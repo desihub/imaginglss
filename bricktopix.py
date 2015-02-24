@@ -176,10 +176,8 @@ def load(repo, brickid, x, y, default=numpy.nan):
         # advance
         if i != len(brickid):
             try:
-                print 'opening', (repo % dict(brickid=brickid[i]))
                 image = fits.open(repo % dict(brickid=brickid[i]))[0].data
             except Exception as e:
-                print e
                 image = numpy.empty((1, 1))
                 image[0, 0] = default
             oldid = brickid[i]
@@ -192,13 +190,10 @@ def optimize(bid, ra, dec):
     invarg[arg] = numpy.arange(len(arg), dtype='i8')
     return ra[arg], dec[arg], invarg
 
-if __name__ == '__main__':
+def test398599():
+    """ needs file coadd/image-398599-z.fits """
     bricks = fits.open('bricks.fits')
     bi = BrickIndex(bricks[1].data) 
-    print bricks[1].data[398599 - 1]
-    #print bricks[1].data.dtype
-    #print bricks[1].data[900]
-
     print 'testing on brick 398599'
     x, y = numpy.indices((3600, 3600))
     x = numpy.ravel(x) + 0.5
@@ -208,15 +203,23 @@ if __name__ == '__main__':
     ra, dec, invarg = optimize(bid, ra, dec)
     print 'unique bid', len(numpy.unique(bid))
     bxy = bi.query(ra, dec)
-    numpy.save('bxy.npy', bxy[..., invarg])
-    print 'saved in bxy.npy'
     img = load('coadd/image-%(brickid)d-z.fits', *bxy)
     print (~numpy.isnan(img)).sum()
-    numpy.save('img.npy', img[..., invarg])
-    print 'img.npy saved'
+    img2 = fits.open('coadd/image-398599-z.fits')[0].data[:]
+    diff = img[..., invarg].reshape(3600, 3600) - img2
+    assert (diff[400:-400, 400:-400] == 0).all()
+    print 'passed'
+
+if __name__ == '__main__':
+    bricks = fits.open('bricks.fits')
+    bi = BrickIndex(bricks[1].data) 
+    print bricks[1].data[398599 - 1]
+    test398599()
+    #print bricks[1].data.dtype
+    #print bricks[1].data[900]
+
 #    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)
 
-    raise
     dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
     ra = numpy.random.random(size=20000) * 360. 
     bid = bi.query_brick(ra, dec)
