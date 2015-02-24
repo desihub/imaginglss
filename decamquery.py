@@ -1,6 +1,8 @@
 """
 This module provides an interface to query coadd images from 
 DECAM imaging data release.
+
+Will need bricks.fits and coadd/* (depending on which image to query)
 """
 from astropy import wcs
 from astropy.io import fits
@@ -189,6 +191,8 @@ def load(repo, brickid, x, y, default=numpy.nan):
         This is faster if brickid, x, y is sorted by brickid.
 
         Note that brickid starts from 1.
+
+        Of course the files has to be there already!
     """
     pixels = numpy.empty(len(brickid))
     oldid = -1 
