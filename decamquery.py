@@ -33,15 +33,17 @@ class BrickIndex(object):
             indexing bricks from bricks.fits 
             bricks = fits.open('bricks.fits')
             bi = BrickIndex(bricks[1].data) 
-
-            
         """
 
-        #    FIXME:
-        #    hard coded numbers: 10000 (max number of rows per col)
         self.hdudata = numpy.array(hdudata[:], copy=True)
         self.ncols = numpy.bincount(hdudata['BRICKROW'])
-        self.hash = hdudata['BRICKROW'] * 10000 + hdudata['BRICKCOL']
+
+        self.ROWMAX = hdudata['BRICKROW'].max()
+        self.COLMAX = hdudata['BRICKCOL'].max() 
+
+        # fast querying from row col
+        self.hash = hdudata['BRICKROW'] * (self.COLMAX + 1) + hdudata['BRICKCOL']
+
         assert (self.hdudata['BRICKID'] == numpy.arange(len(self.hdudata)) + 1).all()
 
     def query_brick(self, RA, DEC):
@@ -49,16 +51,13 @@ class BrickIndex(object):
             finds the brick index (BRICKID - 1) for given RA and DEC 
 
         """
-        #    FIXME:
-        #    hard coded number: 720(~number of cols - 1), 10000 (max number of rows per col)
-        #    4, 360. 0.5 the spacing of cols (found via a poly fit, clear this up!)
         RA = numpy.asarray(RA)
         DEC = numpy.asarray(DEC)
-        row = numpy.int32(numpy.floor(DEC * 4 + 360. + 0.5))
-        row = numpy.clip(row, 0, 720)
+        row = numpy.int32(numpy.floor(DEC * self.ROWMAX / 180 + 360. + 0.5))
+        row = numpy.clip(row, 0, self.ROWMAX)
         ncols = self.ncols[row]
         col = numpy.int32(numpy.floor(RA * ncols / 360. ))
-        hash = row * 10000 + col
+        hash = row * (self.COLMAX + 1) + col
         ind = self.hash.searchsorted(hash)
         return ind
 
@@ -240,8 +239,11 @@ def test398599():
     img = load('coadd/image-%(brickid)d-z.fits', *bxy)
     print (~numpy.isnan(img)).sum()
     img2 = fits.open('coadd/image-398599-z.fits')[0].data[:]
-    diff = img[..., invarg].reshape(3600, 3600) - img2
-    assert (diff[400:-400, 400:-400] == 0).all()
+    img = img[..., invarg]
+    diff = img.reshape(3600, 3600) - img2
+
+    # FIXME: tighten this up
+    assert (diff[300:-300, 300:-300] == 0).all()
     print 'passed'
 def testquery_brick():
     print 'testing query_brick'
