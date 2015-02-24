@@ -3,6 +3,20 @@ This module provides an interface to query coadd images from
 DECAM imaging data release.
 
 Will need bricks.fits and coadd/* (depending on which image to query)
+
+    usage:
+
+        bricks = fits.open('bricks.fits')
+        bi = BrickIndex(bricks[1].data) 
+        ra = ....
+        dec = ....
+        ra, dec, invarg = bi.optimize(ra, dec)
+        brickid, x, y = bi.query(ra, dec)
+        value = load('coadd/images-%(brickid)d-z.fits', brickid, x, y)
+
+        # if we want value in original ra, dec order
+        value = value[invarg]
+ 
 """
 from astropy import wcs
 from astropy.io import fits
@@ -19,6 +33,7 @@ class BrickIndex(object):
             indexing bricks from bricks.fits 
             bricks = fits.open('bricks.fits')
             bi = BrickIndex(bricks[1].data) 
+
             
         """
 
