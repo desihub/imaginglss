@@ -10,7 +10,6 @@ import numpy
 
 __all__ = [
     'BrickIndex',
-    'optimize',
     'load'
 ]
 
