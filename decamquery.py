@@ -217,6 +217,7 @@ def load(repo, brickid, x, y, default=numpy.nan):
 def test398599():
     """ test image readout on brick-398599. 
         needs file coadd/image-398599-z.fits
+        this test took ~21 seconds
     """
     bricks = fits.open('bricks.fits')
     bi = BrickIndex(bricks[1].data) 
@@ -243,12 +244,12 @@ if __name__ == '__main__':
     #print bricks[1].data[900]
 
 #    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)
-
-    dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
-    ra = numpy.random.random(size=20000) * 360. 
-    ra, dec, invarg = bi.optimize(ra, dec)
-    bxy = bi.query(ra, dec)
-    print len(bxy.T)
-    print numpy.isnan(load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)).sum()
+    if False:
+        dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
+        ra = numpy.random.random(size=20000) * 360. 
+        ra, dec, invarg = bi.optimize(ra, dec)
+        bxy = bi.query(ra, dec)
+        print len(bxy.T)
+        print numpy.isnan(load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)).sum()
     #bi.test()
 
