@@ -113,14 +113,14 @@ def load(repo, brickid, x, y):
         pixels[i] =  image[(x[i], y[i])]
     return pixels
 
-
-bricks = fits.open('bricks.fits')
-bi = BrickIndex(bricks[1].data) 
-print bricks[1].data[398599 - 1]
-#print bricks[1].data.dtype
-#print bricks[1].data[900]
-bxy = bi.query([243.6] * 6, numpy.arange(11.75 - 0.12, 11.75 + 0.12, 0.04))
-print bxy
-print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy.T)
-#bi.test()
+if __name__ == '__main__':
+    bricks = fits.open('bricks.fits')
+    bi = BrickIndex(bricks[1].data) 
+    print bricks[1].data[398599 - 1]
+    #print bricks[1].data.dtype
+    #print bricks[1].data[900]
+    bxy = bi.query([243.6] * 6, numpy.arange(11.75 - 0.12, 11.75 + 0.12, 0.04))
+    print bxy
+    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy.T)
+    #bi.test()
 
