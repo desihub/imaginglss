@@ -13,7 +13,7 @@ class BrickIndex(object):
 
         #    FIXME:
         #    hard coded numbers: 10000 (max number of rows per col)
-        self.hdudata = hdudata[:].copy()
+        self.hdudata = numpy.array(hdudata[:], copy=True)
         self.ncols = numpy.bincount(hdudata['BRICKROW'])
         self.hash = hdudata['BRICKROW'] * 10000 + hdudata['BRICKCOL']
         assert (self.hdudata['BRICKID'] == numpy.arange(len(self.hdudata)) + 1).all()
@@ -36,6 +36,54 @@ class BrickIndex(object):
         ind = self.hash.searchsorted(hash)
         return ind
 
+    def revert(self, brickid, x, y):
+        """ brickid, x, y -> RA, DEC """
+        pix = numpy.empty((len(brickid), 2), dtype='f8') 
+
+        # translate to BRICKID + 1 by searching (could done - 1)
+        brickid = self.hdudata['BRICKID'].searchsorted(brickid)
+
+        # template header to feed wcs
+        # fill CRVAL1, CRVAL2 later
+        header = dict(
+            CTYPE1  = 'RA---TAN',#           / TANgent plane                                  
+            CTYPE2  = 'DEC--TAN', #           / TANgent plane                                  
+            CRPIX1  =               1800.5, # / Reference x                                    
+            CRPIX2  =               1800.5, # / Reference y                                    
+            CD1_1   = -7.27777777777778E-05, # / CD matrix                                     
+            CD1_2   =                   0., # / CD matrix                                      
+            CD2_1   =                   0., # / CD matrix                                      
+            CD2_2   = 7.27777777777778E-05, # / CD matrix    
+        )
+
+        # now loop and query!
+        oldbrk = -1 
+        start = 0
+        q = None
+        for i in range(len(brickid) + 1):
+            if not (i == len(brickid) or brickid[i] != oldbrk): continue
+            sl = slice(start, i)
+
+            if i != 0:
+                dat = numpy.array((x[sl], y[sl])).T
+                r = q.all_pix2world(dat, 0)
+                pix[sl, 0] = r[:, 0]
+                pix[sl, 1] = r[:, 1]
+
+            if i != len(brickid):
+                #advance
+                ra = self.hdudata['RA'][brickid[i]]
+                dec = self.hdudata['DEC'][brickid[i]]
+                header['CRVAL1']  =     ra, # / Reference RA                                   
+                header['CRVAL2']  =     dec, # / Reference Dec                                  
+
+                q = wcs.WCS(header)
+
+                oldbrk = brickid[i]
+                start = i
+
+        return pix.T
+
     def query(self, RA, DEC):
         """ 
             This will return the brickid and pix x, y (0, 0 as origin)
@@ -47,7 +95,6 @@ class BrickIndex(object):
         """
         brk = self.query_brick(RA, DEC)
         
-#        ubrk, ind = numpy.unique(brk, return_inverse=True)
         pix = numpy.empty((len(brk), 3), dtype='i4') 
         pix[:, 0] = self.hdudata['BRICKID'][brk]
 
@@ -65,23 +112,32 @@ class BrickIndex(object):
         )
 
         # now loop and query!
-        oldbrk = None
-        for i in range(len(brk)):
-            if brk[i] != oldbrk:
+        oldbrk = -1 
+        start = 0
+        q = None
+        for i in range(len(brk) + 1):
+            if not (i == len(brk) or brk[i] != oldbrk): continue
+            sl = slice(start, i)
+
+            if i != 0:
+                dat = numpy.array([RA[sl], DEC[sl]], dtype='f8').T
+                r = q.all_world2pix(dat, 0)
+                pix[sl, 1] = r[:, 0]
+                pix[sl, 2] = r[:, 1]
+
+            if i != len(brk):
+                #advance
                 ra = self.hdudata['RA'][brk[i]]
                 dec = self.hdudata['DEC'][brk[i]]
                 header['CRVAL1']  =     ra, # / Reference RA                                   
                 header['CRVAL2']  =     dec, # / Reference Dec                                  
 
                 q = wcs.WCS(header)
-                oldbrk = brk[i]
-             
-            dat = numpy.array([[RA[i], DEC[i]]])
-            r = q.all_world2pix(dat, 0)[0]
-            pix[i, 1] = r[0]
-            pix[i, 2] = r[1]
 
-        return pix
+                oldbrk = brk[i]
+                start = i
+
+        return pix.T
 
     def test(self):
         """ no testing on RA; this makes sure the DEC and centers edges are correctly handled """
@@ -92,7 +148,7 @@ class BrickIndex(object):
         rows = self.hdudata[self.query_brick(self.hdudata['RA'], self.hdudata['DEC'] + 0.124)]
         print 'failed', (rows['BRICKID'] != self.hdudata['BRICKID']).nonzero()
 
-def load(repo, brickid, x, y):
+def load(repo, brickid, x, y, default=numpy.nan):
     """ repo is a string with %(brickid),
 
         load all pixels indexed by brickid, x, y from the primary HDU of fits files in repo,
@@ -105,13 +161,36 @@ def load(repo, brickid, x, y):
         This can be done better!
     """
     pixels = numpy.empty(len(brickid))
-    oldid = None
-    for i in range(len(brickid)):
-        if brickid[i] != oldid:
-            image = fits.open(repo % dict(brickid=brickid[i]))[0].data
+    oldid = -1 
+    image = None
+    start = 0
+    for i in range(len(brickid) + 1):
+        if not (i == len(brickid) or brickid[i] != oldid): continue
+        sl = slice(start, i)
+
+        if i != 0:
+            ind = (x[sl], y[sl])
+            l = numpy.ravel_multi_index(ind, image.shape, mode='wrap')
+            pixels[sl] = image.flat[l]
+        
+        # advance
+        if i != len(brickid):
+            try:
+                print 'opening', (repo % dict(brickid=brickid[i]))
+                image = fits.open(repo % dict(brickid=brickid[i]))[0].data
+            except Exception as e:
+                print e
+                image = numpy.empty((1, 1))
+                image[0, 0] = default
             oldid = brickid[i]
-        pixels[i] =  image[(x[i], y[i])]
+            start = i
     return pixels
+
+def optimize(bid, ra, dec):
+    arg = bid.argsort()
+    invarg = numpy.empty_like(arg)
+    invarg[arg] = numpy.arange(len(arg), dtype='i8')
+    return ra[arg], dec[arg], invarg
 
 if __name__ == '__main__':
     bricks = fits.open('bricks.fits')
@@ -119,8 +198,32 @@ if __name__ == '__main__':
     print bricks[1].data[398599 - 1]
     #print bricks[1].data.dtype
     #print bricks[1].data[900]
-    bxy = bi.query([243.6] * 6, numpy.arange(11.75 - 0.12, 11.75 + 0.12, 0.04))
-    print bxy
-    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy.T)
+
+    print 'testing on brick 398599'
+    x, y = numpy.indices((3600, 3600))
+    x = numpy.ravel(x) + 0.5
+    y = numpy.ravel(y) + 0.5
+    ra, dec = bi.revert([398599] * len(x), x, y)
+    bid = bi.query_brick(ra, dec)
+    ra, dec, invarg = optimize(bid, ra, dec)
+    print 'unique bid', len(numpy.unique(bid))
+    bxy = bi.query(ra, dec)
+    numpy.save('bxy.npy', bxy[..., invarg])
+    print 'saved in bxy.npy'
+    img = load('coadd/image-%(brickid)d-z.fits', *bxy)
+    print (~numpy.isnan(img)).sum()
+    numpy.save('img.npy', img[..., invarg])
+    print 'img.npy saved'
+#    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)
+
+    raise
+    dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
+    ra = numpy.random.random(size=20000) * 360. 
+    bid = bi.query_brick(ra, dec)
+    print 'unique bid', len(numpy.unique(bid))
+    ra, dec, invarg = optimize(bid, ra, dec)
+    bxy = bi.query(ra, dec)
+    print len(bxy.T)
+    print numpy.isnan(load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)).sum()
     #bi.test()
 
