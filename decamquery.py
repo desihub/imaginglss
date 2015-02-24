@@ -1,6 +1,16 @@
+"""
+This module provides an interface to query coadd images from 
+DECAM imaging data release.
+"""
 from astropy import wcs
 from astropy.io import fits
 import numpy
+
+__all__ = [
+    'BrickIndex',
+    'optimize',
+    'load'
+]
 
 class BrickIndex(object):
     def __init__(self, hdudata):
@@ -35,6 +45,24 @@ class BrickIndex(object):
         hash = row * 10000 + col
         ind = self.hash.searchsorted(hash)
         return ind
+
+    def optimize(self, ra, dec):
+        """ optimize the ordering of ra, dec,
+
+            This will sort ra, dec by their brickid.
+
+            return sorted_ra, sorted_dec, invert_arg
+
+            invariance:
+                sorted_ra[inverg_arg] == ra
+                sorted_dec[inverg_arg] == dec
+        """
+        bid = self.query_brick(ra, dec)
+        arg = bid.argsort()
+        invarg = numpy.empty_like(arg)
+        invarg[arg] = numpy.arange(len(arg), dtype='i8')
+        return ra[arg], dec[arg], invarg
+
 
     def revert(self, brickid, x, y):
         """ brickid, x, y -> RA, DEC """
@@ -84,7 +112,7 @@ class BrickIndex(object):
 
         return pix.T
 
-    def query(self, RA, DEC):
+    def query(self, RA, DEC, sort=True):
         """ 
             This will return the brickid and pix x, y (0, 0 as origin)
 
@@ -94,7 +122,7 @@ class BrickIndex(object):
             the same brick together. 
         """
         brk = self.query_brick(RA, DEC)
-        
+         
         pix = numpy.empty((len(brk), 3), dtype='i4') 
         pix[:, 0] = self.hdudata['BRICKID'][brk]
 
@@ -149,16 +177,18 @@ class BrickIndex(object):
         print 'failed', (rows['BRICKID'] != self.hdudata['BRICKID']).nonzero()
 
 def load(repo, brickid, x, y, default=numpy.nan):
-    """ repo is a string with %(brickid),
+    """ 
+        Load all pixels indexed by brickid, x, y from the primary HDU of fits files in repo,
 
-        load all pixels indexed by brickid, x, y from the primary HDU of fits files in repo,
+        repo is a format string with %(brickid).
 
         eg:
             bxy = bi.query([243.6] * 6, numpy.arange(11.75 - 0.12, 11.75 + 0.12, 0.04))
             print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy.T)
 
-        currently we avoid reopening the files if the brickid is continous.
-        This can be done better!
+        This is faster if brickid, x, y is sorted by brickid.
+
+        Note that brickid starts from 1.
     """
     pixels = numpy.empty(len(brickid))
     oldid = -1 
@@ -184,14 +214,10 @@ def load(repo, brickid, x, y, default=numpy.nan):
             start = i
     return pixels
 
-def optimize(bid, ra, dec):
-    arg = bid.argsort()
-    invarg = numpy.empty_like(arg)
-    invarg[arg] = numpy.arange(len(arg), dtype='i8')
-    return ra[arg], dec[arg], invarg
-
 def test398599():
-    """ needs file coadd/image-398599-z.fits """
+    """ test image readout on brick-398599. 
+        needs file coadd/image-398599-z.fits
+    """
     bricks = fits.open('bricks.fits')
     bi = BrickIndex(bricks[1].data) 
     print 'testing on brick 398599'
@@ -199,9 +225,7 @@ def test398599():
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
     ra, dec = bi.revert([398599] * len(x), x, y)
-    bid = bi.query_brick(ra, dec)
-    ra, dec, invarg = optimize(bid, ra, dec)
-    print 'unique bid', len(numpy.unique(bid))
+    ra, dec, invarg = bi.optimize(ra, dec)
     bxy = bi.query(ra, dec)
     img = load('coadd/image-%(brickid)d-z.fits', *bxy)
     print (~numpy.isnan(img)).sum()
@@ -222,9 +246,7 @@ if __name__ == '__main__':
 
     dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
     ra = numpy.random.random(size=20000) * 360. 
-    bid = bi.query_brick(ra, dec)
-    print 'unique bid', len(numpy.unique(bid))
-    ra, dec, invarg = optimize(bid, ra, dec)
+    ra, dec, invarg = bi.optimize(ra, dec)
     bxy = bi.query(ra, dec)
     print len(bxy.T)
     print numpy.isnan(load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)).sum()
