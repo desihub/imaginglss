@@ -169,15 +169,6 @@ class BrickIndex(object):
 
         return pix.T
 
-    def test(self):
-        """ no testing on RA; this makes sure the DEC and centers edges are correctly handled """
-        rows = self.hdudata[self.query_brick(self.hdudata['RA'], self.hdudata['DEC'])]
-        print 'failed', (rows['BRICKID'] != self.hdudata['BRICKID']).nonzero()
-        rows = self.hdudata[self.query_brick(self.hdudata['RA'], self.hdudata['DEC'] - 0.125)]
-        print 'failed', (rows['BRICKID'] != self.hdudata['BRICKID']).nonzero()
-        rows = self.hdudata[self.query_brick(self.hdudata['RA'], self.hdudata['DEC'] + 0.124)]
-        print 'failed', (rows['BRICKID'] != self.hdudata['BRICKID']).nonzero()
-
 def load(repo, brickid, x, y, default=numpy.nan):
     """ 
         Load all pixels indexed by brickid, x, y from the primary HDU of fits files in repo,
@@ -238,17 +229,26 @@ def test398599():
     diff = img[..., invarg].reshape(3600, 3600) - img2
     assert (diff[400:-400, 400:-400] == 0).all()
     print 'passed'
-
-if __name__ == '__main__':
+def testquery_brick():
+    print 'testing query_brick'
     bricks = fits.open('bricks.fits')
     bi = BrickIndex(bricks[1].data) 
-    print bricks[1].data[398599 - 1]
-    test398599()
-    #print bricks[1].data.dtype
-    #print bricks[1].data[900]
+    
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'])]
+    print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] - 0.125)]
+    print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] + 0.124)]
+    print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
+    print 'assert seeing [] [] [] above'
 
-#    print load('coadd/depth-%(brickid)d-z.fits.gz', *bxy)
+if __name__ == '__main__':
+    testquery_brick()
+    test398599()
     if False:
+        bricks = fits.open('bricks.fits')
+        bi = BrickIndex(bricks[1].data) 
+        print bricks[1].data[398599 - 1]
         dec = (numpy.random.random(size=20000) - 0.5)* 10 + 10.
         ra = numpy.random.random(size=20000) * 360. 
         ra, dec, invarg = bi.optimize(ra, dec)
