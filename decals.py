@@ -2,6 +2,7 @@ import os
 import os.path
 import decamquery as dq
 from astropy.io import fits
+import numpy
 
 class DECALS(object):
     def __init__(self, root=None):
@@ -38,7 +39,6 @@ class DECALS(object):
         return images
 
 if __name__ == '__main__':
-    import numpy
     decals = DECALS('.')
     print len(decals.catalogue)
     dec = decals.catalogue['DEC'][:10000:10]
