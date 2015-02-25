@@ -24,7 +24,7 @@ import numpy
 
 __all__ = [
     'BrickIndex',
-    'load'
+    'load',
 ]
 
 class BrickIndex(object):
@@ -214,7 +214,9 @@ def load(repo, brickid, x, y, default=numpy.nan):
         # advance
         if i != len(brickid):
             try:
-                image = fits.open(repo % dict(brickid=brickid[i]))[0].data
+                f = fits.open(repo % dict(brickid=brickid[i]))
+                image = numpy.array(f[0].data, copy=True)
+                f.close()
             except Exception as e:
                 image = numpy.empty((1, 1))
                 image[0, 0] = default
