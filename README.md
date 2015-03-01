@@ -13,6 +13,10 @@ Describe the derived products that worth saving.
    as one file per brick. We need a smarter way of handling 
    this.
 
+* bare bone catalogue files.
+  
+  RA DEC and r, u, z nanomags.
+
 * sky brightness:
 
    Where shall this come from?
@@ -22,3 +26,24 @@ Describe the derived products that worth saving.
    
    extinction in r, u, z (and maybe more) as a function of RA DEC;
    is this also in bricks?
+   is it on Nersc
+
+* TACO star catalog
+   is it on nersc?
+
+* Details on CFHTLS can be found at:
+http://www.cfht.hawaii.edu/Science/CFHTLS/
+
+there was also a series of nice papers by the "CARS" collaboration (The CFHTLS-Archive-Research Survey) which I remember being quite readable.  They also made a lot of processed data available.  The following looks useful:
+
+http://adsabs.harvard.edu/abs/2009A%26A...493.1197E
+
+and might give us some ideas for figures/tests/cross-checks we can do.
+
+* DESI software on Edison: /project/projectdirs/desi/software/edison/
+  dust directory has dust
+
+* depth as function of RA dEC in mollleview??
+
+* compare SDSS flux with DECAM flux.
+  fit a line. 

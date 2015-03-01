@@ -48,7 +48,7 @@ class BrickIndex(object):
 
     def query_brick(self, RA, DEC):
         """ 
-            finds the brick index (BRICKID - 1) for given RA and DEC 
+            finds BRICKID for given RA and DEC 
 
         """
         RA = numpy.asarray(RA)
@@ -59,9 +59,10 @@ class BrickIndex(object):
         col = numpy.int32(numpy.floor(RA * ncols / 360. ))
         hash = row * (self.COLMAX + 1) + col
         ind = self.hash.searchsorted(hash)
-        return ind
+        bid = self.hdudata['BRICKID'][ind]
+        return bid
 
-    def optimize(self, ra, dec):
+    def optimize(self, ra, dec, active_bid=None):
         """ optimize the ordering of ra, dec,
 
             This will sort ra, dec by their brickid.
@@ -74,6 +75,7 @@ class BrickIndex(object):
         """
         bid = self.query_brick(ra, dec)
         arg = bid.argsort()
+
         invarg = numpy.empty_like(arg)
         invarg[arg] = numpy.arange(len(arg), dtype='i8')
         return ra[arg], dec[arg], invarg
@@ -127,7 +129,7 @@ class BrickIndex(object):
 
         return pix.T
 
-    def query(self, RA, DEC, sort=True):
+    def query(self, RA, DEC):
         """ 
             This will return the brickid and pix x, y (0, 0 as origin)
 
@@ -139,7 +141,7 @@ class BrickIndex(object):
         brk = self.query_brick(RA, DEC)
          
         pix = numpy.empty((len(brk), 3), dtype='i4') 
-        pix[:, 0] = self.hdudata['BRICKID'][brk]
+        pix[:, 0] = brk
 
         # template header to feed wcs
         # fill CRVAL1, CRVAL2 later
@@ -170,8 +172,8 @@ class BrickIndex(object):
 
             if i != len(brk):
                 #advance
-                ra = self.hdudata['RA'][brk[i]]
-                dec = self.hdudata['DEC'][brk[i]]
+                ra = self.hdudata['RA'][brk[i] - 1]  # watch out
+                dec = self.hdudata['DEC'][brk[i] - 1] # watch out
                 header['CRVAL1']  =     ra, # / Reference RA                                   
                 header['CRVAL2']  =     dec, # / Reference Dec                                  
 
@@ -215,6 +217,7 @@ def load(repo, brickid, x, y, default=numpy.nan):
         if i != len(brickid):
             try:
                 f = fits.open(repo % dict(brickid=brickid[i]))
+                print 'opening file', brickid[i]
                 image = numpy.array(f[0].data, copy=True)
                 f.close()
             except Exception as e:
@@ -252,11 +255,11 @@ def testquery_brick():
     bricks = fits.open('bricks.fits')
     bi = BrickIndex(bricks[1].data) 
     
-    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'])]
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC']) - 1]
     print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
-    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] - 0.125)]
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] - 0.125) - 1]
     print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
-    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] + 0.124)]
+    rows = bi.hdudata[bi.query_brick(bi.hdudata['RA'], bi.hdudata['DEC'] + 0.124) - 1]
     print 'id of failed:', (rows['BRICKID'] != bi.hdudata['BRICKID']).nonzero()
     print 'assert seeing [] [] [] above'
 
