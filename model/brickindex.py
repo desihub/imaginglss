@@ -1,5 +1,7 @@
-from astropy import wcs
 import numpy
+
+from astropy.io import fits
+from brick import Brick
 
 class BrickIndex(object):
     def __init__(self, hdudata):
@@ -7,8 +9,12 @@ class BrickIndex(object):
             indexing bricks from bricks.fits 
             bricks = fits.open('bricks.fits')
             bi = BrickIndex(bricks[1].data) 
-        """
 
+            hdudata can also be a file name.
+        """
+        if isinstance(hdudata, basestring):
+            hdudata = fits.open(hdudata)[1].data[:]
+            
         self.hdudata = numpy.array(hdudata[:], copy=True)
         self.ncols = numpy.bincount(hdudata['BRICKROW'])
 
@@ -24,23 +30,14 @@ class BrickIndex(object):
         """ create a single brick from bid """
         # template header to feed wcs
         # fill CRVAL1, CRVAL2 later
-        header = dict(
-            CTYPE1  = 'RA---TAN',#           / TANgent plane                                  
-            CTYPE2  = 'DEC--TAN', #           / TANgent plane                                  
-            CRPIX1  =               1800.5, # / Reference x                                    
-            CRPIX2  =               1800.5, # / Reference y                                    
-            CD1_1   = -7.27777777777778E-05, # / CD matrix                                     
-            CD1_2   =                   0., # / CD matrix                                      
-            CD2_1   =                   0., # / CD matrix                                      
-            CD2_2   = 7.27777777777778E-05, # / CD matrix    
-        )
-        ra = self.hdudata['RA'][index]  # watch out
-        dec = self.hdudata['DEC'][index] # watch out
-        header['CRVAL1']  =     ra, # / Reference RA                                   
-        header['CRVAL2']  =     dec, # / Reference Dec                                  
-        q = wcs.WCS(header)
         return Brick(self.hdudata['BRICKID'][index], 
-                self.hdudata['BRICKNAME'][index], wcs)
+                self.hdudata['BRICKNAME'][index], 
+                self.hdudata['RA'][index], 
+                self.hdudata['DEC'][index], 
+                self.hdudata['RA1'][index], 
+                self.hdudata['RA2'][index], 
+                self.hdudata['DEC1'][index], 
+                self.hdudata['DEC2'][index])
 
     def query(self, coord):
         """ 

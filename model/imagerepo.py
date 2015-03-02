@@ -11,21 +11,14 @@ class ImageRepo(object):
         self.root = root
         self.pattern = pattern
 
-    def open(self, brick):
-        return fits.open(self.get_filename(brick))
+    def open(self, brick, **kwargs):
+        kwargs['brickid'] = brick.id
+        kwargs['brickname'] = brick.name
+        return fits.open(self.get_filename(
+            **kwargs
+            ))[0].data
 
-    def get_filename(self, brick):
+    def get_filename(self, **kwargs):
         return os.path.join(self.root, 
-            self.pattern) % brick.name)[0].data[:]
-
-class ImageRepoEDR(ImageRepo):
-    """ EDR image repo. 
-        Note that naming convention has changed from 
-        EDR to EDR3
-
-        in EDR it is %(brick)d % brick.id
-    """
-    def get_filename(self, brick):
-        return os.path.join(self.root, 
-            self.pattern) % brick.id)[0].data[:]
+            self.pattern) % kwargs
 
