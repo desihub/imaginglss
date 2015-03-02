@@ -70,6 +70,14 @@ class DataRelease(object):
             example:
                 corrd = (RA, DEC)
                 keys = [('DEPTH', 'z'), ....]
+
+            This is here, because we want to query multiple images
+            at the same time. 
+            It is also convenient to have it here to make use of
+            brickindex. (ImageRepo is then just a stub with no business logic)
+
+            Otherwise it makes more sense to
+            have readout in ImageRepo.
         """
         RA, DEC = coord
         images = numpy.empty((len(RA), len(keys)))
@@ -87,7 +95,7 @@ class DataRelease(object):
 
         
         ubid = numpy.unique(bid)
-        print ubid
+
         for (i, (repo, band)) in enumerate(keys):
             for b in ubid:
                 brick = self.brickindex[b]
