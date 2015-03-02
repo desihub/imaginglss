@@ -86,7 +86,6 @@ def pix2ang(xy, CD, CRPIX, CRVAL):
     xy -= numpy.array(CRPIX).reshape(2, 1)
     xy = matrix.dot(xy)
 
-    print xy
     rinv = numpy.einsum('ij,ij->j', xy, xy) ** -0.5
     rinv *= 180.0 / numpy.pi
 
