@@ -19,7 +19,7 @@ import math
 __all__ = ['ang2pix', 'pix2ang']
 def ang2pix(coord, CD, CRPIX, CRVAL):
     """
-    TAN Transform from coord = (ra, dec) to 1-based pixel xy coordinate 
+    TAN Transform from coord = (ra, dec) to pixel xy coordinate 
     according the the WCS header. Look up Section 5.1.3 of 
     http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
     
@@ -31,9 +31,11 @@ def ang2pix(coord, CD, CRPIX, CRVAL):
 
     coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
 
-    returns the pixel xy = (x, y). starting offset is 1 per FITS convention.
+    returns the pixel xy = (x, y). 
 
-    For anything useful minus one from the output.
+    Depending on the value of CRPIX, it can be 
+        starting from 1 if the CRPIX1 and CRPIX2 in FITS header are used.
+        starting from 0 if CRPIX1 - 1 and CRPIX2 - 1 are used (useful in numpy)
 
     CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,
     CRPIX is the center of pixels as of original FITS header (starting from 1), CRPIX1, CRPIX2
@@ -67,7 +69,11 @@ def pix2ang(xy, CD, CRPIX, CRVAL):
     """
         This is the invert transformation of ang2pix. (TAN)
 
-        xy = (x, y): coordinate in pixels starting offset is 1.
+        xy = (x, y): coordinate in pixels 
+
+        Depending on the value of CRPIX, the offset of xy can be 
+            starting from 1 if the CRPIX1 and CRPIX2 in FITS header are used.
+            starting from 0 if CRPIX1 - 1 and CRPIX2 - 1 are used (useful in numpy)
 
         Returns coord = (RA, DEC), in degrees.
     """
