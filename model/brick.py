@@ -1,4 +1,5 @@
 from astropy import wcs
+import numpy
 class Brick(object):
     def __init__(self, id, name, ra, dec, ra1, ra2, dec1, dec2):
         """ initialize a brick object 
@@ -45,6 +46,17 @@ class Brick(object):
             returns (2xN)
         """
         #FIXME: other types of input
-        ra, dec = coord
-        out = self.wcs.all_world2pix((ra, dec), 0).T
+        coord = numpy.array(coord).T
+        out = self.wcs.all_world2pix(coord, 0).T
+        return out
+    def revert(self, xy):
+        """ returns the RA, DEC index of pixels for coord
+            coord can be:
+                (x, y) tuple of arrays
+                array of shape (2xN) x, y
+            returns (2xN)
+        """
+        #FIXME: other types of input
+        xy = numpy.array(xy).T
+        out = self.wcs.all_pix2world(xy, 0).T
         return out

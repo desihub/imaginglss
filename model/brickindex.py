@@ -45,6 +45,8 @@ class BrickIndex(object):
             RA, DEC = coord
 
             coord shall be in the same coordinate system of the bricks!
+            returns the internal index of the bricks.
+            get real Brick objects by iterating over the result and use brickindex[i]
         """
         RA, DEC = coord
         RA = numpy.asarray(RA)
@@ -55,7 +57,7 @@ class BrickIndex(object):
         col = numpy.int32(numpy.floor(RA * ncols / 360. ))
         hash = row * (self.COLMAX + 1) + col
         ind = self.hash.searchsorted(hash)
-        return bid
+        return ind
 
     def optimize(self, coord):
         """ optimize the ordering of ra, dec,
@@ -68,12 +70,12 @@ class BrickIndex(object):
                 sorted_ra[inverg_arg] == ra
                 sorted_dec[inverg_arg] == dec
         """
-        ra, dec = coord
-        bid = self.query_brick(ra, dec)
+        coord = numpy.array(coord)
+        bid = self.query(coord)
         arg = bid.argsort()
 
         invarg = numpy.empty_like(arg)
         invarg[arg] = numpy.arange(len(arg), dtype='i8')
-        return ra[arg], dec[arg], invarg
+        return numpy.array(coord[:, arg]), invarg
 
 

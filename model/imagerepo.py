@@ -16,7 +16,7 @@ class ImageRepo(object):
         kwargs['brickname'] = brick.name
         return fits.open(self.get_filename(
             **kwargs
-            ))[0].data
+            ))[0].data[:]
 
     def get_filename(self, **kwargs):
         return os.path.join(self.root, 

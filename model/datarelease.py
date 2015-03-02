@@ -63,23 +63,44 @@ class DataRelease(object):
 
         return catalogue
 
-    def get_pixel(self, RA, DEC, keys, default=numpy.nan):
+    def readout(self, coord, keys, default=numpy.nan):
+        """ readout pixels at coord.
+            querying from several images. 
+            
+            example:
+                corrd = (RA, DEC)
+                keys = [('DEPTH', 'z'), ....]
+        """
+        RA, DEC = coord
         images = numpy.empty((len(RA), len(keys)))
-
         images[...] = default
 
-        bid = self.brickindex.query_brick(RA, DEC)
+        bid = self.brickindex.query((RA, DEC))
         mask = contains(self.observed_bricks, bid)
         ra = RA[mask]
         dec = DEC[mask]
-        ra, dec, invarg = self.brickindex.optimize(ra, dec)
-        bxy = self.brickindex.query(ra, dec)
+        coord, invarg = self.brickindex.optimize((ra, dec))
+        bid = self.brickindex.query(coord)
 
-        print 'querying', len(ra), 'out of', len(RA)
+        pixels = numpy.empty(len(bid), 'f8')
+        pixels[:] = default
+
+        
+        ubid = numpy.unique(bid)
+        print ubid
         for (i, (repo, band)) in enumerate(keys):
-            repo = self.repos[repo] % dict(band=band)
-            repo = os.path.join(self.root, repo)
-            img = dq.load(repo, *bxy, default=default)
-            images[:,  i][mask] = img[invarg]
+            for b in ubid:
+                brick = self.brickindex[b]
+                first = bid.searchsorted(b, side='left')
+                last = bid.searchsorted(b, side='right')
+                sl = slice(first, last)
 
+                x, y = numpy.int32(brick.query(coord[:, sl]))
+
+                img = self.images[repo].open(brick, band=band)
+                l = numpy.ravel_multi_index((x, y), img.shape, mode='raise')
+                pixels[sl] = img.flat[l] 
+            #
+            images[:,  i][mask] = pixels[invarg]
+            
         return images
