@@ -1,5 +1,6 @@
 import numpy
 from astropy.io import fits
+from columnstore import ColumnStore
 
 def coord2xyz(coord):
     RA, DEC = coord
@@ -10,7 +11,7 @@ def coord2xyz(coord):
     xyz[:, 2] = numpy.sin(DEC / 180. * numpy.pi)
     return xyz.T
 
-class Catalogue(object):
+class Catalogue(ColumnStore):
     """ Catalogue. 
         Only columns that are accessed are loaded to the memory.
 
@@ -19,27 +20,15 @@ class Catalogue(object):
     """
     def __init__(self, filenames):
         self.filenames = filenames
-        self.cache = {}
         fn = filenames[0]
         first = fits.open(fn)[1].data
-        self.dtype = first.dtype
+        ColumnStore.__init__(self, first.dtype)
 
-    def __getitem__(self, column):
-        if column not in self.cache:
-            cat = [numpy.array(fits.open(fn)[1].data[column], copy=True)
-                for fn in self.filenames]
-            cat = numpy.concatenate(cat)
-            self.cache[column] = cat
-        return self.cache[column] 
-
-    def __contains__(self, column):
-        return column in self.dtype.names
-
-    def __setitem__(self, column):
-        raise "Unsupported"
-
-    def forget(self, column):
-        del self.cache[column]
+    def fetch(self, column):
+        cat = [numpy.array(fits.open(fn)[1].data[column], copy=True)
+            for fn in self.filenames]
+        cat = numpy.concatenate(cat)
+        return cat
 
     def __repr__(self):
         return 'Catalogue: %s' % str(self.dtype)
