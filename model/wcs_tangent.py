@@ -16,7 +16,7 @@ __email__  = "yfeng1@berkeley.edu or mwhite@berkeley.edu"
 
 import numpy 
 import math
-
+__all__ = ['ang2pix', 'pix2ang']
 def ang2pix(coord, CD, CRPIX, CRVAL):
     """
     TAN Transform from coord = (ra, dec) to 1-based pixel xy coordinate 
