@@ -7,6 +7,8 @@ import re
 
 from . import brickindex
 from . import imagerepo
+from . import catalogue
+
 class Lazy(object):
     def __init__(self, calculate_function):
         self._calculate = calculate_function
@@ -51,18 +53,12 @@ class DataRelease(object):
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
         self.observed_area = 41253. * len(self.observed_bricks) / len(bricks)
 
-    @Lazy
-    def catalogue(self):
-        catalogue = []
-        for brick in observed_bricks:
-            catalogue.append(numpy.array(
-                fits.open(os.path.join(self.root, 'tractor/tractor-%d.fits' % brick))[1].data, 
-                    copy=True))
-        catalogue = numpy.concatenate(catalogue)
-        catalogue['RA'] %= 360.
-
-        return catalogue
-
+        self.catalogue = catalogue.Catalogue([
+            os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
+            for brick in self.observed_bricks])
+        # fix RA
+        self.catalogue['RA'][:] %= 360.
+            
     def readout(self, coord, keys, default=numpy.nan):
         """ readout pixels at coord.
             querying from several images. 

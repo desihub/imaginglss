@@ -33,4 +33,10 @@ def test398599():
     # FIXME: tighten this up
     assert (diff[300:-300, 300:-300] == 0).all()
     print 'passed'
+
+def testcat():
+    dr = DataRelease(root='.', version='EDR')
+    print dr.catalogue 
+
+testcat()
 test398599()
