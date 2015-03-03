@@ -32,8 +32,8 @@ class ImageRepo(object):
             **kwargs is unused 
         """
         for b in bricks:
-            self.cache[b] = self.open(b, **kwargs)
-
+            self.cache[b] = self.open(b, **kwargs) 
+            
     def open(self, brick, **kwargs):
         """ open and read the image for 
             Brick object brick. The image content is returned

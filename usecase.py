@@ -55,7 +55,7 @@ def testrandom():
     decmax = dr.observed_bricks['DEC2'].max()
 
     print decmin, decmax
-    u1, u2 = numpy.random.random(size=(2, 4000000))
+    u1, u2 = numpy.random.random(size=(2, 4))
     RA = (ramax - ramin) * u1 + ramin
     a = 0.5 * ((numpy.cos(decmax / 180. * numpy.pi)  + 1))
     b = 0.5 * ((numpy.cos(decmin / 180. * numpy.pi)  + 1))
@@ -63,11 +63,11 @@ def testrandom():
     
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)
 
-#    dr.images['r']['IMAGE'].preload(
-#        [dr.brickindex[i-1] for i in dr.observed_brickids])
+    dr.images['r']['IMAGE'].preload(
+        [dr.brickindex[i-1] for i in dr.observed_brickids[:2]])
 #    print 'prefetched'
     coord = (RA, DEC)
-    depth = dr.readout(coord, (dr.images['r']['IMAGE'],))[..., 0]
+    depth = dr.readout(coord, (dr.images['r']['DEPTH'],))[..., 0]
     print depth
  
 def testcat():
