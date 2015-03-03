@@ -1,5 +1,7 @@
-from astropy import wcs
+
 import numpy
+import wcs_tangent
+
 class Brick(object):
     def __init__(self, id, name, ra, dec, ra1, ra2, dec1, dec2):
         """ initialize a brick object 
@@ -18,22 +20,8 @@ class Brick(object):
         self.ra2 = ra2
         self.dec1 = dec1
         self.dec2 = dec2
-
-        header = dict(
-            CTYPE1  = 'RA---TAN',#           / TANgent plane                                  
-            CTYPE2  = 'DEC--TAN', #           / TANgent plane                                  
-            CRPIX1  =               1800.5, # / Reference x                                    
-            CRPIX2  =               1800.5, # / Reference y                                    
-            CD1_1   = -7.27777777777778E-05, # / CD matrix                                     
-            CD1_2   =                   0., # / CD matrix                                      
-            CD2_1   =                   0., # / CD matrix                                      
-            CD2_2   = 7.27777777777778E-05, # / CD matrix    
-        )
-        header['CRVAL1']  =     ra, # / Reference RA                                   
-        header['CRVAL2']  =     dec, # / Reference Dec                                  
-        q = wcs.WCS(header)
-        self.wcs = q
-
+        #print self.query(([self.ra], [self.dec]))
+        #print self.revert(([1799.], [1799.]))
     def __repr__(self):
         return ("Brick(id=%d, name=%s, ra=%g, dec=%g, ...)"
             % (self.id, self.name, self.ra, self.dec ))
@@ -46,9 +34,14 @@ class Brick(object):
             returns (2xN)
         """
         #FIXME: other types of input
-        coord = numpy.array(coord).T
-        out = self.wcs.all_world2pix(coord, 0).T
+        coord = numpy.array(coord)
+        out = wcs_tangent.ang2pix(coord,
+                CRPIX=(1800.5 - 1, 1800.5 - 1),
+                CRVAL=(self.ra, self.dec),
+                CD=(-7.27777777777778E-05,0,0, 7.27777777777778E-05),
+               )
         return out
+
     def revert(self, xy):
         """ returns the RA, DEC index of pixels for coord
             coord can be:
@@ -57,6 +50,10 @@ class Brick(object):
             returns (2xN)
         """
         #FIXME: other types of input
-        xy = numpy.array(xy).T
-        out = self.wcs.all_pix2world(xy, 0).T
+        xy = numpy.array(xy)
+        out = wcs_tangent.pix2ang(xy,
+                CRPIX=(1800.5 - 1, 1800.5 - 1),
+                CRVAL=(self.ra, self.dec),
+                CD=(-7.27777777777778E-05,0,0,7.27777777777778E-05),
+               )
         return out
