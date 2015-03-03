@@ -1,5 +1,18 @@
 # mydesi
 
+To use the data model on edison:
+
+1. set environments:
+
+
+    export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
+    export DECALS_CACHE=$HOME/desicache
+
+2. somehow install astropy.
+
+3. try if usecase.py runs.
+    
+
 Describe the derived products that worth saving.
 
 * depths in r, u, z bands:
