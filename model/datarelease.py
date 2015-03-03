@@ -63,6 +63,8 @@ class DataRelease(object):
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
         self.observed_area = 41253. * len(self.observed_brickids) / len(bricks)
 
+        self.observed_bricks = bricks[bricks['BRICKID'].searchsorted(self.observed_brickids)]
+
         self.catalogue = catalogue.Catalogue(
             os.path.join(self.cacheroot, 'catalogue'),
             [

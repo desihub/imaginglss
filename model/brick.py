@@ -48,14 +48,12 @@ class Brick(object):
         xy = numpy.int32(wcs_tangent.ang2pix_hdr(coord, meta, 
                 zero_offset=True))
         xy2 = numpy.int32(self.query(coord))
-        print 'xy', xy
-        print 'xy2', xy2
+
         mask = (xy < numpy.array(img.shape) \
             .reshape(2, 1)).all(axis=0)
 
         mask &= (xy >= 0).all(axis=0)
 
-        print mask.sum()
         l = numpy.ravel_multi_index(xy[:, mask], img.shape, mode='raise')
         value[mask] = img.flat[l] 
         return value

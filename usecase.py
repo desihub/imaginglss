@@ -47,24 +47,33 @@ def test398599():
 
 
 def testrandom():
+    dr = DataRelease(version='EDR')
+
+    ramin = dr.observed_bricks['RA1'].min()
+    ramax = dr.observed_bricks['RA2'].max()
+    decmin = dr.observed_bricks['DEC1'].min()
+    decmax = dr.observed_bricks['DEC2'].max()
+
+    print decmin, decmax
     u1, u2 = numpy.random.random(size=(2, 4000000))
-    RA = (246 - 239) * u1 + 239
-    a = 0.5 * ((numpy.cos(12. / 180. * numpy.pi)  + 1))
-    b = 0.5 * ((numpy.cos(5. / 180. * numpy.pi)  + 1))
+    RA = (ramax - ramin) * u1 + ramin
+    a = 0.5 * ((numpy.cos(decmax / 180. * numpy.pi)  + 1))
+    b = 0.5 * ((numpy.cos(decmin / 180. * numpy.pi)  + 1))
     u2 = (a - b) * u2 + b
     
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)
 
-    dr = DataRelease(version='EDR')
-
+#    dr.images['r']['IMAGE'].preload(
+#        [dr.brickindex[i-1] for i in dr.observed_brickids])
+#    print 'prefetched'
     coord = (RA, DEC)
-    depth = dr.readout(coord, (dr.images['u']['IMAGE'],))[..., 0]
+    depth = dr.readout(coord, (dr.images['r']['IMAGE'],))[..., 0]
     print depth
  
 def testcat():
     dr = DataRelease(version='EDR')
     print dr.catalogue 
     print dr.catalogue['RA']
-#testrandom()
+testrandom()
 testcat()
 test398599()

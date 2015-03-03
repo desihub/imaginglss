@@ -24,6 +24,13 @@ class BrickIndex(object):
         # fast querying from row col
         self.hash = hdudata['BRICKROW'] * (self.COLMAX + 1) + hdudata['BRICKCOL']
 
+        self.RA = self.hdudata['RA']
+        self.DEC = self.hdudata['DEC']
+        self.RA1 = self.hdudata['RA1']
+        self.DEC1 = self.hdudata['DEC1']
+        self.RA2 = self.hdudata['RA2']
+        self.DEC2 = self.hdudata['DEC2']
+
         assert (self.hdudata['BRICKID'] == numpy.arange(len(self.hdudata)) + 1).all()
 
     def __getitem__(self, index):
