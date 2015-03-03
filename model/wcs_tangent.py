@@ -86,7 +86,10 @@ def pix2ang(xy, CD, CRPIX, CRVAL):
     xy -= numpy.array(CRPIX).reshape(2, 1)
     xy = matrix.dot(xy)
 
-    rinv = numpy.einsum('ij,ij->j', xy, xy) ** -0.5
+    rinv = numpy.einsum('ij,ij->j', xy, xy)
+    # this will give some reasonable coord[1] at pole
+    rinv.clip(1e-28, out=rinv)
+    rinv **= -0.5
     rinv *= 180.0 / numpy.pi
 
     coord[1] = numpy.arctan(rinv)
@@ -95,7 +98,7 @@ def pix2ang(xy, CD, CRPIX, CRVAL):
     coord *= 180 / numpy.pi
     r = CreateRotationMatrix(CRVAL[0], CRVAL[1])
     coord[:] = Rotate(r.T, coord[0], coord[1]) 
-
+    coord[0] %= 360.
     return coord
 
 
