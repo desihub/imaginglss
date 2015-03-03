@@ -2,7 +2,7 @@ from model.brickindex import BrickIndex
 from model.datarelease import DataRelease
 import numpy
 
-dr = DataRelease(root='.', version='EDR')
+dr = DataRelease(version='EDR')
 bi = dr.brickindex
 ob = dr.observed_bricks
 
@@ -13,7 +13,7 @@ brick = bi[ob[0]]
 def test398599():
     """ test image readout on brick-398599. 
     """
-    dr = DataRelease(root='.', version='EDR')
+    dr = DataRelease(version='EDR')
     bi = dr.brickindex
     ob = dr.observed_bricks
 
@@ -39,7 +39,7 @@ def test398599():
     print 'passed'
 
 def testcat():
-    dr = DataRelease(root='.', version='EDR')
+    dr = DataRelease(version='EDR')
     print dr.catalogue 
 
 #testcat()

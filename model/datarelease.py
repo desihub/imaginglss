@@ -30,7 +30,7 @@ def contains(haystack, needle):
 class DataRelease(object):
     def __init__(self, root=None, version=None):
         if root is None:
-            root = os.env.get("DECALS_IMAGING", '.') 
+            root = os.environ.get("DECALS_IMAGING", '.') 
         self.root = root
 
         bricks = fits.open(os.path.join(self.root, 'bricks.fits'))[1].data
