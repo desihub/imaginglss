@@ -28,10 +28,15 @@ def contains(haystack, needle):
     return haystack[ind] == needle
 
 class DataRelease(object):
-    def __init__(self, root=None, version=None):
+    def __init__(self, root=None, cacheroot=None, version=None):
         if root is None:
             root = os.environ.get("DECALS_IMAGING", '.') 
         self.root = root
+
+        if cacheroot is None:
+            cacheroot = os.environ.get("DECALS_CACHE", '.') 
+
+        self.cacheroot = cacheroot
 
         bricks = fits.open(os.path.join(self.root, 'bricks.fits'))[1].data
         self.brickindex = brickindex.BrickIndex(bricks)
@@ -54,7 +59,7 @@ class DataRelease(object):
         self.observed_area = 41253. * len(self.observed_bricks) / len(bricks)
 
         self.catalogue = catalogue.Catalogue(
-            './cache',
+            os.path.join(self.cacheroot, 'catalogue'),
             [
             os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
             for brick in self.observed_bricks])

@@ -10,8 +10,10 @@ class ColumnStore(object):
 
     def __setitem__(self, column, value):
         value = numpy.array(value)
-        self.cache[column] = value
-        self.updatedtype(column, value)
+        if column in self.dtype.fields:
+            self.cache[column] = value.astype(self.dtype[column])
+        else:
+            self.updatedtype(column, value)
 
     def updatedtype(self, column, value):
         d = dict(self.dtype.fields)
@@ -28,7 +30,7 @@ class ColumnStore(object):
     def __getitem__(self, column):
         if column not in self.cache:
             value = self.fetch(column) 
-            self[column] = value.astype(self.dtype[column])
+            self[column] = value
         return self.cache[column]
 
     def __delitem__(self, column):
@@ -47,22 +49,15 @@ class DiskColumnStore(ColumnStore):
         if column not in self.cache:
             filename = self.getfilename(column)
             try:
-                print 'reading'
                 data = numpy.fromfile(filename,
                     dtype=self.dtype[column])
-                print data.dtype
-                print 'reading done'
             except IOError:
-                print 'fetching'
                 data = ColumnStore.__getitem__(self, column)
                 try:
                     os.makedirs(os.path.dirname(filename))
                 except OSError:
                     pass
-                print 'writing'
-                print data.dtype
                 data.tofile(filename)
-                print 'writing done'
             self[column] = data
         return self.cache[column]
 
