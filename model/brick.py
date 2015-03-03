@@ -20,12 +20,26 @@ class Brick(object):
         self.ra2 = ra2
         self.dec1 = dec1
         self.dec2 = dec2
-        #print self.query(([self.ra], [self.dec]))
+        #print elf.query(([self.ra], [self.dec]))
         #print self.revert(([1799.], [1799.]))
+
+    def __hash__(self):
+        return self.id
+
     def __repr__(self):
         return ("Brick(id=%d, name=%s, ra=%g, dec=%g, ...)"
             % (self.id, self.name, self.ra, self.dec ))
 
+    def readout(self, coord, repo, default=numpy.nan):
+        raise FIXME
+        RA, DEC = coord
+        images = numpy.empty(len(RA))
+        images[...] = default
+        x, y = numpy.int32(brick.query(coord[:, sl]))
+        img = repo.open(self)
+        l = numpy.ravel_multi_index((x, y), img.shape, mode='raise')
+        images[...] = img.flat[l] 
+        
     def query(self, coord):
         """ returns the xy index of pixels for coord
             coord can be:

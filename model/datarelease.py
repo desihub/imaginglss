@@ -43,36 +43,41 @@ class DataRelease(object):
 
         self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
-        self.images = dict(
-            DEPTH=imagerepo.ImageRepo(self.root, 'coadd/depth-%(brickid)d-%(band)s.fits.gz'),
-            IMAGE=imagerepo.ImageRepo(self.root, 'coadd/image-%(brickid)d-%(band)s.fits'),
-            MODEL=imagerepo.ImageRepo(self.root, 'coadd/model-%(brickid)d-%(band)s.fits'),
-        )
+        self.images = {}
+        for band in self.bands:
+            self.images[band] = dict(
+                DEPTH=imagerepo.ImageRepo(self.root, 
+                    'coadd/depth-%%(brickid)d-%(band)s.fits.gz' % dict(band=band)),
+                IMAGE=imagerepo.ImageRepo(self.root, 
+                    'coadd/depth-%%(brickid)d-%(band)s.fits.gz' % dict(band=band)),
+                MODEL=imagerepo.ImageRepo(self.root, 
+                    'coadd/depth-%%(brickid)d-%(band)s.fits.gz' % dict(band=band)),
+            )
 
-        observed_bricks = numpy.unique([
+        observed_brickids = numpy.unique([
             int(re.search('-([0123456789]+)\.', fn).group(1))
                 for fn in glob.glob(os.path.join(self.root, 'tractor/tractor-[0-9]*.fits'))
         ])
-        self.observed_bricks = observed_bricks
+        self.observed_brickids = observed_brickids
 
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
-        self.observed_area = 41253. * len(self.observed_bricks) / len(bricks)
+        self.observed_area = 41253. * len(self.observed_brickids) / len(bricks)
 
         self.catalogue = catalogue.Catalogue(
             os.path.join(self.cacheroot, 'catalogue'),
             [
             os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
-            for brick in self.observed_bricks])
+            for brick in self.observed_brickids])
         # fix RA
         #self.catalogue['RA'][:] %= 360.
             
-    def readout(self, coord, keys, default=numpy.nan):
+    def readout(self, coord, repos, default=numpy.nan):
         """ readout pixels at coord.
             querying from several images. 
             
             example:
                 corrd = (RA, DEC)
-                keys = [('DEPTH', 'z'), ....]
+                repos is fetched from self.images
 
             This is here, because we want to query multiple images
             at the same time. 
@@ -83,11 +88,12 @@ class DataRelease(object):
             have readout in ImageRepo.
         """
         RA, DEC = coord
-        images = numpy.empty((len(RA), len(keys)))
+        images = numpy.empty((len(RA), len(repos)))
         images[...] = default
 
         bid = self.brickindex.query((RA, DEC))
-        mask = contains(self.observed_bricks, bid)
+        # watch out bid + 1
+        mask = contains(self.observed_brickids, bid + 1)
         ra = RA[mask]
         dec = DEC[mask]
         coord, invarg = self.brickindex.optimize((ra, dec))
@@ -99,7 +105,7 @@ class DataRelease(object):
         
         ubid = numpy.unique(bid)
 
-        for (i, (repo, band)) in enumerate(keys):
+        for (i, repo) in enumerate(repos):
             for b in ubid:
                 brick = self.brickindex[b]
                 first = bid.searchsorted(b, side='left')
@@ -108,7 +114,7 @@ class DataRelease(object):
 
                 x, y = numpy.int32(brick.query(coord[:, sl]))
 
-                img = self.images[repo].open(brick, band=band)
+                img = repo.open(brick)
                 l = numpy.ravel_multi_index((x, y), img.shape, mode='raise')
                 pixels[sl] = img.flat[l] 
             #
