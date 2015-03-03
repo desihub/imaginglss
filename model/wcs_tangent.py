@@ -8,50 +8,115 @@
 # "Representations of celestial coordinates in FITS"
 # -- Calabretta, M. R., and Greisen, E. W.,
 # -- Astronomy & Astrophysics, 395, 1077-1122, 2002.
+# and the source code in 
+#   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
+# is also a very useful reference.
 #
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
 __email__  = "yfeng1@berkeley.edu or mwhite@berkeley.edu"
+__all__ = ['ang2pix','pix2ang','ang2pix_hdr','pix2ang_hdr']
+
+
 
 import numpy 
 import math
-__all__ = ['ang2pix', 'pix2ang']
-def ang2pix(coord, CD, CRPIX, CRVAL):
+
+
+
+def ang2pix_hdr(coord,hdr,zero_offset=True):
+    """
+    ang2pix_hdr(coord,hdr,zero_offset=True):
+    A convenience function for calling ang2pix, with the transformations
+    described in a dictionary in the usual FITS header style for WCS
+    transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
+    degrees, vectorized) and the routine returns pixel numbers.
+    If zero_offset is True, the routine returns 0-indexed pixel coordinates
+    (useful in Python or C) while if it is False pixels run from 1 (as in
+    Fortran).
+    """
+    # Check to see whether the "hdr" dictionary contains the necessary
+    # keywords.
+    if ('CTYPE1' not in hdr)|('CTYPE2' not in hdr)|\
+       ('CRVAL1' not in hdr)|('CRVAL2' not in hdr)|\
+       ('CRPIX1' not in hdr)|('CRPIX2' not in hdr)|\
+       ('CD1_1'  not in hdr)|('CD1_2'  not in hdr)|\
+       ('CD2_1'  not in hdr)|('CD2_2'  not in hdr):
+        raise RuntimeError,"Unable to parse header."
+    if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
+        raise RuntimeError,"Not a tangent plane projection."
+    cd    = numpy.array([hdr['CD1_1'],hdr['CD1_2'],hdr['CD2_1'],hdr['CD2_2']])
+    crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
+    crval = numpy.array([hdr['CRVAL1'],hdr['CRVAL2']])
+    return(ang2pix(coord,cd,crpix,crval,zero_offset))
+    #
+
+
+
+
+def pix2ang_hdr(xy,hdr,zero_offset=True):
+    """
+    pix2ang_hdr(xy,hdr,zero_offset=True):
+    A convenience function for calling pix2ang, with the transformations
+    described in a dictionary in the usual FITS header style for WCS
+    transformations.  Given input pixel numbers xy the routine returns
+    coordinates (RA,DEC) in decimal degrees.
+    If zero_offset is True, the routine takes 0-indexed pixel coordinates
+    (useful in Python or C) while if it is False pixels run from 1 (as in
+    Fortran).
+    """
+    # Check to see whether the "hdr" dictionary contains the necessary
+    # keywords.
+    if ('CTYPE1' not in hdr)|('CTYPE2' not in hdr)|\
+       ('CRVAL1' not in hdr)|('CRVAL2' not in hdr)|\
+       ('CRPIX1' not in hdr)|('CRPIX2' not in hdr)|\
+       ('CD1_1'  not in hdr)|('CD1_2'  not in hdr)|\
+       ('CD2_1'  not in hdr)|('CD2_2'  not in hdr):
+        raise RuntimeError,"Unable to parse header."
+    if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
+        raise RuntimeError,"Not a tangent plane projection."
+    cd    = numpy.array([hdr['CD1_1'],hdr['CD1_2'],hdr['CD2_1'],hdr['CD2_2']])
+    crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
+    crval = numpy.array([hdr['CRVAL1'],hdr['CRVAL2']])
+    return(pix2ang(xy,cd,crpix,crval,zero_offset))
+    #
+
+               
+
+
+
+
+
+def ang2pix(coord,CD,CRPIX,CRVAL,zero_offset=True):
     """
     TAN Transform from coord = (ra, dec) to pixel xy coordinate 
     according the the WCS header. Look up Section 5.1.3 of 
     http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
-    
     Although the source code in 
-
-        https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
-
+      https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
     maybe a better explanation of what is done.
-
     coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-
     returns the pixel xy = (x, y). 
 
-    Depending on the value of CRPIX, it can be 
-        starting from 1 if the CRPIX1 and CRPIX2 in FITS header are used.
-        starting from 0 if CRPIX1 - 1 and CRPIX2 - 1 are used (useful in numpy)
-
     CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,
-    CRPIX is the center of pixels as of original FITS header (starting from 1), CRPIX1, CRPIX2
-    CRVAL is the center of RA/DEC as of original FITS header. CRVAL1, CRVAL2
+    CRPIX is the center of pixels as of original FITS header (starting from 1):
+      CRPIX1, CRPIX2
+    CRVAL is the center of RA/DEC as of original FITS header: CRVAL1, CRVAL2
     Obviously PV distortion is not supported.
-
     No checking is performed if a given RA, DEC lies outside the range.
-    """
 
+    If zero_offset is True, the routine returns 0-indexed pixel coordinates
+    (useful in Python or C) while if it is False pixels run from 1 (as in
+    Fortran).
+    """
     coord = numpy.array(coord, dtype='f8').copy()
-    xy = numpy.empty_like(coord)
+    xy    = numpy.empty_like(coord)
     # watch out, this may be wrong if the matrix is not diagonal
     matrix = numpy.linalg.inv(numpy.array(CD).reshape(2, 2))
 
-    r = CreateRotationMatrix(CRVAL[0], CRVAL[1])
-    ra, dec = Rotate(r, coord[0], coord[1]) 
+    r = CreateRotationMatrix_spam(CRVAL[0],CRVAL[1])
+    ra, dec = Rotate_spam(r, coord[0], coord[1]) 
     ra *= numpy.pi / 180.
     dec *= numpy.pi / 180.
 
@@ -61,51 +126,49 @@ def ang2pix(coord, CD, CRPIX, CRVAL):
 
     xy = matrix.dot(xy)
     xy += numpy.array(CRPIX).reshape(2, 1)
+    if zero_offset:
+      xy -= 1
+    return(xy)
+    #
 
-    return  xy
 
 
-def pix2ang(xy, CD, CRPIX, CRVAL):
+def pix2ang(xy,CD,CRPIX,CRVAL,zero_offset=True):
     """
-        This is the invert transformation of ang2pix. (TAN)
-
-        xy = (x, y): coordinate in pixels 
-
-        Depending on the value of CRPIX, the offset of xy can be 
-            starting from 1 if the CRPIX1 and CRPIX2 in FITS header are used.
-            starting from 0 if CRPIX1 - 1 and CRPIX2 - 1 are used (useful in numpy)
-
-        Returns coord = (RA, DEC), in degrees.
+    This is the invert transformation of ang2pix. (TAN)
+    xy = (x, y): coordinate in pixels
+    If zero_offset is True, pixel numbers are assumed to start at 0,
+    as in Python or C.  If it is False numbers are assumed to start at 1.
+    Returns coord = (RA, DEC), in decimal degrees.
     """
-
-    xy = numpy.array(xy, dtype='f8').copy()
+    xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
+    if zero_offset:
+        xy += 1
     # watch out, this may be wrong if the matrix is not diagonal
     matrix = numpy.array(CD).reshape(2, 2)
 
-    xy -= numpy.array(CRPIX).reshape(2, 1)
-    xy = matrix.dot(xy)
-
-    rinv = numpy.einsum('ij,ij->j', xy, xy)
-    # this will give some reasonable coord[1] at pole
+    xy  -= numpy.array(CRPIX).reshape(2, 1)
+    xy   = matrix.dot(xy)
+    rinv = numpy.einsum('ij,ij->j',xy,xy)
+    # this will give a reasonable coord[1] at pole
     rinv.clip(1e-28, out=rinv)
     rinv **= -0.5
-    rinv *= 180.0 / numpy.pi
+    rinv  *= 180.0 / numpy.pi
 
     coord[1] = numpy.arctan(rinv)
-    coord[0] = numpy.arctan2(xy[0], -xy[1])
-
-    coord *= 180 / numpy.pi
-    r = CreateRotationMatrix(CRVAL[0], CRVAL[1])
-    coord[:] = Rotate(r.T, coord[0], coord[1]) 
-    coord[0] %= 360.
-    return coord
+    coord[0] = numpy.arctan2(xy[0],-xy[1])
+    coord   *= 180 / numpy.pi
+    r        = CreateRotationMatrix_spam(CRVAL[0], CRVAL[1])
+    coord[:] = Rotate_spam(r.T, coord[0], coord[1]) 
+    coord[0]%= 360.
+    return(coord)
 
 
 ##############################
 #  Private routines, taken from esutils.py
 #
-def CreateRotationMatrix(native_longpole, native_latpole):
+def CreateRotationMatrix_spam(native_longpole, native_latpole):
     """ create rotation matrix for tan. adapted from esutil.py """
     longpole = 180.
     d2r = numpy.pi / 180.
@@ -135,7 +198,7 @@ def CreateRotationMatrix(native_longpole, native_latpole):
     # we transpose it back 
     return r.T.copy()
 
-def Rotate(r, longitude, latitude):
+def Rotate_spam(r, longitude, latitude):
     """
     Apply a rotation matrix to the input longitude and latitude
     inputs must be numpy arrays; stolen from esutils.py
