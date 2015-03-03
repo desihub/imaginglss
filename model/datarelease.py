@@ -57,7 +57,7 @@ class DataRelease(object):
             os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
             for brick in self.observed_bricks])
         # fix RA
-        self.catalogue['RA'][:] %= 360.
+        #self.catalogue['RA'][:] %= 360.
             
     def readout(self, coord, keys, default=numpy.nan):
         """ readout pixels at coord.
