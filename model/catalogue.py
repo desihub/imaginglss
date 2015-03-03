@@ -13,12 +13,19 @@ def coord2xyz(coord):
 
 class Catalogue(DiskColumnStore):
     """ Catalogue. 
+
         Only columns that are accessed are loaded to the memory.
 
-        This shall be split into a ColumnStore interface, with optional
-        on-disk caching facilities.
+        The columns are cached into cachedir, which is initialized 
+        by the DataRelease object.
+
+        We assume the catalogue is split into multiple files.
+        and the list of file names are provided as an input.
     """
     def __init__(self, cachedir, filenames):
+        """ cachedir is the location for caching.
+            filenames are a list of fits file names for the EDR
+        """
         self.filenames = filenames
         fn = filenames[0]
         first = fits.open(fn)[1].data

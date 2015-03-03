@@ -31,15 +31,35 @@ class Brick(object):
             % (self.id, self.name, self.ra, self.dec ))
 
     def readout(self, coord, repo, default=numpy.nan):
-        raise FIXME
-        RA, DEC = coord
-        images = numpy.empty(len(RA))
-        images[...] = default
-        x, y = numpy.int32(brick.query(coord[:, sl]))
+        """ readout image values at coord = (RA, DEC) 
+
+            if the image does not cover this region, put in `default'.
+
+            returns the image value at coord.            
+        """
+        meta = repo.metadata(self)
         img = repo.open(self)
-        l = numpy.ravel_multi_index((x, y), img.shape, mode='raise')
-        images[...] = img.flat[l] 
         
+        RA, DEC = coord
+        value = numpy.empty(len(RA))
+        value[...] = default
+
+        coord = numpy.array(coord)
+        xy = numpy.int32(wcs_tangent.ang2pix_hdr(coord, meta, 
+                zero_offset=True))
+        xy2 = numpy.int32(self.query(coord))
+        print 'xy', xy
+        print 'xy2', xy2
+        mask = (xy < numpy.array(img.shape) \
+            .reshape(2, 1)).all(axis=0)
+
+        mask &= (xy >= 0).all(axis=0)
+
+        print mask.sum()
+        l = numpy.ravel_multi_index(xy[:, mask], img.shape, mode='raise')
+        value[mask] = img.flat[l] 
+        return value
+ 
     def query(self, coord):
         """ returns the xy index of pixels for coord
             coord can be:
@@ -50,7 +70,7 @@ class Brick(object):
         #FIXME: other types of input
         coord = numpy.array(coord)
         out = wcs_tangent.ang2pix(coord,
-                CRPIX=(1800.5 - 1, 1800.5 - 1),
+                CRPIX=(1800.5, 1800.5),
                 CRVAL=(self.ra, self.dec),
                 CD=(-7.27777777777778E-05,0,0, 7.27777777777778E-05),
                )
@@ -66,7 +86,7 @@ class Brick(object):
         #FIXME: other types of input
         xy = numpy.array(xy)
         out = wcs_tangent.pix2ang(xy,
-                CRPIX=(1800.5 - 1, 1800.5 - 1),
+                CRPIX=(1800.5, 1800.5),
                 CRVAL=(self.ra, self.dec),
                 CD=(-7.27777777777778E-05,0,0,7.27777777777778E-05),
                )
