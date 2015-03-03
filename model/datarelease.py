@@ -112,11 +112,8 @@ class DataRelease(object):
                 last = bid.searchsorted(b, side='right')
                 sl = slice(first, last)
 
-                x, y = numpy.int32(brick.query(coord[:, sl]))
-
-                img = repo.open(brick)
-                l = numpy.ravel_multi_index((x, y), img.shape, mode='raise')
-                pixels[sl] = img.flat[l] 
+                img = brick.readout(coord[:, sl], repo, default=default)
+                pixels[sl] = img
             #
             images[:,  i][mask] = pixels[invarg]
             
