@@ -1,6 +1,6 @@
 import numpy
 from astropy.io import fits
-from columnstore import ColumnStore
+from columnstore import DiskColumnStore
 
 def coord2xyz(coord):
     RA, DEC = coord
@@ -11,18 +11,18 @@ def coord2xyz(coord):
     xyz[:, 2] = numpy.sin(DEC / 180. * numpy.pi)
     return xyz.T
 
-class Catalogue(ColumnStore):
+class Catalogue(DiskColumnStore):
     """ Catalogue. 
         Only columns that are accessed are loaded to the memory.
 
         This shall be split into a ColumnStore interface, with optional
         on-disk caching facilities.
     """
-    def __init__(self, filenames):
+    def __init__(self, cachedir, filenames):
         self.filenames = filenames
         fn = filenames[0]
         first = fits.open(fn)[1].data
-        ColumnStore.__init__(self, first.dtype)
+        DiskColumnStore.__init__(self, cachedir, first.dtype)
 
     def fetch(self, column):
         cat = [numpy.array(fits.open(fn)[1].data[column], copy=True)

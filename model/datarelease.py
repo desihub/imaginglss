@@ -53,7 +53,9 @@ class DataRelease(object):
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
         self.observed_area = 41253. * len(self.observed_bricks) / len(bricks)
 
-        self.catalogue = catalogue.Catalogue([
+        self.catalogue = catalogue.Catalogue(
+            './cache',
+            [
             os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
             for brick in self.observed_bricks])
         # fix RA

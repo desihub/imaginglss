@@ -41,6 +41,6 @@ def test398599():
 def testcat():
     dr = DataRelease(version='EDR')
     print dr.catalogue 
-
-#testcat()
+    print dr.catalogue['RA']
+testcat()
 test398599()
