@@ -1,4 +1,3 @@
-from model.brickindex import BrickIndex
 from model.datarelease import DataRelease
 import numpy
 
