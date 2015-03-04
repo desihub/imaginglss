@@ -4,6 +4,8 @@
 # The target selection criteria are described at:
 #   https://desi.lbl.gov/trac/wiki/TargetSelection
 #
+# usage: python select_elg.py [--plot]
+#
 from __future__ import print_function
 
 
@@ -48,11 +50,56 @@ def select_elgs():
     return( (ra,dc,mag) )
     #
 
+def diagnostic_plots(ra, dec, mag):
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+
+    g = mag[:, 1]
+    r = mag[:, 2]
+    z = mag[:, 4]
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    ax.hist2d(ra, dec)
+    canvas = FigureCanvasAgg(fig)
+    fig.savefig('elg-ra-dec.png')
+
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    ax.plot(r, r - z, '. ')
+    ax.axvline(23.4, label='r < 0.3')
+    ax.axhline(0.3, label='(r-z) > 0.3')
+    ax.axhline(1.5, label='(r-z) < 1.5')
+    ax.set_xlabel('Intrinsic z')
+    ax.set_ylabel('Intrinsic r-z')
+    ax.grid()
+    canvas = FigureCanvasAgg(fig)
+    fig.savefig('elg-ri-rz.png')
+
+    fig = Figure()
+    ax = fig.add_subplot(111)
+    x = N.linspace(
+            (g - r).min(),
+            (g - r).max(), 100)
+
+    ax.plot(g - r, r - z, '. ')
+    ax.plot(x, x + 0.2, label='(g-r) < (r-z) - 0.2')
+    ax.plot(x, 1.2 - x , label='(g-r) > 1.2 - (r-z)')
+    ax.set_xlabel('Intrinsic g-r')
+    ax.set_ylabel('Intrinsic r-z')
+    ax.grid()
+    canvas = FigureCanvasAgg(fig)
+    fig.savefig('elg-gr-rz.png')
+
 
 if __name__=="__main__":
+    from sys import argv
+
     ra,dc,mag = select_elgs()
-    print("# %13s %15s %15s %15s %15s"%("RA","DEC","g","r","z"))
-    for i in range(ra.size):
-        print("%15.10f %15.10f %15.10f %15.10f %15.10f"%\
-          (ra[i],dc[i],mag[1,i],mag[2,i],mag[4,i]))
+    if len(argv) > 1 and argv[1] == '--plot':
+        diagnostic_plots(ra, dc, mag)
+    else:
+        print("# %13s %15s %15s %15s %15s"%("RA","DEC","g","r","z"))
+        for i in range(ra.size):
+            print("%15.10f %15.10f %15.10f %15.10f %15.10f"%\
+              (ra[i],dc[i],mag[1,i],mag[2,i],mag[4,i]))
     #
