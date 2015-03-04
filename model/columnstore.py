@@ -11,7 +11,7 @@ class ColumnStore(object):
     def __setitem__(self, column, value):
         value = numpy.array(value)
         if column in self.dtype.fields:
-            self.cache[column] = value.astype(self.dtype[column])
+            self.cache[column] = value.astype(self.dtype[column].base)
         else:
             self.updatedtype(column, value)
 
