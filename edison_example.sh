@@ -6,7 +6,7 @@
 #PBS -q debug
 #PBS -A m779
 #
-# An example "submit" script, to work on Carver at NERSC,
+# An example "submit" script, to work on Edison at NERSC,
 # to read a catalog of Decals objects and print some
 # basic statics about them.
 #
