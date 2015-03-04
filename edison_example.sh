@@ -25,7 +25,6 @@ export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
 python << EOF
 import numpy
-from model.brickindex  import BrickIndex
 from model.datarelease import DataRelease
 dr    = DataRelease(version='EDR')
 ramin = dr.observed_bricks[ 'RA1'].min()
