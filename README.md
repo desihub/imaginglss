@@ -6,7 +6,7 @@ To use the data model on edison:
 
 
     export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
-    export DECALS_CACHE=$HOME/desicache
+    export DECALS_CACHE=$GSCRATCH/desicache
 
 2. somehow install astropy.
 
