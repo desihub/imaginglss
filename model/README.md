@@ -7,15 +7,25 @@ extinction, etc. are stored in pixelized images within the
 FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.
 
+The main way to access the DECALS imaging data is via DataRelease
+objects defined in "datarelease.py". It holds the imaging catalogue 
+(Catalogue), a BrickIndex for the sky decomposition, and routines
+to query within the full survey area image values at any give sky
+coordinate.
+
 Our data model has the management of the individual FITS files
 handled by "imagerepo.py" and the imagerepo class.
 
-The brick class, defined in "brick.py", holds metadata for each
+The Brick class, defined in "brick.py", holds metadata for each
 brick, routines for converting from sky coordinates to image
 pixels within each brick, and routines for querying the images
-handled by imagerepo.
+handled by imagerepo. Brick objects are created by BrickIndex class
+(see below)
 
-The brickindex class, defined in "brick_index.py", contains...
+The BrickIndex class, defined in "brick_index.py", holds the metadata
+of of the brick decomposition scheme, rountines for converting from
+sky coordinates to bricks, and acts as a factory that creates Brick
+objects.
 
 Catalog information is handled by "catalog.py", which stores the
 list of files to be requested by
