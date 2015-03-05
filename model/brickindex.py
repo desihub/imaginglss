@@ -31,20 +31,53 @@ class BrickIndex(object):
         self.RA2 = self.brickdata['RA2']
         self.DEC2 = self.brickdata['DEC2']
 
+        self.cache = {}
+
         assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
          
     def get_brick(self, index):
-        """ create a single brick from bid """
-        # template header to feed wcs
-        # fill CRVAL1, CRVAL2 later
-        return Brick(self.brickdata['BRICKID'][index], 
-                self.brickdata['BRICKNAME'][index], 
-                self.brickdata['RA'][index], 
-                self.brickdata['DEC'][index], 
-                self.brickdata['RA1'][index], 
-                self.brickdata['RA2'][index], 
-                self.brickdata['DEC1'][index], 
-                self.brickdata['DEC2'][index])
+        """ Obtain a single brick from bid; it can be created.
+
+            The returned Brick object is immutable; there is only
+            a single instance per BrickIndex.
+
+            The lack of a vector version is on purpose to emphasize
+            we are dealing with objects. (YF: maybe not a good idea?)
+        """
+        if index not in self.cache:
+            brick = Brick(self.brickdata['BRICKID'][index], 
+                    self.brickdata['BRICKNAME'][index], 
+                    self.brickdata['RA'][index], 
+                    self.brickdata['DEC'][index], 
+                    self.brickdata['RA1'][index], 
+                    self.brickdata['RA2'][index], 
+                    self.brickdata['DEC1'][index], 
+                    self.brickdata['DEC2'][index])
+            self.cache[index] = brick
+        return self.cache[index]
+
+    def search_by_name(self, brickname):
+        """ search the brickindex for bricks with a given name.
+
+            returns the internal index of bricks.
+
+            Get real Brick objects by iterating over the result and use get_brick(i)
+        """
+        raise NotImplementedError
+
+    def search_by_id(self, brickid):
+        """ search the brickindex for bricks with a given brickid.
+
+            returns the internal index of bricks.
+
+            Get real Brick objects by iterating over the result and use get_brick(i)
+        """
+        rt = self.brickdata['BRICKID'].searchsorted(brickid)
+        rt = rt.clip(0, len(self.brickdata) - 1)
+        found = self.brickdata['BRICKID'][rt] == brickid
+        if not found.all():
+            raise IndexError("Some brickid %s are not found" % str(brickid[~found]))
+        return rt
 
     def query(self, coord):
         """ 
