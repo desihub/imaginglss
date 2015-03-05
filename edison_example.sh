@@ -27,10 +27,10 @@ python << EOF
 import numpy
 from model.datarelease import DataRelease
 dr    = DataRelease(version='EDR')
-ramin = dr.observed_bricks[ 'RA1'].min()
-ramax = dr.observed_bricks[ 'RA2'].max()
-decmin= dr.observed_bricks['DEC1'].min()
-decmax= dr.observed_bricks['DEC2'].max()
+ramin = dr.ramin
+ramax = dr.ramax
+decmin= dr.decmin
+decmax= dr.decmax
 print ramin,ramax,decmin,decmax
 EOF
 #

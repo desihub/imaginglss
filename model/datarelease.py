@@ -5,6 +5,8 @@ import numpy
 import glob
 import re
 
+from collections import namedtuple
+
 from . import brickindex
 from . import imagerepo
 from . import catalogue
@@ -88,6 +90,12 @@ class DataRelease(object):
                 if not (filename.startswith('tractor') and filename.endswith('fits')): continue
                 self.observed_bricks.append(self.tractorfilename_to_brick(filename, self.brickindex))
 
+        self._observed_brickids = self.brickindex.search_by_id(
+            [ brick.id for brick in self.observed_bricks ])
+        arg = self._observed_brickids.argsort()
+        self._observed_brickids = self._observed_brickids[arg]
+        self.observed_bricks = numpy.array(self.observed_bricks)[arg]
+
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
         self.observed_area = 41253. * len(self.observed_bricks) / len(self.brickindex)
 
@@ -97,6 +105,13 @@ class DataRelease(object):
             os.path.join(self.root, self.gettractorfilename(brick))
             for brick in self.observed_bricks])
 
+        # footprint of the survey
+        Footprint = namedtuple('Footprint', ['ramin', 'ramax', 'decmin', 'decmax'])
+        self.footprint = Footprint(
+            ramin=min([brick.ra1 for brick in self.observed_bricks]),
+            ramax=max([brick.ra2 for brick in self.observed_bricks]),
+            decmin=min([brick.dec1 for brick in self.observed_bricks]),
+            decmax=max([brick.dec2 for brick in self.observed_bricks]),)
          
     def readout(self, coord, repo, default=numpy.nan):
         """ readout pixels at coord.
@@ -119,7 +134,9 @@ class DataRelease(object):
 
         bid = self.brickindex.query((RA, DEC))
         # watch out bid + 1
-        mask = contains(self.observed_brickids, bid + 1)
+        print bid
+        mask = contains(self._observed_brickids, bid)
+        print mask
         ra = RA[mask]
         dec = DEC[mask]
         coord, invarg = self.brickindex.optimize((ra, dec))
