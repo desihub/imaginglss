@@ -32,7 +32,7 @@ class BrickIndex(object):
         self.DEC2 = self.brickdata['DEC2']
 
         assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
-
+         
     def get_brick(self, index):
         """ create a single brick from bid """
         # template header to feed wcs

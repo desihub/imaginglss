@@ -56,8 +56,7 @@ class DataRelease(object):
 
         bricks = fits.open(os.path.join(self.root, self.BRICKS_FILENAME))[1].data
 
-        self.bricks = numpy.array(bricks, copy=True)
-        self.brickindex = brickindex.BrickIndex(self.bricks)
+        self.brickindex = brickindex.BrickIndex(bricks)
 
         self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
@@ -69,9 +68,6 @@ class DataRelease(object):
                 MODEL=imagerepo.ImageRepo(self.root, self.getimagefilename(self.MODEL_FILENAME, band)),
             )
 
-        self.build_catalogue()
-
-    def build_catalogue(self):
         observed_brickids = numpy.unique([
             int(re.search('-([0123456789]+)\.', fn).group(1))
                 for fn in glob.glob(os.path.join(self.root, 'tractor/tractor-[0-9]*.fits'))
@@ -79,14 +75,18 @@ class DataRelease(object):
         self.observed_brickids = observed_brickids
 
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
-        self.observed_area = 41253. * len(self.observed_brickids) / len(self.bricks)
+        self.observed_area = 41253. * len(self.observed_brickids) / len(bricks)
 
-        self.observed_bricks = self.bricks[self.bricks['BRICKID'].searchsorted(self.observed_brickids)]
+        self.observed_bricks = [ self.brickindex.get_brick(i)
+                for i in bricks['BRICKID'].searchsorted(observed_brickids)
+                ]
+
         self.catalogue = catalogue.Catalogue(
             os.path.join(self.cacheroot, 'catalogue'),
             [
             os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
             for brick in self.observed_brickids])
+
 
          
     def readout(self, coord, repo, default=numpy.nan):

@@ -2,10 +2,8 @@ from model.datarelease import DataRelease
 import numpy
 
 dr = DataRelease(version='EDR')
-bi = dr.brickindex
-ob = dr.observed_brickids
 
-brick = bi.get_brick(ob[0])
+brick = dr.observed_bricks[0]
 print dr.images['z']['IMAGE'].metadata(brick)
 #print dr.images['DEPTH'].open(brick, band='z')
 #print brick
@@ -14,15 +12,13 @@ def test398599():
     """ test image readout on brick-398599. 
     """
     dr = DataRelease(version='EDR')
-    bi = dr.brickindex
-    ob = dr.observed_brickids
-    brick = bi.get_brick(ob[0])
+    brick = dr.observed_bricks[0]
     dr.images['z']['IMAGE'].preload([brick])
 
     img2 = dr.images['z']['IMAGE'].open(brick)
     assert (img2[300:-300, 300:-300] != 0).any()
 
-    print ob[0], brick
+    print 'Testing on', brick
     x, y = numpy.indices((3600, 3600))
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
@@ -48,10 +44,10 @@ def test398599():
 def testrandom():
     dr = DataRelease(version='EDR')
 
-    ramin = dr.observed_bricks['RA1'].min()
-    ramax = dr.observed_bricks['RA2'].max()
-    decmin = dr.observed_bricks['DEC1'].min()
-    decmax = dr.observed_bricks['DEC2'].max()
+    ramin = min([brick.ra1 for brick in dr.observed_bricks])
+    decmin = min([brick.dec1 for brick in dr.observed_bricks])
+    ramax = max([brick.ra2 for brick in dr.observed_bricks])
+    decmax = max([brick.dec2 for brick in dr.observed_bricks])
 
     print decmin, decmax
     u1, u2 = numpy.random.random(size=(2, 4))
