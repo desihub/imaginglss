@@ -37,7 +37,7 @@ def test398599():
     assert numpy.allclose(y, y2)
 
 
-    img = dr.readout(coord, (dr.images['z']['IMAGE'],))[..., 0]
+    img = dr.readout(coord, dr.images['z']['IMAGE'])
     print 'brick readout passed'
     print 'found', (~numpy.isnan(img)).sum()
     diff = img.reshape(3600, 3600) - img2
@@ -66,7 +66,7 @@ def testrandom():
         [dr.brickindex[i-1] for i in dr.observed_brickids[:2]])
 #    print 'prefetched'
     coord = (RA, DEC)
-    depth = dr.readout(coord, (dr.images['r']['DEPTH'],))[..., 0]
+    depth = dr.readout(coord, dr.images['r']['DEPTH'])
     print depth
  
 def testcat():

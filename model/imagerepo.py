@@ -15,6 +15,12 @@ class ImageRepo(object):
         """
             pattern is a python formatting string.
             supported keywords are
+
+            pattern can also be a callable with signature:
+
+            def pattern(brick):
+                return filename_without_root
+
             %(brickid)d
             %(brickname)d
 
@@ -43,10 +49,8 @@ class ImageRepo(object):
         """
         if brick in self.cache:
             return self.cache[brick]
-        kwargs['brickid'] = brick.id
-        kwargs['brickname'] = brick.name
         _ = self.metadata(brick, **kwargs)
-        return fits.open(self.get_filename(
+        return fits.open(self.get_filename(brick,
             **kwargs
             ))[0].data[:]
 
@@ -54,14 +58,18 @@ class ImageRepo(object):
         """ Fetch the meta data about a brick.
         """
         if brick not in self.meta_cache:
-            kwargs['brickid'] = brick.id
-            kwargs['brickname'] = brick.name
-            hdu = fits.open(self.get_filename(**kwargs))[0]
+            hdu = fits.open(self.get_filename(brick, **kwargs))[0]
             meta = dict(hdu.header)
             self.meta_cache[brick] = meta
         return self.meta_cache[brick]
 
-    def get_filename(self, **kwargs):
-        return os.path.join(self.root, 
-            self.pattern) % kwargs
+    def get_filename(self, brick, **kwargs):
+        if hasattr(self.pattern, '__call__'):
+            return os.path.join(self.root, 
+                self.pattern(brick, **kwargs))
+        else:
+            kwargs['brickid'] = brick.id
+            kwargs['brickname'] = brick.name
+            return os.path.join(self.root, 
+                self.pattern) % kwargs
 
