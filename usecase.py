@@ -5,7 +5,7 @@ dr = DataRelease(version='EDR')
 bi = dr.brickindex
 ob = dr.observed_brickids
 
-brick = bi[ob[0]]
+brick = bi.get_brick(ob[0])
 print dr.images['z']['IMAGE'].metadata(brick)
 #print dr.images['DEPTH'].open(brick, band='z')
 #print brick
@@ -16,7 +16,7 @@ def test398599():
     dr = DataRelease(version='EDR')
     bi = dr.brickindex
     ob = dr.observed_brickids
-    brick = bi[ob[0]]
+    brick = bi.get_brick(ob[0])
     dr.images['z']['IMAGE'].preload([brick])
 
     img2 = dr.images['z']['IMAGE'].open(brick)
@@ -63,7 +63,7 @@ def testrandom():
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)
 
     dr.images['r']['IMAGE'].preload(
-        [dr.brickindex[i-1] for i in dr.observed_brickids[:2]])
+        [dr.brickindex.get_brick(i-1) for i in dr.observed_brickids[:2]])
 #    print 'prefetched'
     coord = (RA, DEC)
     depth = dr.readout(coord, dr.images['r']['DEPTH'])

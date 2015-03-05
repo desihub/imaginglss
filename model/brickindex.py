@@ -4,56 +4,58 @@ from astropy.io import fits
 from brick import Brick
 
 class BrickIndex(object):
-    def __init__(self, hdudata):
+    def __init__(self, brickdata):
         """ 
             indexing bricks from bricks.fits 
             bricks = fits.open('bricks.fits')
             bi = BrickIndex(bricks[1].data) 
 
-            hdudata can also be a file name.
+            brickdata can also be a file name.
         """
-        if isinstance(hdudata, basestring):
-            hdudata = fits.open(hdudata)[1].data[:]
+        if isinstance(brickdata, basestring):
+            brickdata = fits.open(brickdata)[1].data[:]
             
-        self.hdudata = numpy.array(hdudata[:], copy=True)
-        self.ncols = numpy.bincount(hdudata['BRICKROW'])
+        self.brickdata = numpy.array(brickdata[:], copy=True)
+        self.ncols = numpy.bincount(brickdata['BRICKROW'])
 
-        self.ROWMAX = hdudata['BRICKROW'].max()
-        self.COLMAX = hdudata['BRICKCOL'].max() 
+        self.ROWMAX = brickdata['BRICKROW'].max()
+        self.COLMAX = brickdata['BRICKCOL'].max() 
 
         # fast querying from row col
-        self.hash = hdudata['BRICKROW'] * (self.COLMAX + 1) + hdudata['BRICKCOL']
+        self.hash = brickdata['BRICKROW'] * (self.COLMAX + 1) + brickdata['BRICKCOL']
 
-        self.RA = self.hdudata['RA']
-        self.DEC = self.hdudata['DEC']
-        self.RA1 = self.hdudata['RA1']
-        self.DEC1 = self.hdudata['DEC1']
-        self.RA2 = self.hdudata['RA2']
-        self.DEC2 = self.hdudata['DEC2']
+        self.RA = self.brickdata['RA']
+        self.DEC = self.brickdata['DEC']
+        self.RA1 = self.brickdata['RA1']
+        self.DEC1 = self.brickdata['DEC1']
+        self.RA2 = self.brickdata['RA2']
+        self.DEC2 = self.brickdata['DEC2']
 
-        assert (self.hdudata['BRICKID'] == numpy.arange(len(self.hdudata)) + 1).all()
+        assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
 
-    def __getitem__(self, index):
+    def get_brick(self, index):
         """ create a single brick from bid """
         # template header to feed wcs
         # fill CRVAL1, CRVAL2 later
-        return Brick(self.hdudata['BRICKID'][index], 
-                self.hdudata['BRICKNAME'][index], 
-                self.hdudata['RA'][index], 
-                self.hdudata['DEC'][index], 
-                self.hdudata['RA1'][index], 
-                self.hdudata['RA2'][index], 
-                self.hdudata['DEC1'][index], 
-                self.hdudata['DEC2'][index])
+        return Brick(self.brickdata['BRICKID'][index], 
+                self.brickdata['BRICKNAME'][index], 
+                self.brickdata['RA'][index], 
+                self.brickdata['DEC'][index], 
+                self.brickdata['RA1'][index], 
+                self.brickdata['RA2'][index], 
+                self.brickdata['DEC1'][index], 
+                self.brickdata['DEC2'][index])
 
     def query(self, coord):
         """ 
             querying the indices for given RA and DEC
             RA, DEC = coord
 
-            coord shall be in the same coordinate system of the bricks!
-            returns the internal index of the bricks.
-            get real Brick objects by iterating over the result and use brickindex[i]
+            coord shall be in the same coordinate system of the bricks.
+
+            returns the internal index of the bricks (differ from BRICKID.
+
+            Get real Brick objects by iterating over the result and use get_brick(i)
         """
         RA, DEC = coord
         RA = numpy.asarray(RA)

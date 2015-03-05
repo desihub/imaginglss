@@ -123,7 +123,7 @@ class DataRelease(object):
         ubid = numpy.unique(bid)
 
         for b in ubid:
-            brick = self.brickindex[b]
+            brick = self.brickindex.get_brick(b)
             first = bid.searchsorted(b, side='left')
             last = bid.searchsorted(b, side='right')
             sl = slice(first, last)
