@@ -4,7 +4,7 @@ class ColumnStore(object):
     """ a cached column store 
         subclass shall implement
     """
-    def __init__(self, dtype=None):
+    def __init__(self, dtype):
         self.cache = {}
         self.dtype = dtype
 
@@ -38,7 +38,7 @@ class ColumnStore(object):
 
 import os.path
 class DiskColumnStore(ColumnStore):
-    def __init__(self, root, dtype=None):
+    def __init__(self, root, dtype):
         self.root = root
         ColumnStore.__init__(self, dtype)
 
@@ -68,5 +68,3 @@ class DiskColumnStore(ColumnStore):
             pass
         del self[column]
 
-
-    
