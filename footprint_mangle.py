@@ -84,9 +84,8 @@ def make_polygon_file(fn="footprint.ply"):
     """
     capslist,arealist = [],[]
     dr = DataRelease(version='EDR')
-    for brickid in dr.observed_brickids:
-        bb        = dr.brickindex.get_brick(brickid)
-        caps,area = make_caps(bb.ra1,bb.ra2,bb.dec1,bb.dec2)
+    for brick in dr.observed_bricks:
+        caps,area = make_caps(brick.ra1,brick.ra2,brick.dec1,brick.dec2)
         capslist.append(caps)
         arealist.append(area)
     write_poly(capslist,arealist,fn)
