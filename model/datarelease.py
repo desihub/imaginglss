@@ -34,15 +34,29 @@ class DataRelease(object):
     DEPTH_FILENAME = 'coadd/depth-%(brickid)d-%(band)s.fits.gz'
     IMAGE_FILENAME = 'coadd/image-%(brickid)d-%(band)s.fits' 
     MODEL_FILENAME = 'coadd/model-%(brickid)d-%(band)s.fits'
-    TRACTOR_FILENAME = lambda brick: \
-                'tractor/tractor-%(brickid)d.fits' \
-                % dict(brickid=brick.id) 
 
     @staticmethod
     def getimagefilename(PATTERN, band):
         def getfilename(brick):
             return PATTERN % dict(brickid=brick.id, band=band)
         return getfilename
+
+    @staticmethod
+    def gettractorfilename(brick):
+        TRACTOR_FILENAME = 'tractor/tractor-%(brickid)d.fits'
+        return TRACTOR_FILENAME % dict(brickid=brick.id) 
+
+    @staticmethod
+    def gettractorfilename(brick):
+        TRACTOR_FILENAME = 'tractor/tractor-%(brickid)d.fits'
+        return TRACTOR_FILENAME % dict(brickid=brick.id) 
+
+    @staticmethod
+    def tractorfilename_to_brick(filename, brickindex):
+        return brickindex.get_brick(
+            brickindex.search_by_id(
+                int(re.search('-([0123456789]+)\.', 
+                os.path.basename(filename)).group(1))))
 
     def __init__(self, root=None, cacheroot=None, version=None):
         if root is None:
@@ -54,9 +68,9 @@ class DataRelease(object):
 
         self.cacheroot = os.path.join(cacheroot, version)
 
-        bricks = fits.open(os.path.join(self.root, self.BRICKS_FILENAME))[1].data
+        brickdata = fits.open(os.path.join(self.root, self.BRICKS_FILENAME))[1].data
 
-        self.brickindex = brickindex.BrickIndex(bricks)
+        self.brickindex = brickindex.BrickIndex(brickdata)
 
         self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
@@ -68,25 +82,20 @@ class DataRelease(object):
                 MODEL=imagerepo.ImageRepo(self.root, self.getimagefilename(self.MODEL_FILENAME, band)),
             )
 
-        observed_brickids = numpy.unique([
-            int(re.search('-([0123456789]+)\.', fn).group(1))
-                for fn in glob.glob(os.path.join(self.root, 'tractor/tractor-[0-9]*.fits'))
-        ])
-        self.observed_brickids = observed_brickids
+        self.observed_bricks = [ ]
+        for roots, dirnames, filenames in os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
+            for filename in filenames:
+                if not (filename.startswith('tractor') and filename.endswith('fits')): continue
+                self.observed_bricks.append(self.tractorfilename_to_brick(filename, self.brickindex))
 
         # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
-        self.observed_area = 41253. * len(self.observed_brickids) / len(bricks)
-
-        self.observed_bricks = [ self.brickindex.get_brick(i)
-                for i in bricks['BRICKID'].searchsorted(observed_brickids)
-                ]
+        self.observed_area = 41253. * len(self.observed_bricks) / len(self.brickindex)
 
         self.catalogue = catalogue.Catalogue(
             os.path.join(self.cacheroot, 'catalogue'),
             [
-            os.path.join(self.root, 'tractor/tractor-%d.fits' % brick)
-            for brick in self.observed_brickids])
-
+            os.path.join(self.root, self.gettractorfilename(brick))
+            for brick in self.observed_bricks])
 
          
     def readout(self, coord, repo, default=numpy.nan):

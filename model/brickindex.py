@@ -35,6 +35,9 @@ class BrickIndex(object):
 
         assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
          
+    def __len__(self):
+        return len(self.brickdata)
+
     def get_brick(self, index):
         """ Obtain a single brick from bid; it can be created.
 
