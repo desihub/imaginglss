@@ -12,6 +12,7 @@
 #   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
 # is also a very useful reference.
 #
+from __future__ import print_function
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
@@ -257,10 +258,10 @@ if __name__ == '__main__':
                 CRPIX=(1800.5,1800.5),
                 CRVAL=(ra0, dec0))
 
-        print 'transforming', ra, dec, 'at', ra0, dec0
-        print 'roundtrip', back.T
-        print 'astropy has', astropy
-        print 'we have    ', ours.T
+        print('transforming', ra, dec, 'at', ra0, dec0)
+        print('roundtrip', back.T)
+        print('astropy has', astropy)
+        print('we have    ', ours.T)
         return ours - astropy
 
     def test():
