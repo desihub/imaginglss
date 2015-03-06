@@ -154,10 +154,9 @@ class DataRelease(object):
         images[...] = default
 
         bid = self.brickindex.query((RA, DEC))
-        # watch out bid + 1
-        print(bid)
+
         mask = contains(self._observed_brickids, bid)
-        print(mask)
+
         ra = RA[mask]
         dec = DEC[mask]
         coord, invarg = self.brickindex.optimize((ra, dec))

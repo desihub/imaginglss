@@ -1,5 +1,6 @@
 from model.datarelease import DataRelease
 import numpy
+import sys
 from sys import stdout
 from sys import argv
 def main(comm):
@@ -29,7 +30,10 @@ def main(comm):
 
     sl = slice(mystart, myend)
     coord = (RA[sl], DEC[sl])
-    mydepth = dr.readout(coord, dr.images['r']['DEPTH'])
+    mydepth = numpy.zeros(len(Ra[sl]), dtype=('f4', 6))
+    mydepth[:, 1] = dr.readout(coord, dr.images['r']['DEPTH'])
+    mydepth[:, 2] = dr.readout(coord, dr.images['g']['DEPTH'])
+    mydepth[:, 4] = dr.readout(coord, dr.images['z']['DEPTH'])
     if comm is not None:
         depth = comm.gather(mydepth)
         if comm.rank == 0:
@@ -39,11 +43,11 @@ def main(comm):
     else:
         depth = mydepth
 
-    numpy.savetxt(stdout, zip(RA, DEC, depth))
+    numpy.savetxt(stdout, zip(RA, DEC, depth[:, 1], depth[:, 2], depth[:, 4]), header='#ra dec r g z')
 
 if __name__ == '__main__':    
     from sys import argv
-    if argv[0] == '--usempi':
+    if 'mpi' in sys.executable:
         from mpi4py import MPI
         main(MPI.COMM_WORLD)
     else:
