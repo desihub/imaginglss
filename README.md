@@ -18,6 +18,7 @@ https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1
 To use this imaing data model on edison:
 
 1. set environments
+  
   ```
     export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
     export DECALS_CACHE=$GSCRATCH/desicache
