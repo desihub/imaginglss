@@ -17,25 +17,27 @@ https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1
 
 To use this imaing data model on edison:
 
-1. set environments:
-```
+1. set environments
+  
+  ```
     export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
     export DECALS_CACHE=$GSCRATCH/desicache
-```
+  ```
 2. install astropy or fitsio (prefered)
-```easy_install --user astropy```
+  ```
+    easy_install --user astropy
+  ```
 
-    or 
-    
-```easy_install --user fitsio```
-
+  Alternatively, 
+  ```
+    easy_install --user fitsio
+  ```
 
 3. try if usecase.py runs.
-```
+  ```
     python usecase.py
-```
-    Due to internal caching of the catalogue, 
-    the running time is faster after first time.
+  ```
+Due to internal caching of the catalogue, the running time is faster after first time.
 
 Documentation of the modelling can be seen in model/README.md
 
