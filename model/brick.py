@@ -2,10 +2,10 @@
 # This object contains only the meta-data, and it calls
 # imagerepo to handle looking up the pixel-level information.
 
-import numpy
-import wcs_tangent
-
 from __future__ import print_function
+
+import numpy
+from utils import wcs_tangent
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
@@ -33,8 +33,8 @@ class Brick(object):
         self.ra2  = ra2
         self.dec1 = dec1
         self.dec2 = dec2
-        print(elf.query(([self.ra], [self.dec])))
-        print(self.revert(([1799.], [1799.])))
+        #print(self.query(([self.ra], [self.dec])))
+        #print(self.revert(([1799.], [1799.])))
 
     def __hash__(self):
         return self.id
