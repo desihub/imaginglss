@@ -3,9 +3,9 @@
 # This class does some caching for speed.
 
 import numpy
-from astropy.io import fits
-from columnstore import DiskColumnStore
 
+from utils import fits
+from columnstore import DiskColumnStore
 
 
 __author__ = "Yu Feng and Martin White"
@@ -46,11 +46,11 @@ class Catalogue(DiskColumnStore):
         """
         self.filenames = filenames
         fn = filenames[0]
-        first = fits.open(fn)[1].data
+        first = fits.read_table(fn)
         DiskColumnStore.__init__(self, cachedir, first.dtype)
 
     def fetch(self, column):
-        cat = [numpy.array(fits.open(fn)[1].data[column], copy=True)
+        cat = [numpy.array(fits.read_table(fn), copy=True)
             for fn in self.filenames]
         cat = numpy.concatenate(cat)
         return cat

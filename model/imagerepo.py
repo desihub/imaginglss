@@ -1,4 +1,4 @@
-from astropy.io import fits
+from utils import fits
 import os.path
 
 class ImageRepo(object):
@@ -49,16 +49,15 @@ class ImageRepo(object):
         if brick in self.cache:
             return self.cache[brick]
         _ = self.metadata(brick, **kwargs)
-        return fits.open(self.get_filename(brick,
+        return fits.read_image(self.get_filename(brick,
             **kwargs
-            ))[0].data[:]
+            ))
 
     def metadata(self, brick, **kwargs):
         """ Fetch the meta data about a brick.
         """
         if brick not in self.meta_cache:
-            hdu = fits.open(self.get_filename(brick, **kwargs))[0]
-            meta = dict(hdu.header)
+            meta = fits.read_metadata(self.get_filename(brick, **kwargs))
             self.meta_cache[brick] = meta
         return self.meta_cache[brick]
 

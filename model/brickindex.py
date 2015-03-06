@@ -6,7 +6,6 @@
 
 import numpy
 
-from astropy.io import fits
 from brick import Brick
 
 __author__ = "Yu Feng and Martin White"
@@ -25,15 +24,14 @@ class BrickIndex(object):
         """ 
         The FITS file 'bricks.fits' within each imaging data release
         contains meta-data about each of the bricks in the release.
+
         We generate an index from bricks.fits , e.g.
-        bricks = fits.open('bricks.fits')
-        bi = BrickIndex(bricks[1].data) 
-        brickdata can be the data in the FITS file or the file name.
+        brickdata = fits.read_table('bricks.fits')
+        bi = BrickIndex(brickdata) 
+    
         """
-        if isinstance(brickdata, basestring):
-            brickdata = fits.open(brickdata)[1].data[:]
-            
         self.brickdata = numpy.array(brickdata[:], copy=True)
+
         self.ncols = numpy.bincount(brickdata['BRICKROW'])
 
         self.ROWMAX = brickdata['BRICKROW'].max()

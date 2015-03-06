@@ -13,7 +13,7 @@ import glob
 import re
 from collections import namedtuple
 
-from astropy.io import fits
+from utils import fits
 
 from . import brickindex
 from . import imagerepo
@@ -91,7 +91,7 @@ class DataRelease(object):
 
         self.cacheroot = os.path.join(cacheroot, version)
 
-        brickdata = fits.open(os.path.join(self.root, self.BRICKS_FILENAME))[1].data
+        brickdata = fits.read_table(os.path.join(self.root, self.BRICKS_FILENAME))
 
         self.brickindex = brickindex.BrickIndex(brickdata)
 
