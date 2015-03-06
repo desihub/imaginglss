@@ -28,7 +28,10 @@ sky coordinates to bricks, and acts as a factory that creates Brick
 objects.
 
 Catalog information is handled by "catalog.py", which stores the
-list of files to be requested by
+object catalogs associated with a data release.
+The catalogs are contained in FITS files, but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory.
 
 The images contain only coordinate transformations in the WCS
 "tangent" format.  In order to speed up these transformations, and
