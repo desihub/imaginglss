@@ -23,12 +23,11 @@ To use this imaing data model on edison:
     export DECALS_CACHE=$GSCRATCH/desicache
 ```
 2. install astropy or fitsio (prefered)
-
 ```
 easy_install --user astropy
 ```
-    or 
-    
+
+Alternatively, 
 ```
 easy_install --user fitsio
 ```
