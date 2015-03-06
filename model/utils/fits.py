@@ -25,6 +25,9 @@ def use_astropy():
     global read_image
     global read_table
     global read_metadata
+    global backend 
+
+    backend = "astropy"
 
     from astropy.io import fits
 
@@ -59,6 +62,9 @@ def use_fitsio():
     global read_image
     global read_table
     global read_metadata
+    global backend 
+
+    backend = "fitsio"
 
     from fitsio import FITS
 
@@ -93,7 +99,6 @@ _priorities = [use_fitsio, use_astropy]
 for backend in _priorities:
     try:
         backend()
-        print('using', backend)
         break
     except ImportError:
         continue
@@ -103,10 +108,14 @@ if __name__ == '__main__':
     im0 = read_image('depth-370143-g.fits.gz')
     meta0 = read_metadata('depth-370143-g.fits.gz')
     tbl0 = read_table('tractor-370143.fits')
+    assert backend == 'fitsio'
     use_astropy()
     im1 = read_image('depth-370143-g.fits.gz')
     meta1 = read_metadata('depth-370143-g.fits.gz')
     tbl1 = read_table('tractor-370143.fits')
+
+    assert backend == 'astropy'
+
     assert (im0[...] == im1[...]).all()
     assert set(tbl0.dtype.names) == set(tbl1.dtype.names)
     assert set(meta0.keys()) == set(meta1.keys())
