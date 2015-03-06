@@ -24,13 +24,13 @@ export DECALS_CACHE=$GSCRATCH/desicache
 export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
 python << EOF
-import numpy
 from model.datarelease import DataRelease
 dr    = DataRelease(version='EDR')
-ramin = dr.ramin
-ramax = dr.ramax
-decmin= dr.decmin
-decmax= dr.decmax
+foot  = dr.footprint
+ramin = foot.ramin
+ramax = foot.ramax
+decmin= foot.decmin
+decmax= foot.decmax
 print ramin,ramax,decmin,decmax
 EOF
 #
