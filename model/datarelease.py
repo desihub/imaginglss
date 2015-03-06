@@ -155,9 +155,9 @@ class DataRelease(object):
 
         bid = self.brickindex.query((RA, DEC))
         # watch out bid + 1
-        print bid
+        print(bid)
         mask = contains(self._observed_brickids, bid)
-        print mask
+        print(mask)
         ra = RA[mask]
         dec = DEC[mask]
         coord, invarg = self.brickindex.optimize((ra, dec))
