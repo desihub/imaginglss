@@ -1,15 +1,31 @@
+# Python code to look at the imaging data, containing
+# interfaces to deal with "bricks" and "catalogs".
+# This is the "highest level" interface to the
+# imaging data and makes use of several lower
+# level objects.
+
+from __future__ import print_function
+
 import os
 import os.path
-from astropy.io import fits
 import numpy
 import glob
 import re
-
 from collections import namedtuple
+
+from astropy.io import fits
 
 from . import brickindex
 from . import imagerepo
 from . import catalogue
+
+
+__author__ = "Yu Feng and Martin White"
+__version__ = "0.9"
+__email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
+
+
+
 
 class Lazy(object):
     def __init__(self, calculate_function):
@@ -30,6 +46,11 @@ def contains(haystack, needle):
     return haystack[ind] == needle
 
 class DataRelease(object):
+    """
+    The highest level interface into the data for a given imaging
+    data release.  Uses several "helper" classes and has methods for
+    looking at pixelized data or catalogs arranged in bricks.
+    """
     BANDS = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
     BRICKS_FILENAME = 'bricks.fits'

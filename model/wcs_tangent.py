@@ -15,7 +15,7 @@
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
-__email__  = "yfeng1@berkeley.edu or mwhite@berkeley.edu"
+__email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 __all__ = ['ang2pix','pix2ang','ang2pix_hdr','pix2ang_hdr']
 
 

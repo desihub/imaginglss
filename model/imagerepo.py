@@ -2,29 +2,28 @@ from astropy.io import fits
 import os.path
 
 class ImageRepo(object):
-    """ Image repository.
-
-        Image repository concerns about file system layout and
-        IO of bricks. 
-
-        Given a Brick object, ImageRepo can return the image data
-        or meta data of the image.
-
+    """
+    Image repository.
+    This class serves as an interface to the file system, the
+    layout of files and IO for brick files.
+    Given a Brick object, ImageRepo can return the image data
+    or meta data of the image.
+    Standard users should not need to modify this class.
     """
     def __init__(self, root, pattern):
         """
-            pattern is a python formatting string.
-            supported keywords are
+        pattern is a python formatting string.
+        supported keywords are
 
-            pattern can also be a callable with signature:
+        pattern can also be a callable with signature:
 
-            def pattern(brick):
-                return filename_without_root
+        def pattern(brick):
+            return filename_without_root
 
-            %(brickid)d
-            %(brickname)d
+        %(brickid)d
+        %(brickname)d
 
-            We need to extend this for DR1.
+        We need to extend this for DR1.
         """
         self.root = root
         self.pattern = pattern
