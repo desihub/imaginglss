@@ -37,10 +37,26 @@ To use this imaing data model on edison:
   ```
     python usecase.py
   ```
+
+4. start hacking with
+  ```
+    from model.datarelease import DataRelease
+    dr = DataRelease(version='EDR')
+  ```
+
 Due to internal caching of the catalogue, the running time is faster after first time.
 
 Documentation of the modelling can be seen in model/README.md
 
 We are working on a more comprehensive documentation generated from
 source code doc strings.
+
+Examples:
+  ```
+  edison_example.sh
+  mpirandom.py
+  usecase.py
+  select_elgs.py
+  footprint_mangle.py
+  ```
 
