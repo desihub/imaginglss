@@ -5,6 +5,8 @@
 import numpy
 import wcs_tangent
 
+from __future__ import print_function
+
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
@@ -31,8 +33,8 @@ class Brick(object):
         self.ra2  = ra2
         self.dec1 = dec1
         self.dec2 = dec2
-        #print elf.query(([self.ra], [self.dec]))
-        #print self.revert(([1799.], [1799.]))
+        print(elf.query(([self.ra], [self.dec])))
+        print(self.revert(([1799.], [1799.])))
 
     def __hash__(self):
         return self.id
