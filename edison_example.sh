@@ -1,5 +1,5 @@
 #PBS -S /bin/bash
-#PBS -l mppwidth=24,walltime=00:10:00
+#PBS -l mppwidth=24,walltime=00:05:00
 #PBS -N Example
 #PBS -o Example.out
 #PBS -e Example.err
@@ -23,7 +23,7 @@ export DECALS_CACHE=$GSCRATCH/desicache
 # and set up the Python path...this is an example.
 export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
-python << EOF
+aprun -n 1 python << EOF
 from model.datarelease import DataRelease
 dr    = DataRelease(version='EDR')
 foot  = dr.footprint
