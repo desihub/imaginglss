@@ -30,10 +30,10 @@ def main(comm):
 
     sl = slice(mystart, myend)
     coord = (RA[sl], DEC[sl])
-    mydepth = numpy.zeros(len(Ra[sl]), dtype=('f4', 6))
-    mydepth[:, 1] = dr.readout(coord, dr.images['r']['DEPTH'])
-    mydepth[:, 2] = dr.readout(coord, dr.images['g']['DEPTH'])
-    mydepth[:, 4] = dr.readout(coord, dr.images['z']['DEPTH'])
+    mydepth = numpy.zeros(len(RA[sl]), dtype=('f4', 6))
+    mydepth[:, 1] = dr.readout(coord, dr.images['depth']['r'])
+    mydepth[:, 2] = dr.readout(coord, dr.images['depth']['g'])
+    mydepth[:, 4] = dr.readout(coord, dr.images['depth']['z'])
     if comm is not None:
         depth = comm.gather(mydepth)
         if comm.rank == 0:

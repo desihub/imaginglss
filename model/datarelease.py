@@ -45,43 +45,51 @@ def contains(haystack, needle):
     ind.clip(0, len(haystack) - 1, ind)
     return haystack[ind] == needle
 
+class EDR:
+    BRICKS_FILENAME = 'bricks.fits'
+
+    @staticmethod
+    def format_image_filenames():
+        images = {'depth': 'coadd/depth-%(brickid)d-%(band)s.fits.gz',
+         'image': 'coadd/image-%(brickid)d-%(band)s.fits',
+         'model': 'coadd/model-%(brickid)d-%(band)s.fits'}
+        imagerepos= {}
+        for image in images:
+            imagerepos[image] = {}
+            for band in 'rgz':
+                PATTERN = images[image]
+                def getfilename(brick):
+                    return PATTERN % dict(brickid=brick.id, band=band)
+                imagerepos[image][band] = getfilename
+        return imagerepos
+
+    @staticmethod
+    def format_catalogue_filename(brick):
+        TRACTOR_FILENAME = 'tractor/tractor-%(brickid)d.fits'
+        return TRACTOR_FILENAME % dict(brickid=brick.id) 
+
+    @staticmethod
+    def parse_filename(filename, brickindex):
+        return brickindex.get_brick(
+            brickindex.search_by_id(
+                int(re.search('-([0123456789]+)\.', 
+                os.path.basename(filename)).group(1))))
+
+_configurations = {
+    'EDR': EDR
+}
 class DataRelease(object):
     """
     The highest level interface into the data for a given imaging
     data release.  Uses several "helper" classes and has methods for
     looking at pixelized data or catalogs arranged in bricks.
     """
-    BANDS = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
-
-    BRICKS_FILENAME = 'bricks.fits'
-    DEPTH_FILENAME = 'coadd/depth-%(brickid)d-%(band)s.fits.gz'
-    IMAGE_FILENAME = 'coadd/image-%(brickid)d-%(band)s.fits' 
-    MODEL_FILENAME = 'coadd/model-%(brickid)d-%(band)s.fits'
-
-    @staticmethod
-    def getimagefilename(PATTERN, band):
-        def getfilename(brick):
-            return PATTERN % dict(brickid=brick.id, band=band)
-        return getfilename
-
-    @staticmethod
-    def gettractorfilename(brick):
-        TRACTOR_FILENAME = 'tractor/tractor-%(brickid)d.fits'
-        return TRACTOR_FILENAME % dict(brickid=brick.id) 
-
-    @staticmethod
-    def gettractorfilename(brick):
-        TRACTOR_FILENAME = 'tractor/tractor-%(brickid)d.fits'
-        return TRACTOR_FILENAME % dict(brickid=brick.id) 
-
-    @staticmethod
-    def tractorfilename_to_brick(filename, brickindex):
-        return brickindex.get_brick(
-            brickindex.search_by_id(
-                int(re.search('-([0123456789]+)\.', 
-                os.path.basename(filename)).group(1))))
-
     def __init__(self, root=None, cacheroot=None, version=None):
+        if version is None:
+            version = 'EDR'
+
+        config = _configurations[version]
+
         if root is None:
             root = os.environ.get("DECALS_IMAGING", '.') 
         self.root = root
@@ -91,28 +99,31 @@ class DataRelease(object):
 
         self.cacheroot = os.path.join(cacheroot, version)
 
-        brickdata = fits.read_table(os.path.join(self.root, self.BRICKS_FILENAME))
+        brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
 
         self.brickindex = brickindex.BrickIndex(brickdata)
 
         self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
         self.images = {}
-        for band in self.bands:
-            self.images[band] = dict(
-                DEPTH=imagerepo.ImageRepo(self.root, self.getimagefilename(self.DEPTH_FILENAME, band)),
-                IMAGE=imagerepo.ImageRepo(self.root, self.getimagefilename(self.IMAGE_FILENAME, band)),
-                MODEL=imagerepo.ImageRepo(self.root, self.getimagefilename(self.MODEL_FILENAME, band)),
-            )
+        image_filenames = config.format_image_filenames()
+        for image in image_filenames:
+            self.images[image] = {}
+            for band in image_filenames[image]:
+                self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
 
         self.observed_bricks = [ ]
-        for roots, dirnames, filenames in os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
+        for roots, dirnames, filenames in \
+            os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
             for filename in filenames:
-                if not (filename.startswith('tractor') and filename.endswith('fits')): continue
-                self.observed_bricks.append(self.tractorfilename_to_brick(filename, self.brickindex))
+                if not (filename.startswith('tractor') 
+                    and filename.endswith('fits')): continue
+                self.observed_bricks.append(
+                    config.parse_filename(filename, self.brickindex))
 
         self._observed_brickids = self.brickindex.search_by_id(
             [ brick.id for brick in self.observed_bricks ])
+        # the list of observed bricks must be sorted.
         arg = self._observed_brickids.argsort()
         self._observed_brickids = self._observed_brickids[arg]
         self.observed_bricks = numpy.array(self.observed_bricks)[arg]
@@ -123,7 +134,7 @@ class DataRelease(object):
         self.catalogue = catalogue.Catalogue(
             os.path.join(self.cacheroot, 'catalogue'),
             [
-            os.path.join(self.root, self.gettractorfilename(brick))
+            os.path.join(self.root, config.format_catalogue_filename(brick))
             for brick in self.observed_bricks])
 
         # footprint of the survey

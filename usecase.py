@@ -4,22 +4,20 @@ import numpy
 dr = DataRelease(version='EDR')
 
 brick = dr.observed_bricks[0]
-print dr.images['z']['IMAGE'].metadata(brick)
-#print dr.images['DEPTH'].open(brick, band='z')
-#print brick
+print dr.images['image']['z'].metadata(brick)
 
 def test398599():
     """ test image readout on brick-398599. 
     """
     dr = DataRelease(version='EDR')
     brick = dr.observed_bricks[0]
-    dr.images['z']['IMAGE'].preload([brick])
+    dr.images['image']['z'].preload([brick])
 
-    img2 = dr.images['z']['IMAGE'].open(brick)
+    img2 = dr.images['image']['z'].open(brick)
     assert (img2[300:-300, 300:-300] != 0).any()
 
     print 'Testing on', brick
-    print dr.images['z']['IMAGE'].get_filename(brick)
+    print dr.images['image']['z'].get_filename(brick)
     x, y = numpy.indices((3600, 3600))
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
@@ -32,12 +30,12 @@ def test398599():
     assert numpy.allclose(y, y2)
 
 
-    img3 = brick.readout(coord, dr.images['z']['IMAGE'])
+    img3 = brick.readout(coord, dr.images['image']['z'])
     diff = img3.reshape(3600, 3600) - img2
     assert (diff[300:-300, 300:-300] == 0).all()
 
 
-    img = dr.readout(coord, dr.images['z']['IMAGE'])
+    img = dr.readout(coord, dr.images['image']['z'])
     print 'brick readout passed'
     print 'found', (~numpy.isnan(img)).sum()
     diff = img.reshape(3600, 3600) - img2
@@ -60,13 +58,13 @@ def testrandom():
 #    print 'prefetched'
     coord = (RA, DEC)
     print coord
-    depth = dr.readout(coord, dr.images['r']['DEPTH'])
+    depth = dr.readout(coord, dr.images['depth']['z'])
     print depth
  
 def testcat():
     dr = DataRelease(version='EDR')
     print dr.catalogue 
     print dr.catalogue['RA']
-#testrandom()
-#testcat()
+testrandom()
+testcat()
 test398599()
