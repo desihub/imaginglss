@@ -5,7 +5,7 @@
 import numpy
 
 from utils import fits
-from columnstore import DiskColumnStore
+from utils.columnstore import DiskColumnStore
 
 
 __author__ = "Yu Feng and Martin White"
