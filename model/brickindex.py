@@ -50,6 +50,9 @@ class BrickIndex(object):
 
         self.cache = {}
 
+        self.names_sortarg = self.brickdata['BRICKNAME'].argsort()
+        self.names_sorted = self.brickdata['BRICKNAME'][self.names_sortarg]
+
         assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
          
     def __len__(self):
@@ -81,8 +84,11 @@ class BrickIndex(object):
         returns the internal index of bricks.
         Get Brick objects by iterating over the result and using get_brick(i)
         """
-        raise NotImplementedError
-
+        foo = numpy.empty(1, self.brickdata['BRICKNAME'].dtype)
+        foo[0] = brickname
+        bid = self.names_sortarg[self.names_sorted.searchsorted(foo[0])]
+        return bid
+ 
     def search_by_id(self, brickid):
         """
         search the brickindex for bricks with a given brickid.

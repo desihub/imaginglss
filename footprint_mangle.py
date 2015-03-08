@@ -83,7 +83,7 @@ def make_polygon_file(fn="footprint.ply"):
     the mask file.
     """
     capslist,arealist = [],[]
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
     for brick in dr.observed_bricks:
         caps,area = make_caps(brick.ra1,brick.ra2,brick.dec1,brick.dec2)
         capslist.append(caps)

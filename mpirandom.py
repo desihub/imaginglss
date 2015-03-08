@@ -5,7 +5,7 @@ from sys import stdout
 from sys import argv
 def main(comm):
     N = int(argv[1])
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
     bi = dr.brickindex
 
     ramin, ramax, decmin, decmax = dr.footprint

@@ -25,7 +25,7 @@ export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
 aprun -n 1 python << EOF
 from model.datarelease import DataRelease
-dr    = DataRelease(version='EDR')
+dr    = DataRelease()
 foot  = dr.footprint
 ramin = foot.ramin
 ramax = foot.ramax

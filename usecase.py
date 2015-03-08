@@ -1,7 +1,7 @@
 from model.datarelease import DataRelease
 import numpy
 
-dr = DataRelease(version='EDR')
+dr = DataRelease()
 
 brick = dr.observed_bricks[0]
 print dr.images['image']['z'].metadata(brick)
@@ -9,7 +9,7 @@ print dr.images['image']['z'].metadata(brick)
 def test398599():
     """ test image readout on brick-398599. 
     """
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
     brick = dr.observed_bricks[0]
     dr.images['image']['z'].preload([brick])
 
@@ -44,7 +44,7 @@ def test398599():
 
 
 def testrandom():
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
 
     print dr.footprint
     u1, u2 = numpy.random.random(size=(2, 4))
@@ -62,7 +62,7 @@ def testrandom():
     print depth
  
 def testcat():
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
     print dr.catalogue 
     print dr.catalogue['RA']
 testrandom()

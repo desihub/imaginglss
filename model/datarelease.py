@@ -70,13 +70,48 @@ class EDR:
 
     @staticmethod
     def parse_filename(filename, brickindex):
+        if not filename.endswith('.fits'): raise ValueError
         return brickindex.get_brick(
             brickindex.search_by_id(
                 int(re.search('-([0123456789]+)\.', 
                 os.path.basename(filename)).group(1))))
 
+class EDR3:
+    BRICKS_FILENAME = 'decals-bricks.fits'
+
+    @staticmethod
+    def format_image_filenames():
+        images = {
+        'depth': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-depth-%(band)s.fits',
+        'model': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-model-%(band)s.fits',
+        'image': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-image-%(band)s.fits',
+        }
+        imagerepos= {}
+        for image in images:
+            imagerepos[image] = {}
+            for band in 'rgz':
+                PATTERN = images[image]
+                def getfilename(brick):
+                    return PATTERN % dict(pre=brick.name[:3], brickname=brick.name, band=band)
+                imagerepos[image][band] = getfilename
+        return imagerepos
+
+    @staticmethod
+    def format_catalogue_filename(brick):
+        TRACTOR_FILENAME = 'tractor/%(pre)s/tractor-%(brickname)s.fits'
+        return TRACTOR_FILENAME % dict(pre=brick.name[:3], brickname=brick.name) 
+
+    @staticmethod
+    def parse_filename(filename, brickindex):
+        if not filename.endswith('.fits'): raise ValueError
+        brickname = re.search('-([p0123456789]+)\.', 
+                os.path.basename(filename)).group(1)
+        bid = brickindex.search_by_name(brickname)
+        return brickindex.get_brick(bid)
+
 _configurations = {
-    'EDR': EDR
+    'EDR': EDR,
+    'EDR3': EDR3
 }
 class DataRelease(object):
     """
@@ -85,17 +120,18 @@ class DataRelease(object):
     looking at pixelized data or catalogs arranged in bricks.
     """
     def __init__(self, root=None, cacheroot=None, version=None):
-        if version is None:
-            version = 'EDR'
-
-        config = _configurations[version]
-
         if root is None:
             root = os.environ.get("DECALS_IMAGING", '.') 
         self.root = root
 
         if cacheroot is None:
             cacheroot = os.environ.get("DECALS_CACHE", '.') 
+
+        if version is None:
+            version = os.path.basename(root).upper()
+
+        config = _configurations[version]
+
 
         self.cacheroot = os.path.join(cacheroot, version)
 
@@ -116,10 +152,11 @@ class DataRelease(object):
         for roots, dirnames, filenames in \
             os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
             for filename in filenames:
-                if not (filename.startswith('tractor') 
-                    and filename.endswith('fits')): continue
-                self.observed_bricks.append(
-                    config.parse_filename(filename, self.brickindex))
+                try:
+                    self.observed_bricks.append(
+                        config.parse_filename(filename, self.brickindex))
+                except ValueError:
+                    pass 
 
         self._observed_brickids = self.brickindex.search_by_id(
             [ brick.id for brick in self.observed_bricks ])

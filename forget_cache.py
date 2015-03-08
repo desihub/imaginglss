@@ -11,7 +11,7 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mwhite@berkeley.edu"
 from model.datarelease import DataRelease
 
-dr = DataRelease(version='EDR')
+dr = DataRelease()
 cat = dr.catalogue
 
 for key in cat:

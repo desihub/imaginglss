@@ -47,10 +47,11 @@ class Catalogue(DiskColumnStore):
         self.filenames = filenames
         fn = filenames[0]
         first = fits.read_table(fn)
-        DiskColumnStore.__init__(self, cachedir, first.dtype)
+        dtype = numpy.dtype([(key.upper(), first.dtype[key]) for key in first.dtype.names])
+        DiskColumnStore.__init__(self, cachedir, dtype)
 
     def fetch(self, column):
-        cat = [numpy.array(fits.read_table(fn), copy=True)[column]
+        cat = [numpy.array(fits.read_table(fn), copy=True).view(dtype=self.dtype)[column]
             for fn in self.filenames]
         cat = numpy.concatenate(cat, axis=0)
         return cat

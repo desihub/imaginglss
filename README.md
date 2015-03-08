@@ -41,7 +41,7 @@ To use this imaing data model on edison:
 4. start hacking with
   ```
     from model.datarelease import DataRelease
-    dr = DataRelease(version='EDR')
+    dr = DataRelease()
   ```
 
 Due to internal caching of the catalogue, the running time is faster after first time.
