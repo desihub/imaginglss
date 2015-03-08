@@ -50,9 +50,9 @@ class Catalogue(DiskColumnStore):
         DiskColumnStore.__init__(self, cachedir, first.dtype)
 
     def fetch(self, column):
-        cat = [numpy.array(fits.read_table(fn), copy=True)
+        cat = [numpy.array(fits.read_table(fn), copy=True)[column]
             for fn in self.filenames]
-        cat = numpy.concatenate(cat)
+        cat = numpy.concatenate(cat, axis=0)
         return cat
 
     def __repr__(self):
