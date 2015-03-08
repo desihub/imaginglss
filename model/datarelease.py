@@ -124,10 +124,11 @@ class DataRelease(object):
     def __init__(self, root=None, cacheroot=None, version=None):
         if root is None:
             root = os.environ.get("DECALS_IMAGING", '.') 
+        root = os.path.normpath(root)
         self.root = root
 
         if cacheroot is None:
-            cacheroot = os.environ.get("DECALS_CACHE", '.') 
+            cacheroot = os.path.normpath(os.environ.get("DECALS_CACHE", '.'))
 
         if version is None:
             version = os.path.basename(root).upper()
