@@ -1,13 +1,26 @@
 from __future__ import print_function
 
-__all__ = ['ColumnArray']
+__all__ = ['ElasticArray']
 
 import numpy
 import os
 import os.path
+class delayed(object):
+    def __init__(self, filename, count, dtype):
+        self.dtype = dtype.base
+        self.filename = filename
+        self.count = count
+        self.iodtype = dtype
+        if dtype.shape is not None:
+            self.shape = tuple([count] + list(dtype.shape))
+        else:
+            self.shape = (count,)
 
-class ColumnArray(object):
-    """ a Column Array that can be stored as a 
+    def read(self):
+        return numpy.fromfile(self.filename, self.iodtype, count=self.count)
+
+class ElasticArray(object):
+    """ a Elastic Array that can be stored as a 
         filesystem tree of binary files, plus some text format
         meta data.
     """
@@ -41,13 +54,19 @@ class ColumnArray(object):
 
     def __getitem__(self, index):
         """ for string index, returns a column.
-            for iterable index, returns a ColumnArray viewing/copying
+            for iterable index, returns a ElasticArray viewing/copying
             only rows selected by the iterable.
         """
         if isinstance(index, basestring):
+            value = self.data[index]
+            if isinstance(value, delayed):
+                self.data[index] = value.read()
             return self.data[index]
         else:
             return self.select(index)
+
+    def __delitem__(self, index):
+        del self.data[index]
 
     def __contains__(self, key):
         return key in self.data
@@ -62,28 +81,41 @@ class ColumnArray(object):
         """ grow the array with new rows """
         raise NotImplementedError
 
-    def select(self, indices):
-        """ returns a new ColumnArray with only items at indices.
+    def select(self, indices, columns=None):
+        """ returns a new ElasticArray with only items at indices.
         """
         if isinstance(indices, numpy.ndarray) and indices.dtype.char == '?':
             newsize = indices.sum()
+        elif isinstance(indices, slice):
+            a, b, c = indices.indices(self.size)
+            newsize = (b - a) // c
+        elif indices ==  Ellipsis:
+            newsize = self.size
         else:
             newsize = len(indices)
         subset = self.__class__(size=newsize)
-        for key in self.data:
+        if columns is None:
+            columns = self.dtype.names
+
+        for key in columns:
             subset[key] = self.data[key][indices]
         return subset 
 
-    def as_ndarray(self):
-        data = numpy.empty(self.size, dtype=self.dtype)
-        for key in self:
+    def __repr__(self):
+        return "ElasticArray: size=%d columns = %s" % (self.size, str(self.dtype))
+
+    def tondarray(self, columns=None):
+        if columns is None:
+            columns = sorted(self.dtype.names)
+        pairs = [(column, self.dtype[column]) for column in columns]
+        dtype = numpy.dtype(pairs)
+        data = numpy.empty(self.size, dtype=dtype)
+        for key in columns:
             data[key][:] = self[key] 
         return data
 
-    def __repr__(self):
-        return "ColumnArray: columns =
     @classmethod
-    def fromndarray(cls, array, copy=False, header=None):
+    def fromndarray(cls, array, copy=False):
         ca = cls(size=len(array))
         for key in array.dtype.names:
             ca[key] = array[key]
@@ -102,7 +134,7 @@ class ColumnArray(object):
             key = key.strip()
             dtype = numpy.dtype(dtype.strip())
             shape = parse_tuple(shape)
-            ca[key] = numpy.fromfile(os.path.join(prefix, key), dtype=(dtype, shape))
+            ca.data[key] = delayed(os.path.join(prefix, key), count=size, dtype=numpy.dtype((dtype, shape)))
         return ca
 
     def tofile(self, prefix):
@@ -140,7 +172,7 @@ def test():
     data2 = numpy.arange(100).reshape(5, 2, 10)
     data3 = numpy.arange(5)
 
-    ca = ColumnArray(size=5)
+    ca = ElasticArray(size=5)
     ca['col1d'] = data3
     ca['col2d'] = data1
     ca['col3d'] = data2
@@ -151,10 +183,14 @@ def test():
     assert 'col1d' in ca
     ca.tofile('testarray')
 
-    ca2 = ColumnArray.fromfile('testarray')
-    print(ca.dtype)
-    print(ca2.dtype)
-    print ca2
+    ca2 = ElasticArray.fromfile('testarray')
+    print(ca)
+    print(ca2)
+    print(ca.tondarray())
+    print(ca2.tondarray())
+    print(ElasticArray.fromndarray(ca.tondarray()).tondarray())
 
+    print(ca.select(Ellipsis, ['col1d', 'col3d']))
+    print(ca.select(slice(1, 3), ['col1d', 'col3d']))
 if __name__ == '__main__':
     test()
