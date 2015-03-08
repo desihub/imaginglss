@@ -24,6 +24,9 @@ class ColumnStore(object):
             d[column] = (value.dtype.base, subshape)
         self.dtype = numpy.dtype([(n, d[n]) for n in d])
 
+    def __iter__(self):
+        return iter(self.dtype.names)
+
     def __contains__(self, column):
         return column in self.dtype.names
 
@@ -64,7 +67,10 @@ class DiskColumnStore(ColumnStore):
     def forget(self, column):
         try:
             os.unlink(self.getfilename(column))
-        except IOError:
+        except OSError:
             pass
-        del self[column]
+        try:
+            del self[column]
+        except KeyError:
+            pass
 
