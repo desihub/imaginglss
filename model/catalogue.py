@@ -39,15 +39,20 @@ class Catalogue(DiskColumnStore):
     and the list of file names are provided as an input.
     The main method is fetch.
     """
-    def __init__(self, cachedir, filenames):
+    def __init__(self, cachedir, filenames, aliases):
         """
         cachedir is the location for caching.
         filenames are a list of fits file names for the DR
+        aliases is a list of fields to rename (fields in old DRs are renamed to newer DRs,
+        so that code written for new DR can work on old DRs.
         """
         self.filenames = filenames
         fn = filenames[0]
         first = fits.read_table(fn)
-        dtype = numpy.dtype([(key.upper(), first.dtype[key]) for key in first.dtype.names])
+        mapping = dict(aliases)
+        pairs = [(key.upper(), first.dtype[key]) for key in first.dtype.names]
+        pairs = [(mapping[key] if key in mapping else key, dtype) for key, dtype in pairs]
+        dtype = numpy.dtype(pairs)
         DiskColumnStore.__init__(self, cachedir, dtype)
 
     def fetch(self, column):

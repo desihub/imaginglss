@@ -47,6 +47,7 @@ def contains(haystack, needle):
 
 class EDR:
     BRICKS_FILENAME = 'bricks.fits'
+    CATALOGUE_ALIASES = [('EXTINCTION', 'DECAM_EXTINCTION')]
 
     @staticmethod
     def format_image_filenames():
@@ -78,7 +79,8 @@ class EDR:
 
 class EDR3:
     BRICKS_FILENAME = 'decals-bricks.fits'
-
+    CATALOGUE_ALIASES = []
+    
     @staticmethod
     def format_image_filenames():
         images = {
@@ -169,10 +171,13 @@ class DataRelease(object):
         self.observed_area = 41253. * len(self.observed_bricks) / len(self.brickindex)
 
         self.catalogue = catalogue.Catalogue(
-            os.path.join(self.cacheroot, 'catalogue'),
-            [
-            os.path.join(self.root, config.format_catalogue_filename(brick))
-            for brick in self.observed_bricks])
+            cachedir=os.path.join(self.cacheroot, 'catalogue'),
+            filenames=[
+                os.path.join(self.root, 
+                config.format_catalogue_filename(brick))
+                for brick in self.observed_bricks],
+            aliases=config.CATALOGUE_ALIASES
+            )
 
         # footprint of the survey
         Footprint = namedtuple('Footprint', ['ramin', 'ramax', 'decmin', 'decmax'])

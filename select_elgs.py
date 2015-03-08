@@ -29,7 +29,7 @@ def select_elgs():
     dr = DataRelease()
     # Define the fluxes.
     flux  = dr.catalogue['DECAM_FLUX'].T
-    ext   = dr.catalogue['EXTINCTION'].T
+    ext   = dr.catalogue['DECAM_EXTINCTION'].T
     GFLUX = flux[1] * 10 ** (ext[1] / 2.5)
     RFLUX = flux[2] * 10 ** (ext[2] / 2.5)
     ZFLUX = flux[4] * 10 ** (ext[4] / 2.5)
