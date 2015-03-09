@@ -59,7 +59,7 @@ class EDR:
             imagerepos[image] = {}
             for band in 'rgz':
                 PATTERN = images[image]
-                def getfilename(brick):
+                def getfilename(brick, PATTERN=PATTERN, band=band):
                     return PATTERN % dict(brickid=brick.id, band=band)
                 imagerepos[image][band] = getfilename
         return imagerepos
@@ -93,16 +93,16 @@ class EDR3:
             imagerepos[image] = {}
             for band in 'rgz':
                 PATTERN = images[image]
-                def getfilename(brick):
+                def getfilename(brick, PATTERN=PATTERN, band=band):
                     return PATTERN % dict(pre=brick.name[:3], brickname=brick.name, band=band)
                 imagerepos[image][band] = getfilename
+
         return imagerepos
 
     @staticmethod
     def format_catalogue_filename(brick):
         TRACTOR_FILENAME = 'tractor/%(pre)s/tractor-%(brickname)s.fits'
         return TRACTOR_FILENAME % dict(pre=brick.name[:3], brickname=brick.name) 
-
     @staticmethod
     def parse_filename(filename, brickindex):
         if not filename.endswith('.fits'): raise ValueError
@@ -147,10 +147,17 @@ class DataRelease(object):
         self.images = {}
         image_filenames = config.format_image_filenames()
         for image in image_filenames:
-            self.images[image] = {}
-            for band in image_filenames[image]:
-                self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
-
+            if isinstance(image_filenames[image], dict):
+                self.images[image] = {}
+                for band in image_filenames[image]:
+                    self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
+            else:
+                self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image])
+        def image_filename(brick, 
+            PATTERN='aux/%(pre)s/%(brickname)s/decals-%(brickname)s-ebv.fits'):
+            return PATTERN % dict(pre=brick.name[:3], brickname=brick.name)
+        self.images['ebv'] = imagerepo.ImageRepo(self.cacheroot, image_filename)
+            
         self.observed_bricks = [ ]
         for roots, dirnames, filenames in \
             os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
