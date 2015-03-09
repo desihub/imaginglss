@@ -23,14 +23,13 @@ def process_file(filename):
     x, y = numpy.array(numpy.indices(shape), dtype='f8').reshape(2, -1)
     x += 0.5
     y += 0.5
-    world = wcs.all_pix2world(numpy.array((x,y)).T, 1)
+    world = wcs.all_pix2world(numpy.array((x,y)).T, 0)
     ebv, junk = sfdmap.extinction([], world[..., 0], world[..., 1], get_ebv=True)
     ebv = ebv.reshape(shape)
     brickname = header['BRICKNAM']
     newfilename = 'decals-%s-ebv.fits' % brickname
     newfilename = os.path.join('dust', newfilename)
     print newfilename, world.max(axis=0), world.min(axis=0)
-    wcs = WCS(header)
     try:
         os.unlink(newfilename)
     except OSError:
