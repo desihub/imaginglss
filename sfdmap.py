@@ -51,7 +51,7 @@ class SFDMap(object):
         if dustdir is None:
             dustdir = os.environ.get('DUST_DIR', None)
         if dustdir is not None:
-            dustdir = dustdir
+            dustdir = os.path.join(dustdir, 'maps')
         else:
             dustdir = '.'
             print 'Warning: $DUST_DIR not set; looking for SFD maps in current directory.'

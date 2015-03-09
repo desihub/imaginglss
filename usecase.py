@@ -21,9 +21,9 @@ def test398599():
     x, y = numpy.indices((3600, 3600))
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
-    coord = brick.revert((x, y))
+    coord = brick.revert(dr.images['image']['z'], (x, y))
 
-    x2, y2 = brick.query(coord)
+    x2, y2 = brick.query(dr.images['image']['z'], coord)
     print x, x2
     print y, y2
     assert numpy.allclose(x, x2)

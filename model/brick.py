@@ -49,15 +49,12 @@ class Brick(object):
         If the image in this brick does not cover this region,
         put in `default'.
         """
-        meta      = repo.metadata(self)
         img       = repo.open(self)
+        coord     = numpy.array(coord)
         RA, DEC   = coord
         value     = numpy.empty(len(RA))
         value[...]= default
-        coord     = numpy.array(coord)
-        xy = numpy.int32(wcs_tangent.ang2pix_hdr(coord, meta, 
-                zero_offset=True))
-        xy2 = numpy.int32(self.query(coord))
+        xy = numpy.int32(self.query(repo, coord))
         mask = (xy < numpy.array(img.shape) \
             .reshape(2, 1)).all(axis=0)
         mask &= (xy >= 0).all(axis=0)
@@ -65,7 +62,7 @@ class Brick(object):
         value[mask] = img.flat[l] 
         return value
  
-    def query(self, coord):
+    def query(self, repo, coord):
         """
         Returns the xy index of pixels at coord
         coord can be:
@@ -73,16 +70,13 @@ class Brick(object):
              array of shape (2xN) RA DEC
         In either case returns a (2xN) array
         """
-        #FIXME: other types of input
-        coord = numpy.array(coord)
-        out = wcs_tangent.ang2pix(coord,
-                CRPIX=(1800.5, 1800.5),
-                CRVAL=(self.ra, self.dec),
-                CD=(-7.27777777777778E-05,0,0, 7.27777777777778E-05),
-               )
-        return out
+        meta      = repo.metadata(self)
+        coord     = numpy.array(coord)
+        xy = wcs_tangent.ang2pix_hdr(coord, meta, 
+                zero_offset=True)
+        return xy
 
-    def revert(self, xy):
+    def revert(self, repo, xy):
         """
         Returns the RA, DEC index of pixels for coord
         coord can be:
@@ -90,11 +84,8 @@ class Brick(object):
             array of shape (2xN) x, y
         In either case returns a (2xN) array.
         """
-        #FIXME: other types of input
+        meta      = repo.metadata(self)
         xy = numpy.array(xy)
-        out = wcs_tangent.pix2ang(xy,
-                CRPIX=(1800.5, 1800.5),
-                CRVAL=(self.ra, self.dec),
-                CD=(-7.27777777777778E-05,0,0,7.27777777777778E-05),
-               )
-        return out
+        coord = wcs_tangent.pix2ang_hdr(xy, meta, 
+                zero_offset=True)
+        return coord
