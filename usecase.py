@@ -65,11 +65,28 @@ def testrandom():
     depth = dr.readout(coord, dr.images['depth']['z'])
     ebv = dr.readout(coord, ebv)
     print depth, ebv
- 
+
+def testebv():
+    dr = DataRelease()
+    RA = dr.catalogue['RA']
+    DEC = dr.catalogue['DEC']
+    EXT_R = dr.catalogue['DECAM_EXTINCTION'][:, 2]
+    ebv = ImageRepo('dust', 
+            lambda brick: 
+            'decals-%(brickname)s-ebv.fits' % dict(brickname=brick.name)
+        )
+    coord = (RA, DEC)
+    ebv = dr.readout(coord, ebv)
+    good = ~numpy.isnan(ebv)
+    ebv = ebv[good] * 2.165
+    EXT_R = EXT_R[good]
+    assert numpy.allclose(ebv, EXT_R, 1e-3)
+
 def testcat():
     dr = DataRelease()
     print dr.catalogue 
     print dr.catalogue['RA']
+testebv()
 testrandom()
 testcat()
 test398599()
