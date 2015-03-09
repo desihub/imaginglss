@@ -12,7 +12,6 @@ import numpy as np
 class anwcs_t(object):
     def __init__(self, filename, hduid):
         header = fitsio.read_header(filename, hduid)
-        print header
         self.obj = wcs.WCS(header)
     def radec2pixelxy(self, ra, dec):
         input = np.array([ra, dec]).T
@@ -20,7 +19,6 @@ class anwcs_t(object):
         return np.zeros_like(x), x, y
 def radectolb(ra, dec):
     l, b = euler(ra, dec, 1)
-    print l, b
     return l, b 
 class SFDMap(object):
     # These come from Schlafly & Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1
