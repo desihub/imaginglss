@@ -1,4 +1,5 @@
 from model.datarelease import DataRelease
+from model.imagerepo import ImageRepo
 import numpy
 
 dr = DataRelease()
@@ -18,7 +19,7 @@ def test398599():
 
     print 'Testing on', brick
     print dr.images['image']['z'].get_filename(brick)
-    x, y = numpy.indices((3600, 3600))
+    x, y = numpy.indices(img2.shape)
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
     coord = brick.revert(dr.images['image']['z'], (x, y))
@@ -31,21 +32,24 @@ def test398599():
 
 
     img3 = brick.readout(coord, dr.images['image']['z'])
-    diff = img3.reshape(3600, 3600) - img2
+    diff = img3.reshape(img2.shape) - img2
     assert (diff[300:-300, 300:-300] == 0).all()
 
 
     img = dr.readout(coord, dr.images['image']['z'])
     print 'brick readout passed'
     print 'found', (~numpy.isnan(img)).sum()
-    diff = img.reshape(3600, 3600) - img2
+    diff = img.reshape(img2.shape) - img2
     assert (diff[300:-300, 300:-300] == 0).all()
     print 'dr readout passed'
 
 
 def testrandom():
     dr = DataRelease()
-
+    ebv = ImageRepo('dust', 
+            lambda brick: 
+            'decals-%(brickname)s-ebv.fits' % dict(brickname=brick.name)
+        )
     print dr.footprint
     u1, u2 = numpy.random.random(size=(2, 4))
     RA = (dr.footprint.ramax - dr.footprint.ramin) * u1 + dr.footprint.ramin
@@ -59,7 +63,8 @@ def testrandom():
     coord = (RA, DEC)
     print coord
     depth = dr.readout(coord, dr.images['depth']['z'])
-    print depth
+    ebv = dr.readout(coord, ebv)
+    print depth, ebv
  
 def testcat():
     dr = DataRelease()
