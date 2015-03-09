@@ -8,7 +8,7 @@ root = os.environ['DECALS_IMAGING']
 sfdmap = SFDMap(dustdir='/project/projectdirs/desi/software/edison/dust/v0_0/')
 
 def process_file(filename):
-    header = fitsio.read_header(filename)
+    header = dict(fitsio.read_header(filename))
     fac = 8
     shape = int(header['NAXIS1']) / fac, int(header['NAXIS2']) / fac
     header['NAXIS1'] = shape[0]
@@ -18,12 +18,14 @@ def process_file(filename):
     header['CD1_1'] = float(header['CD1_1']) * fac
     header['CD2_2'] = float(header['CD2_2']) * fac
     header['IMTYPE'] = 'ebv'
+    del header['FILTER']
     wcs = WCS(header)
     x, y = numpy.array(numpy.indices(shape), dtype='f8').reshape(2, -1)
     x += 0.5
     y += 0.5
     world = wcs.all_pix2world(numpy.array((x,y)).T, 1)
     ebv, junk = sfdmap.extinction([], world[..., 0], world[..., 1], get_ebv=True)
+    ebv = ebv.reshape(shape)
     brickname = header['BRICKNAM']
     newfilename = 'decals-%s-ebv.fits' % brickname
     newfilename = os.path.join('dust', newfilename)
