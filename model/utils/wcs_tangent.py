@@ -50,7 +50,7 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
     (useful in Python or C) while if it is False pixels run from 1 (as in
     Fortran).
     """
-    if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
+    if ('---TAN' not in hdr['CTYPE1'])|('--TAN' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a tangent plane projection."
     cd, crpix, crval = parse_header(hdr, zero_offset)
     return(pix2ang(xy,cd,crpix,crval))
