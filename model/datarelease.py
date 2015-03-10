@@ -146,7 +146,7 @@ class DataRelease(object):
         try:
             brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
         except :
-            brickdata = fits.read_table(os.path.join(os.path.dirname(__file__), 'default-bricks.fits'))
+            brickdata = fits.read_table(os.path.join(os.path.dirname(__file__), '..', 'fallback', 'default-bricks.fits'))
 
         self.brickindex = brickindex.BrickIndex(brickdata)
 
