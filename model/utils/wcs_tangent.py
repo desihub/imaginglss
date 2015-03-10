@@ -24,11 +24,8 @@ __all__ = ['ang2pix','pix2ang','ang2pix_hdr','pix2ang_hdr']
 import numpy 
 import math
 
-
-
 def ang2pix_hdr(coord,hdr,zero_offset=True):
     """
-    ang2pix_hdr(coord,hdr,zero_offset=True):
     A convenience function for calling ang2pix, with the transformations
     described in a dictionary in the usual FITS header style for WCS
     transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
@@ -37,28 +34,14 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
     (useful in Python or C) while if it is False pixels run from 1 (as in
     Fortran).
     """
-    # Check to see whether the "hdr" dictionary contains the necessary
-    # keywords.
-    if ('CTYPE1' not in hdr)|('CTYPE2' not in hdr)|\
-       ('CRVAL1' not in hdr)|('CRVAL2' not in hdr)|\
-       ('CRPIX1' not in hdr)|('CRPIX2' not in hdr)|\
-       ('CD1_1'  not in hdr)|('CD1_2'  not in hdr)|\
-       ('CD2_1'  not in hdr)|('CD2_2'  not in hdr):
-        raise RuntimeError,"Unable to parse header."
     if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a tangent plane projection."
-    cd    = numpy.array([hdr['CD1_1'],hdr['CD1_2'],hdr['CD2_1'],hdr['CD2_2']])
-    crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
-    crval = numpy.array([hdr['CRVAL1'],hdr['CRVAL2']])
-    return(ang2pix(coord,cd,crpix,crval,zero_offset))
+    cd, crpix, crval = parse_header(hdr, zero_offset)
+    return(ang2pix(coord,cd,crpix,crval))
     #
-
-
-
 
 def pix2ang_hdr(xy,hdr,zero_offset=True):
     """
-    pix2ang_hdr(xy,hdr,zero_offset=True):
     A convenience function for calling pix2ang, with the transformations
     described in a dictionary in the usual FITS header style for WCS
     transformations.  Given input pixel numbers xy the routine returns
@@ -67,6 +50,17 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
     (useful in Python or C) while if it is False pixels run from 1 (as in
     Fortran).
     """
+    if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
+        raise RuntimeError,"Not a tangent plane projection."
+    cd, crpix, crval = parse_header(hdr, zero_offset)
+    return(pix2ang(xy,cd,crpix,crval))
+    #
+
+def parse_header(hdr, zero_offset):
+    """
+    If zero_offset is True, the routine takes 0-indexed pixel coordinates
+    (useful in Python or C) while if it is False pixels run from 1 (as in
+    """
     # Check to see whether the "hdr" dictionary contains the necessary
     # keywords.
     if ('CTYPE1' not in hdr)|('CTYPE2' not in hdr)|\
@@ -75,21 +69,16 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
        ('CD1_1'  not in hdr)|('CD1_2'  not in hdr)|\
        ('CD2_1'  not in hdr)|('CD2_2'  not in hdr):
         raise RuntimeError,"Unable to parse header."
-    if ('RA---TAN' not in hdr['CTYPE1'])|('DEC--TAN' not in hdr['CTYPE2']):
-        raise RuntimeError,"Not a tangent plane projection."
     cd    = numpy.array([hdr['CD1_1'],hdr['CD1_2'],hdr['CD2_1'],hdr['CD2_2']])
     crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
     crval = numpy.array([hdr['CRVAL1'],hdr['CRVAL2']])
-    return(pix2ang(xy,cd,crpix,crval,zero_offset))
-    #
-
+    if zero_offset:
+        crpix -= 1
+    return cd, crpix, crval
                
 
 
-
-
-
-def ang2pix(coord,CD,CRPIX,CRVAL,zero_offset=True):
+def ang2pix(coord,CD,CRPIX,CRVAL):
     """
     TAN Transform from coord = (ra, dec) to pixel xy coordinate 
     according the the WCS header. Look up Section 5.1.3 of 
@@ -101,15 +90,11 @@ def ang2pix(coord,CD,CRPIX,CRVAL,zero_offset=True):
     returns the pixel xy = (x, y). 
 
     CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,
-    CRPIX is the center of pixels as of original FITS header (starting from 1):
-      CRPIX1, CRPIX2
-    CRVAL is the center of RA/DEC as of original FITS header: CRVAL1, CRVAL2
+
+    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
+
     Obviously PV distortion is not supported.
     No checking is performed if a given RA, DEC lies outside the range.
-
-    If zero_offset is True, the routine returns 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
-    Fortran).
     """
     coord = numpy.array(coord, dtype='f8').copy()
     xy    = numpy.empty_like(coord)
@@ -127,25 +112,21 @@ def ang2pix(coord,CD,CRPIX,CRVAL,zero_offset=True):
 
     xy = matrix.dot(xy)
     xy += numpy.array(CRPIX).reshape(2, 1)
-    if zero_offset:
-      xy -= 1
     return(xy)
     #
 
 
 
-def pix2ang(xy,CD,CRPIX,CRVAL,zero_offset=True):
+def pix2ang(xy,CD,CRPIX,CRVAL):
     """
     This is the invert transformation of ang2pix. (TAN)
     xy = (x, y): coordinate in pixels
-    If zero_offset is True, pixel numbers are assumed to start at 0,
-    as in Python or C.  If it is False numbers are assumed to start at 1.
     Returns coord = (RA, DEC), in decimal degrees.
+
+    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
     """
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
-    if zero_offset:
-        xy += 1
     # watch out, this may be wrong if the matrix is not diagonal
     matrix = numpy.array(CD).reshape(2, 2)
 
