@@ -7,14 +7,14 @@ ensure the milky way extinction bricks are generated (build_sdfbricks.py)
 
 On Edison, in a job, run
 
-  aprun -n 24 python-mpi mpirandom.py 400000 random.txt
+  aprun -n 24 python-mpi mpirandom.py 400000 random
 
   400000 is the number of random points 
   random.txt is the output.
 
 on front end, run
 
-  python mpirandom.py 400000 random.txt
+  python mpirandom.py 400000 random
 
   (will be a lot slower than with MPI)
 
@@ -27,6 +27,8 @@ from model.datarelease import DataRelease
 import numpy
 import sys
 from sys import argv
+
+import filehandler
 
 def main(comm):
     N = int(argv[1])
@@ -56,10 +58,10 @@ def main(comm):
 
     sl = slice(mystart, myend)
     coord = (RA[sl], DEC[sl])
-    mydepth = numpy.zeros(len(RA[sl]), dtype=('f4', 6))
-    mydepth[:, 1] = dr.readout(coord, dr.images['depth']['r'])
-    mydepth[:, 2] = dr.readout(coord, dr.images['depth']['g'])
-    mydepth[:, 4] = dr.readout(coord, dr.images['depth']['z'])
+    mydepth = numpy.zeros(len(RA[sl]), dtype=('f4', 3))
+    mydepth[:, 0] = dr.readout(coord, dr.images['depth']['r'])
+    mydepth[:, 1] = dr.readout(coord, dr.images['depth']['g'])
+    mydepth[:, 2] = dr.readout(coord, dr.images['depth']['z'])
     myebv = numpy.zeros(len(RA[sl]), dtype='f4')
     myebv[:] = dr.readout(coord, dr.images['ebv'])
     if comm is not None:
@@ -73,7 +75,16 @@ def main(comm):
     else:
         depth = mydepth
         ebv = myebv
-    numpy.savetxt(output, zip(RA, DEC, depth[:, 1], depth[:, 2], depth[:, 4], ebv), fmt='%.6f', header='#ra dec r g z ebv')
+    depth_r = depth[:, 0]
+    depth_g = depth[:, 1]
+    depth_z = depth[:, 2]
+    filehandler.write_file(output, dict(RA=RA, 
+                DEC=DEC, 
+                depth_r=depth_r,
+                depth_g=depth_g,
+                depth_z=depth_z,
+                ebv=ebv))
+#    numpy.savetxt(output, zip(RA, DEC, depth[:, 1], depth[:, 2], depth[:, 4], ebv), fmt='%.6f', header='#ra dec r g z ebv')
 
 if __name__ == '__main__':    
     from sys import argv
