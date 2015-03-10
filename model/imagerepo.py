@@ -52,7 +52,7 @@ class ImageRepo(object):
         return fits.read_image(self.get_filename(brick,
             **kwargs
             ))
-
+        
     def metadata(self, brick, **kwargs):
         """ Fetch the meta data about a brick.
         """
@@ -63,11 +63,16 @@ class ImageRepo(object):
 
     def get_filename(self, brick, **kwargs):
         if hasattr(self.pattern, '__call__'):
-            return os.path.join(self.root, 
+            fn = os.path.join(self.root, 
                 self.pattern(brick, **kwargs))
         else:
             kwargs['brickid'] = brick.id
             kwargs['brickname'] = brick.name
-            return os.path.join(self.root, 
+            fn = os.path.join(self.root, 
                 self.pattern) % kwargs
+        if not os.path.exists(fn):
+            fngz = fn + '.gz' 
+            if os.path.exists(fngz):
+                return fngz
+        return fn
 
