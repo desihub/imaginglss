@@ -5,9 +5,8 @@ import os
 from astropy import wcs
 import numpy as np
 
-# to run need to symlink the dust maps from 
-# /project/projectdirs/desi/software/edison/dust/v0_0/maps/
-# to dust directory
+# to run need to 
+# export DUST_DIR=/project/projectdirs/desi/software/edison/dust/v0_0/
 
 class anwcs_t(object):
     def __init__(self, filename, hduid):
@@ -228,7 +227,7 @@ if __name__ == '__main__':
     RA = dr.catalogue['RA']
     DEC = dr.catalogue['DEC']
     EXT = dr.catalogue['DECAM_EXTINCTION']
-    m = SFDMap(dustdir='dust/')
+    m = SFDMap()
     EXT2 = m.extinction(['DES %s' % i for i in 'ugrizY'],
             RA, DEC)
     print EXT - EXT2
