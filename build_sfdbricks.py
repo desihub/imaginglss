@@ -30,6 +30,8 @@ import numpy
 sfdmap = SFDMap(dustdir='/project/projectdirs/desi/software/edison/dust/v0_0/')
 
 def process_file(header, newfilename=None):
+    if os.path.exists(newfilename):
+        return
     fac = 8
     shape = int(header['NAXIS1']) / fac, int(header['NAXIS2']) / fac
     header['NAXIS1'] = shape[0]
