@@ -27,6 +27,11 @@ def coord2xyz(coord):
     xyz[:, 2] = numpy.sin(DEC / 180. * numpy.pi)
     return xyz.T
 
+def uppercase_dtype(dtype):
+    pairs = dict([(key.upper(), dtype.fields[key]) for key in dtype.names])
+    dtype = numpy.dtype(pairs)
+    return dtype
+
 class Catalogue(DiskColumnStore):
     """
     Class for handling object catalogs associated with a data release.
@@ -49,15 +54,26 @@ class Catalogue(DiskColumnStore):
         self.filenames = filenames
         fn = filenames[0]
         first = fits.read_table(fn)
-        mapping = dict(aliases)
-        pairs = [(key.upper(), first.dtype[key]) for key in first.dtype.names]
-        pairs = [(mapping[key] if key in mapping else key, dtype) for key, dtype in pairs]
-        dtype = numpy.dtype(pairs)
+        self.aliases = dict([(new, (old, transform)) 
+                for old, new, transform in aliases])
+        dtype = uppercase_dtype(first.dtype)
         DiskColumnStore.__init__(self, cachedir, dtype)
 
+    def __getitem__(self, column):
+        if column in self.aliases:
+            old, transform = self.aliases[column]
+            return transform(self[old])
+        else:
+            return DiskColumnStore.__getitem__(self, column)
+
     def fetch(self, column):
-        cat = [numpy.array(fits.read_table(fn), copy=True).view(dtype=self.dtype)[column]
-            for fn in self.filenames]
+        def readafile(fn):
+            # FIXME: this reads in the full table .. maybe not a good idea
+            # but the files are small ..
+            data = numpy.array(fits.read_table(fn))
+            data = data.view(dtype=uppercase_dtype(data.dtype))
+            return numpy.array(data[column], dtype=self.dtype[column].base)
+        cat = [ readafile(fn) for fn in self.filenames]
         cat = numpy.concatenate(cat, axis=0)
         return cat
 
