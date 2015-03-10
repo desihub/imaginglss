@@ -220,6 +220,11 @@ class DataRelease(object):
 
         ra = RA[mask]
         dec = DEC[mask]
+        if len(ra) == 0:
+            # do not try to work if no point is within the
+            # survey 
+            return images
+
         coord, invarg = self.brickindex.optimize((ra, dec))
         bid = self.brickindex.query(coord)
 
