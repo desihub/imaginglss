@@ -58,5 +58,6 @@ Examples:
   usecase.py
   select_elgs.py
   footprint_mangle.py
+  build_sfdmap.py
   ```
 
