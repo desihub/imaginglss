@@ -26,7 +26,7 @@ export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 aprun -n 1 python << EOF
 from model.datarelease import DataRelease
 dr    = DataRelease()
-foot  = dr.footprint
+foot  = dr.observed_range
 ramin = foot.ramin
 ramax = foot.ramax
 decmin= foot.decmin
