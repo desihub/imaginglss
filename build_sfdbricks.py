@@ -1,15 +1,33 @@
+"""
+This file generates the SFD map of E(B-V) from the standard
+dust map DECALS uses.
+
+It depends on astropy and fitsio explicitly.
+model.datarelease dependency is used only to look up filenames
+ 
+It depends on sfdmap.py, extracted from tractor source code.
+
+
+usage:
+
+make sure DECALS_IMAGING and DECALS_CACHING are initialized (see README.md)
+
+python build_sfdmap.py
+ Yu Feng <yfeng1@berkeley.edu>
+ Martin White <mwhite@berkeley.edu>
+"""
+
+# TODO: skip already genearted files.
+# TODO: use smaller pixels?
+# FIXME: hard coded dustdir, only works on edison 
+
 import fitsio
 from sfdmap import SFDMap
 import os.path
 import os
 from astropy.wcs import WCS
 import numpy
-from model.datarelease import DataRelease
-
-root = os.environ['DECALS_IMAGING']
 sfdmap = SFDMap(dustdir='/project/projectdirs/desi/software/edison/dust/v0_0/')
-
-dr = DataRelease()
 
 def process_file(header, newfilename=None):
     fac = 8
@@ -40,19 +58,29 @@ def process_file(header, newfilename=None):
         pass
     fitsio.write(newfilename, ebv, header=header)
 
-for brick in dr.observed_bricks:
-    header = dr.images['depth']['r'].metadata(brick)
-    process_file(header, dr.images['ebv'].get_filename(brick))
+def main():
+    from model.datarelease import DataRelease
+    dr = DataRelease()
+    for brick in dr.observed_bricks:
+        header = dr.images['depth']['r'].metadata(brick)
+        process_file(header, dr.images['ebv'].get_filename(brick))
+def nomodel():
+    root = os.environ['DECALS_IMAGING']
+    for root, dirnames, filenames in \
+        os.walk(os.path.join(root, 'coadd'), followlinks=True):
+        for filename in filenames:
+            if 'depth' not in filename: continue
+            if '-r.fits' not in filename: continue
+            filename = os.path.join(root, filename)
+            header = dict(fitsio.read_header(filename))
+            brickname = header['BRICKNAM']
+            newfilename = 'decals-%s-ebv.fits' % brickname
+            newfilename = os.path.join('dust', newfilename)
+            process_file(header, newfilename)
 
-#for root, dirnames, filenames in \
-#    os.walk(os.path.join(root, 'coadd'), followlinks=True):
-#    for filename in filenames:
-#        if 'depth' not in filename: continue
-#        if '-r.fits' not in filename: continue
-#        filename = os.path.join(root, filename))
-#        brickname = header['BRICKNAM']
-#        newfilename = 'decals-%s-ebv.fits' % brickname
-#        newfilename = os.path.join('dust', newfilename)
-#        header = dict(fitsio.read_header(filename))
-#        process_file(header, newfilename)
-
+try:
+    from model.datarelease import DataRelease
+    main()
+except ImportError:
+    print ("falling back to plain directory structure")
+    nomodel()
