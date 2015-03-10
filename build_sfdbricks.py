@@ -30,8 +30,6 @@ import numpy
 sfdmap = SFDMap(dustdir='/project/projectdirs/desi/software/edison/dust/v0_0/')
 
 def process_file(header, newfilename=None):
-    if os.path.exists(newfilename):
-        return
     fac = 8
     shape = int(header['NAXIS1']) / fac, int(header['NAXIS2']) / fac
     header['NAXIS1'] = shape[0]
@@ -65,7 +63,11 @@ def main():
     dr = DataRelease()
     for brick in dr.observed_bricks:
         header = dr.images['depth']['r'].metadata(brick)
-        process_file(header, dr.images['ebv'].get_filename(brick))
+        newfilename = dr.images['ebv'].get_filename(brick)
+        if os.path.exists(newfilename):
+            return
+        process_file(header, newfilename)
+
 def nomodel():
     root = os.environ['DECALS_IMAGING']
     for root, dirnames, filenames in \
@@ -80,9 +82,9 @@ def nomodel():
             newfilename = os.path.join('dust', newfilename)
             process_file(header, newfilename)
 
-try:
+from sys import argv
+if len(argv) > 1 and argv[1] == '--no-model':
+    nomodel()
+else:
     from model.datarelease import DataRelease
     main()
-except ImportError:
-    print ("falling back to plain directory structure")
-    nomodel()
