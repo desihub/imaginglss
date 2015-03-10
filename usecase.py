@@ -49,11 +49,11 @@ def test398599():
 def testrandom():
     dr = DataRelease()
     ebv = dr.images['ebv']
-    print dr.footprint
+    print dr.observed_range
     u1, u2 = numpy.random.random(size=(2, 4))
-    RA = (dr.footprint.ramax - dr.footprint.ramin) * u1 + dr.footprint.ramin
-    a = 0.5 * ((numpy.cos(dr.footprint.decmax / 180. * numpy.pi)  + 1))
-    b = 0.5 * ((numpy.cos(dr.footprint.decmin / 180. * numpy.pi)  + 1))
+    RA = (dr.observed_range.ramax - dr.observed_range.ramin) * u1 + dr.observed_range.ramin
+    a = 0.5 * ((numpy.cos(dr.observed_range.decmax / 180. * numpy.pi)  + 1))
+    b = 0.5 * ((numpy.cos(dr.observed_range.decmin / 180. * numpy.pi)  + 1))
     u2 = (a - b) * u2 + b
     
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)

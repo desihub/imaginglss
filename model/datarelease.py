@@ -195,9 +195,9 @@ class DataRelease(object):
             aliases=config.CATALOGUE_ALIASES
             )
 
-        # footprint of the survey
-        Footprint = namedtuple('Footprint', ['ramin', 'ramax', 'decmin', 'decmax'])
-        self.footprint = Footprint(
+        # range of ra dec of observed bricks
+        ObservedRange = namedtuple('ObservedRange', ['ramin', 'ramax', 'decmin', 'decmax'])
+        self.observed_range = ObservedRange(
             ramin=min([brick.ra1 for brick in self.observed_bricks]),
             ramax=max([brick.ra2 for brick in self.observed_bricks]),
             decmin=min([brick.dec1 for brick in self.observed_bricks]),
