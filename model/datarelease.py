@@ -47,7 +47,7 @@ def contains(haystack, needle):
 
 class EDR:
     BRICKS_FILENAME = 'bricks.fits'
-    CATALOGUE_ALIASES = [('EXTINCTION', 'DECAM_EXTINCTION')]
+    CATALOGUE_ALIASES = [('EXTINCTION', 'DECAM_EXTINCTION', lambda x: x)]
 
     @staticmethod
     def format_image_filenames():
@@ -111,9 +111,14 @@ class EDR3:
         bid = brickindex.search_by_name(brickname)
         return brickindex.get_brick(bid)
 
+class EDR4(EDR3):
+    CATALOGUE_ALIASES = [('DECAM_MW_TRANSMISSION', 'DECAM_EXTINCTION', lambda x: -2.5 * numpy.log10(x))]
+    pass
+
 _configurations = {
     'EDR': EDR,
-    'EDR3': EDR3
+    'EDR3': EDR3,
+    'EDR4': EDR4,
 }
 class DataRelease(object):
     """
@@ -138,7 +143,10 @@ class DataRelease(object):
 
         self.cacheroot = os.path.join(cacheroot, version)
 
-        brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
+        try:
+            brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
+        except :
+            brickdata = fits.read_table(os.path.join(os.path.dirname(__file__), 'default-bricks.fits'))
 
         self.brickindex = brickindex.BrickIndex(brickdata)
 
