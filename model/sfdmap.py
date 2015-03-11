@@ -12,7 +12,6 @@ import numpy as np
 class anwcs_t(object):
     def __init__(self, filename, hduid):
         header = dict(fitsio.read_header(filename, hduid))
-        print header
         self.scale, self.crpix, self.nsgp = wcs_simplezea.parse_header(header, zero_offset=False)
     def radec2pixelxy(self, ra, dec):
         input = np.array([ra, dec])
