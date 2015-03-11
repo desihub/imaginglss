@@ -58,8 +58,8 @@ class Brick(object):
         mask = (xy < numpy.array(img.shape) \
             .reshape(2, 1)).all(axis=0)
         mask &= (xy >= 0).all(axis=0)
-        l = numpy.ravel_multi_index(xy[:, mask], img.shape, mode='raise')
-        value[mask] = img.flat[l] 
+        x, y= xy[:, mask]
+        value[mask] = img[y, x]
         return value
  
     def query(self, repo, coord):
@@ -69,6 +69,8 @@ class Brick(object):
             (RA, DEC) tuple of arrays
              array of shape (2xN) RA DEC
         In either case returns a (2xN) array
+        Note that the returned array is in a x-first-varying order.
+        To index the ndarray image, use [y, x].
         """
         meta      = repo.metadata(self)
         coord     = numpy.array(coord)
