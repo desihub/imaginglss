@@ -93,11 +93,11 @@ def parse_header(hdr, zero_offset):
     if ('CTYPE1' not in hdr)|('CTYPE2' not in hdr)|\
        ('CRVAL1' not in hdr)|('CRVAL2' not in hdr)|\
        ('CRPIX1' not in hdr)|('CRPIX2' not in hdr)|\
-       ('LAM_NSGP' not in hdr)|('LAM_SCALE' not in hdr):
+       ('LAM_NSGP' not in hdr)|('LAM_SCAL' not in hdr):
         raise RuntimeError,"Unable to parse header."
     crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
     nsgp = int(hdr['LAM_NSGP'])
-    scale = int(hdr['LAM_SCALE'])
+    scale = int(hdr['LAM_SCAL'])
 
     if zero_offset:
         crpix -= 1
