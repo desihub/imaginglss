@@ -99,7 +99,7 @@ class SFDMap(object):
                               (self.southwcs, self.south, np.logical_not(N))]:
             # Our WCS routines are mis-named... the SFD WCSes convert 
             #   X,Y <-> L,B.
-            if sum(cut) == 0:
+            if cut.sum() == 0:
                 continue
             ok,x,y = wcs.radec2pixelxy(l[cut], b[cut])
             assert(np.all(ok == 0))
@@ -113,10 +113,13 @@ class SFDMap(object):
 
     def extinction(self, filts, ra, dec, get_ebv=False):
         ebv = self.ebv(ra, dec)
-        factors = np.array([SFDMap.extinctions[f] for f in filts])
-        rtn = factors[np.newaxis,:] * ebv[:,np.newaxis]
-        if get_ebv:
+        if filts is not None:
+            factors = np.array([SFDMap.extinctions[f] for f in filts])
+            rtn = factors[np.newaxis,:] * ebv[:,np.newaxis]
+        if get_ebv and filts is not None:
             return ebv,rtn
+        elif filts is None:
+            return ebv
         return rtn
 
 if __name__ == '__main__':
