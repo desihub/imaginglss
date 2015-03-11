@@ -64,6 +64,7 @@ def main(comm):
     mydepth[:, 1] = dr.readout(coord, dr.images['depth']['g'])
     mydepth[:, 2] = dr.readout(coord, dr.images['depth']['z'])
     mydepth[...] = 22.5 - 2.5 * numpy.log10(5 / mydepth ** 0.5)
+    myebv[:] = dr.readout(coord, dr.images['ebv'])
 
     if comm is not None:
         depth = comm.gather(mydepth)
