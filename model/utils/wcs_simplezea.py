@@ -107,7 +107,7 @@ def parse_header(hdr, zero_offset):
 
 def ang2pix(coord,SCALE,CRPIX,NSGP):
     """
-    ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
+    A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
     according the the WCS header. Look up Section 5.?.? of 
     http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
     Although the source code in 
@@ -116,10 +116,6 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
     maybe a better explanation of what is done.
     coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
     returns the pixel xy = (x, y). 
-
-    CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,
-
-    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
 
     Obviously PV distortion is not supported.
     No checking is performed if a given RA, DEC lies outside the range.
@@ -143,31 +139,26 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
     #
 
 
-def pix2ang(xy,CD,CRPIX,CRVAL):
+def pix2ang(xy,SCALE,CRPIX,NSGP):
     """
     This is the invert transformation of ang2pix. (TAN)
     xy = (x, y): coordinate in pixels
     Returns coord = (RA, DEC), in decimal degrees.
 
-    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
     """
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
-    # watch out, this may be wrong if the matrix is not diagonal
-    matrix = numpy.array(CD).reshape(2, 2)
+    xy -= numpy.array(CRPIX).reshape(2, 1)
+    xy /= SCALE
 
-    xy  -= numpy.array(CRPIX).reshape(2, 1)
-    xy   = matrix.dot(xy)
-    rinv = numpy.einsum('ij,ij->j',xy,xy)
-    # this will give a reasonable coord[1] at pole
-    rinv.clip(1e-28, out=rinv)
-    rinv **= -0.5
-    rinv  *= 180.0 / numpy.pi
+    x, y = xy
+    b = numpy.arcsin((1 - x ** 2 - y ** 2) * NSGP)
+    l = numpy.arctan2(-NSGP * y, x)
 
-    coord[1] = numpy.arctan(rinv)
-    coord[0] = numpy.arctan2(xy[0],-xy[1])
-    coord   *= 180 / numpy.pi
-    coord[0]%= 360.
+    coord[0] = l
+    coord[1] = b
+    coord *= 180. / numpy.pi
+    coord[0] %= 360.
     return(coord)
 
 if __name__ == '__main__':
@@ -197,9 +188,9 @@ if __name__ == '__main__':
                 CRPIX=(2048.5,2048.5),
                 NSGP=NSGP)
         back = pix2ang(ours, 
-                CD=(0.0395646818624,0., 0.,-0.0395646818624,),
-                CRPIX=(1800.5,1800.5),
-                CRVAL=(ra, dec))
+                SCALE=2048,
+                CRPIX=(2048.5,2048.5),
+                NSGP=NSGP)
 
         print('transforming', ra, dec, 'at', ra, dec)
         print('roundtrip', back.T)
@@ -208,8 +199,12 @@ if __name__ == '__main__':
         return ours - astropy
 
     def test():
-        compare(1, 31., -30)
-        compare(1, 30., -30)
-        compare(1, 30., -31)
-        compare(1, -181., -31)
+        compare(1, 31., 30)
+        compare(1, 30., 30)
+        compare(1, 30., 31)
+        compare(1, -181., 31)
+        compare(-1, 31., -30)
+        compare(-1, 30., -30)
+        compare(-1, 30., -31)
+        compare(-1, -181., -31)
     test()
