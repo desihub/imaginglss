@@ -21,7 +21,7 @@ def test398599():
 
     print 'Testing on', brick
     print dr.images['image']['z'].get_filename(brick)
-    x, y = numpy.indices(img2.shape)
+    y, x = numpy.indices(img2.shape)
     x = numpy.ravel(x) + 0.5
     y = numpy.ravel(y) + 0.5
     coord = brick.revert(dr.images['image']['z'], (x, y))
