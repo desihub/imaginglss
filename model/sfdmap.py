@@ -1,9 +1,9 @@
 # most code taken from https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py
-# switch to astropy.wcs 
+# replaced the transformation with ours
 import fitsio
 import os
-from model.utils import wcs_simplezea
-from model.utils.euler import euler
+from utils import wcs_simplezea
+from utils.euler import euler
 import numpy as np
 
 # to run need to 
@@ -121,7 +121,7 @@ class SFDMap(object):
         return rtn
 
 if __name__ == '__main__':
-    from model.datarelease import DataRelease
+    from datarelease import DataRelease
     dr = DataRelease()
     RA = dr.catalogue['RA']
     DEC = dr.catalogue['DEC']

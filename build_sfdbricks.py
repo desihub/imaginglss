@@ -22,7 +22,7 @@ python build_sfdmap.py
 # FIXME: hard coded dustdir, only works on edison 
 
 import fitsio
-from sfdmap import SFDMap
+from model.sfdmap import SFDMap
 import os.path
 import os
 import numpy
