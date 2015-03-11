@@ -25,8 +25,8 @@ import fitsio
 from sfdmap import SFDMap
 import os.path
 import os
-from astropy.wcs import WCS
 import numpy
+from model.utils import wcs_tangent
 sfdmap = SFDMap(dustdir='/project/projectdirs/desi/software/edison/dust/v0_0/')
 
 def process_file(header, newfilename=None):
@@ -40,12 +40,11 @@ def process_file(header, newfilename=None):
     header['CD2_2'] = float(header['CD2_2']) * fac
     header['IMTYPE'] = 'ebv'
     header.pop('FILTER', None)
-    wcs = WCS(header)
-    x, y = numpy.array(numpy.indices(shape), dtype='f8').reshape(2, -1)
+    y, x = numpy.array(numpy.indices(shape), dtype='f8').reshape(2, -1)
     x += 0.5
     y += 0.5
-    world = wcs.all_pix2world(numpy.array((x,y)).T, 0)
-    ebv, junk = sfdmap.extinction([], world[..., 0], world[..., 1], get_ebv=True)
+    world = wcs_tangent.pix2ang_hdr(numpy.array((x,y)), header, zero_offset=True)
+    ebv, junk = sfdmap.extinction([], world[0], world[1], get_ebv=True)
     ebv = ebv.reshape(shape)
     print newfilename, world.max(axis=0), world.min(axis=0)
     try:
