@@ -46,7 +46,7 @@ def process_file(header, newfilename=None):
     world = wcs_tangent.pix2ang_hdr(numpy.array((x,y)), header, zero_offset=True)
     ebv, junk = sfdmap.extinction([], world[0], world[1], get_ebv=True)
     ebv = ebv.reshape(shape)
-    print newfilename, world.max(axis=0), world.min(axis=0)
+    print newfilename, world.max(axis=1), world.min(axis=1)
     try:
         os.unlink(newfilename)
     except OSError:
