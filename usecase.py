@@ -69,16 +69,16 @@ def testebv():
     dr = DataRelease()
     RA = dr.catalogue['RA']
     DEC = dr.catalogue['DEC']
-    EXT_R = dr.catalogue['DECAM_EXTINCTION'][:, 2]
+    EBV = -2.5 * numpy.log10(dr.catalogue['DECAM_MW_TRANSMISSION'][:, 2]) / dr.extinction[2]
     ebv = dr.images['ebv']
     coord = (RA, DEC)
     ebv = dr.readout(coord, ebv)
     good = ~numpy.isnan(ebv)
     print 'matched', good.sum(), 'out of', len(RA)
-    ebv = ebv[good] * 2.165
-    EXT_R = EXT_R[good]
-    print (ebv-EXT_R).min()
-    assert numpy.allclose(ebv, EXT_R, 1e-2)
+    ebv = ebv[good]
+    EBV = EBV[good]
+    print (ebv-EBV).min()
+    assert numpy.allclose(ebv, EBV, 1e-2)
 
 def testcat():
     dr = DataRelease()

@@ -47,7 +47,7 @@ def contains(haystack, needle):
 
 class EDR:
     BRICKS_FILENAME = 'bricks.fits'
-    CATALOGUE_ALIASES = [('EXTINCTION', 'DECAM_EXTINCTION', lambda x: x)]
+    CATALOGUE_ALIASES = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', lambda x: 10**(x/-2.5))]
 
     @staticmethod
     def format_image_filenames():
@@ -79,7 +79,7 @@ class EDR:
 
 class EDR3:
     BRICKS_FILENAME = 'decals-bricks.fits'
-    CATALOGUE_ALIASES = []
+    CATALOGUE_ALIASES = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', lambda x: 10**(x/-2.5))]
     
     @staticmethod
     def format_image_filenames():
@@ -112,7 +112,7 @@ class EDR3:
         return brickindex.get_brick(bid)
 
 class EDR4(EDR3):
-    CATALOGUE_ALIASES = [('DECAM_MW_TRANSMISSION', 'DECAM_EXTINCTION', lambda x: -2.5 * numpy.log10(x))]
+    CATALOGUE_ALIASES = []
     pass
 
 _configurations = {
@@ -151,6 +151,10 @@ class DataRelease(object):
         self.brickindex = brickindex.BrickIndex(brickdata)
 
         self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
+
+        # E(B-V) to ugrizY bands, SFD98; used in tractor
+        self.extinction = numpy.array([3.995, 3.214, 2.165, 1.592, 1.211, 1.064], dtype='f8')\
+            .view(dtype=[(band, 'f8') for band in 'ugrizY'])[0]
 
         self.images = {}
         image_filenames = config.format_image_filenames()
@@ -202,7 +206,8 @@ class DataRelease(object):
             ramax=max([brick.ra2 for brick in self.observed_bricks]),
             decmin=min([brick.dec1 for brick in self.observed_bricks]),
             decmax=max([brick.dec2 for brick in self.observed_bricks]),)
-         
+
+
     def readout(self, coord, repo, default=numpy.nan):
         """ readout pixels at coord.
             

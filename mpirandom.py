@@ -59,11 +59,12 @@ def main(comm):
     sl = slice(mystart, myend)
     coord = (RA[sl], DEC[sl])
     mydepth = numpy.zeros(len(RA[sl]), dtype=('f4', 3))
+    myebv = numpy.zeros(len(RA[sl]), dtype='f4')
     mydepth[:, 0] = dr.readout(coord, dr.images['depth']['r'])
     mydepth[:, 1] = dr.readout(coord, dr.images['depth']['g'])
     mydepth[:, 2] = dr.readout(coord, dr.images['depth']['z'])
-    myebv = numpy.zeros(len(RA[sl]), dtype='f4')
-    myebv[:] = dr.readout(coord, dr.images['ebv'])
+    mydepth[...] = 22.5 - 2.5 * numpy.log10(5 / mydepth ** 0.5)
+
     if comm is not None:
         depth = comm.gather(mydepth)
         ebv = comm.gather(myebv)
@@ -78,11 +79,13 @@ def main(comm):
     depth_r = depth[:, 0]
     depth_g = depth[:, 1]
     depth_z = depth[:, 2]
+
+    # 5 sigma detection limit in mag
     filehandler.write_file(output, dict(RA=RA, 
                 DEC=DEC, 
-                depth_r=depth_r,
-                depth_g=depth_g,
-                depth_z=depth_z,
+                mdepth_r=depth_r,
+                mdepth_g=depth_g,
+                mdepth_z=depth_z,
                 ebv=ebv))
 #    numpy.savetxt(output, zip(RA, DEC, depth[:, 1], depth[:, 2], depth[:, 4], ebv), fmt='%.6f', header='#ra dec r g z ebv')
 
