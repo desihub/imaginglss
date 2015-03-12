@@ -29,10 +29,10 @@ def select_elgs():
     dr = DataRelease()
     # Define the fluxes.
     flux  = dr.catalogue['DECAM_FLUX'].T
-    ext   = dr.catalogue['DECAM_EXTINCTION'].T
-    GFLUX = flux[1] * 10 ** (ext[1] / 2.5)
-    RFLUX = flux[2] * 10 ** (ext[2] / 2.5)
-    ZFLUX = flux[4] * 10 ** (ext[4] / 2.5)
+    trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
+    GFLUX = flux[1] / trn[1]
+    RFLUX = flux[2] / trn[2]
+    ZFLUX = flux[4] / trn[4]
     # Now do the selection
     primary = dr.catalogue['BRICK_PRIMARY']
     mask  = (primary == 1)
@@ -46,7 +46,7 @@ def select_elgs():
     # magnitudes, ignoring errors.
     ra   = dr.catalogue[ 'RA'][mask]
     dc   = dr.catalogue['DEC'][mask]
-    mag  = 22.5-2.5*N.log10(flux[:,mask].clip(1e-15,1e15))-ext[:,mask]
+    mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
     return( (ra,dc,mag) )
     #
 
@@ -93,7 +93,7 @@ def diagnostic_plots(ra, dec, mag):
 
 if __name__=="__main__":
     from sys import argv
-
+    #
     ra,dc,mag = select_elgs()
     if len(argv) > 1 and argv[1] == '--plot':
         diagnostic_plots(ra, dc, mag)
