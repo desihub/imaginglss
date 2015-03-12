@@ -14,7 +14,7 @@ make sure DECALS_IMAGING and DECALS_CACHING are initialized (see README.md)
 
 python build_sfdmap.py
  Yu Feng <yfeng1@berkeley.edu>
- Martin White <mwhite@berkeley.edu>
+ Martin White <mjwhite@lbl.gov>
 """
 
 # TODO: skip already genearted files.
