@@ -120,20 +120,43 @@ class BrickIndex(object):
         ind = self.hash.searchsorted(hash)
         return ind
 
-    def optimize(self, coord):
+    def optimize(self, coord, return_index=False, return_inverse=True):
         """
         Optimize the ordering of coord=(RA,DEC) to make later queries faster.
         RA and DEC are sorted by their brickid, to group future queries.
-        Returns sorted_ra, sorted_dec, invert_ar such thatg
-            sorted_ra[ invert_arg] == ra
-            sorted_dec[invert_arg] == dec
+
+        if return_inverse is True, returns the array that can be used to
+        reconstruct coord from the returned coord.
+
+                sorted_ra[ iindices] == ra
+                sorted_dec[iindices] == dec
+
+        if return_index is True, returns the array that can be used to
+        construct sorted_coord from coord:
+
+                sorted_ra == ra[indices]
+                sorted_dec == dec[indices]
+
+        returns sorted_coord, indices, iindices or
+                sorted_coord, iindices or
+                sorted_coord, indices or
+                sorted_coord
         """
         coord = numpy.array(coord)
         bid = self.query(coord)
         arg = bid.argsort()
         #
-        invarg = numpy.empty_like(arg)
-        invarg[arg] = numpy.arange(len(arg), dtype='i8')
-        return numpy.array(coord[:, arg]), invarg
+        if return_inverse:
+            invarg = numpy.empty_like(arg)
+            invarg[arg] = numpy.arange(len(arg), dtype='i8')
+            if return_index:
+                return numpy.array(coord[:, arg]), arg, invarg
+            else:
+                return numpy.array(coord[:, arg]), invarg
+        else:
+            if return_index:
+                return numpy.array(coord[:, arg]), arg
+            else:
+                return numpy.array(coord[:, arg])
 
 
