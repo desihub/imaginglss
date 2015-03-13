@@ -54,9 +54,9 @@ def diagnostic_plots(ra, dec, mag):
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-    g = mag[:, 1]
-    r = mag[:, 2]
-    z = mag[:, 4]
+    g = mag[1]
+    r = mag[2]
+    z = mag[4]
     fig = Figure()
     ax = fig.add_subplot(111)
     ax.hist2d(ra, dec)
