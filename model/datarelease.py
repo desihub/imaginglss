@@ -115,10 +115,14 @@ class EDR4(EDR3):
     CATALOGUE_ALIASES = []
     pass
 
+class DR1(EDR4):
+    pass
+
 _configurations = {
     'EDR': EDR,
     'EDR3': EDR3,
     'EDR4': EDR4,
+    'DR1': DR1,
 }
 class DataRelease(object):
     """

@@ -1,3 +1,4 @@
+* DR1 current location /global/homes/d/dstn/tractor/data/dr1
 
 Describe the derived products that worth saving.
 
