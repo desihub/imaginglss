@@ -120,7 +120,7 @@ class BrickIndex(object):
         ind = self.hash.searchsorted(hash)
         return ind
 
-    def optimize(self, coord, return_index=False, return_inverse=True):
+    def optimize(self, coord, return_index=False, return_inverse=False):
         """
         Optimize the ordering of coord=(RA,DEC) to make later queries faster.
         RA and DEC are sorted by their brickid, to group future queries.

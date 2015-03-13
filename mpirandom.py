@@ -47,7 +47,7 @@ def main(comm):
     
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)
 
-    (RA, DEC), junk = dr.brickindex.optimize((RA, DEC))
+    (RA, DEC) = dr.brickindex.optimize((RA, DEC))
 
     if comm is not None:
         mystart = comm.rank * len(RA) // comm.size

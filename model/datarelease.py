@@ -238,7 +238,7 @@ class DataRelease(object):
             # survey 
             return images
 
-        coord, invarg = self.brickindex.optimize((ra, dec))
+        coord, invarg = self.brickindex.optimize((ra, dec), return_inverse=True)
         bid = self.brickindex.query(coord)
 
         pixels = numpy.empty(len(bid), 'f8')
