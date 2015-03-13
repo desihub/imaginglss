@@ -4,6 +4,11 @@
 # The target selection criteria are described at:
 #   https://desi.lbl.gov/trac/wiki/TargetSelection
 #
+# These catalogs also need to be vetod using the
+# depths and masks which are part of Tractor, since
+# catalog entries can appear in places where the
+# nominal depth is insufficient to be complete.
+#
 # usage: python select_elg.py [--plot]
 #
 from __future__ import print_function
@@ -16,6 +21,7 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 
 import numpy as N
+from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
 
 
@@ -25,8 +31,9 @@ def select_elgs():
     select_elgs():
     Does the actual selection, imposing cuts on the fluxes
     """
-    # Get the catalogs.
+    # Get instances of a data release and SFD dust map.
     dr = DataRelease()
+    sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     # Define the fluxes.
     flux  = dr.catalogue['DECAM_FLUX'].T
     trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
@@ -47,16 +54,38 @@ def select_elgs():
     ra   = dr.catalogue[ 'RA'][mask]
     dc   = dr.catalogue['DEC'][mask]
     mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
+    # Now we need to pass this through our mask since galaxies can
+    # appear even in regions where our nominal depth is insufficient
+    # for a complete sample.  Like in make_random this should probably
+    # call out to another routine.  For now I'll just indent it helpfully.
+    if True:
+        (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
+        coord = (RA,DEC)
+        # Get the flux depths and MW transmission in the relevant filters.
+        # For out-of-bounds points, return 0.
+        ebv  = sfd.extinction(None,RA,DEC,get_ebv=True)
+        rdep = dr.readout(coord,dr.images['depth']['r'],default=0)
+        rtrn = 10.0**(-ebv*dr.extinction['r']/2.5)
+        # For now we use a 5-sigma cut in extinction-correct flux as our limit.
+        # Recall "depth" is stored as inverse variance.
+        rlim = 5.0/N.sqrt(rdep+1e-30) / rtrn
+        ww   = N.nonzero( rlim<10.0**((22.5-23.40)/2.5) )[0]
+        ra   = RA[ ww]
+        dc   = DEC[ww]
+        mag  = mag[:,arg[ww]]
     return( (ra,dc,mag) )
     #
+
+
+
 
 def diagnostic_plots(ra, dec, mag):
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
 
-    g = mag[1]
-    r = mag[2]
-    z = mag[4]
+    g = mag[:, 1]
+    r = mag[:, 2]
+    z = mag[:, 4]
     fig = Figure()
     ax = fig.add_subplot(111)
     ax.hist2d(ra, dec)
@@ -91,6 +120,8 @@ def diagnostic_plots(ra, dec, mag):
     fig.savefig('elg-gr-rz.png')
 
 
+
+
 if __name__=="__main__":
     from sys import argv
     #
@@ -98,8 +129,11 @@ if __name__=="__main__":
     if len(argv) > 1 and argv[1] == '--plot':
         diagnostic_plots(ra, dc, mag)
     else:
-        print("# %13s %15s %15s %15s %15s"%("RA","DEC","g","r","z"))
+        ff = open("elgs.rdz","w")
+        ff.write("# %13s %15s %15s %15s %15s %15s\n"%\
+          ("RA","DEC","PhotoZ","g","r","z"))
         for i in range(ra.size):
-            print("%15.10f %15.10f %15.10f %15.10f %15.10f"%\
-              (ra[i],dc[i],mag[1,i],mag[2,i],mag[4,i]))
+            ff.write("%15.10f %15.10f %15.10f %15.10f %15.10f %15.10f\n"%\
+              (ra[i],dc[i],0.5,mag[1,i],mag[2,i],mag[4,i]))
+        ff.close()
     #
