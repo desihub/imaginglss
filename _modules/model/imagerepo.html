@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.imagerepo &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for model.imagerepo</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">fits</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<div class="viewcode-block" id="ImageRepo"><a class="viewcode-back" href="../../index.html#model.imagerepo.ImageRepo">[docs]</a><span class="k">class</span> <span class="nc">ImageRepo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Image repository.</span>
+<span class="sd">    This class serves as an interface to the file system, the</span>
+<span class="sd">    layout of files and IO for brick files.</span>
+<span class="sd">    Given a Brick object, ImageRepo can return the image data</span>
+<span class="sd">    or meta data of the image.</span>
+<span class="sd">    Standard users should not need to modify this class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        pattern is a python formatting string.</span>
+<span class="sd">        supported keywords are</span>
+
+<span class="sd">        pattern can also be a callable with signature:</span>
+
+<span class="sd">        def pattern(brick):</span>
+<span class="sd">            return filename_without_root</span>
+
+<span class="sd">        %(brickid)d</span>
+<span class="sd">        %(brickname)d</span>
+
+<span class="sd">        We need to extend this for DR1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span> <span class="o">=</span> <span class="p">{}</span> 
+
+<div class="viewcode-block" id="ImageRepo.preload"><a class="viewcode-back" href="../../index.html#model.imagerepo.ImageRepo.preload">[docs]</a>    <span class="k">def</span> <span class="nf">preload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; preload the images for </span>
+<span class="sd">            Brick objects listed in bricks list.</span>
+
+<span class="sd">            **kwargs is unused </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
+            </div>
+<div class="viewcode-block" id="ImageRepo.open"><a class="viewcode-back" href="../../index.html#model.imagerepo.ImageRepo.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; open and read the image for </span>
+<span class="sd">            Brick object brick. The image content is returned</span>
+<span class="sd">            as an array.</span>
+
+<span class="sd">            **kwargs is unused </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">))</span>
+        </div>
+<div class="viewcode-block" id="ImageRepo.metadata"><a class="viewcode-back" href="../../index.html#model.imagerepo.ImageRepo.metadata">[docs]</a>    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Fetch the meta data about a brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">brick</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="ImageRepo.get_filename"><a class="viewcode-back" href="../../index.html#model.imagerepo.ImageRepo.get_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;brickid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;brickname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">)</span> <span class="o">%</span> <span class="n">kwargs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+            <span class="n">fngz</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">+</span> <span class="s">&#39;.gz&#39;</span> 
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fngz</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">fngz</span>
+        <span class="k">return</span> <span class="n">fn</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Yu Feng, Martin White.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.2</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
