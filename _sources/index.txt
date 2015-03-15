@@ -46,10 +46,10 @@ Modules
    :undoc-members:
    :show-inheritance:
 
-:mod:`model.brick` -- Brick
+:mod:`model.utils` -- Utilities
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. automodule:: model.brick
+.. automodule:: model.utils
    :members:
    :undoc-members:
    :show-inheritance:
