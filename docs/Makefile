@@ -57,7 +57,7 @@ html:
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
 gh-pages: html
-    ghp-import -n -p $(BUILDDIR)/html/ 
+	ghp-import -n -p $(BUILDDIR)/html/ 
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
