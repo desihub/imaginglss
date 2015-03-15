@@ -38,7 +38,7 @@ def make_random(samp,Nran=1000000):
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
     dr = DataRelease(version='EDR')
-    ramin,ramax,dcmin,dcmax = dr.observed_range
+    ramin,ramax,dcmin,dcmax = dr.footprint.range
     sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     # Generate uniformly distributed points within the boundary (decimal deg).
     # Everyone generates all of the points, then we specialize to a subset.

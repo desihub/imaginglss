@@ -36,7 +36,7 @@ def main(comm):
     dr = DataRelease()
     bi = dr.brickindex
 
-    ramin, ramax, decmin, decmax = dr.observed_range
+    ramin, ramax, decmin, decmax = dr.footprint.range
 
     u1, u2 = numpy.random.random(size=(2, N))
 

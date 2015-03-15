@@ -72,10 +72,9 @@ class EDR:
     @staticmethod
     def parse_filename(filename, brickindex):
         if not filename.endswith('.fits'): raise ValueError
-        return brickindex.get_brick(
-            brickindex.search_by_id(
+        return brickindex.search_by_id(
                 int(re.search('-([0123456789]+)\.', 
-                os.path.basename(filename)).group(1))))
+                os.path.basename(filename)).group(1)))
 
 class EDR3:
     BRICKS_FILENAME = 'decals-bricks.fits'
@@ -109,7 +108,7 @@ class EDR3:
         brickname = re.search('-([p0123456789]+)\.', 
                 os.path.basename(filename)).group(1)
         bid = brickindex.search_by_name(brickname)
-        return brickindex.get_brick(bid)
+        return bid
 
 class EDR4(EDR3):
     CATALOGUE_ALIASES = []
@@ -174,43 +173,48 @@ class DataRelease(object):
             return PATTERN % dict(pre=brick.name[:3], brickname=brick.name)
         self.images['ebv'] = imagerepo.ImageRepo(self.cacheroot, image_filename)
             
-        self.observed_bricks = [ ]
+        _covered_brickids = [ ]
         for roots, dirnames, filenames in \
             os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
             for filename in filenames:
                 try:
-                    self.observed_bricks.append(
+                    _covered_brickids.append(
                         config.parse_filename(filename, self.brickindex))
                 except ValueError:
                     pass 
+        
+        self._covered_brickids = numpy.array(_covered_brickids, dtype='i8')
+        # the list of covered bricks must be sorted.
+        self._covered_brickids.sort()
 
-        self._observed_brickids = self.brickindex.search_by_id(
-            [ brick.id for brick in self.observed_bricks ])
-        # the list of observed bricks must be sorted.
-        arg = self._observed_brickids.argsort()
-        self._observed_brickids = self._observed_brickids[arg]
-        self.observed_bricks = numpy.array(self.observed_bricks)[arg]
-
-        # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
-        self.observed_area = 41253. * len(self.observed_bricks) / len(self.brickindex)
+        _ = self.footprint # build the footprint property
 
         self.catalogue = catalogue.Catalogue(
             cachedir=os.path.join(self.cacheroot, 'catalogue'),
             filenames=[
                 os.path.join(self.root, 
                 config.format_catalogue_filename(brick))
-                for brick in self.observed_bricks],
+                for brick in self.footprint.bricks],
             aliases=config.CATALOGUE_ALIASES
             )
 
-        # range of ra dec of observed bricks
-        ObservedRange = namedtuple('ObservedRange', ['ramin', 'ramax', 'decmin', 'decmax'])
-        self.observed_range = ObservedRange(
-            ramin=min([brick.ra1 for brick in self.observed_bricks]),
-            ramax=max([brick.ra2 for brick in self.observed_bricks]),
-            decmin=min([brick.dec1 for brick in self.observed_bricks]),
-            decmax=max([brick.dec2 for brick in self.observed_bricks]),)
 
+    @Lazy
+    def footprint(self):
+        obj = lambda : None
+
+        # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
+        obj.bricks = [self.brickindex.get_brick(bid) for bid in self._covered_brickids]
+        obj.area = 41253. * len(self._covered_brickids) / len(self.brickindex)
+
+        # range of ra dec of covered bricks
+        FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
+        obj.range = FootPrintRange(
+            ramin=min([brick.ra1 for brick in obj.bricks]),
+            ramax=max([brick.ra2 for brick in obj.bricks]),
+            decmin=min([brick.dec1 for brick in obj.bricks]),
+            decmax=max([brick.dec2 for brick in obj.bricks]),)
+        return obj
 
     def readout(self, coord, repo, default=numpy.nan):
         """ readout pixels at coord.
@@ -233,7 +237,7 @@ class DataRelease(object):
 
         bid = self.brickindex.query((RA, DEC))
 
-        mask = contains(self._observed_brickids, bid)
+        mask = contains(self._covered_brickids, bid)
 
         ra = RA[mask]
         dec = DEC[mask]

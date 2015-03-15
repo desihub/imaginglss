@@ -5,7 +5,7 @@ import numpy
 
 dr = DataRelease()
 
-brick = dr.observed_bricks[0]
+brick = dr.footprint.bricks[0]
 print dr.images['image']['z'].metadata(brick)
 print '\n'.join(sorted([str(f) for f in dr.catalogue.dtype.fields]))
 
@@ -13,7 +13,7 @@ def test398599():
     """ test image readout on brick-398599. 
     """
     dr = DataRelease()
-    brick = dr.observed_bricks[0]
+    brick = dr.footprint.bricks[0]
     dr.images['image']['z'].preload([brick])
 
     img2 = dr.images['image']['z'].open(brick)
@@ -49,11 +49,11 @@ def test398599():
 def testrandom():
     dr = DataRelease()
     ebv = dr.images['ebv']
-    print dr.observed_range
+    print dr.footprint.range
     u1, u2 = numpy.random.random(size=(2, 4))
-    RA = (dr.observed_range.ramax - dr.observed_range.ramin) * u1 + dr.observed_range.ramin
-    a = 0.5 * ((numpy.cos(dr.observed_range.decmax / 180. * numpy.pi)  + 1))
-    b = 0.5 * ((numpy.cos(dr.observed_range.decmin / 180. * numpy.pi)  + 1))
+    RA = (dr.footprint.range.ramax - dr.footprint.range.ramin) * u1 + dr.footprint.range.ramin
+    a = 0.5 * ((numpy.cos(dr.footprint.range.decmax / 180. * numpy.pi)  + 1))
+    b = 0.5 * ((numpy.cos(dr.footprint.range.decmin / 180. * numpy.pi)  + 1))
     u2 = (a - b) * u2 + b
     
     DEC = numpy.arccos(2.0 * u2 - 1) * (180. / numpy.pi)

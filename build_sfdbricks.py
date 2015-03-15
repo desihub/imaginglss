@@ -60,7 +60,7 @@ def process_file(header, newfilename=None):
 def main():
     from model.datarelease import DataRelease
     dr = DataRelease()
-    for brick in dr.observed_bricks:
+    for brick in dr.footprint.bricks:
         header = dr.images['depth']['r'].metadata(brick)
         newfilename = dr.images['ebv'].get_filename(brick)
         if os.path.exists(newfilename):
