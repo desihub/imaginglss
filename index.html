@@ -119,6 +119,80 @@
 <ul class="simple">
 </ul>
 </div>
+<p># mydesi</p>
+<p>This is a data model of the DECAM imaging survey data
+and potentially also for other desi targeting imaging survey,
+for Large scale structure analysis.</p>
+<p>The modelled data is a product from the Tractor, the source identification
+software used in by DESI.</p>
+<p>We have support on the Early Data Release (EDR) data, and DR1 support is on the way.</p>
+<p>See
+<a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles">https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles</a></p>
+<p>and
+<a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1">https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1</a></p>
+<p>To use this imaing data model on edison:</p>
+<ol class="arabic simple">
+<li>set environments</li>
+</ol>
+<blockquote>
+<div><dl class="docutils">
+<dt><a href="#id1"><span class="problematic" id="id2">``</span></a><a href="#id3"><span class="problematic" id="id4">`</span></a></dt>
+<dd>export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
+export DECALS_CACHE=$GSCRATCH/desicache</dd>
+</dl>
+<p><a href="#id5"><span class="problematic" id="id6">``</span></a><a href="#id7"><span class="problematic" id="id8">`</span></a></p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>install astropy or fitsio (prefered)</li>
+</ol>
+<blockquote>
+<div><dl class="docutils">
+<dt><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a></dt>
+<dd>easy_install &#8211;user astropy</dd>
+</dl>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>Alternatively,
+<a href="#id17"><span class="problematic" id="id18">``</span></a><a href="#id19"><span class="problematic" id="id20">`</span></a></p>
+<blockquote>
+<div>easy_install &#8211;user fitsio</div></blockquote>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a><a href="#id23"><span class="problematic" id="id24">`</span></a></p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>try if usecase.py runs.</li>
+</ol>
+<blockquote>
+<div><dl class="docutils">
+<dt><a href="#id25"><span class="problematic" id="id26">``</span></a><a href="#id27"><span class="problematic" id="id28">`</span></a></dt>
+<dd>python usecase.py</dd>
+</dl>
+<p><a href="#id29"><span class="problematic" id="id30">``</span></a><a href="#id31"><span class="problematic" id="id32">`</span></a></p>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>start hacking with</li>
+</ol>
+<blockquote>
+<div><dl class="docutils">
+<dt><a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a></dt>
+<dd>from model.datarelease import DataRelease
+dr = DataRelease()</dd>
+</dl>
+<p><a href="#id37"><span class="problematic" id="id38">``</span></a><a href="#id39"><span class="problematic" id="id40">`</span></a></p>
+</div></blockquote>
+<p>Due to internal caching of the catalogue, the running time is faster after first time.</p>
+<p>Documentation of the modelling can be seen in model/README.md</p>
+<p>We are working on a more comprehensive documentation generated from
+source code doc strings.</p>
+<dl class="docutils">
+<dt>Examples:</dt>
+<dd><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">edison_example.sh</span>
+<span class="pre">mpirandom.py</span>
+<span class="pre">usecase.py</span>
+<span class="pre">select_elgs.py</span>
+<span class="pre">footprint_mangle.py</span>
+<span class="pre">build_sfdmap.py</span>
+<span class="pre">`</span></code></dd>
+</dl>
 </div>
 <div class="section" id="modules">
 <h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
