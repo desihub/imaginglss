@@ -316,7 +316,7 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>brickindex</td>
-<td>(an index object of all of the bricks (covering the entire sky)) bands      : a dictionary translating from band name to integer used in Tractor catalogue catalogue  : the concatenated tractor catalogue, accessed by attributes. extinction : an array stroing the extinction coeffcients  images:      image repositories (depth, image, model are by bands, ebv is the extinction map) footprint  : the footprint of the data release</td>
+<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky) bands      : dict a dictionary translating from band name to integer used in Tractor catalogue catalogue  : model.catalogue.Catalogue the concatenated tractor catalogue, accessed by attributes. extinction : array_like an array stroing the extinction coeffcients images:      model.imagerepo.ImageRepo image repositories (depth, image, model are by bands, ebv is the extinction map) footprint  : Footprint the footprint of the data release</td>
 </tr>
 </tbody>
 </table>
@@ -349,7 +349,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x208ff50&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x20c2758&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -379,7 +379,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21981b8&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x20c2938&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -418,18 +418,18 @@ have readout in ImageRepo.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="13%" />
-<col width="87%" />
+<col width="12%" />
+<col width="88%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>bricks</td>
-<td>(covered bricks)</td>
+<td>(list, model.brick.Brick) covered bricks</td>
 </tr>
 <tr class="row-even"><td>range</td>
-<td>(ramin, ramax, decmin, decmax)</td>
+<td>( tuple) (ramin, ramax, decmin, decmax)</td>
 </tr>
 <tr class="row-odd"><td>area</td>
-<td>(covered outline area in square degrees)</td>
+<td>(float) covered outline area in square degrees</td>
 </tr>
 </tbody>
 </table>
