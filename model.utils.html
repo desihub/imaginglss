@@ -128,18 +128,6 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>a cached column store 
 subclass shall implement</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.columnstore.ColumnStore.updatedtype" title="model.utils.columnstore.ColumnStore.updatedtype"><code class="xref py py-obj docutils literal"><span class="pre">updatedtype</span></code></a>(column,&nbsp;value)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="model.utils.columnstore.ColumnStore.updatedtype">
 <code class="descname">updatedtype</code><span class="sig-paren">(</span><em>column</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#ColumnStore.updatedtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.ColumnStore.updatedtype" title="Permalink to this definition">¶</a></dt>
@@ -151,24 +139,6 @@ subclass shall implement</p>
 <dt id="model.utils.columnstore.DiskColumnStore">
 <em class="property">class </em><code class="descclassname">model.utils.columnstore.</code><code class="descname">DiskColumnStore</code><span class="sig-paren">(</span><em>root</em>, <em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#DiskColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.DiskColumnStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.utils.columnstore.ColumnStore" title="model.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">model.utils.columnstore.ColumnStore</span></code></a></p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.columnstore.DiskColumnStore.forget" title="model.utils.columnstore.DiskColumnStore.forget"><code class="xref py py-obj docutils literal"><span class="pre">forget</span></code></a>(column)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.columnstore.DiskColumnStore.getfilename" title="model.utils.columnstore.DiskColumnStore.getfilename"><code class="xref py py-obj docutils literal"><span class="pre">getfilename</span></code></a>(column)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">updatedtype</span></code>(column,&nbsp;value)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="method">
 <dt id="model.utils.columnstore.DiskColumnStore.forget">
 <code class="descname">forget</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#DiskColumnStore.forget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.DiskColumnStore.forget" title="Permalink to this definition">¶</a></dt>
@@ -284,48 +254,6 @@ Add option to specify SELECT as a keyword W. Landsman March 2003</dd>
 <p>a Elastic Array that can be stored as a 
 filesystem tree of binary files, plus some text format
 meta data.</p>
-<p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.dtype" title="model.utils.fsarray.ElasticArray.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dtype</span></code></a></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.extend" title="model.utils.fsarray.ElasticArray.extend"><code class="xref py py-obj docutils literal"><span class="pre">extend</span></code></a>(newrows)</td>
-<td>grow the array with new rows</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.fromfile" title="model.utils.fsarray.ElasticArray.fromfile"><code class="xref py py-obj docutils literal"><span class="pre">fromfile</span></code></a>(prefix)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.fromndarray" title="model.utils.fsarray.ElasticArray.fromndarray"><code class="xref py py-obj docutils literal"><span class="pre">fromndarray</span></code></a>(array[,&nbsp;copy])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.keys" title="model.utils.fsarray.ElasticArray.keys"><code class="xref py py-obj docutils literal"><span class="pre">keys</span></code></a>()</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.select" title="model.utils.fsarray.ElasticArray.select"><code class="xref py py-obj docutils literal"><span class="pre">select</span></code></a>(indices[,&nbsp;columns])</td>
-<td>returns a new ElasticArray with only items at indices.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.tofile" title="model.utils.fsarray.ElasticArray.tofile"><code class="xref py py-obj docutils literal"><span class="pre">tofile</span></code></a>(prefix)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.fsarray.ElasticArray.tondarray" title="model.utils.fsarray.ElasticArray.tondarray"><code class="xref py py-obj docutils literal"><span class="pre">tondarray</span></code></a>([columns])</td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="attribute">
 <dt id="model.utils.fsarray.ElasticArray.dtype">
 <code class="descname">dtype</code><a class="headerlink" href="#model.utils.fsarray.ElasticArray.dtype" title="Permalink to this definition">¶</a></dt>
@@ -379,27 +307,6 @@ meta data.</p>
 <dd><p>KDtree:
 A pure-Python class to do some simple KD tree construction and
 search.  Everything is manipulated through lists.</p>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.kdtree.KDtree.TreeNode" title="model.utils.kdtree.KDtree.TreeNode"><code class="xref py py-obj docutils literal"><span class="pre">TreeNode</span></code></a></td>
-<td>An empty class for the nodes.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.kdtree.KDtree.kdtree" title="model.utils.kdtree.KDtree.kdtree"><code class="xref py py-obj docutils literal"><span class="pre">kdtree</span></code></a>(point_list[,&nbsp;split_dim])</td>
-<td>kdtree(self,point_list,split_dim=0):</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#model.utils.kdtree.KDtree.simplesearch" title="model.utils.kdtree.KDtree.simplesearch"><code class="xref py py-obj docutils literal"><span class="pre">simplesearch</span></code></a>(point_value,&nbsp;depth)</td>
-<td>simplesearch(self,point_value,depth):</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#model.utils.kdtree.KDtree.treelist" title="model.utils.kdtree.KDtree.treelist"><code class="xref py py-obj docutils literal"><span class="pre">treelist</span></code></a>(node)</td>
-<td>treelist(self,node):</td>
-</tr>
-</tbody>
-</table>
 <dl class="class">
 <dt id="model.utils.kdtree.KDtree.TreeNode">
 <em class="property">class </em><code class="descname">TreeNode</code><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.TreeNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.TreeNode" title="Permalink to this definition">¶</a></dt>
