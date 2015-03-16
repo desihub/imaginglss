@@ -238,11 +238,52 @@
     <span class="s">&#39;EDR4&#39;</span><span class="p">:</span> <span class="n">EDR4</span><span class="p">,</span>
     <span class="s">&#39;DR1&#39;</span><span class="p">:</span> <span class="n">DR1</span><span class="p">,</span>
 <span class="p">}</span>
+<div class="viewcode-block" id="Footprint"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint">[docs]</a><span class="k">class</span> <span class="nc">Footprint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; footprint of a data release.</span>
+<span class="sd">        </span>
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+
+<span class="sd">        bricks : covered bricks</span>
+<span class="sd">        range : ramin, ramax, decmin, decmax</span>
+<span class="sd">        area  : covered outline area in square degrees</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="n">dr</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="mf">41253.</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dr</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dr</span><span class="o">.</span><span class="n">brickindex</span><span class="p">)</span>
+
+        <span class="c"># range of ra dec of covered bricks</span>
+        <span class="n">FootPrintRange</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FootPrintRange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;ramin&#39;</span><span class="p">,</span> <span class="s">&#39;ramax&#39;</span><span class="p">,</span> <span class="s">&#39;decmin&#39;</span><span class="p">,</span> <span class="s">&#39;decmax&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">FootPrintRange</span><span class="p">(</span>
+            <span class="n">ramin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
+            <span class="n">ramax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
+            <span class="n">decmin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
+            <span class="n">decmax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;Footprint: len(bricks)=</span><span class="si">%d</span><span class="s"> , area=</span><span class="si">%g</span><span class="s"> degrees, range=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
+            <span class="p">)</span>
+</div>
 <div class="viewcode-block" id="DataRelease"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease">[docs]</a><span class="k">class</span> <span class="nc">DataRelease</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The highest level interface into the data for a given imaging</span>
 <span class="sd">    data release.  Uses several &quot;helper&quot; classes and has methods for</span>
 <span class="sd">    looking at pixelized data or catalogs arranged in bricks.</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">        brickindex : an index object of all of the bricks (covering the entire sky)</span>
+<span class="sd">        bands      : a dictionary translating from band name to integer used in Tractor catalogue</span>
+<span class="sd">        catalogue  : the concatenated tractor catalogue, accessed by attributes.</span>
+<span class="sd">        extinction : an array stroing the extinction coeffcients</span>
+
+<span class="sd">        images:      image repositories (depth, image, model are by bands, ebv is the extinction map)</span>
+<span class="sd">        footprint  : the footprint of the data release</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cacheroot</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -302,7 +343,7 @@
         <span class="c"># the list of covered bricks must be sorted.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
-        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">footprint</span> <span class="c"># build the footprint property</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">footprint</span> <span class="o">=</span> <span class="n">Footprint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c"># build the footprint property</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">catalogue</span> <span class="o">=</span> <span class="n">catalogue</span><span class="o">.</span><span class="n">Catalogue</span><span class="p">(</span>
             <span class="n">cachedir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cacheroot</span><span class="p">,</span> <span class="s">&#39;catalogue&#39;</span><span class="p">),</span>
@@ -313,24 +354,6 @@
             <span class="n">aliases</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
             <span class="p">)</span>
 
-
-    <span class="nd">@Lazy</span>
-<div class="viewcode-block" id="DataRelease.footprint"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.footprint">[docs]</a>    <span class="k">def</span> <span class="nf">footprint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="k">lambda</span> <span class="p">:</span> <span class="bp">None</span>
-
-        <span class="c"># approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">]</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="mf">41253.</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">)</span>
-
-        <span class="c"># range of ra dec of covered bricks</span>
-        <span class="n">FootPrintRange</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FootPrintRange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;ramin&#39;</span><span class="p">,</span> <span class="s">&#39;ramax&#39;</span><span class="p">,</span> <span class="s">&#39;decmin&#39;</span><span class="p">,</span> <span class="s">&#39;decmax&#39;</span><span class="p">])</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">FootPrintRange</span><span class="p">(</span>
-            <span class="n">ramin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-            <span class="n">ramax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-            <span class="n">decmin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-            <span class="n">decmax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),)</span>
-        <span class="k">return</span> <span class="n">obj</span>
-</div>
 <div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; readout pixels at coord.</span>
 <span class="sd">            </span>

@@ -147,6 +147,7 @@
 This object contains only the meta-data, and it calls
 imagerepo to handle looking up the pixel-level information.
 Major methods are &#8220;readout&#8221;, &#8220;query&#8221; and &#8220;revert&#8221;.</p>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.brick.Brick.query">
 <code class="descname">query</code><span class="sig-paren">(</span><em>repo</em>, <em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick.query" title="Permalink to this definition">¶</a></dt>
@@ -194,6 +195,7 @@ array of shape (2xN) x, y</div></blockquote>
 <p>Manages a high level table/list/index of bricks.
 Contains methods for organizing and querying bricks
 or returning brick objects.</p>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.brickindex.BrickIndex.get_brick">
 <code class="descname">get_brick</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.get_brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.get_brick" title="Permalink to this definition">¶</a></dt>
@@ -269,6 +271,7 @@ by the DataRelease object.
 We assume the catalogue is split into multiple files.
 and the list of file names are provided as an input.
 The main method is fetch.</p>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.catalogue.Catalogue.fetch">
 <code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
@@ -299,6 +302,7 @@ The main method is fetch.</p>
 <dt id="model.datarelease.DR1">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/datarelease.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DR1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR4" title="model.datarelease.EDR4"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR4</span></code></a></p>
+<p class="rubric">Methods</p>
 </dd></dl>
 
 <dl class="class">
@@ -308,11 +312,19 @@ The main method is fetch.</p>
 <p>The highest level interface into the data for a given imaging
 data release.  Uses several &#8220;helper&#8221; classes and has methods for
 looking at pixelized data or catalogs arranged in bricks.</p>
-<dl class="attribute">
-<dt id="model.datarelease.DataRelease.footprint">
-<code class="descname">footprint</code><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.footprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.footprint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="2%" />
+<col width="98%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>brickindex</td>
+<td>(an index object of all of the bricks (covering the entire sky)) bands      : a dictionary translating from band name to integer used in Tractor catalogue catalogue  : the concatenated tractor catalogue, accessed by attributes. extinction : an array stroing the extinction coeffcients  images:      image repositories (depth, image, model are by bands, ebv is the extinction map) footprint  : the footprint of the data release</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.datarelease.DataRelease.readout">
 <code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
@@ -335,14 +347,15 @@ have readout in ImageRepo.</p>
 <dl class="class">
 <dt id="model.datarelease.EDR">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR</code><a class="reference internal" href="_modules/model/datarelease.html#EDR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p class="rubric">Methods</p>
+<dl class="attribute">
 <dt id="model.datarelease.EDR.BRICKS_FILENAME">
 <code class="descname">BRICKS_FILENAME</code><em class="property"> = 'bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x1f9b758&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21fbb18&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -365,14 +378,15 @@ have readout in ImageRepo.</p>
 <dl class="class">
 <dt id="model.datarelease.EDR3">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR3</code><a class="reference internal" href="_modules/model/datarelease.html#EDR3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
+<dd><p class="rubric">Methods</p>
+<dl class="attribute">
 <dt id="model.datarelease.EDR3.BRICKS_FILENAME">
 <code class="descname">BRICKS_FILENAME</code><em class="property"> = 'decals-bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x1f9b938&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21fbcf8&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -396,11 +410,37 @@ have readout in ImageRepo.</p>
 <dt id="model.datarelease.EDR4">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR4</code><a class="reference internal" href="_modules/model/datarelease.html#EDR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR4" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR3" title="model.datarelease.EDR3"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR3</span></code></a></p>
+<p class="rubric">Methods</p>
 <dl class="attribute">
 <dt id="model.datarelease.EDR4.CATALOGUE_ALIASES">
 <code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#model.datarelease.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="model.datarelease.Footprint">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Footprint</code><span class="sig-paren">(</span><em>dr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>footprint of a data release.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>bricks</td>
+<td>(covered bricks)</td>
+</tr>
+<tr class="row-even"><td>range</td>
+<td>(ramin, ramax, decmin, decmax)</td>
+</tr>
+<tr class="row-odd"><td>area</td>
+<td>(covered outline area in square degrees)</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -428,6 +468,7 @@ layout of files and IO for brick files.
 Given a Brick object, ImageRepo can return the image data
 or meta data of the image.
 Standard users should not need to modify this class.</p>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.get_filename">
 <code class="descname">get_filename</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.get_filename" title="Permalink to this definition">¶</a></dt>
@@ -465,6 +506,7 @@ Brick objects listed in bricks list.</p>
 <dt id="model.sfdmap.SFDMap">
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">SFDMap</code><span class="sig-paren">(</span><em>ngp_filename=None</em>, <em>sgp_filename=None</em>, <em>dustdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p class="rubric">Methods</p>
 <dl class="staticmethod">
 <dt id="model.sfdmap.SFDMap.bilinear_interp_nonzero">
 <em class="property">static </em><code class="descname">bilinear_interp_nonzero</code><span class="sig-paren">(</span><em>image</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.bilinear_interp_nonzero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.bilinear_interp_nonzero" title="Permalink to this definition">¶</a></dt>
@@ -491,6 +533,7 @@ Brick objects listed in bricks list.</p>
 <dt id="model.sfdmap.anwcs_t">
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">anwcs_t</code><span class="sig-paren">(</span><em>filename</em>, <em>hduid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p class="rubric">Methods</p>
 <dl class="method">
 <dt id="model.sfdmap.anwcs_t.radec2pixelxy">
 <code class="descname">radec2pixelxy</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t.radec2pixelxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t.radec2pixelxy" title="Permalink to this definition">¶</a></dt>
