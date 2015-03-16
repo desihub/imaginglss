@@ -311,12 +311,27 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="2%" />
-<col width="98%" />
+<col width="8%" />
+<col width="92%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>brickindex</td>
-<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky) bands      : dict a dictionary translating from band name to integer used in Tractor catalogue catalogue  : model.catalogue.Catalogue the concatenated tractor catalogue, accessed by attributes. extinction : array_like an array stroing the extinction coeffcients images:      model.imagerepo.ImageRepo image repositories (depth, image, model are by bands, ebv is the extinction map) footprint  : Footprint the footprint of the data release</td>
+<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky)</td>
+</tr>
+<tr class="row-even"><td>bands</td>
+<td>(dict) a dictionary translating from band name to integer used in Tractor catalogue</td>
+</tr>
+<tr class="row-odd"><td>catalogue</td>
+<td>(model.catalogue.Catalogue) the concatenated tractor catalogue, accessed by attributes.</td>
+</tr>
+<tr class="row-even"><td>extinction</td>
+<td>(array_like) an array stroing the extinction coeffcients</td>
+</tr>
+<tr class="row-odd"><td>images</td>
+<td>(     model.imagerepo.ImageRepo) image repositories (depth, image, model are by bands, ebv is the extinction map)</td>
+</tr>
+<tr class="row-even"><td>footprint</td>
+<td>(Footprint) the footprint of the data release</td>
 </tr>
 </tbody>
 </table>
