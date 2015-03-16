@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>model.utils.fits &mdash; ImagingLSS 0.9 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> ImagingLSS</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="simple">
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">ImagingLSS</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>model.utils.fits</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for model.utils.fits</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple routines that provide a uniform interface for reading</span>
+<span class="sd">    fits hdus via either astropy.io.fits or fitsio.</span>
+
+<span class="sd">    Three functions are provided:</span>
+
+<span class="sd">        read_image, read_table, read_metadata</span>
+
+<span class="sd">    Warning: A copy of data is returned to detach any backreference to </span>
+<span class="sd">    the original fits library. Use with caution with extremely </span>
+<span class="sd">    large files. (&gt; half of avail memory on machine)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;read_image&#39;</span><span class="p">,</span> <span class="s">&#39;read_table&#39;</span><span class="p">,</span> <span class="s">&#39;read_metadata&#39;</span><span class="p">]</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="k">def</span> <span class="nf">use_astropy</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; select the astropy backend &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">read_image</span>
+    <span class="k">global</span> <span class="n">read_table</span>
+    <span class="k">global</span> <span class="n">read_metadata</span>
+    <span class="k">global</span> <span class="n">backend</span> 
+
+    <span class="n">backend</span> <span class="o">=</span> <span class="s">&quot;astropy&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+
+    <span class="k">def</span> <span class="nf">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Read the zeroth image HDU from a fits file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="c">#    A copy of data is made before the file object</span>
+        <span class="c">#    is dereferenced. This is to ensure no back references</span>
+        <span class="c">#    to the fits object and file gets closed in a timely</span>
+        <span class="c">#    fashion.</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Read the first HDU table from a fits file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Read the metadata of a HDU table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">use_fitsio</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; select the fitsio backend &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">read_image</span>
+    <span class="k">global</span> <span class="n">read_table</span>
+    <span class="k">global</span> <span class="n">read_metadata</span>
+    <span class="k">global</span> <span class="n">backend</span> 
+
+    <span class="n">backend</span> <span class="o">=</span> <span class="s">&quot;fitsio&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">fitsio</span> <span class="kn">import</span> <span class="n">FITS</span>
+
+    <span class="k">def</span> <span class="nf">read_image</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Read the zeroth image HDU from a fits file</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="c">#    A copy of data is made before the file object</span>
+        <span class="c">#    is dereferenced. This is to ensure no back references</span>
+        <span class="c">#    to the fits object and file gets closed in a timely</span>
+        <span class="c">#    fashion.</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Read the first HDU table from a fits file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">            Read the metadata of a HDU table</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">read_header</span><span class="p">())</span>
+
+<span class="n">_priorities</span> <span class="o">=</span> <span class="p">[</span><span class="n">use_fitsio</span><span class="p">,</span> <span class="n">use_astropy</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="n">_priorities</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">backend</span><span class="p">()</span>
+        <span class="k">break</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">use_fitsio</span><span class="p">()</span>
+    <span class="n">im0</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="s">&#39;depth-370143-g.fits.gz&#39;</span><span class="p">)</span>
+    <span class="n">meta0</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="s">&#39;depth-370143-g.fits.gz&#39;</span><span class="p">)</span>
+    <span class="n">tbl0</span> <span class="o">=</span> <span class="n">read_table</span><span class="p">(</span><span class="s">&#39;tractor-370143.fits&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;fitsio&#39;</span>
+    <span class="n">use_astropy</span><span class="p">()</span>
+    <span class="n">im1</span> <span class="o">=</span> <span class="n">read_image</span><span class="p">(</span><span class="s">&#39;depth-370143-g.fits.gz&#39;</span><span class="p">)</span>
+    <span class="n">meta1</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="s">&#39;depth-370143-g.fits.gz&#39;</span><span class="p">)</span>
+    <span class="n">tbl1</span> <span class="o">=</span> <span class="n">read_table</span><span class="p">(</span><span class="s">&#39;tractor-370143.fits&#39;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">backend</span> <span class="o">==</span> <span class="s">&#39;astropy&#39;</span>
+
+    <span class="k">assert</span> <span class="p">(</span><span class="n">im0</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">==</span> <span class="n">im1</span><span class="p">[</span><span class="o">...</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">tbl0</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">tbl1</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">meta0</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">meta1</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">meta0</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s">&quot;COMMENT&quot;</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="k">print</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s">&#39;::::&#39;</span><span class="p">,</span> <span class="n">meta0</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s">&#39;::::&#39;</span><span class="p">,</span> <span class="n">meta1</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">assert</span> <span class="n">meta0</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">meta1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Yu Feng, Martin White.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.9',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

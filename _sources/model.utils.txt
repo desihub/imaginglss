@@ -1,0 +1,32 @@
+
+:mod:`model.utils.fits` -- General FITS Input interface
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. automodule:: model.utils.fits
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+:mod:`model.utils.wcs_simplezea` -- Simple WCS ZEA (SFD98) transformation
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. automodule:: model.utils.wcs_simplezea
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+:mod:`model.utils.wcs_tangent` -- WCS TAN transformation
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. automodule:: model.utils.wcs_tangent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+:mod:`model.utils.euler` -- Euler rotation between Galactic and other coordinates
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. automodule:: model.utils.euler
+   :members:
+   :undoc-members:
+   :show-inheritance:

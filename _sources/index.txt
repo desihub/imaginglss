@@ -46,13 +46,6 @@ Modules
    :undoc-members:
    :show-inheritance:
 
-:mod:`model.utils` -- Utilities
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 Indices and tables
 ==================
