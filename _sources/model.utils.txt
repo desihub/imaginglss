@@ -1,32 +1,70 @@
+model.utils package
+===================
 
-:mod:`model.utils.fits` -- General FITS Input interface
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Submodules
+----------
 
-.. automodule:: model.utils.fits
-   :members:
-   :undoc-members:
-   :show-inheritance:
+model.utils.columnstore module
+------------------------------
 
-:mod:`model.utils.wcs_simplezea` -- Simple WCS ZEA (SFD98) transformation
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.. automodule:: model.utils.columnstore
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-.. automodule:: model.utils.wcs_simplezea
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-:mod:`model.utils.wcs_tangent` -- WCS TAN transformation
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.utils.wcs_tangent
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-:mod:`model.utils.euler` -- Euler rotation between Galactic and other coordinates
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+model.utils.euler module
+------------------------
 
 .. automodule:: model.utils.euler
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.fits module
+-----------------------
+
+.. automodule:: model.utils.fits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.fsarray module
+--------------------------
+
+.. automodule:: model.utils.fsarray
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.kdtree module
+-------------------------
+
+.. automodule:: model.utils.kdtree
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.wcs_simplezea module
+--------------------------------
+
+.. automodule:: model.utils.wcs_simplezea
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.wcs_tangent module
+------------------------------
+
+.. automodule:: model.utils.wcs_tangent
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: model.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
