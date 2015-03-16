@@ -121,11 +121,17 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="model.utils.html">model.utils package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.columnstore">model.utils.columnstore module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.columnstore">model.utils.columnstore module</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.euler">model.utils.euler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.fits">model.utils.fits module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.fsarray">model.utils.fsarray module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.kdtree">model.utils.kdtree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.fsarray">model.utils.fsarray module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.kdtree">model.utils.kdtree module</a><ul class="simple">
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.wcs_simplezea">model.utils.wcs_simplezea module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.wcs_tangent">model.utils.wcs_tangent module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils">Module contents</a></li>
@@ -148,6 +154,23 @@ This object contains only the meta-data, and it calls
 imagerepo to handle looking up the pixel-level information.
 Major methods are &#8220;readout&#8221;, &#8220;query&#8221; and &#8220;revert&#8221;.</p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.brick.Brick.query" title="model.brick.Brick.query"><code class="xref py py-obj docutils literal"><span class="pre">query</span></code></a>(repo,&nbsp;coord)</td>
+<td>Returns the xy index of pixels at coord coord can be:     (RA, DEC) tuple of arrays      array of shape (2xN) RA DEC In either case returns a (2xN) array Note that the returned array is in a x-first-varying order.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.brick.Brick.readout" title="model.brick.Brick.readout"><code class="xref py py-obj docutils literal"><span class="pre">readout</span></code></a>(coord,&nbsp;repo[,&nbsp;default])</td>
+<td>Return image values at coord=(RA, DEC) using the imagerepository repo.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.brick.Brick.revert" title="model.brick.Brick.revert"><code class="xref py py-obj docutils literal"><span class="pre">revert</span></code></a>(repo,&nbsp;xy)</td>
+<td>Returns the RA, DEC index of pixels for coord coord can be:     (x, y) tuple of arrays     array of shape (2xN) x, y In either case returns a (2xN) array.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.brick.Brick.query">
 <code class="descname">query</code><span class="sig-paren">(</span><em>repo</em>, <em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick.query" title="Permalink to this definition">¶</a></dt>
@@ -196,6 +219,29 @@ array of shape (2xN) x, y</div></blockquote>
 Contains methods for organizing and querying bricks
 or returning brick objects.</p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.brickindex.BrickIndex.get_brick" title="model.brickindex.BrickIndex.get_brick"><code class="xref py py-obj docutils literal"><span class="pre">get_brick</span></code></a>(index)</td>
+<td>Obtain a single brick from index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.brickindex.BrickIndex.optimize" title="model.brickindex.BrickIndex.optimize"><code class="xref py py-obj docutils literal"><span class="pre">optimize</span></code></a>(coord[,&nbsp;return_index,&nbsp;return_inverse])</td>
+<td>Optimize the ordering of coord=(RA,DEC) to make later queries faster.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.brickindex.BrickIndex.query" title="model.brickindex.BrickIndex.query"><code class="xref py py-obj docutils literal"><span class="pre">query</span></code></a>(coord)</td>
+<td>Returns the internal index of a brick at coord=(RA,DEC) in decimal degrees.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.brickindex.BrickIndex.search_by_id" title="model.brickindex.BrickIndex.search_by_id"><code class="xref py py-obj docutils literal"><span class="pre">search_by_id</span></code></a>(brickid)</td>
+<td>search the brickindex for bricks with a given brickid.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.brickindex.BrickIndex.search_by_name" title="model.brickindex.BrickIndex.search_by_name"><code class="xref py py-obj docutils literal"><span class="pre">search_by_name</span></code></a>(brickname)</td>
+<td>search the brickindex for bricks with a given name.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.brickindex.BrickIndex.get_brick">
 <code class="descname">get_brick</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.get_brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.get_brick" title="Permalink to this definition">¶</a></dt>
@@ -272,6 +318,20 @@ We assume the catalogue is split into multiple files.
 and the list of file names are provided as an input.
 The main method is fetch.</p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.catalogue.Catalogue.fetch" title="model.catalogue.Catalogue.fetch"><code class="xref py py-obj docutils literal"><span class="pre">fetch</span></code></a>(column)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.catalogue.Catalogue.neighbours" title="model.catalogue.Catalogue.neighbours"><code class="xref py py-obj docutils literal"><span class="pre">neighbours</span></code></a>(coord,&nbsp;sep)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.catalogue.Catalogue.fetch">
 <code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
@@ -303,6 +363,23 @@ The main method is fetch.</p>
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/datarelease.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DR1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR4" title="model.datarelease.EDR4"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR4</span></code></a></p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">format_catalogue_filename</span></code>(brick)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">format_image_filenames</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">parse_filename</span></code>(filename,&nbsp;brickindex)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -325,6 +402,17 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.datarelease.DataRelease.readout" title="model.datarelease.DataRelease.readout"><code class="xref py py-obj docutils literal"><span class="pre">readout</span></code></a>(coord,&nbsp;repo[,&nbsp;default])</td>
+<td>readout pixels at coord.</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.datarelease.DataRelease.readout">
 <code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
@@ -348,6 +436,23 @@ have readout in ImageRepo.</p>
 <dt id="model.datarelease.EDR">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR</code><a class="reference internal" href="_modules/model/datarelease.html#EDR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.datarelease.EDR.format_catalogue_filename" title="model.datarelease.EDR.format_catalogue_filename"><code class="xref py py-obj docutils literal"><span class="pre">format_catalogue_filename</span></code></a>(brick)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.datarelease.EDR.format_image_filenames" title="model.datarelease.EDR.format_image_filenames"><code class="xref py py-obj docutils literal"><span class="pre">format_image_filenames</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.datarelease.EDR.parse_filename" title="model.datarelease.EDR.parse_filename"><code class="xref py py-obj docutils literal"><span class="pre">parse_filename</span></code></a>(filename,&nbsp;brickindex)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="model.datarelease.EDR.BRICKS_FILENAME">
 <code class="descname">BRICKS_FILENAME</code><em class="property"> = 'bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
@@ -355,7 +460,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21fbb18&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x22196e0&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -379,6 +484,23 @@ have readout in ImageRepo.</p>
 <dt id="model.datarelease.EDR3">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR3</code><a class="reference internal" href="_modules/model/datarelease.html#EDR3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.datarelease.EDR3.format_catalogue_filename" title="model.datarelease.EDR3.format_catalogue_filename"><code class="xref py py-obj docutils literal"><span class="pre">format_catalogue_filename</span></code></a>(brick)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.datarelease.EDR3.format_image_filenames" title="model.datarelease.EDR3.format_image_filenames"><code class="xref py py-obj docutils literal"><span class="pre">format_image_filenames</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.datarelease.EDR3.parse_filename" title="model.datarelease.EDR3.parse_filename"><code class="xref py py-obj docutils literal"><span class="pre">parse_filename</span></code></a>(filename,&nbsp;brickindex)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.BRICKS_FILENAME">
 <code class="descname">BRICKS_FILENAME</code><em class="property"> = 'decals-bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
@@ -386,7 +508,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21fbcf8&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x22198c0&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -411,6 +533,23 @@ have readout in ImageRepo.</p>
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR4</code><a class="reference internal" href="_modules/model/datarelease.html#EDR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR4" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR3" title="model.datarelease.EDR3"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR3</span></code></a></p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">format_catalogue_filename</span></code>(brick)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">format_image_filenames</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">parse_filename</span></code>(filename,&nbsp;brickindex)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="attribute">
 <dt id="model.datarelease.EDR4.CATALOGUE_ALIASES">
 <code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#model.datarelease.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
@@ -469,6 +608,26 @@ Given a Brick object, ImageRepo can return the image data
 or meta data of the image.
 Standard users should not need to modify this class.</p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.imagerepo.ImageRepo.get_filename" title="model.imagerepo.ImageRepo.get_filename"><code class="xref py py-obj docutils literal"><span class="pre">get_filename</span></code></a>(brick,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.imagerepo.ImageRepo.metadata" title="model.imagerepo.ImageRepo.metadata"><code class="xref py py-obj docutils literal"><span class="pre">metadata</span></code></a>(brick,&nbsp;**kwargs)</td>
+<td>Fetch the meta data about a brick.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.imagerepo.ImageRepo.open" title="model.imagerepo.ImageRepo.open"><code class="xref py py-obj docutils literal"><span class="pre">open</span></code></a>(brick,&nbsp;**kwargs)</td>
+<td>open and read the image for</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.imagerepo.ImageRepo.preload" title="model.imagerepo.ImageRepo.preload"><code class="xref py py-obj docutils literal"><span class="pre">preload</span></code></a>(bricks,&nbsp;**kwargs)</td>
+<td>preload the images for</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.get_filename">
 <code class="descname">get_filename</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.get_filename" title="Permalink to this definition">¶</a></dt>
@@ -507,6 +666,23 @@ Brick objects listed in bricks list.</p>
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">SFDMap</code><span class="sig-paren">(</span><em>ngp_filename=None</em>, <em>sgp_filename=None</em>, <em>dustdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.sfdmap.SFDMap.bilinear_interp_nonzero" title="model.sfdmap.SFDMap.bilinear_interp_nonzero"><code class="xref py py-obj docutils literal"><span class="pre">bilinear_interp_nonzero</span></code></a>(image,&nbsp;x,&nbsp;y)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#model.sfdmap.SFDMap.ebv" title="model.sfdmap.SFDMap.ebv"><code class="xref py py-obj docutils literal"><span class="pre">ebv</span></code></a>(ra,&nbsp;dec)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#model.sfdmap.SFDMap.extinction" title="model.sfdmap.SFDMap.extinction"><code class="xref py py-obj docutils literal"><span class="pre">extinction</span></code></a>(filts,&nbsp;ra,&nbsp;dec[,&nbsp;get_ebv])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="staticmethod">
 <dt id="model.sfdmap.SFDMap.bilinear_interp_nonzero">
 <em class="property">static </em><code class="descname">bilinear_interp_nonzero</code><span class="sig-paren">(</span><em>image</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.bilinear_interp_nonzero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.bilinear_interp_nonzero" title="Permalink to this definition">¶</a></dt>
@@ -534,6 +710,17 @@ Brick objects listed in bricks list.</p>
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">anwcs_t</code><span class="sig-paren">(</span><em>filename</em>, <em>hduid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#model.sfdmap.anwcs_t.radec2pixelxy" title="model.sfdmap.anwcs_t.radec2pixelxy"><code class="xref py py-obj docutils literal"><span class="pre">radec2pixelxy</span></code></a>(ra,&nbsp;dec)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="model.sfdmap.anwcs_t.radec2pixelxy">
 <code class="descname">radec2pixelxy</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t.radec2pixelxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t.radec2pixelxy" title="Permalink to this definition">¶</a></dt>
