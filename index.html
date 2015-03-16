@@ -137,12 +137,11 @@ and <a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLega
 <ol class="arabic simple" start="2">
 <li>install astropy or fitsio (prefered)</li>
 </ol>
-<div class="highlight-bash"><div class="highlight"><pre>  easy_install --user astropy
-
-Alternatively,
+<div class="highlight-bash"><div class="highlight"><pre>easy_install --user fitsio
 </pre></div>
 </div>
-<div class="highlight-bash"><div class="highlight"><pre>easy_install --user fitsio
+<p>or</p>
+<div class="highlight-bash"><div class="highlight"><pre>easy_install --user astropy
 </pre></div>
 </div>
 <ol class="arabic simple" start="3">
@@ -174,6 +173,12 @@ source code doc strings. The current version of the document is at</p>
 <li>build_sfdmap.py</li>
 </ul>
 </div></blockquote>
+<div class="section" id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<p>If the data release has updated (rare but it happened),
+and the cache files are out of date.
+Run forget_cache.py to clear the cache.</p>
+</div>
 <div class="section" id="description-of-model-used-to-process-decals-imaging-data">
 <h2>Description of model used to process DECALS imaging data.<a class="headerlink" href="#description-of-model-used-to-process-decals-imaging-data" title="Permalink to this headline">¶</a></h2>
 <p>The DECALS imaging data are processed in &#8220;bricks&#8221; on the sky,
