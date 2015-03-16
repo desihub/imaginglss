@@ -177,6 +177,41 @@ source code doc strings. The current version of the document is at</p>
 <li>build_sfdmap.py</li>
 </ul>
 </div></blockquote>
+<div class="section" id="description-of-model-used-to-process-decals-imaging-data">
+<h2>Description of model used to process DECALS imaging data.<a class="headerlink" href="#description-of-model-used-to-process-decals-imaging-data" title="Permalink to this headline">¶</a></h2>
+<p>The DECALS imaging data are processed in &#8220;bricks&#8221; on the sky,
+each brick being a small, contiguous regions of sky (roughly
+0.5x0.5 degrees).  The data, including information on depths,
+extinction, etc. are stored in pixelized images within the
+FITS files.  There are also catalogs of objects, produced by
+Tractor, which are associated with each brick.</p>
+<p>The main way to access the DECALS imaging data is via DataRelease
+objects defined in &#8220;datarelease.py&#8221;. It holds the imaging catalogue
+(Catalogue), a BrickIndex for the sky decomposition, and routines
+to query within the full survey area image values at any give sky
+coordinate.</p>
+<p>Our data model has the management of the individual FITS files
+handled by &#8220;imagerepo.py&#8221; and the imagerepo class.</p>
+<p>The Brick class, defined in &#8220;brick.py&#8221;, holds metadata for each
+brick, routines for converting from sky coordinates to image
+pixels within each brick, and routines for querying the images
+handled by imagerepo. Brick objects are created by BrickIndex class
+(see below)</p>
+<p>The BrickIndex class, defined in &#8220;brick_index.py&#8221;, holds the metadata
+of of the brick decomposition scheme, rountines for converting from
+sky coordinates to bricks, and acts as a factory that creates Brick
+objects.</p>
+<p>Catalog information is handled by &#8220;catalog.py&#8221;, which stores the
+object catalogs associated with a data release.
+The catalogs are contained in FITS files, but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory.</p>
+<p>The images contain only coordinate transformations in the WCS
+&#8220;tangent&#8221; format.  In order to speed up these transformations, and
+to make the code more stand-alone, we have implemented the pixel
+to sky and sky to pixel routines in &#8220;wcs_tangent.py&#8221; as helper
+routines.</p>
+</div>
 </div>
 <div class="section" id="modules">
 <h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>

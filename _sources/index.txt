@@ -13,6 +13,8 @@ Contents:
 
 .. include:: ../README.rst
 
+.. include:: ../model/README.rst
+
 Modules
 =======
 
