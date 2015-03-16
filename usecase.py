@@ -6,6 +6,7 @@ import numpy
 dr = DataRelease()
 
 brick = dr.footprint.bricks[0]
+print dr.footprint
 print dr.images['image']['z'].metadata(brick)
 print '\n'.join(sorted([str(f) for f in dr.catalogue.dtype.fields]))
 

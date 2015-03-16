@@ -123,11 +123,60 @@ _configurations = {
     'EDR4': EDR4,
     'DR1': DR1,
 }
+class Footprint(object):
+    """ footprint of a data release.
+        
+        Attributes
+        ----------
+
+        bricks : list, model.brick.Brick
+            covered bricks
+        range :  tuple
+            (ramin, ramax, decmin, decmax)
+        area  : float
+            covered outline area in square degrees
+    """
+    def __init__(self, dr):
+        self.bricks = [dr.brickindex.get_brick(bid) for bid in dr._covered_brickids]
+        self.area = 41253. * len(dr._covered_brickids) / len(dr.brickindex)
+
+        # range of ra dec of covered bricks
+        FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
+        self.range = FootPrintRange(
+            ramin=min([brick.ra1 for brick in self.bricks]),
+            ramax=max([brick.ra2 for brick in self.bricks]),
+            decmin=min([brick.dec1 for brick in self.bricks]),
+            decmax=max([brick.dec2 for brick in self.bricks]),)
+    def __repr__(self):
+        return "Footprint: len(bricks)=%d , area=%g degrees, range=%s" % (
+                len(self.bricks),
+                self.area,
+                str(self.range)
+            )
+
 class DataRelease(object):
     """
     The highest level interface into the data for a given imaging
     data release.  Uses several "helper" classes and has methods for
     looking at pixelized data or catalogs arranged in bricks.
+
+
+    Attributes
+    ----------
+
+    brickindex : model.brickindex.BrickIndex
+        an index object of all of the bricks (covering the entire sky)
+    bands      : dict
+        a dictionary translating from band name to integer used in Tractor catalogue
+    catalogue  : model.catalogue.Catalogue
+        the concatenated tractor catalogue, accessed by attributes.
+    extinction : array_like
+        an array stroing the extinction coeffcients
+    images :      model.imagerepo.ImageRepo
+        image repositories (depth, image, model are by bands, ebv is the extinction map)
+    footprint  : Footprint 
+        the footprint of the data release
+
     """
     def __init__(self, root=None, cacheroot=None, version=None):
         if root is None:
@@ -187,7 +236,7 @@ class DataRelease(object):
         # the list of covered bricks must be sorted.
         self._covered_brickids.sort()
 
-        _ = self.footprint # build the footprint property
+        self.footprint = Footprint(self) # build the footprint property
 
         self.catalogue = catalogue.Catalogue(
             cachedir=os.path.join(self.cacheroot, 'catalogue'),
@@ -197,24 +246,6 @@ class DataRelease(object):
                 for brick in self.footprint.bricks],
             aliases=config.CATALOGUE_ALIASES
             )
-
-
-    @Lazy
-    def footprint(self):
-        obj = lambda : None
-
-        # approximate area in degrees. Currently a brick is 0.25 * 0.25 deg**2
-        obj.bricks = [self.brickindex.get_brick(bid) for bid in self._covered_brickids]
-        obj.area = 41253. * len(self._covered_brickids) / len(self.brickindex)
-
-        # range of ra dec of covered bricks
-        FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
-        obj.range = FootPrintRange(
-            ramin=min([brick.ra1 for brick in obj.bricks]),
-            ramax=max([brick.ra2 for brick in obj.bricks]),
-            decmin=min([brick.dec1 for brick in obj.bricks]),
-            decmax=max([brick.dec2 for brick in obj.bricks]),)
-        return obj
 
     def readout(self, coord, repo, default=numpy.nan):
         """ readout pixels at coord.

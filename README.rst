@@ -20,15 +20,15 @@ To use this imaing data model on edison:
  
 2. install astropy or fitsio (prefered)
 
-.. code-block:: bash  
-
-    easy_install --user astropy
-
-  Alternatively, 
-
 .. code-block:: bash
 
     easy_install --user fitsio
+
+or
+
+.. code-block:: bash  
+
+    easy_install --user astropy
 
 3. try if usecase.py runs.
 
@@ -60,4 +60,12 @@ Examples:
  - select_elgs.py
  - footprint_mangle.py
  - build_sfdmap.py
+
+Known Issues
+++++++++++++
+
+If the data release has updated (rare but it happened), 
+and the cache files are out of date. 
+Run forget_cache.py to clear the cache.
+
 
