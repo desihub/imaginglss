@@ -1,4 +1,5 @@
-# Description of model used to process DECALS imaging data.
+Description of model used to process DECALS imaging data.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The DECALS imaging data are processed in "bricks" on the sky,
 each brick being a small, contiguous regions of sky (roughly

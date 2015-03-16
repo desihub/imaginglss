@@ -1,0 +1,70 @@
+model.utils package
+===================
+
+Submodules
+----------
+
+model.utils.columnstore module
+------------------------------
+
+.. automodule:: model.utils.columnstore
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.euler module
+------------------------
+
+.. automodule:: model.utils.euler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.fits module
+-----------------------
+
+.. automodule:: model.utils.fits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.fsarray module
+--------------------------
+
+.. automodule:: model.utils.fsarray
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.kdtree module
+-------------------------
+
+.. automodule:: model.utils.kdtree
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.wcs_simplezea module
+--------------------------------
+
+.. automodule:: model.utils.wcs_simplezea
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+model.utils.wcs_tangent module
+------------------------------
+
+.. automodule:: model.utils.wcs_tangent
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: model.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -11,48 +11,14 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+.. include:: ../README.rst
+
+.. include:: ../model/README.rst
+
 Modules
 =======
 
-:mod:`model.datarelease` -- DataRelease
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.datarelease 
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-:mod:`model.sfdmap` -- SFD98 Galaxy Map
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.sfdmap
-   :members:
-   :undoc-members:
-   :show-inheritance:
- 
-:mod:`model.imagerepo` -- Image Repository
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.imagerepo
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-:mod:`model.brickindex` -- BrickIndex
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.brickindex
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-:mod:`model.utils` -- Utilities
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-.. automodule:: model.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. include:: modules.rst
 
 Indices and tables
 ==================
