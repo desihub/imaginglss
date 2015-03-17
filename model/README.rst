@@ -20,39 +20,40 @@ The member methods are:
  - DataRelease.readout   : reading out pixel value of an image 
                 for coordinates on the sky.
 
-It holds the imaging catalogue 
-(Catalogue), a BrickIndex for the sky decomposition, and routines
-to query within the full survey area image values at any give sky
-coordinate. 
+Catalog information is handled by catalog.Catalogue, which stores the
+object catalogs associated with a data release.
+The catalogs are contained in many small FITS files, 
+but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory. Use 'forget_cache.py' to clear this cache.
 
-The images are represented by imagerepo.ImageRepo objects. A DataRelease
-has several image repositories. The ImageRepo object takes care of reading
-the image tile of a Brick. An image tile contains a padded region around the
-Brick, which is sometimes mentioned as a margin, a padding, or a bleeding region.
+
+The images are represented by imagerepo.ImageRepo objects. 
+An ImageRepo object takes care of reading the image tile of a Brick. 
+An image tile contains a padded region around the Brick, 
+which is sometimes mentioned as a margin, a padding, or a bleeding region.
+
+A DataRelease has several image repositories, for example,
 
  - DataRelease.images['depth']['u'] : the 'u' band inverse variance depth images
  - DataRelease.images['image']['u'] : the coadded 'u' band image in nanomaggies
  - DataRelease.images['model']['u'] : the model 'u' band image in nanomaggies; 
 or what tractor thinks the sky looks like.
 
-The Brick class, defined in "brick.py", holds metadata for each
-brick, routines for converting from sky coordinates to image
+brick.Brick holds metadata for each Brick, including the central 'ra',
+'dec', and the primary area covered by the brick, excluding the padding regsions. There are routines for converting from sky coordinates to image
 pixels within each brick, and routines for querying the images
 handled by imagerepo. 
 
-The BrickIndex class, defined in "brick_index.py", holds the metadata
-of of the brick decomposition scheme, rountines for converting from
+brickindex.BrickIndex holds the metadata
+of of the brick decomposition scheme. 
+There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates Brick
 objects.
 
-Catalog information is handled by "catalog.py", which stores the
-object catalogs associated with a data release.
-The catalogs are contained in FITS files, but this class caches the
-information for speed and only columns that are accessed are loaded
-into memory.
+Helper routines. In order to reduce the number of dependecies, 
+we implemented a few coordinate transformations 
 
-The images contain only coordinate transformations in the WCS
-"tangent" format.  In order to speed up these transformations, and
-to make the code more stand-alone, we have implemented the pixel
-to sky and sky to pixel routines in "wcs_tangent.py" as helper
-routines.
+ - wcs_tangent impments the WCS tangent format.
+ - wcs_simplezea implement the WCS ZEA format, oriented at north / south pole
+
