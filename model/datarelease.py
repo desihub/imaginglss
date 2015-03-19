@@ -247,7 +247,7 @@ class DataRelease(object):
             aliases=config.CATALOGUE_ALIASES
             )
 
-    def readout(self, coord, repo, default=numpy.nan):
+    def readout(self, coord, repo, default=numpy.nan, ignore_missing=False):
         """ readout pixels at coord.
             
             example:
@@ -292,8 +292,12 @@ class DataRelease(object):
             last = bid.searchsorted(b, side='right')
             sl = slice(first, last)
 
-            img = brick.readout(coord[:, sl], repo, default=default)
-            pixels[sl] = img
+            try:
+                img = brick.readout(coord[:, sl], repo, default=default)
+                pixels[sl] = img
+            except IOError:
+                if not ignore_missing:
+                    raise
         #
         images[mask] = pixels[invarg]
             

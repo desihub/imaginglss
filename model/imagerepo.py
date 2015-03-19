@@ -48,10 +48,11 @@ class ImageRepo(object):
         """
         if brick in self.cache:
             return self.cache[brick]
+        fname = self.get_filename(brick, **kwargs)
+        if not os.path.exists(fname):
+            raise IOError('%s not exists' % fname)
         _ = self.metadata(brick, **kwargs)
-        return fits.read_image(self.get_filename(brick,
-            **kwargs
-            ))
+        return fits.read_image(fname)
         
     def metadata(self, brick, **kwargs):
         """ Fetch the meta data about a brick.

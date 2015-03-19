@@ -49,11 +49,13 @@ class Brick(object):
         If the image in this brick does not cover this region,
         put in `default'.
         """
-        img       = repo.open(self)
         coord     = numpy.array(coord)
         RA, DEC   = coord
         value     = numpy.empty(len(RA))
         value[...]= default
+
+        img   = repo.open(self)
+
         xy = numpy.int32(self.query(repo, coord))
         mask = (xy < numpy.array(img.shape) \
             .reshape(2, 1)).all(axis=0)
