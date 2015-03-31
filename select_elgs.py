@@ -21,12 +21,10 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 
 import numpy as N
+
+from model.utils import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
-# either use multiprocessing or sharedmem
-# sharedmem is faster but it is another dependency.
-import multiprocessing.pool
-import sharedmem
 
 def select_elgs():
     """

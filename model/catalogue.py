@@ -5,6 +5,7 @@
 import numpy
 
 from utils import fits
+from utils import sharedmem
 from utils.columnstore import DiskColumnStore
 import multiprocessing.pool
 
@@ -73,9 +74,9 @@ class Catalogue(DiskColumnStore):
             data = numpy.array(fits.read_table(fn))
             data = data.view(dtype=uppercase_dtype(data.dtype))
             return numpy.array(data[column], dtype=self.dtype[column].base)
-        pool = multiprocessing.pool.ThreadPool()
+        with sharedmem.MapReduce() as pool:
             #cat = [ readafile(fn) for fn in self.filenames]
-        cat = pool.map(readafile, self.filenames)
+            cat = pool.map(readafile, self.filenames)
         cat = numpy.concatenate(cat, axis=0)
         return cat
 
