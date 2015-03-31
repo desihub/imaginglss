@@ -23,12 +23,14 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import numpy as N
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
-
-
+# either use multiprocessing or sharedmem
+# sharedmem is faster but it is another dependency.
+import multiprocessing.pool
+import sharedmem
 
 def select_elgs():
     """
-    select_elgs():
+    select_elgs()
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
@@ -58,17 +60,34 @@ def select_elgs():
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.  Like in make_random this should probably
     # call out to another routine.  For now I'll just indent it helpfully.
-    if True:
-        (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
+    def findrlim(RA, DEC):
         coord = (RA,DEC)
-        # Get the flux depths and MW transmission in the relevant filters.
-        # For out-of-bounds points, return 0.
         ebv  = sfd.extinction(None,RA,DEC,get_ebv=True)
         rdep = dr.readout(coord,dr.images['depth']['r'],default=0)
         rtrn = 10.0**(-ebv*dr.extinction['r']/2.5)
         # For now we use a 5-sigma cut in extinction-correct flux as our limit.
         # Recall "depth" is stored as inverse variance.
         rlim = 5.0/N.sqrt(rdep+1e-30) / rtrn
+        return rlim
+    if True:
+        (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
+        # Get the flux depths and MW transmission in the relevant filters.
+        # For out-of-bounds points, return 0.
+        chunksize = 1024
+        def work(i):
+            print(i, '/', len(RA)), 
+            rlim = findrlim(RA[i:i+chunksize], 
+                    DEC[i:i+chunksize])
+            print('done', i)
+            return rlim
+
+#       threadpool is so much slower than my sharedme!
+#        pool = multiprocessing.pool.ThreadPool()
+        with sharedmem.MapReduce() as pool:
+            rlim = N.concatenate(
+                pool.map(work, range(0, len(RA), chunksize))
+                )
+
         ww   = N.nonzero( rlim<10.0**((22.5-23.40)/2.5) )[0]
         ra   = RA[ ww]
         dc   = DEC[ww]
