@@ -24,6 +24,7 @@ on front end, run
  Martin White <mwhite@berkeley.edu>
 """ 
 from model.datarelease import DataRelease
+from model.sfdmap      import SFDMap
 import numpy
 import sys
 from sys import argv
@@ -34,6 +35,7 @@ def main(comm):
     N = int(argv[1])
     output = argv[2]
     dr = DataRelease()
+    sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     bi = dr.brickindex
 
     ramin, ramax, decmin, decmax = dr.footprint.range
@@ -60,11 +62,12 @@ def main(comm):
     coord = (RA[sl], DEC[sl])
     mydepth = numpy.zeros(len(RA[sl]), dtype=('f4', 3))
     myebv = numpy.zeros(len(RA[sl]), dtype='f4')
-    mydepth[:, 0] = dr.readout(coord, dr.images['depth']['r'])
-    mydepth[:, 1] = dr.readout(coord, dr.images['depth']['g'])
-    mydepth[:, 2] = dr.readout(coord, dr.images['depth']['z'])
+    mydepth[:, 0] = dr.readout(coord, dr.images['depth']['r'], ignore_missing=True)
+    mydepth[:, 1] = dr.readout(coord, dr.images['depth']['g'], ignore_missing=True)
+    mydepth[:, 2] = dr.readout(coord, dr.images['depth']['z'], ignore_missing=True)
     mydepth[...] = 22.5 - 2.5 * numpy.log10(5 / mydepth ** 0.5)
-    myebv[:] = dr.readout(coord, dr.images['ebv'])
+#    myebv[:] = dr.readout(coord, dr.images['ebv'])
+    myebv[:]  = sfd.extinction(None,RA[sl],DEC[sl],get_ebv=True)
 
     if comm is not None:
         depth = comm.gather(mydepth)
@@ -82,18 +85,21 @@ def main(comm):
     depth_z = depth[:, 2]
 
     # 5 sigma detection limit in mag
-    filehandler.write_file(output, dict(RA=RA, 
-                DEC=DEC, 
-                mdepth_r=depth_r,
-                mdepth_g=depth_g,
-                mdepth_z=depth_z,
-                ebv=ebv))
+    if comm is None or comm.rank == 0:
+        filehandler.write_file(output, dict(RA=RA, 
+                    DEC=DEC, 
+                    mdepth_r=depth_r,
+                    mdepth_g=depth_g,
+                    mdepth_z=depth_z,
+                    ebv=ebv))
 #    numpy.savetxt(output, zip(RA, DEC, depth[:, 1], depth[:, 2], depth[:, 4], ebv), fmt='%.6f', header='#ra dec r g z ebv')
 
 if __name__ == '__main__':    
     from sys import argv
     if 'mpi' in sys.executable:
         from mpi4py import MPI
+        if MPI.COMM_WORLD.rank == 0:
+            print 'using MPI'
         main(MPI.COMM_WORLD)
     else:
         main(None)
