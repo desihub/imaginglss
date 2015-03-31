@@ -18,19 +18,17 @@ source /project/projectdirs/desi/software/modules/desi_environment.sh
 # Set the path to the imaging data.
 export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/cats/edr3
 export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/release/edr/
+export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/release/dr1/
 export DECALS_CACHE=$GSCRATCH/desicache
 #
 # and set up the Python path...this is an example.
 export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
-aprun -n 1 python << EOF
+export OMP_NUM_THREADS=24
+aprun -n 1 -d 24 python << EOF
 from model.datarelease import DataRelease
 dr    = DataRelease()
-foot  = dr.observed_range
-ramin = foot.ramin
-ramax = foot.ramax
-decmin= foot.decmin
-decmax= foot.decmax
-print ramin,ramax,decmin,decmax
+foot  = dr.footprint
+print foot
 EOF
 #
