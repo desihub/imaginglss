@@ -50,7 +50,7 @@ class ImageRepo(object):
             return self.cache[brick]
         fname = self.get_filename(brick, **kwargs)
         if not os.path.exists(fname):
-            raise IOError('%s not exists' % fname)
+            raise IOError('%s does not exist' % fname)
         _ = self.metadata(brick, **kwargs)
         return fits.read_image(fname)
         
