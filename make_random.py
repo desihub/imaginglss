@@ -37,7 +37,7 @@ def make_random(samp,Nran=1000000):
         raise RuntimeError,"Unknown sample "+samp
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    dr = DataRelease(version='EDR')
+    dr = DataRelease(version='DR1')
     ramin,ramax,dcmin,dcmax = dr.footprint.range
     sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     # Generate uniformly distributed points within the boundary (decimal deg).
@@ -59,11 +59,14 @@ def make_random(samp,Nran=1000000):
     # Everyone needs "r", but only LRGs need "z" and "W1".
     # For out-of-bounds points, return 0.
     ebv  = sfd.extinction(None,RA[sl],DEC[sl],get_ebv=True)
-    rdep = dr.readout(coord,dr.images['depth']['r'],default=0)
+    rdep = dr.readout(coord,dr.images['depth']['r'],\
+                      default=0,ignore_missing=True)
     rtrn = 10.0**(-ebv*dr.extinction['r']/2.5)
     if samp=="LRG":
-        zdep = dr.readout(coord,dr.images['depth'][ 'z'],default=0)
-        wdep = dr.readout(coord,dr.images['depth']['W1'],default=0)
+        zdep = dr.readout(coord,dr.images['depth'][ 'z'],\
+                          default=0,ignore_missing=True)
+        wdep = dr.readout(coord,dr.images['depth']['W1'],\
+                          default=0,ignore_missing=True)
         ztrn = 10.0**(-ebv*dr.extinction[ 'z']/2.5)
         wtrn = 10.0**(-ebv*dr.extinction['W1']/2.5)
     # For now we use a 5-sigma cut in extinction-correct flux as our limit.
