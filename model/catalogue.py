@@ -6,7 +6,7 @@ import numpy
 
 from utils import fits
 from utils.columnstore import DiskColumnStore
-
+import multiprocessing.pool
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
@@ -73,7 +73,9 @@ class Catalogue(DiskColumnStore):
             data = numpy.array(fits.read_table(fn))
             data = data.view(dtype=uppercase_dtype(data.dtype))
             return numpy.array(data[column], dtype=self.dtype[column].base)
-        cat = [ readafile(fn) for fn in self.filenames]
+        pool = multiprocessing.pool.ThreadPool()
+            #cat = [ readafile(fn) for fn in self.filenames]
+        cat = pool.map(readafile, self.filenames)
         cat = numpy.concatenate(cat, axis=0)
         return cat
 
