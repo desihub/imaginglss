@@ -29,10 +29,9 @@ from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
 def fill_random(dr, Nran, seed=999993):
     # Generate uniformly distributed points within the boundary (decimal deg).
-    # Everyone generates all of the points, then we specialize to a subset
-    #
-
-    # use the same seed to ensure the random points are identical cross ranks
+    # We generate in the ra/dec area, then remove points not in any bricks.
+    # this hugely increases the memory efficiency for footprints like DR1,
+    # where the survey covers several far away patches of the sky.
 
     rng = N.random.RandomState(seed)
 
@@ -42,6 +41,7 @@ def fill_random(dr, Nran, seed=999993):
     start = 0
     while start != Nran:
         with sharedmem.MapReduce() as pool:
+            # prepare for a parallel section.
 
             chunksize = 1024 * 512
             u1,u2= rng.uniform(size=(2, 1024 * 1024 * 32))
@@ -58,18 +58,23 @@ def fill_random(dr, Nran, seed=999993):
                 DEC  = 90-N.arccos(cmin+myu2*(cmax-cmin))*180./N.pi
 
                 # filter out those not in any bricks
+                # only very few points remain!
                 coord1 = dr.footprint.filter((RA, DEC))
                 
                 return coord1
 
+            # run; the number here is just make sure each batch won't 
+            # use too much memory
             coord1 = N.concatenate(
                     pool.map(work, range(0, 1024 * 1024 * 32, chunksize)),
                     axis=-1)
 
+        # are we full ?
         coord1 = coord1[:, :min(len(coord1.T), Nran - start)]
         sl = slice(start, start + len(coord1.T))
         coord[:, sl] = coord1
         start = start + len(coord1.T)
+
         print(start, '/', Nran, 'filled')
 
     if len(N.unique(dr.brickindex.query(coord))) != len(dr.footprint.bricks):
@@ -151,6 +156,7 @@ def make_random(samp,Nran=10000000):
     coord = dr.brickindex.optimize(coord)
 
     with sharedmem.MapReduce() as pool:
+        # prepare a parallel section
 
         chunksize = 1024 * 8
 
@@ -165,7 +171,9 @@ def make_random(samp,Nran=10000000):
             mycoord = coord[:, i:i+chunksize]
 
             # apply the cut for sample type on my slice
-
+            #
+            # the logic is sufficiently complicated I moved it to
+            # a function.
             ww, rmag = apply_samp_cut(mycoord, dr, sfd, samp)
 
             # notify user this slide is done
