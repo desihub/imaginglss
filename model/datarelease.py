@@ -39,7 +39,13 @@ class Lazy(object):
         return value
     
 def contains(haystack, needle):
-    """ returns true if needle is in haystack """
+    """ returns mask:
+
+        len(mask) == len(need), 
+        mask[i] == true only if needle[i] is in haystack;
+    
+        haystack must be sorted.
+    """
 
     ind = haystack.searchsorted(needle)
     ind.clip(0, len(haystack) - 1, ind)
@@ -147,12 +153,25 @@ class Footprint(object):
             ramax=max([brick.ra2 for brick in self.bricks]),
             decmin=min([brick.dec1 for brick in self.bricks]),
             decmax=max([brick.dec2 for brick in self.bricks]),)
+
+        self._covered_brickids = dr._covered_brickids
+        self.brickindex = dr.brickindex
+
     def __repr__(self):
         return "Footprint: len(bricks)=%d , area=%g degrees, range=%s" % (
                 len(self.bricks),
                 self.area,
                 str(self.range)
             )
+    def filter(self, coord):
+        """ filter coord, remove those are not covered by the current footprint 
+
+            returns coord_in_footprint
+        """
+        coord = numpy.array(coord)
+        bid = self.brickindex.query(coord)
+        mask = contains(self._covered_brickids, bid)
+        return coord[:, mask]
 
 class DataRelease(object):
     """
@@ -287,6 +306,8 @@ class DataRelease(object):
         ubid = numpy.unique(bid)
 
         for b in ubid:
+            if b not in self._covered_brickids:
+                continue
             brick = self.brickindex.get_brick(b)
             first = bid.searchsorted(b, side='left')
             last = bid.searchsorted(b, side='right')
