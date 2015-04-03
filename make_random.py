@@ -189,8 +189,11 @@ def make_random(samp,Nran=10000000):
                 for j in ww:
                     ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
                       (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
+            return len(ww)
 
-        pool.map(work, range(0, len(coord.T), chunksize), reduce=reduce)
+        total = sum(pool.map(work, range(0, len(coord.T), chunksize), reduce=reduce))
+
+    print ('total area (sq deg.) ', dr.footprint.area * 1.0 * total / len(coord.T))
     print ('done')
     #
 
