@@ -27,6 +27,9 @@ import sys
 from model.utils       import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
+
+from select_elgs import findlim
+
 def fill_random(dr, Nran, seed=999993):
     # Generate uniformly distributed points within the boundary (decimal deg).
     # We generate in the ra/dec area, then remove points not in any bricks.
@@ -95,41 +98,39 @@ def apply_samp_cut(coord, dr, sfd, samp):
     # For out-of-bounds points, return 0.
 
     ebv  = sfd.extinction(None, coord[0], coord[1],get_ebv=True)
-    rdep = dr.readout(coord,dr.images['depth']['r'],\
-                      default=0,ignore_missing=True)
-    rtrn = 10.0**(-ebv*dr.extinction['r']/2.5)
-    if samp=="LRG":
-        zdep = dr.readout(coord,dr.images['depth'][ 'z'],\
-                          default=0,ignore_missing=True)
-        wdep = dr.readout(coord,dr.images['depth']['W1'],\
-                          default=0,ignore_missing=True)
-        ztrn = 10.0**(-ebv*dr.extinction[ 'z']/2.5)
-        wtrn = 10.0**(-ebv*dr.extinction['W1']/2.5)
-    # For now we use a 5-sigma cut in extinction-correct flux as our limit.
-    # Recall "depth" is stored as inverse variance.
-    rlim = 5.0/N.sqrt(rdep+1e-30) / rtrn
-    # It's also useful to have r magnitude later.
-    rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
+    sigma = 5
     #
     # Now work out which points pass the cuts--note we want a flux
     # limit *lower* than the catalog cutoff.
-    # This code should probably be refactored so that it is
-    # connected in some way to the target selection code.
+
+    # this code shall be related to the target selection code
+    if samp=="LRG":
+        rlim, zlim, wlim = findlim(dr, sfd, coord, ['r', 'z', 'W1'], sigma=5)
+
+        mask  = (rlim<10.0**((22.5-23.00)/2.5))
+        mask &= (zlim<10.0**((22.5-20.56)/2.5))
+        mask &= (wlim<10.0**((22.5-19.50)/2.5))
+        [ww]  = N.nonzero(mask)
+    elif samp=="ELG":
+        rlim, glim, zlim = findlim(dr, sfd, coord, ['r', 'g', 'z'], sigma=5)
+
+        mask  = rlim < 10 ** ((22.5 - 23.4) / 2.5) 
+        mask &= zlim < 10 ** ((22.5 - 23.4 + 0.3) / 2.5)
+        mask &= glim < 10 ** ((22.5 - 23.4 - 1.5 + 0.2) / 2.5)
+
+    elif samp=="QSO":
+        rlim, = findlim(dr, sfd, coord, ['r'], sigma=5)
+        mask  = rlim<10.0**((22.5-23.00)/2.5)
+    else:
+        raise RuntimeError,"Unknown sample "+samp
+
     # For now it just returns a list of indices passing the
     # cuts, so the functionality should be easy to reproduce.
     #
-    if samp=="LRG":
-        zlim = 5.0/N.sqrt(zdep+1e-30) / ztrn
-        wlim = 5.0/N.sqrt(wdep+1e-30) / wtrn
-        ww   = N.nonzero( (rlim<10.0**((22.5-23.00)/2.5))&\
-                          (zlim<10.0**((22.5-20.56)/2.5))&\
-                          (wlim<10.0**((22.5-19.50)/2.5)) )[0]
-    elif samp=="ELG":
-        ww = N.nonzero( rlim<10.0**((22.5-23.40)/2.5) )[0]
-    elif samp=="QSO":
-        ww = N.nonzero( rlim<10.0**((22.5-23.00)/2.5) )[0]
-    else:
-        raise RuntimeError,"Unknown sample "+samp
+    [ww] = N.nonzero(mask)
+    # It's also useful to have r magnitude later.
+    rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
+
     return ww, rmag
 
 def make_random(samp,Nran=10000000):

@@ -26,6 +26,24 @@ from model.utils import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
 
+def findlim(dr, sfd, coord, bands, sigma=5.0):
+    assert isinstance(bands, (list, tuple))
+
+    # Get the flux depths and MW transmission in the relevant filters.
+    # For out-of-bounds points, return 0.
+    ebv  = sfd.extinction(None,coord[0], coord[1], get_ebv=True)
+    ret = []
+    for band in bands:        
+        rdep = dr.readout(coord,dr.images['depth'][band],
+                default=0, ignore_missing=True)
+
+        rtrn = 10.0**(-ebv*dr.extinction[band]/2.5)
+        # For now we use a 5-sigma cut in extinction-correct flux as our limit.
+        # Recall "depth" is stored as inverse variance.
+        rlim = sigma /N.sqrt(rdep+1e-30) / rtrn
+        ret.append(rlim)
+    return ret
+
 def select_elgs():
     """
     select_elgs()
@@ -54,42 +72,42 @@ def select_elgs():
     ra   = dr.catalogue[ 'RA'][mask]
     dc   = dr.catalogue['DEC'][mask]
     mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
+
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.  Like in make_random this should probably
     # call out to another routine.  For now I'll just indent it helpfully.
-    def findrlim(RA, DEC):
-        coord = (RA,DEC)
-        ebv  = sfd.extinction(None,RA,DEC,get_ebv=True)
-        rdep = dr.readout(coord,dr.images['depth']['r'],default=0)
-        rtrn = 10.0**(-ebv*dr.extinction['r']/2.5)
-        # For now we use a 5-sigma cut in extinction-correct flux as our limit.
-        # Recall "depth" is stored as inverse variance.
-        rlim = 5.0/N.sqrt(rdep+1e-30) / rtrn
-        return rlim
-    if True:
+
+    with sharedmem.MapReduce() as pool:
         (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
-        # Get the flux depths and MW transmission in the relevant filters.
-        # For out-of-bounds points, return 0.
         chunksize = 1024
+
         def work(i):
             print(i, '/', len(RA)), 
-            rlim = findrlim(RA[i:i+chunksize], 
-                    DEC[i:i+chunksize])
+
+
+            coord = (RA[i:i+chunksize],DEC[i:i+chunksize])
+            lim = findlim(dr, sfd, coord, ['r', 'g', 'z'])
+
             print('done', i)
-            return rlim
+            return lim
 
-#       threadpool is so much slower than my sharedme!
-#        pool = multiprocessing.pool.ThreadPool()
-        with sharedmem.MapReduce() as pool:
-            rlim = N.concatenate(
-                pool.map(work, range(0, len(RA), chunksize))
-                )
+        lim = N.concatenate(
+            pool.map(work, range(0, len(RA), chunksize)),
+            axis=1
+            )
 
-        ww   = N.nonzero( rlim<10.0**((22.5-23.40)/2.5) )[0]
+        rlim, glim, zlim = lim
+
+        mask =  rlim < 10 ** ((22.5 - 23.4) / 2.5) 
+        mask &= zlim < 10 ** ((22.5 - 23.4 + 0.3) / 2.5)
+        mask &= glim < 10 ** ((22.5 - 23.4 - 1.5 + 0.2) / 2.5)
+
+        [ww] = N.nonzero(mask)
         ra   = RA[ ww]
         dc   = DEC[ww]
         mag  = mag[:,arg[ww]]
+
     return( (ra,dc,mag) )
     #
 
