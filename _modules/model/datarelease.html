@@ -88,7 +88,13 @@
         <span class="k">return</span> <span class="n">value</span>
     </div>
 <div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../model.html#model.datarelease.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; returns true if needle is in haystack &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot; returns mask:</span>
+
+<span class="sd">        len(mask) == len(need), </span>
+<span class="sd">        mask[i] == true only if needle[i] is in haystack;</span>
+<span class="sd">    </span>
+<span class="sd">        haystack must be sorted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ind</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span>
     <span class="n">ind</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
@@ -196,13 +202,26 @@
             <span class="n">ramax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
             <span class="n">decmin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
             <span class="n">decmax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">_covered_brickids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">brickindex</span>
+
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;Footprint: len(bricks)=</span><span class="si">%d</span><span class="s"> , area=</span><span class="si">%g</span><span class="s"> degrees, range=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
                 <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
             <span class="p">)</span>
-</div>
+<div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; filter coord, remove those are not covered by the current footprint </span>
+
+<span class="sd">            returns coord_in_footprint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+        <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">contains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">,</span> <span class="n">bid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">coord</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">]</span>
+</div></div>
 <div class="viewcode-block" id="DataRelease"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease">[docs]</a><span class="k">class</span> <span class="nc">DataRelease</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The highest level interface into the data for a given imaging</span>
@@ -296,7 +315,7 @@
             <span class="n">aliases</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
+<div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; readout pixels at coord.</span>
 <span class="sd">            </span>
 <span class="sd">            example:</span>
@@ -336,13 +355,19 @@
         <span class="n">ubid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">ubid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">:</span>
+                <span class="k">continue</span>
             <span class="n">brick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
             <span class="n">first</span> <span class="o">=</span> <span class="n">bid</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
             <span class="n">last</span> <span class="o">=</span> <span class="n">bid</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">)</span>
             <span class="n">sl</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>
 
-            <span class="n">img</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">sl</span><span class="p">],</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
-            <span class="n">pixels</span><span class="p">[</span><span class="n">sl</span><span class="p">]</span> <span class="o">=</span> <span class="n">img</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">sl</span><span class="p">],</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
+                <span class="n">pixels</span><span class="p">[</span><span class="n">sl</span><span class="p">]</span> <span class="o">=</span> <span class="n">img</span>
+            <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_missing</span><span class="p">:</span>
+                    <span class="k">raise</span>
         <span class="c">#</span>
         <span class="n">images</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">[</span><span class="n">invarg</span><span class="p">]</span>
             

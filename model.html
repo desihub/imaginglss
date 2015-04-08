@@ -276,7 +276,7 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 </table>
 <dl class="method">
 <dt id="model.datarelease.DataRelease.readout">
-<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
+<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em>, <em>ignore_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
 <dd><p>readout pixels at coord.</p>
 <dl class="docutils">
 <dt>example:</dt>
@@ -303,7 +303,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x20c2758&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2162848&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -333,7 +333,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x20c2938&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2162a28&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -387,6 +387,13 @@ have readout in ImageRepo.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="model.datarelease.Footprint.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter coord, remove those are not covered by the current footprint</p>
+<p>returns coord_in_footprint</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -398,7 +405,10 @@ have readout in ImageRepo.</p>
 <dl class="function">
 <dt id="model.datarelease.contains">
 <code class="descclassname">model.datarelease.</code><code class="descname">contains</code><span class="sig-paren">(</span><em>haystack</em>, <em>needle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.contains" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns true if needle is in haystack</p>
+<dd><p>returns mask:</p>
+<p>len(mask) == len(need), 
+mask[i] == true only if needle[i] is in haystack;</p>
+<p>haystack must be sorted.</p>
 </dd></dl>
 
 </div>
