@@ -27,10 +27,12 @@ import select_elgs       as S
 from   model.utils       import sharedmem
 from   model.sfdmap      import SFDMap
 from   model.datarelease import DataRelease
+import cuts
 import sys
+
 #from mpi4py            import MPI
 
-import cuts
+verbose = False
 
 
 def fill_random(dr,Nran,seed=999993):
@@ -73,7 +75,8 @@ def fill_random(dr,Nran,seed=999993):
         sl = slice(start, start + len(coord1.T))
         coord[:, sl] = coord1
         start = start + len(coord1.T)
-        print(start, '/', Nran, 'filled')
+        if verbose:
+            print(start, '/', Nran, 'filled')
     if len(N.unique(dr.brickindex.query(coord))) != len(dr.footprint.bricks):
         # If this happens, we don't have enough points to cover the foot print
         # fairly. Some bricks have no random points.
@@ -95,29 +98,17 @@ def apply_samp_cut(coord, dr, sfd, samp):
     based on the survey limit (and the LF) or we could produce randoms for
     "100%" complete samples of different luminosity thresholds.
     """
-    # Get the flux depths and MW transmission in the relevant filters.
-    # For out-of-bounds points, return 0.
-
-    ebv  = sfd.ebv(coord[0], coord[1])
-
-    sigma = 5
-    # Now work out which points pass the cuts -- note we want a flux
-    # limit *lower* than the catalog cutoff.
-    # This code should be related to the target selection code, for now
-    # we are hard-wiring it and calling the similar routine in select_elgs.
-    # The code just returns a list of indices passing the cuts, so the
-    # functionality should be easy to reproduce.
+    # Work out which points pass the cuts -- most of this work is handled
+    # by calls to "cuts".
     if samp=="LRG":
-        rlim, zlim, wlim = S.findlim(dr, sfd, coord, ['r', 'z', 'W1'], sigma=5)
-
-        mask = cuts.Completeness.LRG(rlim, zlim, wlim)
+        rlim,zlim,wlim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
+        mask = cuts.Completeness.LRG(rlim,zlim,wlim)
     elif samp=="ELG":
-        rlim, glim, zlim = S.findlim(dr, sfd, coord, ['r', 'g', 'z'], sigma=5)
-        mask = cuts.Completeness.ELG(rlim, glim, zlim)
-
+        glim,rlim,zlim = cuts.findlim(dr,sfd,coord,['g','r','z'])
+        mask = cuts.Completeness.ELG(glim,rlim,zlim)
     elif samp=="QSO":
-        rlim, = S.findlim(dr, sfd, coord, ['r'], sigma=5)
-        mask = cuts.Completeness.QSO(rlim)
+        glim,rlim,w1lim,w2lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
+        mask = cuts.Completeness.QSO(glim,rlim,w1lim,w2lim)
     else:
         raise RuntimeError,"Unknown sample "+samp
     ww = N.nonzero(mask)[0]
@@ -141,32 +132,30 @@ def make_random(samp,Nran=10000000):
     sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     print('Making randoms in the survey footprint.')
     coord = fill_random(dr, Nran)
-    print('Querying the depth of randoms')
-
+    #
     # The call to optimize reorders the array to be brick-ordered.
     # Read out is faster this way
     coord = dr.brickindex.optimize(coord)
-
-    bid = dr.brickindex.query(coord)
-    print('unique bricks', len(N.unique(bid)))
-
+    bid   = dr.brickindex.query(coord)
+    print("Have %d unique bricks"%len(N.unique(bid)))
+    #
     with sharedmem.MapReduce() as pool:
         # prepare a parallel section
-
         chunksize = max(len(coord.T) // (pool.np * 4), 1)
-
         # purge the file once for all
         fout  = "randoms_%s.rdz"%samp
         with open(fout,'w') as ff:
             pass
         def work(i):
-            print (i)
+            if verbose:
+                print(i)
             # Work out which points belong on which slice.
             mycoord = coord[:, i:i+chunksize]
             # Apply the cut for sample type on my slice
             ww,rmag = apply_samp_cut(mycoord,dr,sfd,samp)
             # Notify user this slice is done
-            print(i, '/', len(coord.T))
+            if verbose:
+                print(i, '/', len(coord.T))
             return( (mycoord,ww,rmag) )
         def reduce(mycoord, ww, rmag):
             # and take turns writing this out:
@@ -175,7 +164,7 @@ def make_random(samp,Nran=10000000):
                     ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
                       (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
             return len(ww)
-        total = sum(pool.map(work,range(0,len(coord.T),chunksize),reduce=reduce))
+        total=sum(pool.map(work,range(0,len(coord.T),chunksize),reduce=reduce))
     print('Total area (sq.deg.) ',dr.footprint.area*1.0*total/len(coord.T))
     print('Done!')
     #

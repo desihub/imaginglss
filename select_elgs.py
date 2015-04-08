@@ -9,7 +9,7 @@
 # catalog entries can appear in places where the
 # nominal depth is insufficient to be complete.
 #
-# usage: python select_elg.py [--plot]
+# Usage: python select_elg.py [--plot]
 #
 from __future__ import print_function
 
@@ -21,30 +21,14 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 
 import numpy as N
-
-from model.utils import sharedmem
+from model.utils       import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
-
 import cuts
 
-def findlim(dr, sfd, coord, bands, sigma=5.0):
-    assert isinstance(bands, (list, tuple))
 
-    # Get the flux depths and MW transmission in the relevant filters.
-    # For out-of-bounds points, return 0.
-    ebv  = sfd.ebv(coord[0], coord[1])
-    ret = []
-    for band in bands:        
-        rdep = dr.readout(coord,dr.images['depth'][band],
-                default=0, ignore_missing=True)
 
-        rtrn = 10.0**(-ebv*dr.extinction[band]/2.5)
-        # For now we use a 5-sigma cut in extinction-correct flux as our limit.
-        # Recall "depth" is stored as inverse variance.
-        rlim = sigma /N.sqrt(rdep+1e-30) / rtrn
-        ret.append(rlim)
-    return ret
+
 
 def select_elgs():
     """
@@ -54,68 +38,55 @@ def select_elgs():
     # Get instances of a data release and SFD dust map.
     dr = DataRelease()
     sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
-    # Define the fluxes.
+    # Define the fluxes, corrected for MW transmission.
     flux  = dr.catalogue['DECAM_FLUX'].T
     trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
-
     GFLUX = flux[1] / trn[1]
     RFLUX = flux[2] / trn[2]
     ZFLUX = flux[4] / trn[4]
-
-    # Now do the selection
-    primary = dr.catalogue['BRICK_PRIMARY']
-    mask  = (primary == 1)
-    mask &= cuts.Color.ELG(rflux=RFLUX, gflux=GFLUX, zflux=ZFLUX)
-
-    # and extract only the objects which passed the cuts.
+    # Now do the selection ...
+    primary= dr.catalogue['BRICK_PRIMARY']
+    mask   = (primary == 1)
+    mask  &= cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX)
+    # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
     ra   = dr.catalogue[ 'RA'][mask]
     dc   = dr.catalogue['DEC'][mask]
     mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
-
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
-    # for a complete sample.  Like in make_random this should probably
-    # call out to another routine.  For now I'll just indent it helpfully.
-
+    # for a complete sample.
     with sharedmem.MapReduce() as pool:
         (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
         chunksize = 1024
-
         def work(i):
             print(i, '/', len(RA)), 
-
-
             coord = (RA[i:i+chunksize],DEC[i:i+chunksize])
-            lim = findlim(dr, sfd, coord, ['r', 'g', 'z'])
-
-            print('done', i)
-            return lim
-
+            lim = cuts.findlim(dr,sfd,coord,['g','r','z'])
+            print('done',i)
+            return(lim)
         # the ordering is the same as the call to findlim
-        rlim, glim, zlim = N.concatenate(
-            pool.map(work, range(0, len(RA), chunksize)),
-            axis=1
-            )
-
-        mask = cuts.Completeness.ELG(rlim=rlim, glim=glim, zlim=zlim)
-
+        glim,rlim,zlim = N.concatenate(\
+            pool.map(work,range(0,len(RA),chunksize)),axis=1)
+        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
         [ww] = N.nonzero(mask)
         ra   = RA[ ww]
         dc   = DEC[ww]
         mag  = mag[:,arg[ww]]
-
     return( (ra,dc,mag) )
     #
 
 
 
 
-def diagnostic_plots(ra, dec, mag):
+def diagnostic_plots(ra,dec,mag):
+    """
+    diagnostic_plots(ra,dec,mag):
+    Makes some "useful" diagnostic plots.
+    """
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
-
     g = mag[1, :]
     r = mag[2, :]
     z = mag[4, :]
@@ -124,7 +95,7 @@ def diagnostic_plots(ra, dec, mag):
     ax.hist2d(ra, dec)
     canvas = FigureCanvasAgg(fig)
     fig.savefig('elg-ra-dec.png')
-
+    #
     fig = Figure()
     ax = fig.add_subplot(111)
     ax.plot(r, r - z, '. ')
@@ -136,13 +107,12 @@ def diagnostic_plots(ra, dec, mag):
     ax.grid()
     canvas = FigureCanvasAgg(fig)
     fig.savefig('elg-ri-rz.png')
-
+    #
     fig = Figure()
     ax = fig.add_subplot(111)
     x = N.linspace(
             (g - r).min(),
             (g - r).max(), 100)
-
     ax.plot(g - r, r - z, '. ')
     ax.plot(x, x + 0.2, label='(g-r) < (r-z) - 0.2')
     ax.plot(x, 1.2 - x , label='(g-r) > 1.2 - (r-z)')
@@ -151,6 +121,7 @@ def diagnostic_plots(ra, dec, mag):
     ax.grid()
     canvas = FigureCanvasAgg(fig)
     fig.savefig('elg-gr-rz.png')
+    #
 
 
 
@@ -162,6 +133,7 @@ if __name__=="__main__":
     if len(argv) > 1 and argv[1] == '--plot':
         diagnostic_plots(ra, dc, mag)
     else:
+        # Just write the sample to an ascii text file.
         ff = open("elgs.rdz","w")
         ff.write("# %13s %15s %15s %15s %15s %15s\n"%\
           ("RA","DEC","PhotoZ","g","r","z"))
