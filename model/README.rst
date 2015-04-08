@@ -16,9 +16,10 @@ objects defined in "datarelease.py". Important attributes are
  - DataRelease.images    : the images released in the DR
  - DataRelease.catalogue : the imaging catalogue reported by tractor
 
-The member methods are:
+The member methods are
+
  - DataRelease.readout   : reading out pixel value of an image 
-                for coordinates on the sky.
+                           for coordinates on the sky.
 
 Catalog information is handled by catalog.Catalogue, which stores the
 object catalogs associated with a data release.
