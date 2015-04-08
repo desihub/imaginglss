@@ -44,7 +44,7 @@ def process_file(header, newfilename=None):
     x += 0.5
     y += 0.5
     world = wcs_tangent.pix2ang_hdr(numpy.array((x,y)), header, zero_offset=True)
-    ebv, junk = sfdmap.extinction([], world[0], world[1], get_ebv=True)
+    ebv, junk = sfdmap.ebv(world[0], world[1])
     ebv = ebv.reshape(shape)
     print newfilename, world.max(axis=1), world.min(axis=1)
     try:
@@ -61,10 +61,14 @@ def main():
     from model.datarelease import DataRelease
     dr = DataRelease()
     for brick in dr.footprint.bricks:
-        header = dr.images['depth']['r'].metadata(brick)
+        try:
+            header = dr.images['depth']['r'].metadata(brick)
+        except:
+            header = dr.images['image']['z'].metadata(brick)
+        
         newfilename = dr.images['ebv'].get_filename(brick)
         if os.path.exists(newfilename):
-            return
+            continue
         process_file(header, newfilename)
 
 def nomodel():
