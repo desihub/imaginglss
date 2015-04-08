@@ -96,7 +96,9 @@ def apply_samp_cut(coord, dr, sfd, samp):
     """
     # Get the flux depths and MW transmission in the relevant filters.
     # For out-of-bounds points, return 0.
-    ebv   = sfd.extinction(None,coord[0],coord[1],get_ebv=True)
+
+    ebv  = sfd.ebv(coord[0], coord[1])
+
     sigma = 5
     # Now work out which points pass the cuts -- note we want a flux
     # limit *lower* than the catalog cutoff.

@@ -31,7 +31,7 @@ def findlim(dr, sfd, coord, bands, sigma=5.0):
 
     # Get the flux depths and MW transmission in the relevant filters.
     # For out-of-bounds points, return 0.
-    ebv  = sfd.extinction(None,coord[0], coord[1], get_ebv=True)
+    ebv  = sfd.ebv(coord[0], coord[1])
     ret = []
     for band in bands:        
         rdep = dr.readout(coord,dr.images['depth'][band],
@@ -55,9 +55,11 @@ def select_elgs():
     # Define the fluxes.
     flux  = dr.catalogue['DECAM_FLUX'].T
     trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
+
     GFLUX = flux[1] / trn[1]
     RFLUX = flux[2] / trn[2]
     ZFLUX = flux[4] / trn[4]
+
     # Now do the selection
     primary = dr.catalogue['BRICK_PRIMARY']
     mask  = (primary == 1)
