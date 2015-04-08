@@ -30,6 +30,7 @@ from   model.datarelease import DataRelease
 import sys
 #from mpi4py            import MPI
 
+import cuts
 
 
 def fill_random(dr,Nran,seed=999993):
@@ -84,7 +85,7 @@ def fill_random(dr,Nran,seed=999993):
 
 def apply_samp_cut(coord, dr, sfd, samp):
     """
-    apply_samp_cut(coord, dr, sfd, samp):
+    apply_samp_cut(coord, dr, sfd, samp): 
     Apply the cuts for sample "samp".  This logic is sufficiently complex it
     is worth having in its own routine.
     Returns ww (indices of good samples), rmag (r band mag)
@@ -107,18 +108,16 @@ def apply_samp_cut(coord, dr, sfd, samp):
     # The code just returns a list of indices passing the cuts, so the
     # functionality should be easy to reproduce.
     if samp=="LRG":
-        rlim,zlim,wlim = S.findlim(dr,sfd,coord,['r','z','W1'],sigma=sigma)
-        mask  = (rlim<10.0**((22.5-23.00)/2.5))
-        mask &= (zlim<10.0**((22.5-20.56)/2.5))
-        mask &= (wlim<10.0**((22.5-19.50)/2.5))
+        rlim, zlim, wlim = S.findlim(dr, sfd, coord, ['r', 'z', 'W1'], sigma=5)
+
+        mask = cuts.Completeness.LRG(rlim, zlim, wlim)
     elif samp=="ELG":
-        rlim,glim,zlim = S.findlim(dr,sfd,coord,['r','g','z'],sigma=sigma)
-        mask  = rlim < 10 ** ((22.5 - 23.4) / 2.5) 
-        mask &= zlim < 10 ** ((22.5 - 23.4 + 0.3) / 2.5)
-        mask &= glim < 10 ** ((22.5 - 23.4 - 1.5 + 0.2) / 2.5)
+        rlim, glim, zlim = S.findlim(dr, sfd, coord, ['r', 'g', 'z'], sigma=5)
+        mask = cuts.Completeness.ELG(rlim, glim, zlim)
+
     elif samp=="QSO":
-        rlim, = S.findlim(dr,sfd,coord,['r'],sigma=sigma)
-        mask  = rlim<10.0**((22.5-23.00)/2.5)
+        rlim, = S.findlim(dr, sfd, coord, ['r'], sigma=5)
+        mask = cuts.Completeness.QSO(rlim)
     else:
         raise RuntimeError,"Unknown sample "+samp
     ww = N.nonzero(mask)[0]
@@ -143,17 +142,25 @@ def make_random(samp,Nran=10000000):
     print('Making randoms in the survey footprint.')
     coord = fill_random(dr, Nran)
     print('Querying the depth of randoms')
+
     # The call to optimize reorders the array to be brick-ordered.
     # Read out is faster this way
     coord = dr.brickindex.optimize(coord)
+
+    bid = dr.brickindex.query(coord)
+    print('unique bricks', len(N.unique(bid)))
+
     with sharedmem.MapReduce() as pool:
         # prepare a parallel section
-        chunksize = 1024 * 8
+
+        chunksize = max(len(coord.T) // (pool.np * 4), 1)
+
         # purge the file once for all
         fout  = "randoms_%s.rdz"%samp
         with open(fout,'w') as ff:
             pass
         def work(i):
+            print (i)
             # Work out which points belong on which slice.
             mycoord = coord[:, i:i+chunksize]
             # Apply the cut for sample type on my slice
@@ -174,8 +181,8 @@ def make_random(samp,Nran=10000000):
     #
 
 
-
+ 
 if __name__ == '__main__':    
     for samp in ["ELG"]:
-        make_random(samp)
+        make_random(samp, Nran=1000000)
     #

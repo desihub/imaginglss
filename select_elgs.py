@@ -26,6 +26,8 @@ from model.utils import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
 
+import cuts
+
 def findlim(dr, sfd, coord, bands, sigma=5.0):
     assert isinstance(bands, (list, tuple))
 
@@ -63,11 +65,8 @@ def select_elgs():
     # Now do the selection
     primary = dr.catalogue['BRICK_PRIMARY']
     mask  = (primary == 1)
-    mask &= RFLUX > 10**((22.5-23.4) / 2.5)
-    mask &= ZFLUX > 10**((0.3) / 2.5) * RFLUX
-    mask &= ZFLUX < 10**((1.5) / 2.5) * RFLUX
-    mask &= RFLUX ** 2< GFLUX * ZFLUX * 10 ** (-0.2/2.5)
-    mask &= ZFLUX > GFLUX * 10**(1.2/2.5)
+    mask &= cuts.Color.ELG(rflux=RFLUX, gflux=GFLUX, zflux=ZFLUX)
+
     # and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
@@ -94,16 +93,13 @@ def select_elgs():
             print('done', i)
             return lim
 
-        lim = N.concatenate(
+        # the ordering is the same as the call to findlim
+        rlim, glim, zlim = N.concatenate(
             pool.map(work, range(0, len(RA), chunksize)),
             axis=1
             )
 
-        rlim, glim, zlim = lim
-
-        mask =  rlim < 10 ** ((22.5 - 23.4) / 2.5) 
-        mask &= zlim < 10 ** ((22.5 - 23.4 + 0.3) / 2.5)
-        mask &= glim < 10 ** ((22.5 - 23.4 - 1.5 + 0.2) / 2.5)
+        mask = cuts.Completeness.ELG(rlim=rlim, glim=glim, zlim=zlim)
 
         [ww] = N.nonzero(mask)
         ra   = RA[ ww]
