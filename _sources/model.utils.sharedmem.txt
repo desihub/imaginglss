@@ -1,6 +1,11 @@
 model.utils.sharedmem package
 =============================
 
+.. automodule:: model.utils.sharedmem
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -13,10 +18,3 @@ Submodules
    model.utils.sharedmem.parallel
    model.utils.sharedmem.pool
 
-Module contents
----------------
-
-.. automodule:: model.utils.sharedmem
-    :members:
-    :undoc-members:
-    :show-inheritance:

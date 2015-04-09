@@ -1,6 +1,11 @@
 model package
 =============
 
+.. automodule:: model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -21,10 +26,3 @@ Submodules
    model.schema
    model.sfdmap
 
-Module contents
----------------
-
-.. automodule:: model
-    :members:
-    :undoc-members:
-    :show-inheritance:

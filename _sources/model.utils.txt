@@ -1,6 +1,11 @@
 model.utils package
 ===================
 
+.. automodule:: model.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Subpackages
 -----------
 
@@ -21,10 +26,3 @@ Submodules
    model.utils.wcs_simplezea
    model.utils.wcs_tangent
 
-Module contents
----------------
-
-.. automodule:: model.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
