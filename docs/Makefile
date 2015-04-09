@@ -56,8 +56,11 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-gh-pages: html
-	ghp-import -n -p $(BUILDDIR)/html/ 
+deps:
+	@if ! python -c 'import numpydoc'; then easy_install --user numpydoc; fi
+
+gh-pages: 
+	./ghp-import -n -p $(BUILDDIR)/html/ 
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
