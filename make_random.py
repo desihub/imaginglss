@@ -23,7 +23,6 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import numpy             as N
-import select_elgs       as S
 from   model.utils       import sharedmem
 from   model.sfdmap      import SFDMap
 from   model.datarelease import DataRelease
@@ -37,7 +36,7 @@ verbose = False
 
 def fill_random(dr,Nran,seed=999993):
     """
-    fill_random(dr,Nran,seed=999993):
+    fill_random(dr,Nran,seed=999993): 
     Generate uniformly distributed points within the boundary that lie in
     bricks.  We generate in the ra/dec area, then remove points not in any
     bricks.  This hugely increases the memory efficiency for footprints,
