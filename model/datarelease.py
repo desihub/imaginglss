@@ -1,9 +1,11 @@
-# Python code to look at the imaging data, containing
-# interfaces to deal with "bricks" and "catalogs".
-# This is the "highest level" interface to the
-# imaging data and makes use of several lower
-# level objects.
+"""
+Python code to look at the imaging data, containing
+interfaces to deal with "bricks" and "catalogs".
+This is the "highest level" interface to the
+imaging data and makes use of several lower
+level objects.
 
+"""
 from __future__ import print_function
 
 import os
@@ -28,6 +30,9 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 
 class Lazy(object):
+    """ Lazy initialization of object attributes.
+
+    """
     def __init__(self, calculate_function):
         self._calculate = calculate_function
 
@@ -39,14 +44,30 @@ class Lazy(object):
         return value
     
 def contains(haystack, needle):
-    """ returns mask:
+    """ test if needle is in haystack. 
 
-        len(mask) == len(need), 
-        mask[i] == true only if needle[i] is in haystack;
+        
+        returns mask:
+
+        Parameters
+        ----------
+        haystack: array_like
+            Sorted array
+        needle: array_like
+            items to look for
+
+        Returns
+        -------
+        mask : array_like
+             mask[i] is true only if needle[i] is in haystack;
     
-        haystack must be sorted.
-    """
+        Examples
+        --------
+        >>> contains([1, 2, 3], [2])
+        [True]
 
+    """
+    haystack = numpy.asarray(haystack)
     ind = haystack.searchsorted(needle)
     ind.clip(0, len(haystack) - 1, ind)
     return haystack[ind] == needle
@@ -134,13 +155,13 @@ class Footprint(object):
         
         Attributes
         ----------
-
-        bricks : list, model.brick.Brick
-            covered bricks
+        bricks : list of model.brick.Brick
+            A list of Bricks that are covered by the footprint
         range :  tuple
+            The range of RA and DEC of all bricks
             (ramin, ramax, decmin, decmax)
         area  : float
-            covered outline area in square degrees
+            Covered outline area in square degrees
     """
     def __init__(self, dr):
         self.bricks = [dr.brickindex.get_brick(bid) for bid in dr._covered_brickids]
@@ -163,10 +184,19 @@ class Footprint(object):
                 self.area,
                 str(self.range)
             )
-    def filter(self, coord):
-        """ filter coord, remove those are not covered by the current footprint 
 
-            returns coord_in_footprint
+    def filter(self, coord):
+        """ Remove coordinates that are not covered by the footprint 
+
+            Parameters
+            ----------
+                coord: array_like, must be compatible with (RA, DEC)
+
+            Returns
+            -------
+                coord_in_footprint: array_like
+                    items in the input coord that is in the footprint
+        
         """
         coord = numpy.array(coord)
         bid = self.brickindex.query(coord)
@@ -267,12 +297,22 @@ class DataRelease(object):
             )
 
     def readout(self, coord, repo, default=numpy.nan, ignore_missing=False):
-        """ readout pixels at coord.
+        """ Readout pixels from an image.
             
-            example:
-                corrd = (RA, DEC)
-                repo is fetched from self.images
+            Parameters
+            ----------
+            coord: array_like
+                coordinates of the pixels, (RA, DEC)
+            repo: ImageRepo
+                the images to read from.
+            default: scalar
+                value to return if the pixel is not in the footprint.
+            image_missing: boolean
+                When ignore_missing is True, missing brick files are treated
+                as not in the footprint.
 
+            Notes
+            -----
             This is here, because we want to query multiple images
             at the same time. 
             It is also convenient to have it here to make use of
