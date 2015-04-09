@@ -56,9 +56,6 @@ html:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-deps:
-	@if ! python -c 'import numpydoc'; then easy_install --user numpydoc; fi
-
 gh-pages: 
 	./ghp-import -n -p $(BUILDDIR)/html/ 
 
