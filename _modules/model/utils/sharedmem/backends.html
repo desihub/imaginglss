@@ -63,7 +63,7 @@
         <span class="s">&#39;ProcessBackend&#39;</span><span class="p">,</span> <span class="s">&#39;SlaveException&#39;</span><span class="p">,</span> <span class="s">&#39;StopProcessGroup&#39;</span><span class="p">,</span>
         <span class="s">&#39;ProcessGroup&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="set_debug"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.set_debug">[docs]</a><span class="k">def</span> <span class="nf">set_debug</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+<div class="viewcode-block" id="set_debug"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.set_debug">[docs]</a><span class="k">def</span> <span class="nf">set_debug</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
   <span class="sd">&quot;&quot;&quot; in debug mode (flag==True), no slaves are spawn,</span>
 <span class="sd">      rather all work are done in serial on the master thread/process.</span>
 <span class="sd">      so that if the worker throws out exceptions, debugging from the main</span>
@@ -72,11 +72,11 @@
   <span class="k">global</span> <span class="n">__shmdebug__</span>
   <span class="n">__shmdebug__</span> <span class="o">=</span> <span class="n">flag</span>
 </div>
-<div class="viewcode-block" id="get_debug"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.get_debug">[docs]</a><span class="k">def</span> <span class="nf">get_debug</span><span class="p">():</span>
+<div class="viewcode-block" id="get_debug"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.get_debug">[docs]</a><span class="k">def</span> <span class="nf">get_debug</span><span class="p">():</span>
   <span class="k">global</span> <span class="n">__shmdebug__</span>
   <span class="k">return</span> <span class="n">__shmdebug__</span>
 </div>
-<div class="viewcode-block" id="total_memory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.total_memory">[docs]</a><span class="k">def</span> <span class="nf">total_memory</span><span class="p">():</span>
+<div class="viewcode-block" id="total_memory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.total_memory">[docs]</a><span class="k">def</span> <span class="nf">total_memory</span><span class="p">():</span>
   <span class="sd">&quot;&quot;&quot; the amount of memory available for use.</span>
 <span class="sd">      default is the Free Memory entry in /proc/meminfo &quot;&quot;&quot;</span>
   <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="s">&#39;/proc/meminfo&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -85,7 +85,7 @@
           <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;MEMTOTAL:&#39;</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">1024</span>
   <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;MemTotal unknown&#39;</span><span class="p">)</span></div>
-<div class="viewcode-block" id="cpu_count"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.cpu_count">[docs]</a><span class="k">def</span> <span class="nf">cpu_count</span><span class="p">():</span>
+<div class="viewcode-block" id="cpu_count"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.cpu_count">[docs]</a><span class="k">def</span> <span class="nf">cpu_count</span><span class="p">():</span>
   <span class="sd">&quot;&quot;&quot; The cpu count defaults to the number of physical cpu cores</span>
 <span class="sd">      but can be set with OMP_NUM_THREADS environment variable.</span>
 <span class="sd">      OMP_NUM_THREADS is used because if you hybrid sharedmem with</span>
@@ -108,16 +108,16 @@
   <span class="k">except</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="SlaveException"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.SlaveException">[docs]</a><span class="k">class</span> <span class="nc">SlaveException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="SlaveException"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.SlaveException">[docs]</a><span class="k">class</span> <span class="nc">SlaveException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tracebackstr</span><span class="p">):</span>
         <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">tracebackstr</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="StopProcessGroup"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.StopProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">StopProcessGroup</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="StopProcessGroup"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.StopProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">StopProcessGroup</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; StopProcessGroup will terminate the slave process/thread &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;StopProcessGroup&quot;</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">ProcessGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">ProcessGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">main</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">()):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">QueueFactory</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">StorageFactory</span><span class="p">()</span>
@@ -170,7 +170,7 @@
                 <span class="k">continue</span>
             <span class="k">pass</span>
 
-<div class="viewcode-block" id="ProcessGroup.killall"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.killall">[docs]</a>    <span class="k">def</span> <span class="nf">killall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.killall"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.killall">[docs]</a>    <span class="k">def</span> <span class="nf">killall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span> <span class="k">continue</span>
             <span class="k">try</span><span class="p">:</span>
@@ -215,7 +215,7 @@
         <span class="nb">map</span><span class="p">(</span><span class="n">waitone</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ProcessGroup.start"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.start"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
@@ -234,10 +234,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">errorguard</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">guard</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup.get_exception"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.get_exception">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.get_exception"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.get_exception">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">SlaveException</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup.get"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.get"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Protected get. Get an item from Q.</span>
 <span class="sd">            Will block. but if the process group has errors,</span>
 <span class="sd">            raise an StopProcessGroup exception.</span>
@@ -256,7 +256,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">StopProcessGroup</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup.put"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.put"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">Q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -269,10 +269,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">StopProcessGroup</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup.is_alive"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.is_alive"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="ProcessGroup.join"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessGroup.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessGroup.join"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessGroup.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
         <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">join</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">errorguard</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
@@ -308,29 +308,29 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="ThreadBackend"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ThreadBackend">[docs]</a><span class="k">class</span> <span class="nc">ThreadBackend</span><span class="p">:</span>
+<div class="viewcode-block" id="ThreadBackend"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ThreadBackend">[docs]</a><span class="k">class</span> <span class="nc">ThreadBackend</span><span class="p">:</span>
       <span class="n">QueueFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span>
       <span class="n">EventFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>
       <span class="n">LockFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">)</span>
       <span class="n">StorageFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">)</span>
       <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ThreadBackend.SlaveFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ThreadBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ThreadBackend.SlaveFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ThreadBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">slave</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">slave</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">slave</span>
 </div></div>
-<div class="viewcode-block" id="ProcessBackend"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessBackend">[docs]</a><span class="k">class</span> <span class="nc">ProcessBackend</span><span class="p">:</span>
+<div class="viewcode-block" id="ProcessBackend"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessBackend">[docs]</a><span class="k">class</span> <span class="nc">ProcessBackend</span><span class="p">:</span>
       <span class="n">QueueFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span>
       <span class="n">EventFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>
       <span class="n">LockFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Lock</span><span class="p">)</span>
 
       <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ProcessBackend.SlaveFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ProcessBackend.SlaveFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">slave</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">slave</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">slave</span></div>
       <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="ProcessBackend.StorageFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.backends.ProcessBackend.StorageFactory">[docs]</a>      <span class="k">def</span> <span class="nf">StorageFactory</span><span class="p">():</span>
+<div class="viewcode-block" id="ProcessBackend.StorageFactory"><a class="viewcode-back" href="../../../../model.utils.sharedmem.backends.html#model.utils.sharedmem.backends.ProcessBackend.StorageFactory">[docs]</a>      <span class="k">def</span> <span class="nf">StorageFactory</span><span class="p">():</span>
           <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span><span class="bp">None</span>
 </pre></div></div></div>
 

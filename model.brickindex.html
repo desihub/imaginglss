@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.brickindex module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model package" href="model.html" />
+    <link rel="next" title="model.catalogue module" href="model.catalogue.html" />
+    <link rel="prev" title="model.brick module" href="model.brick.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.catalogue.html" title="model.catalogue module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.brick.html" title="model.brick module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.brickindex">
+<span id="model-brickindex-module"></span><h1>model.brickindex module<a class="headerlink" href="#module-model.brickindex" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="model.brickindex.BrickIndex">
+<em class="property">class </em><code class="descclassname">model.brickindex.</code><code class="descname">BrickIndex</code><span class="sig-paren">(</span><em>brickdata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Manages a high level table/list/index of bricks.
+Contains methods for organizing and querying bricks
+or returning brick objects.</p>
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.get_brick">
+<code class="descname">get_brick</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.get_brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.get_brick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain a single brick from index.
+The returned Brick object is immutable; there is only
+a single instance per BrickIndex.
+The lack of a vector version is on purpose to emphasize
+we are dealing with objects. (YF: maybe not a good idea?)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.optimize">
+<code class="descname">optimize</code><span class="sig-paren">(</span><em>coord</em>, <em>return_index=False</em>, <em>return_inverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimize the ordering of coord=(RA,DEC) to make later queries faster.
+RA and DEC are sorted by their brickid, to group future queries.</p>
+<p>if return_inverse is True, returns the array that can be used to
+reconstruct coord from the returned coord.</p>
+<blockquote>
+<div>sorted_ra[ iindices] == ra
+sorted_dec[iindices] == dec</div></blockquote>
+<p>if return_index is True, returns the array that can be used to
+construct sorted_coord from coord:</p>
+<blockquote>
+<div>sorted_ra == ra[indices]
+sorted_dec == dec[indices]</div></blockquote>
+<dl class="docutils">
+<dt>returns sorted_coord, indices, iindices or</dt>
+<dd>sorted_coord, iindices or
+sorted_coord, indices or
+sorted_coord</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the internal index of a brick at coord=(RA,DEC) in
+decimal degrees.  This internal index can differ from BRICKID.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.search_by_id">
+<code class="descname">search_by_id</code><span class="sig-paren">(</span><em>brickid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.search_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.search_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>search the brickindex for bricks with a given brickid.
+returns the internal index of bricks.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.search_by_name">
+<code class="descname">search_by_name</code><span class="sig-paren">(</span><em>brickname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.search_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.search_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>search the brickindex for bricks with a given name.
+returns the internal index of bricks.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.brick.html"
+                        title="previous chapter">model.brick module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.catalogue.html"
+                        title="next chapter">model.catalogue module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.brickindex.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.catalogue.html" title="model.catalogue module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.brick.html" title="model.brick module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

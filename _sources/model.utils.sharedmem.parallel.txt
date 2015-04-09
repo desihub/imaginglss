@@ -1,0 +1,7 @@
+model.utils.sharedmem.parallel module
+=====================================
+
+.. automodule:: model.utils.sharedmem.parallel
+    :members:
+    :undoc-members:
+    :show-inheritance:

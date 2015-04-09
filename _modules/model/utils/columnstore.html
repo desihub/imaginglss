@@ -49,7 +49,7 @@
   <h1>Source code for model.utils.columnstore</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<div class="viewcode-block" id="ColumnStore"><a class="viewcode-back" href="../../../model.utils.html#model.utils.columnstore.ColumnStore">[docs]</a><span class="k">class</span> <span class="nc">ColumnStore</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ColumnStore"><a class="viewcode-back" href="../../../model.utils.columnstore.html#model.utils.columnstore.ColumnStore">[docs]</a><span class="k">class</span> <span class="nc">ColumnStore</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; a cached column store </span>
 <span class="sd">        subclass shall implement</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -64,7 +64,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">updatedtype</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ColumnStore.updatedtype"><a class="viewcode-back" href="../../../model.utils.html#model.utils.columnstore.ColumnStore.updatedtype">[docs]</a>    <span class="k">def</span> <span class="nf">updatedtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="ColumnStore.updatedtype"><a class="viewcode-back" href="../../../model.utils.columnstore.html#model.utils.columnstore.ColumnStore.updatedtype">[docs]</a>    <span class="k">def</span> <span class="nf">updatedtype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
         <span class="n">subshape</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subshape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -89,12 +89,12 @@
         <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
 </div>
 <span class="kn">import</span> <span class="nn">os.path</span>
-<div class="viewcode-block" id="DiskColumnStore"><a class="viewcode-back" href="../../../model.utils.html#model.utils.columnstore.DiskColumnStore">[docs]</a><span class="k">class</span> <span class="nc">DiskColumnStore</span><span class="p">(</span><span class="n">ColumnStore</span><span class="p">):</span>
+<div class="viewcode-block" id="DiskColumnStore"><a class="viewcode-back" href="../../../model.utils.columnstore.html#model.utils.columnstore.DiskColumnStore">[docs]</a><span class="k">class</span> <span class="nc">DiskColumnStore</span><span class="p">(</span><span class="n">ColumnStore</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
         <span class="n">ColumnStore</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DiskColumnStore.getfilename"><a class="viewcode-back" href="../../../model.utils.html#model.utils.columnstore.DiskColumnStore.getfilename">[docs]</a>    <span class="k">def</span> <span class="nf">getfilename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<div class="viewcode-block" id="DiskColumnStore.getfilename"><a class="viewcode-back" href="../../../model.utils.columnstore.html#model.utils.columnstore.DiskColumnStore.getfilename">[docs]</a>    <span class="k">def</span> <span class="nf">getfilename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
     </div>
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
@@ -113,7 +113,7 @@
             <span class="bp">self</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
 
-<div class="viewcode-block" id="DiskColumnStore.forget"><a class="viewcode-back" href="../../../model.utils.html#model.utils.columnstore.DiskColumnStore.forget">[docs]</a>    <span class="k">def</span> <span class="nf">forget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<div class="viewcode-block" id="DiskColumnStore.forget"><a class="viewcode-back" href="../../../model.utils.columnstore.html#model.utils.columnstore.DiskColumnStore.forget">[docs]</a>    <span class="k">def</span> <span class="nf">forget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getfilename</span><span class="p">(</span><span class="n">column</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>

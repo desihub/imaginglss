@@ -61,13 +61,15 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="model.utils.sharedmem.html">model.utils.sharedmem package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.backends">model.utils.sharedmem.backends module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.background">model.utils.sharedmem.background module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.mapreduce">model.utils.sharedmem.mapreduce module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.memory">model.utils.sharedmem.memory module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.parallel">model.utils.sharedmem.parallel module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.pool">model.utils.sharedmem.pool module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.backends.html">model.utils.sharedmem.backends module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.background.html">model.utils.sharedmem.background module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.mapreduce.html">model.utils.sharedmem.mapreduce module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.memory.html">model.utils.sharedmem.memory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.parallel.html">model.utils.sharedmem.parallel module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.pool.html">model.utils.sharedmem.pool module</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem">Module contents</a></li>
 </ul>
 </li>
@@ -76,353 +78,17 @@
 </div>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-model.utils.columnstore">
-<span id="model-utils-columnstore-module"></span><h2>model.utils.columnstore module<a class="headerlink" href="#module-model.utils.columnstore" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="model.utils.columnstore.ColumnStore">
-<em class="property">class </em><code class="descclassname">model.utils.columnstore.</code><code class="descname">ColumnStore</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#ColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.ColumnStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>a cached column store 
-subclass shall implement</p>
-<dl class="method">
-<dt id="model.utils.columnstore.ColumnStore.updatedtype">
-<code class="descname">updatedtype</code><span class="sig-paren">(</span><em>column</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#ColumnStore.updatedtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.ColumnStore.updatedtype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="model.utils.columnstore.DiskColumnStore">
-<em class="property">class </em><code class="descclassname">model.utils.columnstore.</code><code class="descname">DiskColumnStore</code><span class="sig-paren">(</span><em>root</em>, <em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#DiskColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.DiskColumnStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.utils.columnstore.ColumnStore" title="model.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">model.utils.columnstore.ColumnStore</span></code></a></p>
-<dl class="method">
-<dt id="model.utils.columnstore.DiskColumnStore.forget">
-<code class="descname">forget</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#DiskColumnStore.forget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.DiskColumnStore.forget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="model.utils.columnstore.DiskColumnStore.getfilename">
-<code class="descname">getfilename</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/columnstore.html#DiskColumnStore.getfilename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.columnstore.DiskColumnStore.getfilename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-model.utils.euler">
-<span id="model-utils-euler-module"></span><h2>model.utils.euler module<a class="headerlink" href="#module-model.utils.euler" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="model.utils.euler.euler">
-<code class="descclassname">model.utils.euler.</code><code class="descname">euler</code><span class="sig-paren">(</span><em>ai</em>, <em>bi</em>, <em>select=1</em>, <em>fk4=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/euler.html#euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.euler.euler" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>NAME:</dt>
-<dd>EULER</dd>
-<dt>PURPOSE:</dt>
-<dd>Transform between Galactic, celestial, and ecliptic coordinates.</dd>
-<dt>EXPLANATION:</dt>
-<dd>Use the procedure ASTRO to use this routine interactively</dd>
-<dt>CALLING SEQUENCE:</dt>
-<dd>EULER, AI, BI, AO, BO, [ SELECT, /FK4, SELECT = ]</dd>
-<dt>INPUTS:</dt>
-<dd><dl class="first docutils">
-<dt>AI - Input Longitude in DEGREES, scalar or vector.  If only two</dt>
-<dd>parameters are supplied, then  AI and BI will be modified to
-contain the output longitude and latitude.</dd>
-</dl>
-<p class="last">BI - Input Latitude in DEGREES</p>
-</dd>
-<dt>OPTIONAL INPUT:</dt>
-<dd><blockquote class="first">
-<div>SELECT - Integer (1-6) specifying type of coordinate transformation.</div></blockquote>
-<dl class="docutils">
-<dt>SELECT   From          To        |   SELECT      From            To</dt>
-<dd>1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec
-2     Galactic       RA-DEC     |     5       Ecliptic      Galactic
-3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic</dd>
-</dl>
-<p class="last">If not supplied as a parameter or keyword, then EULER will prompt for
-the value of SELECT
-Celestial coordinates (RA, Dec) should be given in equinox J2000
-unless the /FK4 keyword is set.</p>
-</dd>
-<dt>OUTPUTS:</dt>
-<dd>AO - Output Longitude in DEGREES
-BO - Output Latitude in DEGREES</dd>
-<dt>INPUT KEYWORD:</dt>
-<dd><dl class="first docutils">
-<dt>/FK4 - If this keyword is set and non-zero, then input and output</dt>
-<dd>celestial and ecliptic coordinates should be given in equinox
-B1950.</dd>
-</dl>
-<table class="last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">/SELECT</span></kbd></td>
-<td><ul class="first simple">
-<li>The coordinate conversion integer (1-6) may alternatively be</li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.columnstore.html">model.utils.columnstore module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.euler.html">model.utils.euler module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.fits.html">model.utils.fits module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.fsarray.html">model.utils.fsarray module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.kdtree.html">model.utils.kdtree module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.wcs_simplezea.html">model.utils.wcs_simplezea module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.wcs_tangent.html">model.utils.wcs_tangent module</a></li>
 </ul>
-<p class="last">specified as a keyword</p>
-</td></tr>
-</tbody>
-</table>
-</dd>
-<dt>NOTES:</dt>
-<dd>EULER was changed in December 1998 to use J2000 coordinates as the
-default, ** and may be incompatible with earlier versions***.</dd>
-<dt>REVISION HISTORY:</dt>
-<dd>Written W. Landsman,  February 1987
-Adapted from Fortran by Daryl Yentis NRL
-Converted to IDL V5.0   W. Landsman   September 1997
-Made J2000 the default, added /FK4 keyword  W. Landsman December 1998
-Add option to specify SELECT as a keyword W. Landsman March 2003</dd>
-</dl>
-</dd></dl>
-
 </div>
-<div class="section" id="module-model.utils.fits">
-<span id="model-utils-fits-module"></span><h2>model.utils.fits module<a class="headerlink" href="#module-model.utils.fits" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="model.utils.fits.read_image">
-<code class="descclassname">model.utils.fits.</code><code class="descname">read_image</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#model.utils.fits.read_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the zeroth image HDU from a fits file</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.fits.read_table">
-<code class="descclassname">model.utils.fits.</code><code class="descname">read_table</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=1</em><span class="sig-paren">)</span><a class="headerlink" href="#model.utils.fits.read_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the first HDU table from a fits file</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.fits.read_metadata">
-<code class="descclassname">model.utils.fits.</code><code class="descname">read_metadata</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#model.utils.fits.read_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the metadata of a HDU table</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model.utils.fsarray">
-<span id="model-utils-fsarray-module"></span><h2>model.utils.fsarray module<a class="headerlink" href="#module-model.utils.fsarray" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="model.utils.fsarray.ElasticArray">
-<em class="property">class </em><code class="descclassname">model.utils.fsarray.</code><code class="descname">ElasticArray</code><span class="sig-paren">(</span><em>size=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>a Elastic Array that can be stored as a 
-filesystem tree of binary files, plus some text format
-meta data.</p>
-<dl class="attribute">
-<dt id="model.utils.fsarray.ElasticArray.dtype">
-<code class="descname">dtype</code><a class="headerlink" href="#model.utils.fsarray.ElasticArray.dtype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="model.utils.fsarray.ElasticArray.extend">
-<code class="descname">extend</code><span class="sig-paren">(</span><em>newrows</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.extend" title="Permalink to this definition">¶</a></dt>
-<dd><p>grow the array with new rows</p>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="model.utils.fsarray.ElasticArray.fromfile">
-<em class="property">classmethod </em><code class="descname">fromfile</code><span class="sig-paren">(</span><em>prefix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.fromfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.fromfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="classmethod">
-<dt id="model.utils.fsarray.ElasticArray.fromndarray">
-<em class="property">classmethod </em><code class="descname">fromndarray</code><span class="sig-paren">(</span><em>array</em>, <em>copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.fromndarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.fromndarray" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="model.utils.fsarray.ElasticArray.keys">
-<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="model.utils.fsarray.ElasticArray.select">
-<code class="descname">select</code><span class="sig-paren">(</span><em>indices</em>, <em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns a new ElasticArray with only items at indices.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="model.utils.fsarray.ElasticArray.tofile">
-<code class="descname">tofile</code><span class="sig-paren">(</span><em>prefix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.tofile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.tofile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="model.utils.fsarray.ElasticArray.tondarray">
-<code class="descname">tondarray</code><span class="sig-paren">(</span><em>columns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/fsarray.html#ElasticArray.tondarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.fsarray.ElasticArray.tondarray" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-model.utils.kdtree">
-<span id="model-utils-kdtree-module"></span><h2>model.utils.kdtree module<a class="headerlink" href="#module-model.utils.kdtree" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="model.utils.kdtree.KDtree">
-<em class="property">class </em><code class="descclassname">model.utils.kdtree.</code><code class="descname">KDtree</code><span class="sig-paren">(</span><em>point_list</em>, <em>split_dim=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree" title="Permalink to this definition">¶</a></dt>
-<dd><p>KDtree:
-A pure-Python class to do some simple KD tree construction and
-search.  Everything is manipulated through lists.</p>
-<dl class="class">
-<dt id="model.utils.kdtree.KDtree.TreeNode">
-<em class="property">class </em><code class="descname">TreeNode</code><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.TreeNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.TreeNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>An empty class for the nodes.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="model.utils.kdtree.KDtree.kdtree">
-<code class="descclassname">KDtree.</code><code class="descname">kdtree</code><span class="sig-paren">(</span><em>point_list</em>, <em>split_dim=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.kdtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.kdtree" title="Permalink to this definition">¶</a></dt>
-<dd><p>kdtree(self,point_list,split_dim=0):
-Does the work of constructing the KD tree in terms of &#8220;TreeNode&#8221;s.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="model.utils.kdtree.KDtree.simplesearch">
-<code class="descclassname">KDtree.</code><code class="descname">simplesearch</code><span class="sig-paren">(</span><em>point_value</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.simplesearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.simplesearch" title="Permalink to this definition">¶</a></dt>
-<dd><p>simplesearch(self,point_value,depth):
-Walks down the tree &#8220;depth&#8221; steps, then returns all points in
-that subtree.  If depth is a mutiple of the number of dimensions
-then you get a spatially compact region.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="model.utils.kdtree.KDtree.treelist">
-<code class="descclassname">KDtree.</code><code class="descname">treelist</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.treelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.treelist" title="Permalink to this definition">¶</a></dt>
-<dd><p>treelist(self,node):
-Returns a list of all points in the tree (or subtree).</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-model.utils.wcs_simplezea">
-<span id="model-utils-wcs-simplezea-module"></span><h2>model.utils.wcs_simplezea module<a class="headerlink" href="#module-model.utils.wcs_simplezea" title="Permalink to this headline">¶</a></h2>
-<p>example header:
-SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999
-BITPIX  =                  -32 /
-NAXIS   =                    2 /
-NAXIS1  =                 4096 /
-NAXIS2  =                 4096 /
-DATE    = &#8216;1999-05-09&#8217;         / Creation date (CCYY-MM-DD) of FITS header
-OBJECT  = &#8216;E(B-V)  &#8216;           /
-BUNIT   = &#8216;mag     &#8216;           /
-CRPIX1  =              2048.50 / 1-indexed X pixel number of pole
-CRVAL1  =              90.0000 /
-CTYPE1  = &#8216;GLON-ZEA&#8217;           / X=sqrt(1-NSGP*sin(b))*cos(l)*SCALE
-CRPIX2  =              2048.50 / 1-indexed Y pixel number of pole
-CRVAL2  =              90.0000 /
-CTYPE2  = &#8216;GLAT-ZEA&#8217;           / Y=-NSGP*sqrt(1-NSGP*sin(b))*sin(l)*SCALE
-CD1_1   =     -0.0395646818624 /
-CD1_2   =              0.00000 /
-CD2_1   =              0.00000 /
-CD2_2   =      0.0395646818624 /
-LONPOLE =                  180 /
-LAM_NSGP=                    1 / NSGP=+1 for north polar, =-1 for south polar
-LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg
-AUTHOR  = &#8216;David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis&#8217; /</p>
-<dl class="function">
-<dt id="model.utils.wcs_simplezea.ang2pix">
-<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix</code><span class="sig-paren">(</span><em>coord</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
-according the the WCS header. Look up Section 5.?.? of 
-<a class="reference external" href="http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf">http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf</a> 
-Although the source code in</p>
-<blockquote>
-<div><a class="reference external" href="https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc">https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc</a></div></blockquote>
-<p>maybe a better explanation of what is done.
-coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-returns the pixel xy = (x, y).</p>
-<p>Obviously PV distortion is not supported.
-No checking is performed if a given RA, DEC lies outside the range.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_simplezea.pix2ang">
-<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang</code><span class="sig-paren">(</span><em>xy</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the invert transformation of ang2pix. (TAN)
-xy = (x, y): coordinate in pixels
-Returns coord = (RA, DEC), in decimal degrees.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_simplezea.ang2pix_hdr">
-<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix_hdr</code><span class="sig-paren">(</span><em>coord</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling ang2pix, with the transformations
-described in a dictionary in the usual FITS header style for WCS
-transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
-degrees, vectorized) and the routine returns pixel numbers.
-If zero_offset is True, the routine returns 0-indexed pixel coordinates
-(useful in Python or C) while if it is False pixels run from 1 (as in
-Fortran).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_simplezea.pix2ang_hdr">
-<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang_hdr</code><span class="sig-paren">(</span><em>xy</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling pix2ang, with the transformations
-described in a dictionary in the usual FITS header style for WCS
-transformations.  Given input pixel numbers xy the routine returns
-coordinates (RA,DEC) in decimal degrees.
-If zero_offset is True, the routine takes 0-indexed pixel coordinates
-(useful in Python or C) while if it is False pixels run from 1 (as in
-Fortran).</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-model.utils.wcs_tangent">
-<span id="model-utils-wcs-tangent-module"></span><h2>model.utils.wcs_tangent module<a class="headerlink" href="#module-model.utils.wcs_tangent" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="model.utils.wcs_tangent.ang2pix">
-<code class="descclassname">model.utils.wcs_tangent.</code><code class="descname">ang2pix</code><span class="sig-paren">(</span><em>coord</em>, <em>CD</em>, <em>CRPIX</em>, <em>CRVAL</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_tangent.html#ang2pix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_tangent.ang2pix" title="Permalink to this definition">¶</a></dt>
-<dd><p>TAN Transform from coord = (ra, dec) to pixel xy coordinate 
-according the the WCS header. Look up Section 5.1.3 of 
-<a class="reference external" href="http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf">http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf</a> 
-Although the source code in</p>
-<blockquote>
-<div><a class="reference external" href="https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py">https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py</a></div></blockquote>
-<p>maybe a better explanation of what is done.
-coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-returns the pixel xy = (x, y).</p>
-<p>CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,</p>
-<p>RA/DEC at CRVAL shall map exactly to x/y at CRPIX.</p>
-<p>Obviously PV distortion is not supported.
-No checking is performed if a given RA, DEC lies outside the range.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_tangent.pix2ang">
-<code class="descclassname">model.utils.wcs_tangent.</code><code class="descname">pix2ang</code><span class="sig-paren">(</span><em>xy</em>, <em>CD</em>, <em>CRPIX</em>, <em>CRVAL</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_tangent.html#pix2ang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_tangent.pix2ang" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the invert transformation of ang2pix. (TAN)
-xy = (x, y): coordinate in pixels
-Returns coord = (RA, DEC), in decimal degrees.</p>
-<p>RA/DEC at CRVAL shall map exactly to x/y at CRPIX.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_tangent.ang2pix_hdr">
-<code class="descclassname">model.utils.wcs_tangent.</code><code class="descname">ang2pix_hdr</code><span class="sig-paren">(</span><em>coord</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_tangent.html#ang2pix_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_tangent.ang2pix_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling ang2pix, with the transformations
-described in a dictionary in the usual FITS header style for WCS
-transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
-degrees, vectorized) and the routine returns pixel numbers.
-If zero_offset is True, the routine returns 0-indexed pixel coordinates
-(useful in Python or C) while if it is False pixels run from 1 (as in
-Fortran).</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="model.utils.wcs_tangent.pix2ang_hdr">
-<code class="descclassname">model.utils.wcs_tangent.</code><code class="descname">pix2ang_hdr</code><span class="sig-paren">(</span><em>xy</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_tangent.html#pix2ang_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_tangent.pix2ang_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling pix2ang, with the transformations
-described in a dictionary in the usual FITS header style for WCS
-transformations.  Given input pixel numbers xy the routine returns
-coordinates (RA,DEC) in decimal degrees.
-If zero_offset is True, the routine takes 0-indexed pixel coordinates
-(useful in Python or C) while if it is False pixels run from 1 (as in
-Fortran).</p>
-</dd></dl>
-
 </div>
 <div class="section" id="module-model.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model.utils" title="Permalink to this headline">¶</a></h2>
@@ -440,13 +106,6 @@ Fortran).</p>
 <li><a class="reference internal" href="#">model.utils package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-model.utils.columnstore">model.utils.columnstore module</a></li>
-<li><a class="reference internal" href="#module-model.utils.euler">model.utils.euler module</a></li>
-<li><a class="reference internal" href="#module-model.utils.fits">model.utils.fits module</a></li>
-<li><a class="reference internal" href="#module-model.utils.fsarray">model.utils.fsarray module</a></li>
-<li><a class="reference internal" href="#module-model.utils.kdtree">model.utils.kdtree module</a></li>
-<li><a class="reference internal" href="#module-model.utils.wcs_simplezea">model.utils.wcs_simplezea module</a></li>
-<li><a class="reference internal" href="#module-model.utils.wcs_tangent">model.utils.wcs_tangent module</a></li>
 <li><a class="reference internal" href="#module-model.utils">Module contents</a></li>
 </ul>
 </li>

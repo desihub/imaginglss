@@ -1,0 +1,7 @@
+model.catalogue module
+======================
+
+.. automodule:: model.catalogue
+    :members:
+    :undoc-members:
+    :show-inheritance:

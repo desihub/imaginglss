@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.imagerepo module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model package" href="model.html" />
+    <link rel="next" title="model.schema module" href="model.schema.html" />
+    <link rel="prev" title="model.datarelease module" href="model.datarelease.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.schema.html" title="model.schema module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.datarelease.html" title="model.datarelease module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.imagerepo">
+<span id="model-imagerepo-module"></span><h1>model.imagerepo module<a class="headerlink" href="#module-model.imagerepo" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="model.imagerepo.ImageRepo">
+<em class="property">class </em><code class="descclassname">model.imagerepo.</code><code class="descname">ImageRepo</code><span class="sig-paren">(</span><em>root</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Image repository.
+This class serves as an interface to the file system, the
+layout of files and IO for brick files.
+Given a Brick object, ImageRepo can return the image data
+or meta data of the image.
+Standard users should not need to modify this class.</p>
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.get_filename">
+<code class="descname">get_filename</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.metadata">
+<code class="descname">metadata</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the meta data about a brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>open and read the image for 
+Brick object brick. The image content is returned
+as an array.</p>
+<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs is unused</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.preload">
+<code class="descname">preload</code><span class="sig-paren">(</span><em>bricks</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.preload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.preload" title="Permalink to this definition">¶</a></dt>
+<dd><p>preload the images for 
+Brick objects listed in bricks list.</p>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs is unused</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.datarelease.html"
+                        title="previous chapter">model.datarelease module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.schema.html"
+                        title="next chapter">model.schema module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.imagerepo.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.schema.html" title="model.schema module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.datarelease.html" title="model.datarelease module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+model.utils.sharedmem.mapreduce module
+======================================
+
+.. automodule:: model.utils.sharedmem.mapreduce
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+model.utils.sharedmem.background module
+=======================================
+
+.. automodule:: model.utils.sharedmem.background
+    :members:
+    :undoc-members:
+    :show-inheritance:

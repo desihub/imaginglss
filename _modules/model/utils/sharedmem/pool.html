@@ -51,11 +51,11 @@
 <span class="kn">import</span> <span class="nn">backends</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Pool&#39;</span><span class="p">,</span> <span class="s">&#39;TPool&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Pool"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.pool.Pool">[docs]</a><span class="k">class</span> <span class="nc">Pool</span><span class="p">(</span><span class="n">MapReduce</span><span class="p">):</span>
+<div class="viewcode-block" id="Pool"><a class="viewcode-back" href="../../../../model.utils.sharedmem.pool.html#model.utils.sharedmem.pool.Pool">[docs]</a><span class="k">class</span> <span class="nc">Pool</span><span class="p">(</span><span class="n">MapReduce</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">np</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">MapReduce</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backends</span><span class="o">.</span><span class="n">ProcessBackend</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="TPool"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.pool.TPool">[docs]</a><span class="k">class</span> <span class="nc">TPool</span><span class="p">(</span><span class="n">MapReduce</span><span class="p">):</span>
+<div class="viewcode-block" id="TPool"><a class="viewcode-back" href="../../../../model.utils.sharedmem.pool.html#model.utils.sharedmem.pool.TPool">[docs]</a><span class="k">class</span> <span class="nc">TPool</span><span class="p">(</span><span class="n">MapReduce</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">np</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">MapReduce</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backends</span><span class="o">.</span><span class="n">ThreadBackend</span><span class="p">)</span>
 </div>

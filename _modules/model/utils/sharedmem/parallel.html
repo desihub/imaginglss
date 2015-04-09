@@ -133,7 +133,7 @@
 <span class="kn">from</span> <span class="nn">memory</span> <span class="kn">import</span> <span class="n">empty</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Parallel&#39;</span><span class="p">,</span> <span class="s">&#39;ParallelException&#39;</span><span class="p">]</span>
-<div class="viewcode-block" id="ParallelException"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.parallel.ParallelException">[docs]</a><span class="k">class</span> <span class="nc">ParallelException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelException"><a class="viewcode-back" href="../../../../model.utils.sharedmem.parallel.html#model.utils.sharedmem.parallel.ParallelException">[docs]</a><span class="k">class</span> <span class="nc">ParallelException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;When a Slave process is unexpectedly killed (by the OS, eg, OOM)&quot;&quot;&quot;</span>
     <span class="k">pass</span>
 </div>
@@ -277,7 +277,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Parallel"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.parallel.Parallel">[docs]</a><span class="k">class</span> <span class="nc">Parallel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Parallel"><a class="viewcode-back" href="../../../../model.utils.sharedmem.parallel.html#model.utils.sharedmem.parallel.Parallel">[docs]</a><span class="k">class</span> <span class="nc">Parallel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        **kwargs: </span>
@@ -392,10 +392,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_errormon</span><span class="o">.</span><span class="n">slaveraise</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">traceback</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         
-<div class="viewcode-block" id="Parallel.barrier"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.parallel.Parallel.barrier">[docs]</a>    <span class="k">def</span> <span class="nf">barrier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Parallel.barrier"><a class="viewcode-back" href="../../../../model.utils.sharedmem.parallel.html#model.utils.sharedmem.parallel.Parallel.barrier">[docs]</a>    <span class="k">def</span> <span class="nf">barrier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_barrier</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </div>
-<div class="viewcode-block" id="Parallel.forloop"><a class="viewcode-back" href="../../../../model.utils.sharedmem.html#model.utils.sharedmem.parallel.Parallel.forloop">[docs]</a>    <span class="k">def</span> <span class="nf">forloop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;static&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+<div class="viewcode-block" id="Parallel.forloop"><a class="viewcode-back" href="../../../../model.utils.sharedmem.parallel.html#model.utils.sharedmem.parallel.Parallel.forloop">[docs]</a>    <span class="k">def</span> <span class="nf">forloop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">range</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;static&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot; schedule can be</span>
 <span class="sd">            (sch, chunk) or sch;</span>
 <span class="sd">            sch is &#39;static&#39;, &#39;dynamic&#39; or &#39;guided&#39;.</span>

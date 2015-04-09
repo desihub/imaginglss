@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.utils.wcs_simplezea module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model.utils package" href="model.utils.html" />
+    <link rel="next" title="model.utils.wcs_tangent module" href="model.utils.wcs_tangent.html" />
+    <link rel="prev" title="model.utils.kdtree module" href="model.utils.kdtree.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.wcs_tangent.html" title="model.utils.wcs_tangent module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.kdtree.html" title="model.utils.kdtree module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" accesskey="U">model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.utils.wcs_simplezea">
+<span id="model-utils-wcs-simplezea-module"></span><h1>model.utils.wcs_simplezea module<a class="headerlink" href="#module-model.utils.wcs_simplezea" title="Permalink to this headline">¶</a></h1>
+<p>example header:
+SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999
+BITPIX  =                  -32 /
+NAXIS   =                    2 /
+NAXIS1  =                 4096 /
+NAXIS2  =                 4096 /
+DATE    = &#8216;1999-05-09&#8217;         / Creation date (CCYY-MM-DD) of FITS header
+OBJECT  = &#8216;E(B-V)  &#8216;           /
+BUNIT   = &#8216;mag     &#8216;           /
+CRPIX1  =              2048.50 / 1-indexed X pixel number of pole
+CRVAL1  =              90.0000 /
+CTYPE1  = &#8216;GLON-ZEA&#8217;           / X=sqrt(1-NSGP*sin(b))*cos(l)*SCALE
+CRPIX2  =              2048.50 / 1-indexed Y pixel number of pole
+CRVAL2  =              90.0000 /
+CTYPE2  = &#8216;GLAT-ZEA&#8217;           / Y=-NSGP*sqrt(1-NSGP*sin(b))*sin(l)*SCALE
+CD1_1   =     -0.0395646818624 /
+CD1_2   =              0.00000 /
+CD2_1   =              0.00000 /
+CD2_2   =      0.0395646818624 /
+LONPOLE =                  180 /
+LAM_NSGP=                    1 / NSGP=+1 for north polar, =-1 for south polar
+LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg
+AUTHOR  = &#8216;David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis&#8217; /</p>
+<dl class="function">
+<dt id="model.utils.wcs_simplezea.ang2pix">
+<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix</code><span class="sig-paren">(</span><em>coord</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
+according the the WCS header. Look up Section 5.?.? of 
+<a class="reference external" href="http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf">http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf</a> 
+Although the source code in</p>
+<blockquote>
+<div><a class="reference external" href="https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc">https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc</a></div></blockquote>
+<p>maybe a better explanation of what is done.
+coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
+returns the pixel xy = (x, y).</p>
+<p>Obviously PV distortion is not supported.
+No checking is performed if a given RA, DEC lies outside the range.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.utils.wcs_simplezea.pix2ang">
+<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang</code><span class="sig-paren">(</span><em>xy</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the invert transformation of ang2pix. (TAN)
+xy = (x, y): coordinate in pixels
+Returns coord = (RA, DEC), in decimal degrees.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.utils.wcs_simplezea.ang2pix_hdr">
+<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix_hdr</code><span class="sig-paren">(</span><em>coord</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix_hdr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience function for calling ang2pix, with the transformations
+described in a dictionary in the usual FITS header style for WCS
+transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
+degrees, vectorized) and the routine returns pixel numbers.
+If zero_offset is True, the routine returns 0-indexed pixel coordinates
+(useful in Python or C) while if it is False pixels run from 1 (as in
+Fortran).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.utils.wcs_simplezea.pix2ang_hdr">
+<code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang_hdr</code><span class="sig-paren">(</span><em>xy</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang_hdr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience function for calling pix2ang, with the transformations
+described in a dictionary in the usual FITS header style for WCS
+transformations.  Given input pixel numbers xy the routine returns
+coordinates (RA,DEC) in decimal degrees.
+If zero_offset is True, the routine takes 0-indexed pixel coordinates
+(useful in Python or C) while if it is False pixels run from 1 (as in
+Fortran).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.utils.kdtree.html"
+                        title="previous chapter">model.utils.kdtree module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.utils.wcs_tangent.html"
+                        title="next chapter">model.utils.wcs_tangent module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.utils.wcs_simplezea.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.wcs_tangent.html" title="model.utils.wcs_tangent module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.kdtree.html" title="model.utils.kdtree module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" >model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.catalogue module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model package" href="model.html" />
+    <link rel="next" title="model.datarelease module" href="model.datarelease.html" />
+    <link rel="prev" title="model.brickindex module" href="model.brickindex.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.datarelease.html" title="model.datarelease module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.brickindex.html" title="model.brickindex module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.catalogue">
+<span id="model-catalogue-module"></span><h1>model.catalogue module<a class="headerlink" href="#module-model.catalogue" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="model.catalogue.Catalogue">
+<em class="property">class </em><code class="descclassname">model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>filenames</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="model.utils.columnstore.html#model.utils.columnstore.DiskColumnStore" title="model.utils.columnstore.DiskColumnStore"><code class="xref py py-class docutils literal"><span class="pre">model.utils.columnstore.DiskColumnStore</span></code></a></p>
+<p>Class for handling object catalogs associated with a data release.
+The catalogs are contained in FITS files, but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory.
+The columns are cached into cachedir, which is initialized 
+by the DataRelease object.
+We assume the catalogue is split into multiple files.
+and the list of file names are provided as an input.
+The main method is fetch.</p>
+<dl class="method">
+<dt id="model.catalogue.Catalogue.fetch">
+<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.catalogue.Catalogue.neighbours">
+<code class="descname">neighbours</code><span class="sig-paren">(</span><em>coord</em>, <em>sep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.neighbours" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="model.catalogue.coord2xyz">
+<code class="descclassname">model.catalogue.</code><code class="descname">coord2xyz</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#coord2xyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.coord2xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.catalogue.uppercase_dtype">
+<code class="descclassname">model.catalogue.</code><code class="descname">uppercase_dtype</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#uppercase_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.uppercase_dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.brickindex.html"
+                        title="previous chapter">model.brickindex module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.datarelease.html"
+                        title="next chapter">model.datarelease module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.catalogue.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.datarelease.html" title="model.datarelease module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.brickindex.html" title="model.brickindex module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

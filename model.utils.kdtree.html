@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.utils.kdtree module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model.utils package" href="model.utils.html" />
+    <link rel="next" title="model.utils.wcs_simplezea module" href="model.utils.wcs_simplezea.html" />
+    <link rel="prev" title="model.utils.fsarray module" href="model.utils.fsarray.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.wcs_simplezea.html" title="model.utils.wcs_simplezea module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.fsarray.html" title="model.utils.fsarray module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" accesskey="U">model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.utils.kdtree">
+<span id="model-utils-kdtree-module"></span><h1>model.utils.kdtree module<a class="headerlink" href="#module-model.utils.kdtree" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="model.utils.kdtree.KDtree">
+<em class="property">class </em><code class="descclassname">model.utils.kdtree.</code><code class="descname">KDtree</code><span class="sig-paren">(</span><em>point_list</em>, <em>split_dim=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>KDtree:
+A pure-Python class to do some simple KD tree construction and
+search.  Everything is manipulated through lists.</p>
+<dl class="class">
+<dt id="model.utils.kdtree.KDtree.TreeNode">
+<em class="property">class </em><code class="descname">TreeNode</code><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.TreeNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.TreeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>An empty class for the nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.utils.kdtree.KDtree.kdtree">
+<code class="descclassname">KDtree.</code><code class="descname">kdtree</code><span class="sig-paren">(</span><em>point_list</em>, <em>split_dim=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.kdtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.kdtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>kdtree(self,point_list,split_dim=0):
+Does the work of constructing the KD tree in terms of &#8220;TreeNode&#8221;s.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.utils.kdtree.KDtree.simplesearch">
+<code class="descclassname">KDtree.</code><code class="descname">simplesearch</code><span class="sig-paren">(</span><em>point_value</em>, <em>depth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.simplesearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.simplesearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>simplesearch(self,point_value,depth):
+Walks down the tree &#8220;depth&#8221; steps, then returns all points in
+that subtree.  If depth is a mutiple of the number of dimensions
+then you get a spatially compact region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.utils.kdtree.KDtree.treelist">
+<code class="descclassname">KDtree.</code><code class="descname">treelist</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/kdtree.html#KDtree.treelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.kdtree.KDtree.treelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>treelist(self,node):
+Returns a list of all points in the tree (or subtree).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.utils.fsarray.html"
+                        title="previous chapter">model.utils.fsarray module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.utils.wcs_simplezea.html"
+                        title="next chapter">model.utils.wcs_simplezea module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.utils.kdtree.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.wcs_simplezea.html" title="model.utils.wcs_simplezea module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.fsarray.html" title="model.utils.fsarray module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" >model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

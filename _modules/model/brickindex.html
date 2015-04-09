@@ -63,7 +63,7 @@
 
 
 
-<div class="viewcode-block" id="BrickIndex"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex">[docs]</a><span class="k">class</span> <span class="nc">BrickIndex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex">[docs]</a><span class="k">class</span> <span class="nc">BrickIndex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Manages a high level table/list/index of bricks.</span>
 <span class="sd">    Contains methods for organizing and querying bricks</span>
@@ -107,7 +107,7 @@
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BrickIndex.get_brick"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex.get_brick">[docs]</a>    <span class="k">def</span> <span class="nf">get_brick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex.get_brick"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.get_brick">[docs]</a>    <span class="k">def</span> <span class="nf">get_brick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Obtain a single brick from index.</span>
 <span class="sd">        The returned Brick object is immutable; there is only</span>
@@ -127,7 +127,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="BrickIndex.search_by_name"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex.search_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickname</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex.search_by_name"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.search_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        search the brickindex for bricks with a given name.</span>
 <span class="sd">        returns the internal index of bricks.</span>
@@ -138,7 +138,7 @@
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">return</span> <span class="n">bid</span>
  </div>
-<div class="viewcode-block" id="BrickIndex.search_by_id"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex.search_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickid</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex.search_by_id"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.search_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        search the brickindex for bricks with a given brickid.</span>
 <span class="sd">        returns the internal index of bricks.</span>
@@ -152,7 +152,7 @@
               <span class="nb">str</span><span class="p">(</span><span class="n">brickid</span><span class="p">[</span><span class="o">~</span><span class="n">found</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">rt</span>
 </div>
-<div class="viewcode-block" id="BrickIndex.query"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex.query"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Returns the internal index of a brick at coord=(RA,DEC) in</span>
 <span class="sd">        decimal degrees.  This internal index can differ from BRICKID.</span>
@@ -169,7 +169,7 @@
         <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">ind</span>
 </div>
-<div class="viewcode-block" id="BrickIndex.optimize"><a class="viewcode-back" href="../../model.html#model.brickindex.BrickIndex.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BrickIndex.optimize"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Optimize the ordering of coord=(RA,DEC) to make later queries faster.</span>
 <span class="sd">        RA and DEC are sorted by their brickid, to group future queries.</span>

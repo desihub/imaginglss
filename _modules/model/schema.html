@@ -57,10 +57,10 @@
 <span class="sd">    The `version` parameter of `DataRelease.__init__` picks the correct</span>
 <span class="sd">    schema. </span>
 <span class="sd">&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Schema"><a class="viewcode-back" href="../../model.html#model.schema.Schema">[docs]</a><span class="k">class</span> <span class="nc">Schema</span><span class="p">:</span>
+<div class="viewcode-block" id="Schema"><a class="viewcode-back" href="../../model.schema.html#model.schema.Schema">[docs]</a><span class="k">class</span> <span class="nc">Schema</span><span class="p">:</span>
     <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="EDR"><a class="viewcode-back" href="../../model.html#model.schema.EDR">[docs]</a><span class="k">class</span> <span class="nc">EDR</span><span class="p">(</span><span class="n">Schema</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR">[docs]</a><span class="k">class</span> <span class="nc">EDR</span><span class="p">(</span><span class="n">Schema</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schema for EDR.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -68,7 +68,7 @@
     <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;EXTINCTION&#39;</span><span class="p">,</span> <span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="o">/-</span><span class="mf">2.5</span><span class="p">))]</span>
 
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.format_image_filenames"><a class="viewcode-back" href="../../model.html#model.schema.EDR.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
+<div class="viewcode-block" id="EDR.format_image_filenames"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
         <span class="n">images</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;depth&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/depth-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits.gz&#39;</span><span class="p">,</span>
          <span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/image-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
          <span class="s">&#39;model&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/model-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">}</span>
@@ -83,18 +83,18 @@
         <span class="k">return</span> <span class="n">imagerepos</span>
 </div>
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.format_catalogue_filename"><a class="viewcode-back" href="../../model.html#model.schema.EDR.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR.format_catalogue_filename"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
         <span class="n">TRACTOR_FILENAME</span> <span class="o">=</span> <span class="s">&#39;tractor/tractor-</span><span class="si">%(brickid)d</span><span class="s">.fits&#39;</span>
         <span class="k">return</span> <span class="n">TRACTOR_FILENAME</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">brickid</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> 
 </div>
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.parse_filename"><a class="viewcode-back" href="../../model.html#model.schema.EDR.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR.parse_filename"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span>
         <span class="k">return</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span>
                 <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([0123456789]+)\.&#39;</span><span class="p">,</span> 
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
 </div></div>
-<div class="viewcode-block" id="EDR3"><a class="viewcode-back" href="../../model.html#model.schema.EDR3">[docs]</a><span class="k">class</span> <span class="nc">EDR3</span><span class="p">(</span><span class="n">Schema</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR3"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR3">[docs]</a><span class="k">class</span> <span class="nc">EDR3</span><span class="p">(</span><span class="n">Schema</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schema for EDR3.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -102,7 +102,7 @@
     <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;DECAM_EXTINCTION&#39;</span><span class="p">,</span> <span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="o">/-</span><span class="mf">2.5</span><span class="p">))]</span>
     
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.format_image_filenames"><a class="viewcode-back" href="../../model.html#model.schema.EDR3.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
+<div class="viewcode-block" id="EDR3.format_image_filenames"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR3.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
         <span class="n">images</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;depth&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-depth-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
         <span class="s">&#39;model&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-model-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
@@ -120,18 +120,18 @@
         <span class="k">return</span> <span class="n">imagerepos</span>
 </div>
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.format_catalogue_filename"><a class="viewcode-back" href="../../model.html#model.schema.EDR3.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR3.format_catalogue_filename"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR3.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
         <span class="n">TRACTOR_FILENAME</span> <span class="o">=</span> <span class="s">&#39;tractor/</span><span class="si">%(pre)s</span><span class="s">/tractor-</span><span class="si">%(brickname)s</span><span class="s">.fits&#39;</span>
         <span class="k">return</span> <span class="n">TRACTOR_FILENAME</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">brickname</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> </div>
     <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.parse_filename"><a class="viewcode-back" href="../../model.html#model.schema.EDR3.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR3.parse_filename"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR3.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span>
         <span class="n">brickname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([p0123456789]+)\.&#39;</span><span class="p">,</span> 
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">search_by_name</span><span class="p">(</span><span class="n">brickname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bid</span>
 </div></div>
-<div class="viewcode-block" id="EDR4"><a class="viewcode-back" href="../../model.html#model.schema.EDR4">[docs]</a><span class="k">class</span> <span class="nc">EDR4</span><span class="p">(</span><span class="n">EDR3</span><span class="p">):</span>
+<div class="viewcode-block" id="EDR4"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR4">[docs]</a><span class="k">class</span> <span class="nc">EDR4</span><span class="p">(</span><span class="n">EDR3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schema for EDR4.</span>
 <span class="sd">        Changed to DECAM_MW_TRANSMISSION</span>
 
@@ -139,7 +139,7 @@
     <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">pass</span>
 </div>
-<div class="viewcode-block" id="DR1"><a class="viewcode-back" href="../../model.html#model.schema.DR1">[docs]</a><span class="k">class</span> <span class="nc">DR1</span><span class="p">(</span><span class="n">EDR4</span><span class="p">):</span>
+<div class="viewcode-block" id="DR1"><a class="viewcode-back" href="../../model.schema.html#model.schema.DR1">[docs]</a><span class="k">class</span> <span class="nc">DR1</span><span class="p">(</span><span class="n">EDR4</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Schema for DR1. Same as EDR4.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>

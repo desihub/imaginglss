@@ -1,0 +1,7 @@
+model.brickindex module
+=======================
+
+.. automodule:: model.brickindex
+    :members:
+    :undoc-members:
+    :show-inheritance:

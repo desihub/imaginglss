@@ -65,7 +65,7 @@
 
 
 
-<div class="viewcode-block" id="coord2xyz"><a class="viewcode-back" href="../../model.html#model.catalogue.coord2xyz">[docs]</a><span class="k">def</span> <span class="nf">coord2xyz</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
+<div class="viewcode-block" id="coord2xyz"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.coord2xyz">[docs]</a><span class="k">def</span> <span class="nf">coord2xyz</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -77,12 +77,12 @@
     <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">DEC</span> <span class="o">/</span> <span class="mf">180.</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">xyz</span><span class="o">.</span><span class="n">T</span>
 </div>
-<div class="viewcode-block" id="uppercase_dtype"><a class="viewcode-back" href="../../model.html#model.catalogue.uppercase_dtype">[docs]</a><span class="k">def</span> <span class="nf">uppercase_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+<div class="viewcode-block" id="uppercase_dtype"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.uppercase_dtype">[docs]</a><span class="k">def</span> <span class="nf">uppercase_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">])</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dtype</span>
 </div>
-<div class="viewcode-block" id="Catalogue"><a class="viewcode-back" href="../../model.html#model.catalogue.Catalogue">[docs]</a><span class="k">class</span> <span class="nc">Catalogue</span><span class="p">(</span><span class="n">DiskColumnStore</span><span class="p">):</span>
+<div class="viewcode-block" id="Catalogue"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.Catalogue">[docs]</a><span class="k">class</span> <span class="nc">Catalogue</span><span class="p">(</span><span class="n">DiskColumnStore</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for handling object catalogs associated with a data release.</span>
 <span class="sd">    The catalogs are contained in FITS files, but this class caches the</span>
@@ -116,7 +116,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">DiskColumnStore</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Catalogue.fetch"><a class="viewcode-back" href="../../model.html#model.catalogue.Catalogue.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<div class="viewcode-block" id="Catalogue.fetch"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.Catalogue.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">readafile</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
             <span class="c"># FIXME: this reads in the full table .. maybe not a good idea</span>
             <span class="c"># but the files are small ..</span>
@@ -132,7 +132,7 @@
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;Catalogue: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Catalogue.neighbours"><a class="viewcode-back" href="../../model.html#model.catalogue.Catalogue.neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">sep</span><span class="p">):</span>
+<div class="viewcode-block" id="Catalogue.neighbours"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.Catalogue.neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">sep</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
 </pre></div>
 

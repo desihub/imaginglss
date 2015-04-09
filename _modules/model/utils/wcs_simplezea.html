@@ -100,7 +100,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> 
 <span class="kn">import</span> <span class="nn">math</span>
 
-<div class="viewcode-block" id="ang2pix_hdr"><a class="viewcode-back" href="../../../model.utils.html#model.utils.wcs_simplezea.ang2pix_hdr">[docs]</a><span class="k">def</span> <span class="nf">ang2pix_hdr</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ang2pix_hdr"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.ang2pix_hdr">[docs]</a><span class="k">def</span> <span class="nf">ang2pix_hdr</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A convenience function for calling ang2pix, with the transformations</span>
 <span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
@@ -116,7 +116,7 @@
     <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
     <span class="c">#</span>
 </div>
-<div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../model.utils.html#model.utils.wcs_simplezea.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A convenience function for calling pix2ang, with the transformations</span>
 <span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
@@ -154,7 +154,7 @@
                
 
 
-<div class="viewcode-block" id="ang2pix"><a class="viewcode-back" href="../../../model.utils.html#model.utils.wcs_simplezea.ang2pix">[docs]</a><span class="k">def</span> <span class="nf">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
+<div class="viewcode-block" id="ang2pix"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.ang2pix">[docs]</a><span class="k">def</span> <span class="nf">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate </span>
 <span class="sd">    according the the WCS header. Look up Section 5.?.? of </span>
@@ -188,7 +188,7 @@
     <span class="c">#</span>
 
 </div>
-<div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../model.utils.html#model.utils.wcs_simplezea.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
+<div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is the invert transformation of ang2pix. (TAN)</span>
 <span class="sd">    xy = (x, y): coordinate in pixels</span>

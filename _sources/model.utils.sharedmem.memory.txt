@@ -1,0 +1,7 @@
+model.utils.sharedmem.memory module
+===================================
+
+.. automodule:: model.utils.sharedmem.memory
+    :members:
+    :undoc-members:
+    :show-inheritance:

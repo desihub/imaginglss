@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.schema module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model package" href="model.html" />
+    <link rel="next" title="model.sfdmap module" href="model.sfdmap.html" />
+    <link rel="prev" title="model.imagerepo module" href="model.imagerepo.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.sfdmap.html" title="model.sfdmap module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.imagerepo.html" title="model.imagerepo module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.schema">
+<span id="model-schema-module"></span><h1>model.schema module<a class="headerlink" href="#module-model.schema" title="Permalink to this headline">¶</a></h1>
+<p>The schema of DataReleases.</p>
+<p>DataRelease Objects manages the migrating schema of EDR, DR. 
+For example, if a field is renamed in DR from EDR, we want to modify
+the EDR schema such that the code using DataRelease does not have to
+be modified.</p>
+<p>The <cite>version</cite> parameter of <cite>DataRelease.__init__</cite> picks the correct
+schema.</p>
+<dl class="class">
+<dt id="model.schema.DR1">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/schema.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.DR1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.EDR4" title="model.schema.EDR4"><code class="xref py py-class docutils literal"><span class="pre">model.schema.EDR4</span></code></a></p>
+<p>Schema for DR1. Same as EDR4.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR</code><a class="reference internal" href="_modules/model/schema.html#EDR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.Schema" title="model.schema.Schema"><code class="xref py py-class docutils literal"><span class="pre">model.schema.Schema</span></code></a></p>
+<p>Schema for EDR.</p>
+<dl class="attribute">
+<dt id="model.schema.EDR.BRICKS_FILENAME">
+<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'bricks.fits'</em><a class="headerlink" href="#model.schema.EDR.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.schema.EDR.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2188e60&gt;)]</em><a class="headerlink" href="#model.schema.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.format_catalogue_filename">
+<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.format_image_filenames">
+<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.format_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.parse_filename">
+<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.parse_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR3">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR3</code><a class="reference internal" href="_modules/model/schema.html#EDR3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.Schema" title="model.schema.Schema"><code class="xref py py-class docutils literal"><span class="pre">model.schema.Schema</span></code></a></p>
+<p>Schema for EDR3.</p>
+<dl class="attribute">
+<dt id="model.schema.EDR3.BRICKS_FILENAME">
+<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'decals-bricks.fits'</em><a class="headerlink" href="#model.schema.EDR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.schema.EDR3.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x22410c8&gt;)]</em><a class="headerlink" href="#model.schema.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.format_catalogue_filename">
+<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.format_image_filenames">
+<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.format_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.parse_filename">
+<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.parse_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR4">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR4</code><a class="reference internal" href="_modules/model/schema.html#EDR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.EDR3" title="model.schema.EDR3"><code class="xref py py-class docutils literal"><span class="pre">model.schema.EDR3</span></code></a></p>
+<p>Schema for EDR4.
+Changed to DECAM_MW_TRANSMISSION</p>
+<dl class="attribute">
+<dt id="model.schema.EDR4.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#model.schema.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.Schema">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">Schema</code><a class="reference internal" href="_modules/model/schema.html#Schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.Schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.imagerepo.html"
+                        title="previous chapter">model.imagerepo module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.sfdmap.html"
+                        title="next chapter">model.sfdmap module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.schema.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.sfdmap.html" title="model.sfdmap module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.imagerepo.html" title="model.imagerepo module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+model.utils.fsarray module
+==========================
+
+.. automodule:: model.utils.fsarray
+    :members:
+    :undoc-members:
+    :show-inheritance:

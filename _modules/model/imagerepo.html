@@ -50,7 +50,7 @@
 <span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">fits</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 
-<div class="viewcode-block" id="ImageRepo"><a class="viewcode-back" href="../../model.html#model.imagerepo.ImageRepo">[docs]</a><span class="k">class</span> <span class="nc">ImageRepo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageRepo"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo">[docs]</a><span class="k">class</span> <span class="nc">ImageRepo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Image repository.</span>
 <span class="sd">    This class serves as an interface to the file system, the</span>
@@ -79,7 +79,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span> <span class="o">=</span> <span class="p">{}</span> 
 
-<div class="viewcode-block" id="ImageRepo.preload"><a class="viewcode-back" href="../../model.html#model.imagerepo.ImageRepo.preload">[docs]</a>    <span class="k">def</span> <span class="nf">preload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageRepo.preload"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.preload">[docs]</a>    <span class="k">def</span> <span class="nf">preload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; preload the images for </span>
 <span class="sd">            Brick objects listed in bricks list.</span>
 
@@ -88,7 +88,7 @@
         <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
             </div>
-<div class="viewcode-block" id="ImageRepo.open"><a class="viewcode-back" href="../../model.html#model.imagerepo.ImageRepo.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageRepo.open"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; open and read the image for </span>
 <span class="sd">            Brick object brick. The image content is returned</span>
 <span class="sd">            as an array.</span>
@@ -103,7 +103,7 @@
         <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         </div>
-<div class="viewcode-block" id="ImageRepo.metadata"><a class="viewcode-back" href="../../model.html#model.imagerepo.ImageRepo.metadata">[docs]</a>    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageRepo.metadata"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.metadata">[docs]</a>    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Fetch the meta data about a brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">brick</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">:</span>
@@ -111,7 +111,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="ImageRepo.get_filename"><a class="viewcode-back" href="../../model.html#model.imagerepo.ImageRepo.get_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ImageRepo.get_filename"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.get_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
             <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>

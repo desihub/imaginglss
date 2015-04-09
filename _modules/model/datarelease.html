@@ -78,7 +78,7 @@
 
 
 
-<div class="viewcode-block" id="Lazy"><a class="viewcode-back" href="../../model.html#model.datarelease.Lazy">[docs]</a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Lazy"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.Lazy">[docs]</a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Lazy initialization of object attributes.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -92,7 +92,7 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate</span><span class="o">.</span><span class="n">func_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
     </div>
-<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../model.html#model.datarelease.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
+<div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; test if needle is in haystack. </span>
 
 <span class="sd">        </span>
@@ -121,7 +121,7 @@
     <span class="n">ind</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">haystack</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span>
 </div>
-<div class="viewcode-block" id="Footprint"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint">[docs]</a><span class="k">class</span> <span class="nc">Footprint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Footprint"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.Footprint">[docs]</a><span class="k">class</span> <span class="nc">Footprint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; footprint of a data release.</span>
 <span class="sd">        </span>
 <span class="sd">        Attributes</span>
@@ -156,7 +156,7 @@
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+<div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Remove coordinates that are not covered by the footprint </span>
 
 <span class="sd">            Parameters</span>
@@ -174,7 +174,7 @@
         <span class="n">mask</span> <span class="o">=</span> <span class="n">contains</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">,</span> <span class="n">bid</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">coord</span><span class="p">[:,</span> <span class="n">mask</span><span class="p">]</span>
 </div></div>
-<div class="viewcode-block" id="DataRelease"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease">[docs]</a><span class="k">class</span> <span class="nc">DataRelease</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="DataRelease"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.DataRelease">[docs]</a><span class="k">class</span> <span class="nc">DataRelease</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The highest level interface into the data for a given imaging</span>
 <span class="sd">    data release.  Uses several &quot;helper&quot; classes and has methods for</span>
@@ -269,7 +269,7 @@
             <span class="n">aliases</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Readout pixels from an image.</span>
 <span class="sd">            </span>
 <span class="sd">            Parameters</span>

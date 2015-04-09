@@ -1,0 +1,7 @@
+model.utils.columnstore module
+==============================
+
+.. automodule:: model.utils.columnstore
+    :members:
+    :undoc-members:
+    :show-inheritance:

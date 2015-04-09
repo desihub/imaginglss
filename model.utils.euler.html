@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.utils.euler module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model.utils package" href="model.utils.html" />
+    <link rel="next" title="model.utils.fits module" href="model.utils.fits.html" />
+    <link rel="prev" title="model.utils.columnstore module" href="model.utils.columnstore.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.fits.html" title="model.utils.fits module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.columnstore.html" title="model.utils.columnstore module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" accesskey="U">model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.utils.euler">
+<span id="model-utils-euler-module"></span><h1>model.utils.euler module<a class="headerlink" href="#module-model.utils.euler" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="model.utils.euler.euler">
+<code class="descclassname">model.utils.euler.</code><code class="descname">euler</code><span class="sig-paren">(</span><em>ai</em>, <em>bi</em>, <em>select=1</em>, <em>fk4=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/euler.html#euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.euler.euler" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>NAME:</dt>
+<dd>EULER</dd>
+<dt>PURPOSE:</dt>
+<dd>Transform between Galactic, celestial, and ecliptic coordinates.</dd>
+<dt>EXPLANATION:</dt>
+<dd>Use the procedure ASTRO to use this routine interactively</dd>
+<dt>CALLING SEQUENCE:</dt>
+<dd>EULER, AI, BI, AO, BO, [ SELECT, /FK4, SELECT = ]</dd>
+<dt>INPUTS:</dt>
+<dd><dl class="first docutils">
+<dt>AI - Input Longitude in DEGREES, scalar or vector.  If only two</dt>
+<dd>parameters are supplied, then  AI and BI will be modified to
+contain the output longitude and latitude.</dd>
+</dl>
+<p class="last">BI - Input Latitude in DEGREES</p>
+</dd>
+<dt>OPTIONAL INPUT:</dt>
+<dd><blockquote class="first">
+<div>SELECT - Integer (1-6) specifying type of coordinate transformation.</div></blockquote>
+<dl class="docutils">
+<dt>SELECT   From          To        |   SELECT      From            To</dt>
+<dd>1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec
+2     Galactic       RA-DEC     |     5       Ecliptic      Galactic
+3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic</dd>
+</dl>
+<p class="last">If not supplied as a parameter or keyword, then EULER will prompt for
+the value of SELECT
+Celestial coordinates (RA, Dec) should be given in equinox J2000
+unless the /FK4 keyword is set.</p>
+</dd>
+<dt>OUTPUTS:</dt>
+<dd>AO - Output Longitude in DEGREES
+BO - Output Latitude in DEGREES</dd>
+<dt>INPUT KEYWORD:</dt>
+<dd><dl class="first docutils">
+<dt>/FK4 - If this keyword is set and non-zero, then input and output</dt>
+<dd>celestial and ecliptic coordinates should be given in equinox
+B1950.</dd>
+</dl>
+<table class="last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">/SELECT</span></kbd></td>
+<td><ul class="first simple">
+<li>The coordinate conversion integer (1-6) may alternatively be</li>
+</ul>
+<p class="last">specified as a keyword</p>
+</td></tr>
+</tbody>
+</table>
+</dd>
+<dt>NOTES:</dt>
+<dd>EULER was changed in December 1998 to use J2000 coordinates as the
+default, ** and may be incompatible with earlier versions***.</dd>
+<dt>REVISION HISTORY:</dt>
+<dd>Written W. Landsman,  February 1987
+Adapted from Fortran by Daryl Yentis NRL
+Converted to IDL V5.0   W. Landsman   September 1997
+Made J2000 the default, added /FK4 keyword  W. Landsman December 1998
+Add option to specify SELECT as a keyword W. Landsman March 2003</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.utils.columnstore.html"
+                        title="previous chapter">model.utils.columnstore module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.utils.fits.html"
+                        title="next chapter">model.utils.fits module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.utils.euler.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.fits.html" title="model.utils.fits module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.utils.columnstore.html" title="model.utils.columnstore module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="model.utils.html" >model.utils package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

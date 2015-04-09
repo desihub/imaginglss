@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model.datarelease module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="model package" href="model.html" />
+    <link rel="next" title="model.imagerepo module" href="model.imagerepo.html" />
+    <link rel="prev" title="model.catalogue module" href="model.catalogue.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.imagerepo.html" title="model.imagerepo module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.catalogue.html" title="model.catalogue module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-model.datarelease">
+<span id="model-datarelease-module"></span><h1>model.datarelease module<a class="headerlink" href="#module-model.datarelease" title="Permalink to this headline">¶</a></h1>
+<p>Python code to look at the imaging data, containing
+interfaces to deal with &#8220;bricks&#8221; and &#8220;catalogs&#8221;.
+This is the &#8220;highest level&#8221; interface to the
+imaging data and makes use of several lower
+level objects.</p>
+<dl class="class">
+<dt id="model.datarelease.DataRelease">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root=None</em>, <em>cacheroot=None</em>, <em>version=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The highest level interface into the data for a given imaging
+data release.  Uses several &#8220;helper&#8221; classes and has methods for
+looking at pixelized data or catalogs arranged in bricks.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>brickindex</td>
+<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky)</td>
+</tr>
+<tr class="row-even"><td>bands</td>
+<td>(dict) a dictionary translating from band name to integer used in Tractor catalogue</td>
+</tr>
+<tr class="row-odd"><td>catalogue</td>
+<td>(model.catalogue.Catalogue) the concatenated tractor catalogue, accessed by attributes.</td>
+</tr>
+<tr class="row-even"><td>extinction</td>
+<td>(array_like) an array stroing the extinction coeffcients</td>
+</tr>
+<tr class="row-odd"><td>images</td>
+<td>(     model.imagerepo.ImageRepo) image repositories (depth, image, model are by bands, ebv is the extinction map)</td>
+</tr>
+<tr class="row-even"><td>footprint</td>
+<td>(Footprint) the footprint of the data release</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.datarelease.DataRelease.readout">
+<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em>, <em>ignore_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Readout pixels from an image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<blockquote>
+<div><p>coordinates of the pixels, (RA, DEC)</p>
+</div></blockquote>
+<p><strong>repo: ImageRepo</strong></p>
+<blockquote>
+<div><p>the images to read from.</p>
+</div></blockquote>
+<p><strong>default: scalar</strong></p>
+<blockquote>
+<div><p>value to return if the pixel is not in the footprint.</p>
+</div></blockquote>
+<p><strong>image_missing: boolean</strong></p>
+<blockquote class="last">
+<div><p>When ignore_missing is True, missing brick files are treated
+as not in the footprint.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is here, because we want to query multiple images
+at the same time. 
+It is also convenient to have it here to make use of
+brickindex. (ImageRepo is then just a stub with no business logic)</p>
+<p>Otherwise it makes more sense to
+have readout in ImageRepo.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.datarelease.Footprint">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Footprint</code><span class="sig-paren">(</span><em>dr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>footprint of a data release.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>bricks</td>
+<td>(list of model.brick.Brick) A list of Bricks that are covered by the footprint</td>
+</tr>
+<tr class="row-even"><td>range</td>
+<td>( tuple) The range of RA and DEC of all bricks (ramin, ramax, decmin, decmax)</td>
+</tr>
+<tr class="row-odd"><td>area</td>
+<td>(float) Covered outline area in square degrees</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.datarelease.Footprint.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove coordinates that are not covered by the footprint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like, must be compatible with (RA, DEC)</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord_in_footprint: array_like</p>
+<blockquote class="last">
+<div><p>items in the input coord that is in the footprint</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.datarelease.Lazy">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Lazy</code><span class="sig-paren">(</span><em>calculate_function</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Lazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Lazy initialization of object attributes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.datarelease.contains">
+<code class="descclassname">model.datarelease.</code><code class="descname">contains</code><span class="sig-paren">(</span><em>haystack</em>, <em>needle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if needle is in haystack.</p>
+<p>returns mask:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>haystack: array_like</strong></p>
+<blockquote>
+<div><p>Sorted array</p>
+</div></blockquote>
+<p><strong>needle: array_like</strong></p>
+<blockquote>
+<div><p>items to look for</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>mask</strong> : array_like</p>
+<blockquote class="last">
+<div><p>mask[i] is true only if needle[i] is in haystack;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contains</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">[True]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.catalogue.html"
+                        title="previous chapter">model.catalogue module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.imagerepo.html"
+                        title="next chapter">model.imagerepo module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.datarelease.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.imagerepo.html" title="model.imagerepo module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.catalogue.html" title="model.catalogue module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

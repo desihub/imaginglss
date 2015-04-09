@@ -63,7 +63,7 @@
 
 
 
-<div class="viewcode-block" id="Brick"><a class="viewcode-back" href="../../model.html#model.brick.Brick">[docs]</a><span class="k">class</span> <span class="nc">Brick</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Brick"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick">[docs]</a><span class="k">class</span> <span class="nc">Brick</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The base (immutable) object corresponding to an imaging brick.</span>
 <span class="sd">    This object contains only the meta-data, and it calls</span>
@@ -92,7 +92,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="s">&quot;Brick(id=</span><span class="si">%d</span><span class="s">, name=</span><span class="si">%s</span><span class="s">, ra=</span><span class="si">%g</span><span class="s">, dec=</span><span class="si">%g</span><span class="s">, ...)&quot;</span>\
             <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ra</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dec</span> <span class="p">))</span>
 
-<div class="viewcode-block" id="Brick.readout"><a class="viewcode-back" href="../../model.html#model.brick.Brick.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
+<div class="viewcode-block" id="Brick.readout"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return image values at coord=(RA, DEC) using the imagerepository repo.</span>
 <span class="sd">        If the image in this brick does not cover this region,</span>
@@ -113,7 +113,7 @@
         <span class="n">value</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">value</span>
  </div>
-<div class="viewcode-block" id="Brick.query"><a class="viewcode-back" href="../../model.html#model.brick.Brick.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+<div class="viewcode-block" id="Brick.query"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the xy index of pixels at coord</span>
 <span class="sd">        coord can be:</span>
@@ -129,7 +129,7 @@
                 <span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">xy</span>
 </div>
-<div class="viewcode-block" id="Brick.revert"><a class="viewcode-back" href="../../model.html#model.brick.Brick.revert">[docs]</a>    <span class="k">def</span> <span class="nf">revert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
+<div class="viewcode-block" id="Brick.revert"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.revert">[docs]</a>    <span class="k">def</span> <span class="nf">revert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the RA, DEC index of pixels for coord</span>
 <span class="sd">        coord can be:</span>

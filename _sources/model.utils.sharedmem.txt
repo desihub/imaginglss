@@ -4,54 +4,14 @@ model.utils.sharedmem package
 Submodules
 ----------
 
-model.utils.sharedmem.backends module
--------------------------------------
+.. toctree::
 
-.. automodule:: model.utils.sharedmem.backends
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-model.utils.sharedmem.background module
----------------------------------------
-
-.. automodule:: model.utils.sharedmem.background
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-model.utils.sharedmem.mapreduce module
---------------------------------------
-
-.. automodule:: model.utils.sharedmem.mapreduce
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-model.utils.sharedmem.memory module
------------------------------------
-
-.. automodule:: model.utils.sharedmem.memory
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-model.utils.sharedmem.parallel module
--------------------------------------
-
-.. automodule:: model.utils.sharedmem.parallel
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-model.utils.sharedmem.pool module
----------------------------------
-
-.. automodule:: model.utils.sharedmem.pool
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   model.utils.sharedmem.backends
+   model.utils.sharedmem.background
+   model.utils.sharedmem.mapreduce
+   model.utils.sharedmem.memory
+   model.utils.sharedmem.parallel
+   model.utils.sharedmem.pool
 
 Module contents
 ---------------
