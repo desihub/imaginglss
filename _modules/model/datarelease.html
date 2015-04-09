@@ -69,7 +69,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">brickindex</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">imagerepo</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">catalogue</span>
-
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">schema</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
@@ -121,84 +121,6 @@
     <span class="n">ind</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">haystack</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span>
 </div>
-<div class="viewcode-block" id="EDR"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR">[docs]</a><span class="k">class</span> <span class="nc">EDR</span><span class="p">:</span>
-    <span class="n">BRICKS_FILENAME</span> <span class="o">=</span> <span class="s">&#39;bricks.fits&#39;</span>
-    <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;EXTINCTION&#39;</span><span class="p">,</span> <span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="o">/-</span><span class="mf">2.5</span><span class="p">))]</span>
-
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.format_image_filenames"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
-        <span class="n">images</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;depth&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/depth-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits.gz&#39;</span><span class="p">,</span>
-         <span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/image-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
-         <span class="s">&#39;model&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/model-</span><span class="si">%(brickid)d</span><span class="s">-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">}</span>
-        <span class="n">imagerepos</span><span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-            <span class="n">imagerepos</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="s">&#39;rgz&#39;</span><span class="p">:</span>
-                <span class="n">PATTERN</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span>
-                <span class="k">def</span> <span class="nf">getfilename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="n">PATTERN</span><span class="o">=</span><span class="n">PATTERN</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="n">PATTERN</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">brickid</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">)</span>
-                <span class="n">imagerepos</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">]</span> <span class="o">=</span> <span class="n">getfilename</span>
-        <span class="k">return</span> <span class="n">imagerepos</span>
-</div>
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.format_catalogue_filename"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
-        <span class="n">TRACTOR_FILENAME</span> <span class="o">=</span> <span class="s">&#39;tractor/tractor-</span><span class="si">%(brickid)d</span><span class="s">.fits&#39;</span>
-        <span class="k">return</span> <span class="n">TRACTOR_FILENAME</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">brickid</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> 
-</div>
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR.parse_filename"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span>
-        <span class="k">return</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">search_by_id</span><span class="p">(</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([0123456789]+)\.&#39;</span><span class="p">,</span> 
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
-</div></div>
-<div class="viewcode-block" id="EDR3"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR3">[docs]</a><span class="k">class</span> <span class="nc">EDR3</span><span class="p">:</span>
-    <span class="n">BRICKS_FILENAME</span> <span class="o">=</span> <span class="s">&#39;decals-bricks.fits&#39;</span>
-    <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;DECAM_EXTINCTION&#39;</span><span class="p">,</span> <span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="o">/-</span><span class="mf">2.5</span><span class="p">))]</span>
-    
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.format_image_filenames"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR3.format_image_filenames">[docs]</a>    <span class="k">def</span> <span class="nf">format_image_filenames</span><span class="p">():</span>
-        <span class="n">images</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;depth&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-depth-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
-        <span class="s">&#39;model&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-model-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
-        <span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="s">&#39;coadd/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-image-</span><span class="si">%(band)s</span><span class="s">.fits&#39;</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="n">imagerepos</span><span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
-            <span class="n">imagerepos</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="s">&#39;rgz&#39;</span><span class="p">:</span>
-                <span class="n">PATTERN</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span>
-                <span class="k">def</span> <span class="nf">getfilename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="n">PATTERN</span><span class="o">=</span><span class="n">PATTERN</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="n">PATTERN</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">brickname</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">band</span><span class="p">)</span>
-                <span class="n">imagerepos</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">]</span> <span class="o">=</span> <span class="n">getfilename</span>
-
-        <span class="k">return</span> <span class="n">imagerepos</span>
-</div>
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.format_catalogue_filename"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR3.format_catalogue_filename">[docs]</a>    <span class="k">def</span> <span class="nf">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">):</span>
-        <span class="n">TRACTOR_FILENAME</span> <span class="o">=</span> <span class="s">&#39;tractor/</span><span class="si">%(pre)s</span><span class="s">/tractor-</span><span class="si">%(brickname)s</span><span class="s">.fits&#39;</span>
-        <span class="k">return</span> <span class="n">TRACTOR_FILENAME</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">brickname</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> </div>
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="EDR3.parse_filename"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR3.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span>
-        <span class="n">brickname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([p0123456789]+)\.&#39;</span><span class="p">,</span> 
-                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">bid</span> <span class="o">=</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">search_by_name</span><span class="p">(</span><span class="n">brickname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bid</span>
-</div></div>
-<div class="viewcode-block" id="EDR4"><a class="viewcode-back" href="../../model.html#model.datarelease.EDR4">[docs]</a><span class="k">class</span> <span class="nc">EDR4</span><span class="p">(</span><span class="n">EDR3</span><span class="p">):</span>
-    <span class="n">CATALOGUE_ALIASES</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">pass</span>
-</div>
-<div class="viewcode-block" id="DR1"><a class="viewcode-back" href="../../model.html#model.datarelease.DR1">[docs]</a><span class="k">class</span> <span class="nc">DR1</span><span class="p">(</span><span class="n">EDR4</span><span class="p">):</span>
-    <span class="k">pass</span>
-</div>
-<span class="n">_configurations</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&#39;EDR&#39;</span><span class="p">:</span> <span class="n">EDR</span><span class="p">,</span>
-    <span class="s">&#39;EDR3&#39;</span><span class="p">:</span> <span class="n">EDR3</span><span class="p">,</span>
-    <span class="s">&#39;EDR4&#39;</span><span class="p">:</span> <span class="n">EDR4</span><span class="p">,</span>
-    <span class="s">&#39;DR1&#39;</span><span class="p">:</span> <span class="n">DR1</span><span class="p">,</span>
-<span class="p">}</span>
 <div class="viewcode-block" id="Footprint"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint">[docs]</a><span class="k">class</span> <span class="nc">Footprint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; footprint of a data release.</span>
 <span class="sd">        </span>
@@ -288,8 +210,10 @@
         <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">version</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-        <span class="n">config</span> <span class="o">=</span> <span class="n">_configurations</span><span class="p">[</span><span class="n">version</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Data Release of version </span><span class="si">%s</span><span class="s"> is not supported&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
 
+        <span class="n">config</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cacheroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cacheroot</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
 

@@ -240,12 +240,6 @@ This is the &#8220;highest level&#8221; interface to the
 imaging data and makes use of several lower
 level objects.</p>
 <dl class="class">
-<dt id="model.datarelease.DR1">
-<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/datarelease.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DR1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR4" title="model.datarelease.EDR4"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR4</span></code></a></p>
-</dd></dl>
-
-<dl class="class">
 <dt id="model.datarelease.DataRelease">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root=None</em>, <em>cacheroot=None</em>, <em>version=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
@@ -316,77 +310,6 @@ brickindex. (ImageRepo is then just a stub with no business logic)</p>
 <p>Otherwise it makes more sense to
 have readout in ImageRepo.</p>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="model.datarelease.EDR">
-<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR</code><a class="reference internal" href="_modules/model/datarelease.html#EDR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="model.datarelease.EDR.BRICKS_FILENAME">
-<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2051758&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR.format_catalogue_filename">
-<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR.format_image_filenames">
-<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR.format_image_filenames" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR.parse_filename">
-<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR.parse_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="model.datarelease.EDR3">
-<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR3</code><a class="reference internal" href="_modules/model/datarelease.html#EDR3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="attribute">
-<dt id="model.datarelease.EDR3.BRICKS_FILENAME">
-<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'decals-bricks.fits'</em><a class="headerlink" href="#model.datarelease.EDR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2051938&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR3.format_catalogue_filename">
-<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR3.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR3.format_image_filenames">
-<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR3.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3.format_image_filenames" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="model.datarelease.EDR3.parse_filename">
-<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#EDR3.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR3.parse_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="model.datarelease.EDR4">
-<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">EDR4</code><a class="reference internal" href="_modules/model/datarelease.html#EDR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.EDR4" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#model.datarelease.EDR3" title="model.datarelease.EDR3"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.EDR3</span></code></a></p>
-<dl class="attribute">
-<dt id="model.datarelease.EDR4.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#model.datarelease.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
