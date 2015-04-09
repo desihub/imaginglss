@@ -47,12 +47,14 @@
           <div class="body" role="main">
             
   <h1>Source code for model.datarelease</h1><div class="highlight"><pre>
-<span class="c"># Python code to look at the imaging data, containing</span>
-<span class="c"># interfaces to deal with &quot;bricks&quot; and &quot;catalogs&quot;.</span>
-<span class="c"># This is the &quot;highest level&quot; interface to the</span>
-<span class="c"># imaging data and makes use of several lower</span>
-<span class="c"># level objects.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python code to look at the imaging data, containing</span>
+<span class="sd">interfaces to deal with &quot;bricks&quot; and &quot;catalogs&quot;.</span>
+<span class="sd">This is the &quot;highest level&quot; interface to the</span>
+<span class="sd">imaging data and makes use of several lower</span>
+<span class="sd">level objects.</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -77,6 +79,9 @@
 
 
 <div class="viewcode-block" id="Lazy"><a class="viewcode-back" href="../../model.html#model.datarelease.Lazy">[docs]</a><span class="k">class</span> <span class="nc">Lazy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Lazy initialization of object attributes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calculate_function</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate</span> <span class="o">=</span> <span class="n">calculate_function</span>
 
@@ -88,14 +93,30 @@
         <span class="k">return</span> <span class="n">value</span>
     </div>
 <div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../model.html#model.datarelease.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; returns mask:</span>
+    <span class="sd">&quot;&quot;&quot; test if needle is in haystack. </span>
 
-<span class="sd">        len(mask) == len(need), </span>
-<span class="sd">        mask[i] == true only if needle[i] is in haystack;</span>
+<span class="sd">        </span>
+<span class="sd">        returns mask:</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        haystack: array_like</span>
+<span class="sd">            Sorted array</span>
+<span class="sd">        needle: array_like</span>
+<span class="sd">            items to look for</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mask : array_like</span>
+<span class="sd">             mask[i] is true only if needle[i] is in haystack;</span>
 <span class="sd">    </span>
-<span class="sd">        haystack must be sorted.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; contains([1, 2, 3], [2])</span>
+<span class="sd">        [True]</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">haystack</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span>
     <span class="n">ind</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span>
     <span class="n">ind</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">haystack</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span>
@@ -183,13 +204,13 @@
 <span class="sd">        </span>
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
-
-<span class="sd">        bricks : list, model.brick.Brick</span>
-<span class="sd">            covered bricks</span>
+<span class="sd">        bricks : list of model.brick.Brick</span>
+<span class="sd">            A list of Bricks that are covered by the footprint</span>
 <span class="sd">        range :  tuple</span>
+<span class="sd">            The range of RA and DEC of all bricks</span>
 <span class="sd">            (ramin, ramax, decmin, decmax)</span>
 <span class="sd">        area  : float</span>
-<span class="sd">            covered outline area in square degrees</span>
+<span class="sd">            Covered outline area in square degrees</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dr</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="n">dr</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="n">dr</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">]</span>
@@ -212,10 +233,19 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
             <span class="p">)</span>
-<div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; filter coord, remove those are not covered by the current footprint </span>
 
-<span class="sd">            returns coord_in_footprint</span>
+<div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../model.html#model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Remove coordinates that are not covered by the footprint </span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">                coord: array_like, must be compatible with (RA, DEC)</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">                coord_in_footprint: array_like</span>
+<span class="sd">                    items in the input coord that is in the footprint</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
@@ -316,12 +346,22 @@
             <span class="p">)</span>
 
 <div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../model.html#model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; readout pixels at coord.</span>
+        <span class="sd">&quot;&quot;&quot; Readout pixels from an image.</span>
 <span class="sd">            </span>
-<span class="sd">            example:</span>
-<span class="sd">                corrd = (RA, DEC)</span>
-<span class="sd">                repo is fetched from self.images</span>
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            coord: array_like</span>
+<span class="sd">                coordinates of the pixels, (RA, DEC)</span>
+<span class="sd">            repo: ImageRepo</span>
+<span class="sd">                the images to read from.</span>
+<span class="sd">            default: scalar</span>
+<span class="sd">                value to return if the pixel is not in the footprint.</span>
+<span class="sd">            image_missing: boolean</span>
+<span class="sd">                When ignore_missing is True, missing brick files are treated</span>
+<span class="sd">                as not in the footprint.</span>
 
+<span class="sd">            Notes</span>
+<span class="sd">            -----</span>
 <span class="sd">            This is here, because we want to query multiple images</span>
 <span class="sd">            at the same time. </span>
 <span class="sd">            It is also convenient to have it here to make use of</span>

@@ -234,6 +234,11 @@ The main method is fetch.</p>
 </div>
 <div class="section" id="module-model.datarelease">
 <span id="model-datarelease-module"></span><h2>model.datarelease module<a class="headerlink" href="#module-model.datarelease" title="Permalink to this headline">¶</a></h2>
+<p>Python code to look at the imaging data, containing
+interfaces to deal with &#8220;bricks&#8221; and &#8220;catalogs&#8221;.
+This is the &#8220;highest level&#8221; interface to the
+imaging data and makes use of several lower
+level objects.</p>
 <dl class="class">
 <dt id="model.datarelease.DR1">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/datarelease.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DR1" title="Permalink to this definition">¶</a></dt>
@@ -277,12 +282,33 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 <dl class="method">
 <dt id="model.datarelease.DataRelease.readout">
 <code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em>, <em>ignore_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
-<dd><p>readout pixels at coord.</p>
-<dl class="docutils">
-<dt>example:</dt>
-<dd>corrd = (RA, DEC)
-repo is fetched from self.images</dd>
-</dl>
+<dd><p>Readout pixels from an image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<blockquote>
+<div><p>coordinates of the pixels, (RA, DEC)</p>
+</div></blockquote>
+<p><strong>repo: ImageRepo</strong></p>
+<blockquote>
+<div><p>the images to read from.</p>
+</div></blockquote>
+<p><strong>default: scalar</strong></p>
+<blockquote>
+<div><p>value to return if the pixel is not in the footprint.</p>
+</div></blockquote>
+<p><strong>image_missing: boolean</strong></p>
+<blockquote class="last">
+<div><p>When ignore_missing is True, missing brick files are treated
+as not in the footprint.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>This is here, because we want to query multiple images
 at the same time. 
 It is also convenient to have it here to make use of
@@ -303,7 +329,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2162848&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2051758&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -333,7 +359,7 @@ have readout in ImageRepo.</p>
 
 <dl class="attribute">
 <dt id="model.datarelease.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2162a28&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2051938&gt;)]</em><a class="headerlink" href="#model.datarelease.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -372,26 +398,40 @@ have readout in ImageRepo.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="12%" />
-<col width="88%" />
+<col width="7%" />
+<col width="93%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>bricks</td>
-<td>(list, model.brick.Brick) covered bricks</td>
+<td>(list of model.brick.Brick) A list of Bricks that are covered by the footprint</td>
 </tr>
 <tr class="row-even"><td>range</td>
-<td>( tuple) (ramin, ramax, decmin, decmax)</td>
+<td>( tuple) The range of RA and DEC of all bricks (ramin, ramax, decmin, decmax)</td>
 </tr>
 <tr class="row-odd"><td>area</td>
-<td>(float) covered outline area in square degrees</td>
+<td>(float) Covered outline area in square degrees</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="model.datarelease.Footprint.filter">
 <code class="descname">filter</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint.filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>filter coord, remove those are not covered by the current footprint</p>
-<p>returns coord_in_footprint</p>
+<dd><p>Remove coordinates that are not covered by the footprint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like, must be compatible with (RA, DEC)</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord_in_footprint: array_like</p>
+<blockquote class="last">
+<div><p>items in the input coord that is in the footprint</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -400,15 +440,41 @@ have readout in ImageRepo.</p>
 <dt id="model.datarelease.Lazy">
 <em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Lazy</code><span class="sig-paren">(</span><em>calculate_function</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Lazy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Lazy initialization of object attributes.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.datarelease.contains">
 <code class="descclassname">model.datarelease.</code><code class="descname">contains</code><span class="sig-paren">(</span><em>haystack</em>, <em>needle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.contains" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns mask:</p>
-<p>len(mask) == len(need), 
-mask[i] == true only if needle[i] is in haystack;</p>
-<p>haystack must be sorted.</p>
+<dd><p>test if needle is in haystack.</p>
+<p>returns mask:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>haystack: array_like</strong></p>
+<blockquote>
+<div><p>Sorted array</p>
+</div></blockquote>
+<p><strong>needle: array_like</strong></p>
+<blockquote>
+<div><p>items to look for</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>mask</strong> : array_like</p>
+<blockquote class="last">
+<div><p>mask[i] is true only if needle[i] is in haystack;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contains</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">[True]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
