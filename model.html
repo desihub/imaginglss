@@ -1,0 +1,686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model package &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="next" title="model.utils package" href="model.utils.html" />
+    <link rel="prev" title="Welcome to ImagingLSS’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.html" title="model.utils package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ImagingLSS’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="model-package">
+<h1>model package<a class="headerlink" href="#model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model.utils.html">model.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.utils.sharedmem.html">model.utils.sharedmem package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.backends">model.utils.sharedmem.backends module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.background">model.utils.sharedmem.background module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.mapreduce">model.utils.sharedmem.mapreduce module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.memory">model.utils.sharedmem.memory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.parallel">model.utils.sharedmem.parallel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem.pool">model.utils.sharedmem.pool module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model.utils.sharedmem.html#module-model.utils.sharedmem">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.columnstore">model.utils.columnstore module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.euler">model.utils.euler module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.fits">model.utils.fits module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.fsarray">model.utils.fsarray module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.kdtree">model.utils.kdtree module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.wcs_simplezea">model.utils.wcs_simplezea module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils.wcs_tangent">model.utils.wcs_tangent module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.utils.html#module-model.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-model.brick">
+<span id="model-brick-module"></span><h2>model.brick module<a class="headerlink" href="#module-model.brick" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.brick.Brick">
+<em class="property">class </em><code class="descclassname">model.brick.</code><code class="descname">Brick</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>ra</em>, <em>dec</em>, <em>ra1</em>, <em>ra2</em>, <em>dec1</em>, <em>dec2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The base (immutable) object corresponding to an imaging brick.
+This object contains only the meta-data, and it calls
+imagerepo to handle looking up the pixel-level information.
+Major methods are &#8220;readout&#8221;, &#8220;query&#8221; and &#8220;revert&#8221;.</p>
+<dl class="method">
+<dt id="model.brick.Brick.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>repo</em>, <em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the xy index of pixels at coord
+coord can be:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>(RA, DEC) tuple of arrays</dt>
+<dd>array of shape (2xN) RA DEC</dd>
+</dl>
+</div></blockquote>
+<p>In either case returns a (2xN) array
+Note that the returned array is in a x-first-varying order.
+To index the ndarray image, use [y, x].</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brick.Brick.readout">
+<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return image values at coord=(RA, DEC) using the imagerepository repo.
+If the image in this brick does not cover this region,
+put in <a href="#id1"><span class="problematic" id="id2">`</span></a>default&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brick.Brick.revert">
+<code class="descname">revert</code><span class="sig-paren">(</span><em>repo</em>, <em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brick.html#Brick.revert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brick.Brick.revert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the RA, DEC index of pixels for coord
+coord can be:</p>
+<blockquote>
+<div>(x, y) tuple of arrays
+array of shape (2xN) x, y</div></blockquote>
+<p>In either case returns a (2xN) array.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.brickindex">
+<span id="model-brickindex-module"></span><h2>model.brickindex module<a class="headerlink" href="#module-model.brickindex" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.brickindex.BrickIndex">
+<em class="property">class </em><code class="descclassname">model.brickindex.</code><code class="descname">BrickIndex</code><span class="sig-paren">(</span><em>brickdata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Manages a high level table/list/index of bricks.
+Contains methods for organizing and querying bricks
+or returning brick objects.</p>
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.get_brick">
+<code class="descname">get_brick</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.get_brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.get_brick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain a single brick from index.
+The returned Brick object is immutable; there is only
+a single instance per BrickIndex.
+The lack of a vector version is on purpose to emphasize
+we are dealing with objects. (YF: maybe not a good idea?)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.optimize">
+<code class="descname">optimize</code><span class="sig-paren">(</span><em>coord</em>, <em>return_index=False</em>, <em>return_inverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.optimize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimize the ordering of coord=(RA,DEC) to make later queries faster.
+RA and DEC are sorted by their brickid, to group future queries.</p>
+<p>if return_inverse is True, returns the array that can be used to
+reconstruct coord from the returned coord.</p>
+<blockquote>
+<div>sorted_ra[ iindices] == ra
+sorted_dec[iindices] == dec</div></blockquote>
+<p>if return_index is True, returns the array that can be used to
+construct sorted_coord from coord:</p>
+<blockquote>
+<div>sorted_ra == ra[indices]
+sorted_dec == dec[indices]</div></blockquote>
+<dl class="docutils">
+<dt>returns sorted_coord, indices, iindices or</dt>
+<dd>sorted_coord, iindices or
+sorted_coord, indices or
+sorted_coord</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the internal index of a brick at coord=(RA,DEC) in
+decimal degrees.  This internal index can differ from BRICKID.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.search_by_id">
+<code class="descname">search_by_id</code><span class="sig-paren">(</span><em>brickid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.search_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.search_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>search the brickindex for bricks with a given brickid.
+returns the internal index of bricks.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.brickindex.BrickIndex.search_by_name">
+<code class="descname">search_by_name</code><span class="sig-paren">(</span><em>brickname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/brickindex.html#BrickIndex.search_by_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.brickindex.BrickIndex.search_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>search the brickindex for bricks with a given name.
+returns the internal index of bricks.
+Get Brick objects by iterating over the result and using get_brick(i)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.catalogue">
+<span id="model-catalogue-module"></span><h2>model.catalogue module<a class="headerlink" href="#module-model.catalogue" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.catalogue.Catalogue">
+<em class="property">class </em><code class="descclassname">model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>filenames</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="model.utils.html#model.utils.columnstore.DiskColumnStore" title="model.utils.columnstore.DiskColumnStore"><code class="xref py py-class docutils literal"><span class="pre">model.utils.columnstore.DiskColumnStore</span></code></a></p>
+<p>Class for handling object catalogs associated with a data release.
+The catalogs are contained in FITS files, but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory.
+The columns are cached into cachedir, which is initialized 
+by the DataRelease object.
+We assume the catalogue is split into multiple files.
+and the list of file names are provided as an input.
+The main method is fetch.</p>
+<dl class="method">
+<dt id="model.catalogue.Catalogue.fetch">
+<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.catalogue.Catalogue.neighbours">
+<code class="descname">neighbours</code><span class="sig-paren">(</span><em>coord</em>, <em>sep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.neighbours" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="model.catalogue.coord2xyz">
+<code class="descclassname">model.catalogue.</code><code class="descname">coord2xyz</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#coord2xyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.coord2xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.catalogue.uppercase_dtype">
+<code class="descclassname">model.catalogue.</code><code class="descname">uppercase_dtype</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#uppercase_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.uppercase_dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model.datarelease">
+<span id="model-datarelease-module"></span><h2>model.datarelease module<a class="headerlink" href="#module-model.datarelease" title="Permalink to this headline">¶</a></h2>
+<p>Python code to look at the imaging data, containing
+interfaces to deal with &#8220;bricks&#8221; and &#8220;catalogs&#8221;.
+This is the &#8220;highest level&#8221; interface to the
+imaging data and makes use of several lower
+level objects.</p>
+<dl class="class">
+<dt id="model.datarelease.DataRelease">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root=None</em>, <em>cacheroot=None</em>, <em>version=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The highest level interface into the data for a given imaging
+data release.  Uses several &#8220;helper&#8221; classes and has methods for
+looking at pixelized data or catalogs arranged in bricks.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="92%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>brickindex</td>
+<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky)</td>
+</tr>
+<tr class="row-even"><td>bands</td>
+<td>(dict) a dictionary translating from band name to integer used in Tractor catalogue</td>
+</tr>
+<tr class="row-odd"><td>catalogue</td>
+<td>(model.catalogue.Catalogue) the concatenated tractor catalogue, accessed by attributes.</td>
+</tr>
+<tr class="row-even"><td>extinction</td>
+<td>(array_like) an array stroing the extinction coeffcients</td>
+</tr>
+<tr class="row-odd"><td>images</td>
+<td>(     model.imagerepo.ImageRepo) image repositories (depth, image, model are by bands, ebv is the extinction map)</td>
+</tr>
+<tr class="row-even"><td>footprint</td>
+<td>(Footprint) the footprint of the data release</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.datarelease.DataRelease.readout">
+<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em>, <em>ignore_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Readout pixels from an image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<blockquote>
+<div><p>coordinates of the pixels, (RA, DEC)</p>
+</div></blockquote>
+<p><strong>repo: ImageRepo</strong></p>
+<blockquote>
+<div><p>the images to read from.</p>
+</div></blockquote>
+<p><strong>default: scalar</strong></p>
+<blockquote>
+<div><p>value to return if the pixel is not in the footprint.</p>
+</div></blockquote>
+<p><strong>image_missing: boolean</strong></p>
+<blockquote class="last">
+<div><p>When ignore_missing is True, missing brick files are treated
+as not in the footprint.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is here, because we want to query multiple images
+at the same time. 
+It is also convenient to have it here to make use of
+brickindex. (ImageRepo is then just a stub with no business logic)</p>
+<p>Otherwise it makes more sense to
+have readout in ImageRepo.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.datarelease.Footprint">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Footprint</code><span class="sig-paren">(</span><em>dr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>footprint of a data release.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>bricks</td>
+<td>(list of model.brick.Brick) A list of Bricks that are covered by the footprint</td>
+</tr>
+<tr class="row-even"><td>range</td>
+<td>( tuple) The range of RA and DEC of all bricks (ramin, ramax, decmin, decmax)</td>
+</tr>
+<tr class="row-odd"><td>area</td>
+<td>(float) Covered outline area in square degrees</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="model.datarelease.Footprint.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Footprint.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Footprint.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove coordinates that are not covered by the footprint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like, must be compatible with (RA, DEC)</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord_in_footprint: array_like</p>
+<blockquote class="last">
+<div><p>items in the input coord that is in the footprint</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.datarelease.Lazy">
+<em class="property">class </em><code class="descclassname">model.datarelease.</code><code class="descname">Lazy</code><span class="sig-paren">(</span><em>calculate_function</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#Lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.Lazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Lazy initialization of object attributes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.datarelease.contains">
+<code class="descclassname">model.datarelease.</code><code class="descname">contains</code><span class="sig-paren">(</span><em>haystack</em>, <em>needle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>test if needle is in haystack.</p>
+<p>returns mask:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>haystack: array_like</strong></p>
+<blockquote>
+<div><p>Sorted array</p>
+</div></blockquote>
+<p><strong>needle: array_like</strong></p>
+<blockquote>
+<div><p>items to look for</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>mask</strong> : array_like</p>
+<blockquote class="last">
+<div><p>mask[i] is true only if needle[i] is in haystack;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">contains</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="go">[True]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.imagerepo">
+<span id="model-imagerepo-module"></span><h2>model.imagerepo module<a class="headerlink" href="#module-model.imagerepo" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.imagerepo.ImageRepo">
+<em class="property">class </em><code class="descclassname">model.imagerepo.</code><code class="descname">ImageRepo</code><span class="sig-paren">(</span><em>root</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Image repository.
+This class serves as an interface to the file system, the
+layout of files and IO for brick files.
+Given a Brick object, ImageRepo can return the image data
+or meta data of the image.
+Standard users should not need to modify this class.</p>
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.get_filename">
+<code class="descname">get_filename</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.get_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.metadata">
+<code class="descname">metadata</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the meta data about a brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>open and read the image for 
+Brick object brick. The image content is returned
+as an array.</p>
+<p><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs is unused</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="model.imagerepo.ImageRepo.preload">
+<code class="descname">preload</code><span class="sig-paren">(</span><em>bricks</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.preload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.preload" title="Permalink to this definition">¶</a></dt>
+<dd><p>preload the images for 
+Brick objects listed in bricks list.</p>
+<p><a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs is unused</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-model.schema">
+<span id="model-schema-module"></span><h2>model.schema module<a class="headerlink" href="#module-model.schema" title="Permalink to this headline">¶</a></h2>
+<p>The schema of DataReleases.</p>
+<p>DataRelease Objects manages the migrating schema of EDR, DR. 
+For example, if a field is renamed in DR from EDR, we want to modify
+the EDR schema such that the code using DataRelease does not have to
+be modified.</p>
+<p>The <cite>version</cite> parameter of <cite>DataRelease.__init__</cite> picks the correct
+schema.</p>
+<dl class="class">
+<dt id="model.schema.DR1">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">DR1</code><a class="reference internal" href="_modules/model/schema.html#DR1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.DR1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.EDR4" title="model.schema.EDR4"><code class="xref py py-class docutils literal"><span class="pre">model.schema.EDR4</span></code></a></p>
+<p>Schema for DR1. Same as EDR4.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR</code><a class="reference internal" href="_modules/model/schema.html#EDR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.Schema" title="model.schema.Schema"><code class="xref py py-class docutils literal"><span class="pre">model.schema.Schema</span></code></a></p>
+<p>Schema for EDR.</p>
+<dl class="attribute">
+<dt id="model.schema.EDR.BRICKS_FILENAME">
+<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'bricks.fits'</em><a class="headerlink" href="#model.schema.EDR.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.schema.EDR.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x2126410&gt;)]</em><a class="headerlink" href="#model.schema.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.format_catalogue_filename">
+<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.format_image_filenames">
+<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.format_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR.parse_filename">
+<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR.parse_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR3">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR3</code><a class="reference internal" href="_modules/model/schema.html#EDR3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.Schema" title="model.schema.Schema"><code class="xref py py-class docutils literal"><span class="pre">model.schema.Schema</span></code></a></p>
+<p>Schema for EDR3.</p>
+<dl class="attribute">
+<dt id="model.schema.EDR3.BRICKS_FILENAME">
+<code class="descname">BRICKS_FILENAME</code><em class="property"> = 'decals-bricks.fits'</em><a class="headerlink" href="#model.schema.EDR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.schema.EDR3.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x21265f0&gt;)]</em><a class="headerlink" href="#model.schema.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.format_catalogue_filename">
+<em class="property">static </em><code class="descname">format_catalogue_filename</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.format_catalogue_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.format_catalogue_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.format_image_filenames">
+<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.format_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="model.schema.EDR3.parse_filename">
+<em class="property">static </em><code class="descname">parse_filename</code><span class="sig-paren">(</span><em>filename</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/schema.html#EDR3.parse_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR3.parse_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.EDR4">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">EDR4</code><a class="reference internal" href="_modules/model/schema.html#EDR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.EDR4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#model.schema.EDR3" title="model.schema.EDR3"><code class="xref py py-class docutils literal"><span class="pre">model.schema.EDR3</span></code></a></p>
+<p>Schema for EDR4.
+Changed to DECAM_MW_TRANSMISSION</p>
+<dl class="attribute">
+<dt id="model.schema.EDR4.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#model.schema.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.schema.Schema">
+<em class="property">class </em><code class="descclassname">model.schema.</code><code class="descname">Schema</code><a class="reference internal" href="_modules/model/schema.html#Schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.schema.Schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model.sfdmap">
+<span id="model-sfdmap-module"></span><h2>model.sfdmap module<a class="headerlink" href="#module-model.sfdmap" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="model.sfdmap.SFDMap">
+<em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">SFDMap</code><span class="sig-paren">(</span><em>ngp_filename=None</em>, <em>sgp_filename=None</em>, <em>dustdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="staticmethod">
+<dt id="model.sfdmap.SFDMap.bilinear_interp_nonzero">
+<em class="property">static </em><code class="descname">bilinear_interp_nonzero</code><span class="sig-paren">(</span><em>image</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.bilinear_interp_nonzero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.bilinear_interp_nonzero" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.sfdmap.SFDMap.ebv">
+<code class="descname">ebv</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.ebv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.ebv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.sfdmap.SFDMap.extinction">
+<code class="descname">extinction</code><span class="sig-paren">(</span><em>filts</em>, <em>ra</em>, <em>dec</em>, <em>get_ebv=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.extinction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.extinction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.sfdmap.SFDMap.extinctions">
+<code class="descname">extinctions</code><em class="property"> = {'DES i': 1.592, 'DES g': 3.214, 'DES z': 1.211, 'DES u': 3.995, 'DES r': 2.165, 'SDSS u': 4.239, 'WISE W2': 0.113, 'WISE W3': 0.0241, 'WISE W1': 0.184, 'DES Y': 1.064, 'WISE W4': 0.0091}</em><a class="headerlink" href="#model.sfdmap.SFDMap.extinctions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.sfdmap.anwcs_t">
+<em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">anwcs_t</code><span class="sig-paren">(</span><em>filename</em>, <em>hduid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="model.sfdmap.anwcs_t.radec2pixelxy">
+<code class="descname">radec2pixelxy</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t.radec2pixelxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t.radec2pixelxy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sfdmap.radectolb">
+<code class="descclassname">model.sfdmap.</code><code class="descname">radectolb</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#radectolb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.radectolb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">model package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-model.brick">model.brick module</a></li>
+<li><a class="reference internal" href="#module-model.brickindex">model.brickindex module</a></li>
+<li><a class="reference internal" href="#module-model.catalogue">model.catalogue module</a></li>
+<li><a class="reference internal" href="#module-model.datarelease">model.datarelease module</a></li>
+<li><a class="reference internal" href="#module-model.imagerepo">model.imagerepo module</a></li>
+<li><a class="reference internal" href="#module-model.schema">model.schema module</a></li>
+<li><a class="reference internal" href="#module-model.sfdmap">model.sfdmap module</a></li>
+<li><a class="reference internal" href="#module-model">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to ImagingLSS&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model.utils.html"
+                        title="next chapter">model.utils package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/model.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="model.utils.html" title="model.utils package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to ImagingLSS’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>
