@@ -39,6 +39,7 @@ A DataRelease has several image repositories, for example,
  - DataRelease.images['depth']['u'] : the 'u' band inverse variance depth images
  - DataRelease.images['image']['u'] : the coadded 'u' band image in nanomaggies
  - DataRelease.images['model']['u'] : the model 'u' band image in nanomaggies; 
+
 or what tractor thinks the sky looks like.
 
 brick.Brick holds metadata for each Brick, including the central 'ra',
