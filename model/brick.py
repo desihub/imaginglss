@@ -21,7 +21,8 @@ class Brick(object):
     The base (immutable) object corresponding to an imaging brick.
     This object contains only the meta-data, and is immutable.
 
-    Use ImageRepo to handle looking up the pixel-level information.
+    It uses :py:class:`~model.imagerepo.ImageRepo` to handle 
+    looking up the pixel-level information.
 
     Attributes
     ----------
@@ -74,7 +75,7 @@ class Brick(object):
         ----------
         coord: array_like
             Coordinate of the pixels, coord=(RA, DEC)
-        repo: ImageRepo
+        repo: :py:class:`~model.imagerepo.ImageRepo`
             Image repository to read from. Refer to DataRelease.images.
         default:
             Default value to return if the pixel is outside of the brick.
@@ -109,7 +110,7 @@ class Brick(object):
 
         Parameters
         ----------
-        repo: ImageRepo
+        repo: :py:class:`~model.imagerepo.ImageRepo`
             image repository that contains the necessary transformation
             for this brick
         coord: array_like 
@@ -133,7 +134,7 @@ class Brick(object):
 
         Parameters
         ----------
-        repo: ImageRepo
+        repo: :py:class:`~model.imagerepo.ImageRepo`
             image repository that contains the necessary transformation
             for this brick
         xy: array_like
