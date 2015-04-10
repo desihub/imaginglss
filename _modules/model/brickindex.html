@@ -47,11 +47,12 @@
           <div class="body" role="main">
             
   <h1>Source code for model.brickindex</h1><div class="highlight"><pre>
-<span class="c"># Python code to provide a high level table/list/index of</span>
-<span class="c"># bricks, and methods for organizing and querying them and</span>
-<span class="c"># returning brick objects.</span>
-<span class="c">#</span>
-<span class="c">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python code to provide a high level table/list/index of</span>
+<span class="sd">bricks, and methods for organizing and querying them and</span>
+<span class="sd">returning brick objects.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
@@ -65,18 +66,32 @@
 
 <div class="viewcode-block" id="BrickIndex"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex">[docs]</a><span class="k">class</span> <span class="nc">BrickIndex</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Manages a high level table/list/index of bricks.</span>
-<span class="sd">    Contains methods for organizing and querying bricks</span>
+<span class="sd">    BrickIndex manages a high level table/list/index of bricks.</span>
+
+<span class="sd">    It contains methods for organizing and querying bricks</span>
 <span class="sd">    or returning brick objects.</span>
+
+<span class="sd">    The FITS file &#39;bricks.fits&#39; within each imaging data release</span>
+<span class="sd">    contains meta-data about each of the bricks in the release.</span>
+
+<span class="sd">    We generate an index from bricks.fits , e.g.</span>
+
+<span class="sd">    &gt;&gt;&gt; brickdata = fits.read_table(&#39;bricks.fits&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; bi = BrickIndex(brickdata) </span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The bricks in DECALS are first divided as uniform DEC rows. </span>
+<span class="sd">    The number of bricks changes with DEC, such that each brick</span>
+<span class="sd">    as apporximately same area.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickdata</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">        The FITS file &#39;bricks.fits&#39; within each imaging data release</span>
-<span class="sd">        contains meta-data about each of the bricks in the release.</span>
-
-<span class="sd">        We generate an index from bricks.fits , e.g.</span>
-<span class="sd">        brickdata = fits.read_table(&#39;bricks.fits&#39;)</span>
-<span class="sd">        bi = BrickIndex(brickdata) </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brickdata: array_like</span>
+<span class="sd">            contents of `bricks.fits`.</span>
 <span class="sd">    </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">brickdata</span><span class="p">[:],</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -110,10 +125,28 @@
 <div class="viewcode-block" id="BrickIndex.get_brick"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.get_brick">[docs]</a>    <span class="k">def</span> <span class="nf">get_brick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Obtain a single brick from index.</span>
+
 <span class="sd">        The returned Brick object is immutable; there is only</span>
 <span class="sd">        a single instance per BrickIndex.</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index: integer</span>
+<span class="sd">            The internal index of a brick. This differ from BRICKID</span>
+<span class="sd">            in the catalogue.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        brick: Brick</span>
+<span class="sd">            A brick object at index.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
 <span class="sd">        The lack of a vector version is on purpose to emphasize</span>
-<span class="sd">        we are dealing with objects. (YF: maybe not a good idea?)</span>
+<span class="sd">        we are dealing with objects. </span>
+
+<span class="sd">        Use `:py:meth:get_bricks` to create a list of objects.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
             <span class="n">brick</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
@@ -127,11 +160,40 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 </div>
+<div class="viewcode-block" id="BrickIndex.get_bricks"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.get_bricks">[docs]</a>    <span class="k">def</span> <span class="nf">get_bricks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Obtain a list of bricks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indices: array_like</span>
+<span class="sd">            Indices to obtain bricks</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bricks: list</span>
+<span class="sd">            A list of bricks.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+</div>
 <div class="viewcode-block" id="BrickIndex.search_by_name"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.search_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        search the brickindex for bricks with a given name.</span>
-<span class="sd">        returns the internal index of bricks.</span>
-<span class="sd">        Get Brick objects by iterating over the result and using get_brick(i)</span>
+<span class="sd">        Search the brickindex for bricks with a given name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brickname: string</span>
+<span class="sd">            the matching BRICKNAME.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index: integer</span>
+<span class="sd">            The internal index of bricks.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This function is not vectorized.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">foo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">brickname</span>
@@ -140,9 +202,22 @@
  </div>
 <div class="viewcode-block" id="BrickIndex.search_by_id"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.search_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        search the brickindex for bricks with a given brickid.</span>
-<span class="sd">        returns the internal index of bricks.</span>
-<span class="sd">        Get Brick objects by iterating over the result and using get_brick(i)</span>
+<span class="sd">        Search the brickindex for bricks with a given brickid.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brickid: integer or array_like</span>
+<span class="sd">            the matching BRICKID or list of BRICKIDs</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------- </span>
+<span class="sd">        index:  integer or array_like</span>
+<span class="sd">            the internal index of brick or bricks (for array_like input)</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Get Brick objects with :py:meth:`get_bricks` or :py:meth:`get_brick`.</span>
+<span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">brickid</span><span class="p">)</span>
         <span class="n">rt</span> <span class="o">=</span> <span class="n">rt</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -155,8 +230,16 @@
 <div class="viewcode-block" id="BrickIndex.query"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Returns the internal index of a brick at coord=(RA,DEC) in</span>
-<span class="sd">        decimal degrees.  This internal index can differ from BRICKID.</span>
-<span class="sd">        Get Brick objects by iterating over the result and using get_brick(i)</span>
+<span class="sd">        decimal degrees.  </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        coord: array_like</span>
+<span class="sd">            coord = (RA, DEC) in degrees, vectorized.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Get Brick objects with :py:meth:`get_bricks` or :py:meth:`get_brick`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RA</span><span class="p">,</span> <span class="n">DEC</span> <span class="o">=</span> <span class="n">coord</span>
         <span class="n">RA</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">RA</span><span class="p">)</span>
@@ -172,24 +255,33 @@
 <div class="viewcode-block" id="BrickIndex.optimize"><a class="viewcode-back" href="../../model.brickindex.html#model.brickindex.BrickIndex.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Optimize the ordering of coord=(RA,DEC) to make later queries faster.</span>
+
 <span class="sd">        RA and DEC are sorted by their brickid, to group future queries.</span>
 
-<span class="sd">        if return_inverse is True, returns the array that can be used to</span>
-<span class="sd">        reconstruct coord from the returned coord.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        return_inverse: boolean</span>
+<span class="sd">            if True, returns the array that can be used to</span>
+<span class="sd">            reconstruct coord from the returned coord.</span>
+<span class="sd">        return_index: boolean</span>
+<span class="sd">            if True, returns the array that can be used to</span>
+<span class="sd">            construct sorted_coord from coord:</span>
 
-<span class="sd">                sorted_ra[ iindices] == ra</span>
-<span class="sd">                sorted_dec[iindices] == dec</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Depending or return_inverse and return_index, may return</span>
+<span class="sd">        (sorted_coord, indices, iindices), (sorted_coord, iindices)</span>
+<span class="sd">        (sorted_coord, indices), or sorted_coord</span>
 
-<span class="sd">        if return_index is True, returns the array that can be used to</span>
-<span class="sd">        construct sorted_coord from coord:</span>
+<span class="sd">        sorted_coord: array_like</span>
+<span class="sd">            Optimized coord array, that is sorted by bricks.</span>
+<span class="sd">        iindeces: array_like</span>
+<span class="sd">            sorted_ra[ iindices] == ra</span>
+<span class="sd">            sorted_dec[iindices] == dec</span>
+<span class="sd">        indices: array_like</span>
+<span class="sd">            sorted_ra == ra[indices]</span>
+<span class="sd">            sorted_dec == dec[indices]</span>
 
-<span class="sd">                sorted_ra == ra[indices]</span>
-<span class="sd">                sorted_dec == dec[indices]</span>
-
-<span class="sd">        returns sorted_coord, indices, iindices or</span>
-<span class="sd">                sorted_coord, iindices or</span>
-<span class="sd">                sorted_coord, indices or</span>
-<span class="sd">                sorted_coord</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
