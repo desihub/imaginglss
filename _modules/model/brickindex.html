@@ -79,6 +79,12 @@
 <span class="sd">    &gt;&gt;&gt; brickdata = fits.read_table(&#39;bricks.fits&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; bi = BrickIndex(brickdata) </span>
 
+<span class="sd">    However, a BrickIndex object is usually automatically handled by </span>
+<span class="sd">    :py:class:`~model.datarelease.DataRelease`, and one shall use</span>
+
+<span class="sd">    &gt;&gt;&gt; dr = DataRelease()</span>
+<span class="sd">    &gt;&gt;&gt; dr.brickindex</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The bricks in DECALS are first divided as uniform DEC rows. </span>

@@ -73,6 +73,12 @@ contains meta-data about each of the bricks in the release.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bi</span> <span class="o">=</span> <span class="n">BrickIndex</span><span class="p">(</span><span class="n">brickdata</span><span class="p">)</span> 
 </pre></div>
 </div>
+<p>However, a BrickIndex object is usually automatically handled by 
+<a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease" title="model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">DataRelease</span></code></a>, and one shall use</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">brickindex</span>
+</pre></div>
+</div>
 <p class="rubric">Notes</p>
 <p>The bricks in DECALS are first divided as uniform DEC rows. 
 The number of bricks changes with DEC, such that each brick
