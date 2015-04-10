@@ -79,39 +79,41 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span> <span class="o">=</span> <span class="p">{}</span> 
 
 <div class="viewcode-block" id="ImageRepo.preload"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.preload">[docs]</a>    <span class="k">def</span> <span class="nf">preload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Preload images into the cache</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Preload images into the cache</span>
 <span class="sd">    </span>
-<span class="sd">            This function loads images for given bricks into the cache.</span>
-<span class="sd">            In generate the function is not useful, and we shall</span>
-<span class="sd">            try to remove it soon.</span>
+<span class="sd">        This function loads images for given bricks into the cache.</span>
+<span class="sd">        In generate the function is not useful, and we shall</span>
+<span class="sd">        try to remove it soon.</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            bricks: list of :py:class:`~model.brick.Brick`</span>
-<span class="sd">                the bricks whose images will be loaded</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        bricks: list of :py:class:`~model.brick.Brick`</span>
+<span class="sd">            the bricks whose images will be loaded</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> 
             </div>
 <div class="viewcode-block" id="ImageRepo.open"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Open and read an image.</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Open and read an image.</span>
 
-<span class="sd">            The image for Brick object brick is read into memory and returned.</span>
-<span class="sd">            If the image is already in cache, return the cache.</span>
-<span class="sd">            </span>
-<span class="sd">            This function does not add the image to cache.</span>
+<span class="sd">        The image for Brick object brick is read into memory and returned.</span>
+<span class="sd">        If the image is already in cache, return the cache.</span>
+<span class="sd">        </span>
+<span class="sd">        This function does not add the image to cache.</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            brick: :py:class:`~model.brick.Brick`</span>
-<span class="sd">                the brick whose image will be loaded</span>
-<span class="sd">            </span>
-<span class="sd">            Returns</span>
-<span class="sd">            -------</span>
-<span class="sd">            image: array_like</span>
-<span class="sd">                the image as an ndarray, as the ordering in FITS files.</span>
-<span class="sd">                (index with (y, x))</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brick: :py:class:`~model.brick.Brick`</span>
+<span class="sd">            the brick whose image will be loaded</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        image: array_like</span>
+<span class="sd">            the image as an ndarray, as the ordering in FITS files.</span>
+<span class="sd">            (index with (y, x))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
@@ -122,18 +124,19 @@
         <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         </div>
 <div class="viewcode-block" id="ImageRepo.metadata"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.metadata">[docs]</a>    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Fetch the meta data about a brick.</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Fetch the meta data about a brick.</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            brick: :py:class:`~model.brick.Brick`</span>
-<span class="sd">                the brick whose metadata will be loaded</span>
-<span class="sd">            </span>
-<span class="sd">            Returns</span>
-<span class="sd">            -------</span>
-<span class="sd">            metadata: dict</span>
-<span class="sd">                the metadata as a dictionary. Currently this is the</span>
-<span class="sd">                FITS header</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brick: :py:class:`~model.brick.Brick`</span>
+<span class="sd">            the brick whose metadata will be loaded</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        metadata: dict</span>
+<span class="sd">            the metadata as a dictionary. Currently this is the</span>
+<span class="sd">            FITS header</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">brick</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">:</span>
             <span class="n">meta</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
@@ -141,20 +144,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="ImageRepo.get_filename"><a class="viewcode-back" href="../../model.imagerepo.html#model.imagerepo.ImageRepo.get_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Generate a filename.</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Generate a filename.</span>
 
-<span class="sd">            Generate a filename for a brick. </span>
+<span class="sd">        Generate a filename for a brick. </span>
 
-<span class="sd">            Notes</span>
-<span class="sd">            -----</span>
-<span class="sd">            We also try to generate</span>
-<span class="sd">            a .gz filename, if the original filename does not exist.</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        We also try to generate</span>
+<span class="sd">        a .gz filename, if the original filename does not exist.</span>
 
-<span class="sd">            Parameters</span>
-<span class="sd">            ----------</span>
-<span class="sd">            brick: :py:class:`~model.brick.Brick`</span>
-<span class="sd">                the brick whose filename will be generated.</span>
-<span class="sd">             </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        brick: :py:class:`~model.brick.Brick`</span>
+<span class="sd">            the brick whose filename will be generated.</span>
+<span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
             <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
