@@ -60,70 +60,67 @@
 <dl class="function">
 <dt id="model.utils.euler.euler">
 <code class="descclassname">model.utils.euler.</code><code class="descname">euler</code><span class="sig-paren">(</span><em>ai</em>, <em>bi</em>, <em>select=1</em>, <em>fk4=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/euler.html#euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.euler.euler" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>NAME:</dt>
-<dd>EULER</dd>
-<dt>PURPOSE:</dt>
-<dd>Transform between Galactic, celestial, and ecliptic coordinates.</dd>
-<dt>EXPLANATION:</dt>
-<dd>Use the procedure ASTRO to use this routine interactively</dd>
-<dt>CALLING SEQUENCE:</dt>
-<dd>EULER, AI, BI, AO, BO, [ SELECT, /FK4, SELECT = ]</dd>
-<dt>INPUTS:</dt>
-<dd><dl class="first docutils">
-<dt>AI - Input Longitude in DEGREES, scalar or vector.  If only two</dt>
-<dd>parameters are supplied, then  AI and BI will be modified to
-contain the output longitude and latitude.</dd>
-</dl>
-<p class="last">BI - Input Latitude in DEGREES</p>
+<dd><p>Transform between Galactic, celestial, and ecliptic coordinates.</p>
+<p>Use the procedure ASTRO to use this routine interactively</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>AI: array_like</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Input Longitude in DEGREES, scalar or vector.  If only two</dt>
+<dd><p class="first last">parameters are supplied, then  AI and BI will be modified to
+contain the output longitude and latitude.</p>
 </dd>
-<dt>OPTIONAL INPUT:</dt>
-<dd><blockquote class="first">
-<div>SELECT - Integer (1-6) specifying type of coordinate transformation.</div></blockquote>
+</dl>
+</div></blockquote>
+<p><strong>BI: array_like</strong></p>
+<blockquote>
+<div><p>Input Latitude in DEGREES</p>
+</div></blockquote>
+<p><strong>SELECT: integer (1-6), optional</strong></p>
+<blockquote>
+<div><p>Specifying type of coordinate transformation.</p>
 <dl class="docutils">
 <dt>SELECT   From          To        |   SELECT      From            To</dt>
-<dd>1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec
+<dd><p class="first last">1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec
 2     Galactic       RA-DEC     |     5       Ecliptic      Galactic
-3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic</dd>
+3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic</p>
+</dd>
 </dl>
-<p class="last">If not supplied as a parameter or keyword, then EULER will prompt for
+<p>If not supplied as a parameter or keyword, then EULER will prompt for
 the value of SELECT
 Celestial coordinates (RA, Dec) should be given in equinox J2000
 unless the /FK4 keyword is set.</p>
+</div></blockquote>
+<p><strong>FK4: boolean</strong></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>If this keyword is set and non-zero, then input and output</dt>
+<dd><p class="first last">celestial and ecliptic coordinates should be given in equinox
+B1950.</p>
 </dd>
-<dt>OUTPUTS:</dt>
-<dd>AO - Output Longitude in DEGREES
-BO - Output Latitude in DEGREES</dd>
-<dt>INPUT KEYWORD:</dt>
-<dd><dl class="first docutils">
-<dt>/FK4 - If this keyword is set and non-zero, then input and output</dt>
-<dd>celestial and ecliptic coordinates should be given in equinox
-B1950.</dd>
 </dl>
-<table class="last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">/SELECT</span></kbd></td>
-<td><ul class="first simple">
-<li>The coordinate conversion integer (1-6) may alternatively be</li>
-</ul>
-<p class="last">specified as a keyword</p>
-</td></tr>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">AO - Output Longitude in DEGREES</p>
+<blockquote class="last">
+<div><p>BO - Output Latitude in DEGREES</p>
+</div></blockquote>
+</td>
+</tr>
 </tbody>
 </table>
-</dd>
-<dt>NOTES:</dt>
-<dd>EULER was changed in December 1998 to use J2000 coordinates as the
-default, ** and may be incompatible with earlier versions***.</dd>
-<dt>REVISION HISTORY:</dt>
-<dd>Written W. Landsman,  February 1987
+<p class="rubric">Notes</p>
+<p>EULER was changed in December 1998 to use J2000 coordinates as the
+default, ** and may be incompatible with earlier versions***.</p>
+<p>Written W. Landsman,  February 1987
 Adapted from Fortran by Daryl Yentis NRL
 Converted to IDL V5.0   W. Landsman   September 1997
 Made J2000 the default, added /FK4 keyword  W. Landsman December 1998
-Add option to specify SELECT as a keyword W. Landsman March 2003</dd>
-</dl>
+Add option to specify SELECT as a keyword W. Landsman March 2003</p>
 </dd></dl>
 
 </div>

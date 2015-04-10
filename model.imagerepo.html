@@ -60,8 +60,8 @@
 <dt id="model.imagerepo.ImageRepo">
 <em class="property">class </em><code class="descclassname">model.imagerepo.</code><code class="descname">ImageRepo</code><span class="sig-paren">(</span><em>root</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Image repository.
-This class serves as an interface to the file system, the
+<p>Image repository.</p>
+<p>This class serves as an interface to the file system, the
 layout of files and IO for brick files.
 Given a Brick object, ImageRepo can return the image data
 or meta data of the image.
@@ -69,29 +69,97 @@ Standard users should not need to modify this class.</p>
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.get_filename">
 <code class="descname">get_filename</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.get_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.get_filename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generate a filename.</p>
+<p>Generate a filename for a brick.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brick: Brick</strong></p>
+<blockquote class="last">
+<div><p>the brick whose filename will be generated.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>We also try to generate
+a .gz filename, if the original filename does not exist.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.metadata">
 <code class="descname">metadata</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fetch the meta data about a brick.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brick: Brick</strong></p>
+<blockquote>
+<div><p>the brick whose metadata will be loaded</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">metadata: dict</p>
+<blockquote class="last">
+<div><p>the metadata as a dictionary. Currently this is the
+FITS header</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.open">
 <code class="descname">open</code><span class="sig-paren">(</span><em>brick</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.open" title="Permalink to this definition">¶</a></dt>
-<dd><p>open and read the image for 
-Brick object brick. The image content is returned
-as an array.</p>
-<p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs is unused</p>
+<dd><p>Open and read an image.</p>
+<p>The image for Brick object brick is read into memory and returned.
+If the image is already in cache, return the cache.</p>
+<p>This function does not add the image to cache.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brick: Brick</strong></p>
+<blockquote>
+<div><p>the brick whose image will be loaded</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">image: array_like</p>
+<blockquote class="last">
+<div><p>the image as an ndarray, as the ordering in FITS files.
+(index with (y, x))</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="model.imagerepo.ImageRepo.preload">
 <code class="descname">preload</code><span class="sig-paren">(</span><em>bricks</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/imagerepo.html#ImageRepo.preload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.imagerepo.ImageRepo.preload" title="Permalink to this definition">¶</a></dt>
-<dd><p>preload the images for 
-Brick objects listed in bricks list.</p>
-<p><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs is unused</p>
+<dd><p>Preload images into the cache</p>
+<p>This function loads images for given bricks into the cache.
+In generate the function is not useful, and we shall
+try to remove it soon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>bricks: list of Brick</strong></p>
+<blockquote class="last">
+<div><p>the bricks whose images will be loaded</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>

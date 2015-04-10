@@ -57,75 +57,142 @@
             
   <div class="section" id="module-model.utils.wcs_simplezea">
 <span id="model-utils-wcs-simplezea-module"></span><h1>model.utils.wcs_simplezea module<a class="headerlink" href="#module-model.utils.wcs_simplezea" title="Permalink to this headline">¶</a></h1>
-<p>example header:
-SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999
-BITPIX  =                  -32 /
-NAXIS   =                    2 /
-NAXIS1  =                 4096 /
-NAXIS2  =                 4096 /
-DATE    = &#8216;1999-05-09&#8217;         / Creation date (CCYY-MM-DD) of FITS header
-OBJECT  = &#8216;E(B-V)  &#8216;           /
-BUNIT   = &#8216;mag     &#8216;           /
-CRPIX1  =              2048.50 / 1-indexed X pixel number of pole
-CRVAL1  =              90.0000 /
-CTYPE1  = &#8216;GLON-ZEA&#8217;           / X=sqrt(1-NSGP*sin(b))*cos(l)*SCALE
-CRPIX2  =              2048.50 / 1-indexed Y pixel number of pole
-CRVAL2  =              90.0000 /
-CTYPE2  = &#8216;GLAT-ZEA&#8217;           / Y=-NSGP*sqrt(1-NSGP*sin(b))*sin(l)*SCALE
-CD1_1   =     -0.0395646818624 /
-CD1_2   =              0.00000 /
-CD2_1   =              0.00000 /
-CD2_2   =      0.0395646818624 /
-LONPOLE =                  180 /
-LAM_NSGP=                    1 / NSGP=+1 for north polar, =-1 for south polar
-LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg
-AUTHOR  = &#8216;David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis&#8217; /</p>
+<p>Python routines to apply world-coordinate system transformations
+based on the simpler ZEA projection used SFD98 milky way dust map</p>
+<p>This code is designed to be light-weight, and specialized. The general
+ZEA projection is UNSUPPORTED.  We handle two special cases</p>
+<blockquote>
+<div><ul class="simple">
+<li>CRVAL = -90 -90 (south)</li>
+<li>CRVAL = 90 90 (north)</li>
+</ul>
+</div></blockquote>
+<p>The ZEA projection is described in
+<a class="reference external" href="http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html">http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html</a>
+and in:
+&#8220;Representations of celestial coordinates in FITS&#8221;
+Calabretta, M. R., and Greisen, E. W.,
+Astronomy &amp; Astrophysics, 395, 1077-1122, 2002.</p>
 <dl class="function">
 <dt id="model.utils.wcs_simplezea.ang2pix">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix</code><span class="sig-paren">(</span><em>coord</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
-according the the WCS header. Look up Section 5.?.? of 
-<a class="reference external" href="http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf">http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf</a> 
-Although the source code in</p>
+<dd><p>Convert RA, DEC to x,y, with simple ZEA transformation</p>
+<p>A simplified version of the ZEA Transform from coord = (ra, dec) 
+to pixel xy coordinate according the the WCS header.</p>
+<p>Obviously PV distortion is not supported.</p>
+<p>No checking is performed if a given RA, DEC lies outside the range.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
 <blockquote>
-<div><a class="reference external" href="https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc">https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc</a></div></blockquote>
-<p>maybe a better explanation of what is done.
-coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-returns the pixel xy = (x, y).</p>
-<p>Obviously PV distortion is not supported.
-No checking is performed if a given RA, DEC lies outside the range.</p>
+<div><p>coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized)</p>
+</div></blockquote>
+<p><strong>SCALE: int</strong></p>
+<blockquote>
+<div><p>scaling factor</p>
+</div></blockquote>
+<p><strong>CRPIX: array_like</strong></p>
+<blockquote>
+<div><p>center pixel number of x, y</p>
+</div></blockquote>
+<p><strong>NSGP: int</strong></p>
+<blockquote class="last">
+<div><p>+1 for North, -1 for Sourth.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Look up Section 5.?.? of</p>
+<p><a class="reference external" href="http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf">http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf</a></p>
+<p>Although the source code in</p>
+<p><a class="reference external" href="https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py">https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py</a></p>
+<p>maybe a better explanation of what is done.</p>
+<p>The transformation is used by SFD98 dust maps.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.utils.wcs_simplezea.pix2ang">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang</code><span class="sig-paren">(</span><em>xy</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the invert transformation of ang2pix. (TAN)
-xy = (x, y): coordinate in pixels
-Returns coord = (RA, DEC), in decimal degrees.</p>
+<dd><p>Convert x, y to RA, DEC with simple ZEA transformation.</p>
+<p>See the document of py:meth:ang2pix</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.utils.wcs_simplezea.ang2pix_hdr">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">ang2pix_hdr</code><span class="sig-paren">(</span><em>coord</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#ang2pix_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.ang2pix_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling ang2pix, with the transformations
+<dd><p>Apply forward (ra,dec)-&gt;(x,y) simple ZEA transformation</p>
+<p>A convenience function for calling ang2pix, with the transformations
 described in a dictionary in the usual FITS header style for WCS
-transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
-degrees, vectorized) and the routine returns pixel numbers.
-If zero_offset is True, the routine returns 0-indexed pixel coordinates
+transformations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<blockquote>
+<div><p>(ra, dec), RA and DEC (in decimal degrees, vectorized)</p>
+</div></blockquote>
+<p><strong>hdr:   dict</strong></p>
+<blockquote>
+<div><p>WCS header as a dictionary</p>
+</div></blockquote>
+<p><strong>zero_offset: boolean, optional,</strong></p>
+<blockquote>
+<div><p>If True, the routine returns 0-indexed pixel coordinates
 (useful in Python or C) while if it is False pixels run from 1 (as in
 Fortran).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy: array_like</p>
+<blockquote class="last">
+<div><p>xy = (x, y) pixel numbers.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.utils.wcs_simplezea.pix2ang_hdr">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang_hdr</code><span class="sig-paren">(</span><em>xy</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang_hdr" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience function for calling pix2ang, with the transformations
+<dd><p>Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</p>
+<p>A convenience function for calling pix2ang, with the transformations
 described in a dictionary in the usual FITS header style for WCS
-transformations.  Given input pixel numbers xy the routine returns
-coordinates (RA,DEC) in decimal degrees.
-If zero_offset is True, the routine takes 0-indexed pixel coordinates
+transformations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xy: array_like</strong></p>
+<blockquote>
+<div><p>(x, y), x and y in pixel numbers, vectorized</p>
+</div></blockquote>
+<p><strong>hdr:   dict</strong></p>
+<blockquote>
+<div><p>WCS header as a dictionary</p>
+</div></blockquote>
+<p><strong>zero_offset: boolean, optional,</strong></p>
+<blockquote>
+<div><p>If True, the routine assumes 0-indexed pixel coordinates
 (useful in Python or C) while if it is False pixels run from 1 (as in
 Fortran).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord: array_like</p>
+<blockquote class="last">
+<div><p>coord = (RA, DEC) in degrees.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

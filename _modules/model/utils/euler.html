@@ -51,48 +51,45 @@
 
 <div class="viewcode-block" id="euler"><a class="viewcode-back" href="../../../model.utils.euler.html#model.utils.euler.euler">[docs]</a><span class="k">def</span> <span class="nf">euler</span><span class="p">(</span><span class="n">ai</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fk4</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    NAME:</span>
-<span class="sd">        EULER</span>
-<span class="sd">    PURPOSE:</span>
-<span class="sd">        Transform between Galactic, celestial, and ecliptic coordinates.</span>
-<span class="sd">    EXPLANATION:</span>
-<span class="sd">        Use the procedure ASTRO to use this routine interactively</span>
+<span class="sd">    Transform between Galactic, celestial, and ecliptic coordinates.</span>
+
+<span class="sd">    Use the procedure ASTRO to use this routine interactively</span>
 <span class="sd">   </span>
-<span class="sd">    CALLING SEQUENCE:</span>
-<span class="sd">         EULER, AI, BI, AO, BO, [ SELECT, /FK4, SELECT = ]</span>
-<span class="sd">   </span>
-<span class="sd">    INPUTS:</span>
-<span class="sd">          AI - Input Longitude in DEGREES, scalar or vector.  If only two</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------- </span>
+<span class="sd">    AI: array_like</span>
+<span class="sd">        Input Longitude in DEGREES, scalar or vector.  If only two</span>
 <span class="sd">                  parameters are supplied, then  AI and BI will be modified to</span>
 <span class="sd">                  contain the output longitude and latitude.</span>
-<span class="sd">          BI - Input Latitude in DEGREES</span>
+<span class="sd">    BI: array_like </span>
+<span class="sd">        Input Latitude in DEGREES</span>
+<span class="sd">    SELECT: integer (1-6), optional</span>
+<span class="sd">        Specifying type of coordinate transformation.</span>
 <span class="sd">   </span>
-<span class="sd">    OPTIONAL INPUT:</span>
-<span class="sd">          SELECT - Integer (1-6) specifying type of coordinate transformation.</span>
-<span class="sd">   </span>
-<span class="sd">         SELECT   From          To        |   SELECT      From            To</span>
+<span class="sd">        SELECT   From          To        |   SELECT      From            To</span>
 <span class="sd">          1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec</span>
 <span class="sd">          2     Galactic       RA-DEC     |     5       Ecliptic      Galactic</span>
 <span class="sd">          3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic</span>
 <span class="sd">   </span>
-<span class="sd">         If not supplied as a parameter or keyword, then EULER will prompt for</span>
-<span class="sd">         the value of SELECT</span>
-<span class="sd">         Celestial coordinates (RA, Dec) should be given in equinox J2000</span>
-<span class="sd">         unless the /FK4 keyword is set.</span>
-<span class="sd">    OUTPUTS:</span>
-<span class="sd">          AO - Output Longitude in DEGREES</span>
-<span class="sd">          BO - Output Latitude in DEGREES</span>
+<span class="sd">        If not supplied as a parameter or keyword, then EULER will prompt for</span>
+<span class="sd">        the value of SELECT</span>
+<span class="sd">        Celestial coordinates (RA, Dec) should be given in equinox J2000</span>
+<span class="sd">        unless the /FK4 keyword is set.</span>
+<span class="sd">    FK4: boolean</span>
+<span class="sd">        If this keyword is set and non-zero, then input and output</span>
+<span class="sd">            celestial and ecliptic coordinates should be given in equinox</span>
+<span class="sd">            B1950.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        AO - Output Longitude in DEGREES</span>
+<span class="sd">        BO - Output Latitude in DEGREES</span>
 <span class="sd">   </span>
-<span class="sd">    INPUT KEYWORD:</span>
-<span class="sd">          /FK4 - If this keyword is set and non-zero, then input and output</span>
-<span class="sd">                celestial and ecliptic coordinates should be given in equinox</span>
-<span class="sd">                B1950.</span>
-<span class="sd">          /SELECT  - The coordinate conversion integer (1-6) may alternatively be</span>
-<span class="sd">                 specified as a keyword</span>
-<span class="sd">    NOTES:</span>
+<span class="sd">    NOTES</span>
+<span class="sd">    -----</span>
 <span class="sd">          EULER was changed in December 1998 to use J2000 coordinates as the</span>
 <span class="sd">          default, ** and may be incompatible with earlier versions***.</span>
-<span class="sd">    REVISION HISTORY:</span>
+
 <span class="sd">          Written W. Landsman,  February 1987</span>
 <span class="sd">          Adapted from Fortran by Daryl Yentis NRL</span>
 <span class="sd">          Converted to IDL V5.0   W. Landsman   September 1997</span>

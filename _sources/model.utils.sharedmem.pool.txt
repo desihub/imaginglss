@@ -1,7 +1,0 @@
-model.utils.sharedmem.pool module
-=================================
-
-.. automodule:: model.utils.sharedmem.pool
-    :members:
-    :undoc-members:
-    :show-inheritance:

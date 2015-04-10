@@ -47,10 +47,12 @@
           <div class="body" role="main">
             
   <h1>Source code for model.brick</h1><div class="highlight"><pre>
-<span class="c"># The base Python object corresponding to an imaging brick.</span>
-<span class="c"># This object contains only the meta-data, and it calls</span>
-<span class="c"># imagerepo to handle looking up the pixel-level information.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The base Python object corresponding to an imaging brick.</span>
+<span class="sd">This object contains only the meta-data, and it calls</span>
+<span class="sd">imagerepo to handle looking up the pixel-level information.</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -66,9 +68,30 @@
 <div class="viewcode-block" id="Brick"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick">[docs]</a><span class="k">class</span> <span class="nc">Brick</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The base (immutable) object corresponding to an imaging brick.</span>
-<span class="sd">    This object contains only the meta-data, and it calls</span>
-<span class="sd">    imagerepo to handle looking up the pixel-level information.</span>
-<span class="sd">    Major methods are &quot;readout&quot;, &quot;query&quot; and &quot;revert&quot;.</span>
+<span class="sd">    This object contains only the meta-data, and is immutable.</span>
+
+<span class="sd">    Use ImageRepo to handle looking up the pixel-level information.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id:   integer</span>
+<span class="sd">        ID of the brick as in the Tractor catalogue (unique).</span>
+<span class="sd">        Note that we do not use it in indexing.</span>
+<span class="sd">    name: string_like </span>
+<span class="sd">        name of the brick as in the Tractor catalogue (unique)</span>
+<span class="sd">    ra: float</span>
+<span class="sd">        center coordinate ra</span>
+<span class="sd">    dec: float</span>
+<span class="sd">        center coordinate dec</span>
+<span class="sd">    ra1: float</span>
+<span class="sd">        min coordinate ra</span>
+<span class="sd">    dec1: float</span>
+<span class="sd">        min coordinate dec</span>
+<span class="sd">    ra2: float</span>
+<span class="sd">        max coordinate ra</span>
+<span class="sd">    dec2: float</span>
+<span class="sd">        max coordinate dec</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">ra1</span><span class="p">,</span> <span class="n">ra2</span><span class="p">,</span> <span class="n">dec1</span><span class="p">,</span> <span class="n">dec2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -94,9 +117,22 @@
 
 <div class="viewcode-block" id="Brick.readout"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return image values at coord=(RA, DEC) using the imagerepository repo.</span>
-<span class="sd">        If the image in this brick does not cover this region,</span>
-<span class="sd">        put in `default&#39;.</span>
+<span class="sd">        Return image values from an image repository.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        coord: array_like</span>
+<span class="sd">            Coordinate of the pixels, coord=(RA, DEC)</span>
+<span class="sd">        repo: ImageRepo</span>
+<span class="sd">            Image repository to read from. Refer to DataRelease.images.</span>
+<span class="sd">        default:</span>
+<span class="sd">            Default value to return if the pixel is outside of the brick.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        values: array_like</span>
+<span class="sd">            values read out from repo.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coord</span>     <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
         <span class="n">RA</span><span class="p">,</span> <span class="n">DEC</span>   <span class="o">=</span> <span class="n">coord</span>
@@ -115,13 +151,24 @@
  </div>
 <div class="viewcode-block" id="Brick.query"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the xy index of pixels at coord</span>
-<span class="sd">        coord can be:</span>
-<span class="sd">            (RA, DEC) tuple of arrays</span>
-<span class="sd">             array of shape (2xN) RA DEC</span>
-<span class="sd">        In either case returns a (2xN) array</span>
+<span class="sd">        Query the pixel coordinate in &#39;xy&#39; system from RA/DEC system.</span>
+
 <span class="sd">        Note that the returned array is in a x-first-varying order.</span>
 <span class="sd">        To index the ndarray image, use [y, x].</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        repo: ImageRepo</span>
+<span class="sd">            image repository that contains the necessary transformation</span>
+<span class="sd">            for this brick</span>
+<span class="sd">        coord: array_like </span>
+<span class="sd">            coord = (RA, DEC) tuple of arrays</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        xy: array_like</span>
+<span class="sd">            a (2xN) array, xy=(x, y).</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">meta</span>      <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">coord</span>     <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
@@ -131,11 +178,19 @@
 </div>
 <div class="viewcode-block" id="Brick.revert"><a class="viewcode-back" href="../../model.brick.html#model.brick.Brick.revert">[docs]</a>    <span class="k">def</span> <span class="nf">revert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">xy</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the RA, DEC index of pixels for coord</span>
-<span class="sd">        coord can be:</span>
-<span class="sd">            (x, y) tuple of arrays</span>
-<span class="sd">            array of shape (2xN) x, y</span>
-<span class="sd">        In either case returns a (2xN) array.</span>
+<span class="sd">        Look up RA/DEC coord from pixels coordinate in &#39;xy&#39; system.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        repo: ImageRepo</span>
+<span class="sd">            image repository that contains the necessary transformation</span>
+<span class="sd">            for this brick</span>
+<span class="sd">        xy: array_like</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coord: array_like</span>
+<span class="sd">            coord=(RA, DEC) for each given position.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">meta</span>      <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>

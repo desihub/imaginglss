@@ -47,22 +47,32 @@
           <div class="body" role="main">
             
   <h1>Source code for model.utils.wcs_simplezea</h1><div class="highlight"><pre>
-<span class="c"># Python routines to apply world-coordinate system transformations</span>
-<span class="c"># based on the simpler ZEA projection used SFD98 milky way dust map</span>
-<span class="c"># This code is designed to be light-weight, and specialized.</span>
-<span class="c">#</span>
-<span class="c"># We handle two special cases </span>
-<span class="c"># CRVAL = -90 -90 (south) and 90 90 (north)</span>
-<span class="c"># The ZEA projection is described in</span>
-<span class="c"># http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html</span>
-<span class="c"># and in:</span>
-<span class="c"># &quot;Representations of celestial coordinates in FITS&quot;</span>
-<span class="c"># -- Calabretta, M. R., and Greisen, E. W.,</span>
-<span class="c"># -- Astronomy &amp; Astrophysics, 395, 1077-1122, 2002.</span>
-<span class="c"># and the source code in </span>
-<span class="c">#   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py</span>
-<span class="c"># is also a very useful reference.</span>
-<span class="c">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python routines to apply world-coordinate system transformations</span>
+<span class="sd">based on the simpler ZEA projection used SFD98 milky way dust map</span>
+
+<span class="sd">This code is designed to be light-weight, and specialized. The general</span>
+<span class="sd">ZEA projection is UNSUPPORTED.  We handle two special cases </span>
+
+<span class="sd">   - CRVAL = -90 -90 (south) </span>
+<span class="sd">   - CRVAL = 90 90 (north)</span>
+
+<span class="sd">The ZEA projection is described in</span>
+<span class="sd">http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html</span>
+<span class="sd">and in:</span>
+<span class="sd">&quot;Representations of celestial coordinates in FITS&quot;</span>
+<span class="sd">Calabretta, M. R., and Greisen, E. W.,</span>
+<span class="sd">Astronomy &amp; Astrophysics, 395, 1077-1122, 2002.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ang2pix&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang&#39;</span><span class="p">,</span><span class="s">&#39;ang2pix_hdr&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang_hdr&#39;</span><span class="p">]</span>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">example header:</span>
 <span class="sd">SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999</span>
@@ -88,27 +98,34 @@
 <span class="sd">LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg</span>
 <span class="sd">AUTHOR  = &#39;David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis&#39; /</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
-<span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ang2pix&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang&#39;</span><span class="p">,</span><span class="s">&#39;ang2pix_hdr&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang_hdr&#39;</span><span class="p">]</span>
-
-
 
 <span class="kn">import</span> <span class="nn">numpy</span> 
 <span class="kn">import</span> <span class="nn">math</span>
 
 <div class="viewcode-block" id="ang2pix_hdr"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.ang2pix_hdr">[docs]</a><span class="k">def</span> <span class="nf">ang2pix_hdr</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply forward (ra,dec)-&gt;(x,y) simple ZEA transformation</span>
+<span class="sd">    </span>
 <span class="sd">    A convenience function for calling ang2pix, with the transformations</span>
 <span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
-<span class="sd">    transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal</span>
-<span class="sd">    degrees, vectorized) and the routine returns pixel numbers.</span>
-<span class="sd">    If zero_offset is True, the routine returns 0-indexed pixel coordinates</span>
-<span class="sd">    (useful in Python or C) while if it is False pixels run from 1 (as in</span>
-<span class="sd">    Fortran).</span>
+<span class="sd">    transformations.  </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coord: array_like </span>
+<span class="sd">        (ra, dec), RA and DEC (in decimal degrees, vectorized) </span>
+<span class="sd">    hdr:   dict</span>
+<span class="sd">        WCS header as a dictionary</span>
+<span class="sd">    zero_offset: boolean, optional,</span>
+<span class="sd">        If True, the routine returns 0-indexed pixel coordinates</span>
+<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 (as in</span>
+<span class="sd">        Fortran).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xy: array_like</span>
+<span class="sd">        xy = (x, y) pixel numbers.</span>
+<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea projection.&quot;</span>
@@ -118,13 +135,28 @@
 </div>
 <div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</span>
+<span class="sd">    </span>
 <span class="sd">    A convenience function for calling pix2ang, with the transformations</span>
 <span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
-<span class="sd">    transformations.  Given input pixel numbers xy the routine returns</span>
-<span class="sd">    coordinates (RA,DEC) in decimal degrees.</span>
-<span class="sd">    If zero_offset is True, the routine takes 0-indexed pixel coordinates</span>
-<span class="sd">    (useful in Python or C) while if it is False pixels run from 1 (as in</span>
-<span class="sd">    Fortran).</span>
+<span class="sd">    transformations.  </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xy: array_like </span>
+<span class="sd">        (x, y), x and y in pixel numbers, vectorized</span>
+<span class="sd">    hdr:   dict</span>
+<span class="sd">        WCS header as a dictionary</span>
+<span class="sd">    zero_offset: boolean, optional,</span>
+<span class="sd">        If True, the routine assumes 0-indexed pixel coordinates</span>
+<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 (as in</span>
+<span class="sd">        Fortran).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    coord: array_like</span>
+<span class="sd">        coord = (RA, DEC) in degrees.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea plane projection.&quot;</span>
@@ -134,8 +166,31 @@
 </div>
 <span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    If zero_offset is True, the routine takes 0-indexed pixel coordinates</span>
-<span class="sd">    (useful in Python or C) while if it is False pixels run from 1 (as in</span>
+<span class="sd">    Parse a WCS header to arguments of pix2ang and ang2pix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hdr: dict</span>
+<span class="sd">        WCS header</span>
+<span class="sd">    zero_offset: boolean</span>
+<span class="sd">        If zero_offset is True, the routine assumes 0-indexed pixel coordinates</span>
+<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 </span>
+<span class="sd">        (as in Fortran and Julia)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    scale: float</span>
+<span class="sd">        Scaling factor</span>
+<span class="sd">    crpix: array_like</span>
+<span class="sd">        center pixel coordniate; compensated for `zero_offset`</span>
+<span class="sd">    nsgp: int</span>
+<span class="sd">        North or South galactic pool.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError:</span>
+<span class="sd">        if the header does not contain enough fields.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c"># Check to see whether the &quot;hdr&quot; dictionary contains the necessary</span>
     <span class="c"># keywords.</span>
@@ -156,18 +211,39 @@
 
 <div class="viewcode-block" id="ang2pix"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.ang2pix">[docs]</a><span class="k">def</span> <span class="nf">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate </span>
-<span class="sd">    according the the WCS header. Look up Section 5.?.? of </span>
-<span class="sd">    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf </span>
-<span class="sd">    Although the source code in </span>
-<span class="sd">      https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc</span>
+<span class="sd">    Convert RA, DEC to x,y, with simple ZEA transformation</span>
 
-<span class="sd">    maybe a better explanation of what is done.</span>
-<span class="sd">    coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) </span>
-<span class="sd">    returns the pixel xy = (x, y). </span>
+<span class="sd">    A simplified version of the ZEA Transform from coord = (ra, dec) </span>
+<span class="sd">    to pixel xy coordinate according the the WCS header. </span>
 
 <span class="sd">    Obviously PV distortion is not supported.</span>
+
 <span class="sd">    No checking is performed if a given RA, DEC lies outside the range.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coord: array_like</span>
+<span class="sd">        coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) </span>
+<span class="sd">    SCALE: int</span>
+<span class="sd">        scaling factor</span>
+<span class="sd">    CRPIX: array_like</span>
+<span class="sd">        center pixel number of x, y</span>
+<span class="sd">    NSGP: int</span>
+<span class="sd">        +1 for North, -1 for Sourth.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Look up Section 5.?.? of </span>
+
+<span class="sd">    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf </span>
+
+<span class="sd">    Although the source code in </span>
+
+<span class="sd">    https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py</span>
+
+<span class="sd">    maybe a better explanation of what is done.</span>
+
+<span class="sd">    The transformation is used by SFD98 dust maps.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
@@ -190,9 +266,9 @@
 </div>
 <div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../model.utils.wcs_simplezea.html#model.utils.wcs_simplezea.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is the invert transformation of ang2pix. (TAN)</span>
-<span class="sd">    xy = (x, y): coordinate in pixels</span>
-<span class="sd">    Returns coord = (RA, DEC), in decimal degrees.</span>
+<span class="sd">    Convert x, y to RA, DEC with simple ZEA transformation.</span>
+
+<span class="sd">    See the document of py:meth:ang2pix</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
