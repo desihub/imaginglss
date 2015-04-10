@@ -70,7 +70,8 @@
 <span class="sd">    The base (immutable) object corresponding to an imaging brick.</span>
 <span class="sd">    This object contains only the meta-data, and is immutable.</span>
 
-<span class="sd">    Use ImageRepo to handle looking up the pixel-level information.</span>
+<span class="sd">    It uses :py:class:`~model.imagerepo.ImageRepo` to handle </span>
+<span class="sd">    looking up the pixel-level information.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -123,7 +124,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        coord: array_like</span>
 <span class="sd">            Coordinate of the pixels, coord=(RA, DEC)</span>
-<span class="sd">        repo: ImageRepo</span>
+<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            Image repository to read from. Refer to DataRelease.images.</span>
 <span class="sd">        default:</span>
 <span class="sd">            Default value to return if the pixel is outside of the brick.</span>
@@ -158,7 +159,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        repo: ImageRepo</span>
+<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            image repository that contains the necessary transformation</span>
 <span class="sd">            for this brick</span>
 <span class="sd">        coord: array_like </span>
@@ -182,7 +183,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        repo: ImageRepo</span>
+<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            image repository that contains the necessary transformation</span>
 <span class="sd">            for this brick</span>
 <span class="sd">        xy: array_like</span>

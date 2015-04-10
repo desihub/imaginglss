@@ -65,7 +65,8 @@ imagerepo to handle looking up the pixel-level information.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The base (immutable) object corresponding to an imaging brick.
 This object contains only the meta-data, and is immutable.</p>
-<p>Use ImageRepo to handle looking up the pixel-level information.</p>
+<p>It uses <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></a> to handle 
+looking up the pixel-level information.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -109,7 +110,7 @@ To index the ndarray image, use [y, x].</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: ImageRepo</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
 <blockquote>
 <div><p>image repository that contains the necessary transformation
 for this brick</p>
@@ -142,7 +143,7 @@ for this brick</p>
 <blockquote>
 <div><p>Coordinate of the pixels, coord=(RA, DEC)</p>
 </div></blockquote>
-<p><strong>repo: ImageRepo</strong></p>
+<p><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
 <blockquote>
 <div><p>Image repository to read from. Refer to DataRelease.images.</p>
 </div></blockquote>
@@ -170,7 +171,7 @@ for this brick</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: ImageRepo</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
 <blockquote>
 <div><p>image repository that contains the necessary transformation
 for this brick</p>
