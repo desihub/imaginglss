@@ -180,22 +180,32 @@
 <span class="sd">    data release.  Uses several &quot;helper&quot; classes and has methods for</span>
 <span class="sd">    looking at pixelized data or catalogs arranged in bricks.</span>
 
-
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 
-<span class="sd">    brickindex : model.brickindex.BrickIndex</span>
+<span class="sd">    brickindex : :py:class:`~model.brickindex.BrickIndex`</span>
 <span class="sd">        an index object of all of the bricks (covering the entire sky)</span>
 <span class="sd">    bands      : dict</span>
 <span class="sd">        a dictionary translating from band name to integer used in Tractor catalogue</span>
-<span class="sd">    catalogue  : model.catalogue.Catalogue</span>
+<span class="sd">    catalogue  : :py:class:`~model.catalogue.Catalogue`</span>
 <span class="sd">        the concatenated tractor catalogue, accessed by attributes.</span>
 <span class="sd">    extinction : array_like</span>
-<span class="sd">        an array stroing the extinction coeffcients</span>
-<span class="sd">    images :      model.imagerepo.ImageRepo</span>
-<span class="sd">        image repositories (depth, image, model are by bands, ebv is the extinction map)</span>
-<span class="sd">    footprint  : Footprint </span>
-<span class="sd">        the footprint of the data release</span>
+<span class="sd">        an array storing the extinction coeffcients. </span>
+<span class="sd">        The array matches the defination of `DECAM_FLUX` column of </span>
+<span class="sd">        the catalogue, u, g, r, i, z, Y.</span>
+<span class="sd">    images :     :py:class:`~model.imagerepo.ImageRepo`</span>
+<span class="sd">        Image repositories. These image repositories are used by</span>
+<span class="sd">        py:meth:`readout`.</span>
+<span class="sd">    footprint  : :py:class:`Footprint`</span>
+<span class="sd">        the footprint of the data release.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; dr = DataRelease()</span>
+<span class="sd">    &gt;&gt;&gt; dr.images[&#39;depth&#39;][&#39;r&#39;]  # r band depth images.</span>
+<span class="sd">    &gt;&gt;&gt; dr.images[&#39;image&#39;][&#39;r&#39;]  # r band coadd images.</span>
+<span class="sd">    &gt;&gt;&gt; dr.images[&#39;model&#39;][&#39;r&#39;]  # r band tractor model images.</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cacheroot</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>

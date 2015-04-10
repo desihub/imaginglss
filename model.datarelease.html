@@ -68,30 +68,37 @@ level objects.</p>
 <p>The highest level interface into the data for a given imaging
 data release.  Uses several &#8220;helper&#8221; classes and has methods for
 looking at pixelized data or catalogs arranged in bricks.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">][</span><span class="s">&#39;r&#39;</span><span class="p">]</span>  <span class="c"># r band depth images.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;image&#39;</span><span class="p">][</span><span class="s">&#39;r&#39;</span><span class="p">]</span>  <span class="c"># r band coadd images.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;model&#39;</span><span class="p">][</span><span class="s">&#39;r&#39;</span><span class="p">]</span>  <span class="c"># r band tractor model images.</span>
+</pre></div>
+</div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="8%" />
-<col width="92%" />
+<col width="6%" />
+<col width="94%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>brickindex</td>
-<td>(model.brickindex.BrickIndex) an index object of all of the bricks (covering the entire sky)</td>
+<td>(<a class="reference internal" href="model.brickindex.html#model.brickindex.BrickIndex" title="model.brickindex.BrickIndex"><code class="xref py py-class docutils literal"><span class="pre">BrickIndex</span></code></a>) an index object of all of the bricks (covering the entire sky)</td>
 </tr>
 <tr class="row-even"><td>bands</td>
 <td>(dict) a dictionary translating from band name to integer used in Tractor catalogue</td>
 </tr>
 <tr class="row-odd"><td>catalogue</td>
-<td>(model.catalogue.Catalogue) the concatenated tractor catalogue, accessed by attributes.</td>
+<td>(<a class="reference internal" href="model.catalogue.html#model.catalogue.Catalogue" title="model.catalogue.Catalogue"><code class="xref py py-class docutils literal"><span class="pre">Catalogue</span></code></a>) the concatenated tractor catalogue, accessed by attributes.</td>
 </tr>
 <tr class="row-even"><td>extinction</td>
-<td>(array_like) an array stroing the extinction coeffcients</td>
+<td>(array_like) an array storing the extinction coeffcients. The array matches the defination of <cite>DECAM_FLUX</cite> column of the catalogue, u, g, r, i, z, Y.</td>
 </tr>
 <tr class="row-odd"><td>images</td>
-<td>(     model.imagerepo.ImageRepo) image repositories (depth, image, model are by bands, ebv is the extinction map)</td>
+<td>(    <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></a>) Image repositories. These image repositories are used by py:meth:<cite>readout</cite>.</td>
 </tr>
 <tr class="row-even"><td>footprint</td>
-<td>(Footprint) the footprint of the data release</td>
+<td>(<a class="reference internal" href="#model.datarelease.Footprint" title="model.datarelease.Footprint"><code class="xref py py-class docutils literal"><span class="pre">Footprint</span></code></a>) the footprint of the data release.</td>
 </tr>
 </tbody>
 </table>

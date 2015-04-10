@@ -62,18 +62,17 @@ replaced the transformation with ours.</p>
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">SFDMap</code><span class="sig-paren">(</span><em>ngp_filename=None</em>, <em>sgp_filename=None</em>, <em>dustdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>SFDMap accesses the SFD98 Map. The map file shall be given in the constructor.</p>
+<p class="rubric">Notes</p>
+<p>Use <a class="reference internal" href="#model.sfdmap.SFDMap.ebv" title="model.sfdmap.SFDMap.ebv"><code class="xref py py-meth docutils literal"><span class="pre">ebv()</span></code></a> to query the E(B-V) values.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="7%" />
-<col width="93%" />
+<col width="3%" />
+<col width="97%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>extinctions: dict</td>
 <td>These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, &#8220;New recommended SFD coefficients for DECam.&#8221;  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
-</tr>
-<tr class="row-even"><td>Use <a class="reference internal" href="#model.sfdmap.SFDMap.ebv" title="model.sfdmap.SFDMap.ebv"><code class="xref py py-meth docutils literal"><span class="pre">ebv()</span></code></a> to query the E(B-V) values.</td>
-<td>&nbsp;</td>
 </tr>
 </tbody>
 </table>
