@@ -124,24 +124,21 @@ extinction, etc. are stored in pixelized images within the
 FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.</p>
 <p>The main way to access the DECALS imaging data is via DataRelease
-objects defined in &#8220;datarelease.py&#8221;. Important attributes are</p>
+objects defined in <a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease" title="model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.DataRelease</span></code></a>.
+Important attributes are</p>
 <blockquote>
 <div><ul class="simple">
-<li>DataRelease.footprint : the survey footprint.</li>
-<li>DataRelease.brickindex: the Brick geometry (BrickIndex)</li>
-<li>DataRelease.images    : the images released in the DR</li>
-<li>DataRelease.catalogue : the imaging catalogue reported by tractor</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">footprint</span></code> : the survey footprint.</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">brickindex</span></code>: the Brick geometry (BrickIndex)</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">images</span></code>    : the images released in the DR</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">catalogue</span></code> : the imaging catalogue reported by tractor</li>
 </ul>
 </div></blockquote>
 <p>The member methods are</p>
 <blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>DataRelease.readout <span class="classifier-delimiter">:</span> <span class="classifier">reading out pixel value of an image</span></dt>
-<dd><p class="first last">for coordinates on the sky.</p>
-</dd>
-</dl>
-</li>
+<div><ul class="simple">
+<li><a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease.readout" title="model.datarelease.DataRelease.readout"><code class="xref py py-meth docutils literal"><span class="pre">readout()</span></code></a>   : reading out pixel value of an image
+for coordinates on the sky.</li>
 </ul>
 </div></blockquote>
 <p>Catalog information is handled by catalog.Catalogue, which stores the
