@@ -52,10 +52,31 @@
             
   <div class="section" id="module-model.sfdmap">
 <span id="model-sfdmap-module"></span><h1>model.sfdmap module<a class="headerlink" href="#module-model.sfdmap" title="Permalink to this headline">¶</a></h1>
+<p>Accesing SFD98 maps.</p>
+<p>Most code taken from 
+<a class="reference external" href="https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py">https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py</a>
+, 
+replaced the transformation with ours.</p>
 <dl class="class">
 <dt id="model.sfdmap.SFDMap">
 <em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">SFDMap</code><span class="sig-paren">(</span><em>ngp_filename=None</em>, <em>sgp_filename=None</em>, <em>dustdir=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>SFDMap accesses the SFD98 Map. The map file shall be given in the constructor.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>extinctions: dict</td>
+<td>These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, &#8220;New recommended SFD coefficients for DECam.&#8221;  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
+</tr>
+<tr class="row-even"><td>Use <a class="reference internal" href="#model.sfdmap.SFDMap.ebv" title="model.sfdmap.SFDMap.ebv"><code class="xref py py-meth docutils literal"><span class="pre">ebv()</span></code></a> to query the E(B-V) values.</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <dl class="staticmethod">
 <dt id="model.sfdmap.SFDMap.bilinear_interp_nonzero">
 <em class="property">static </em><code class="descname">bilinear_interp_nonzero</code><span class="sig-paren">(</span><em>image</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.bilinear_interp_nonzero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.bilinear_interp_nonzero" title="Permalink to this definition">¶</a></dt>
@@ -64,12 +85,38 @@
 <dl class="method">
 <dt id="model.sfdmap.SFDMap.ebv">
 <code class="descname">ebv</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.ebv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.ebv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Directly query the SFD map and returns E(B-V).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ra: array_like</strong></p>
+<blockquote>
+<div><p>RA in degrees.</p>
+</div></blockquote>
+<p><strong>dec: array_like</strong></p>
+<blockquote>
+<div><p>DEC in degrees.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ebv: array_like</p>
+<blockquote class="last">
+<div><p>E(B-V)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="model.sfdmap.SFDMap.extinction">
 <code class="descname">extinction</code><span class="sig-paren">(</span><em>filts</em>, <em>ra</em>, <em>dec</em>, <em>get_ebv=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#SFDMap.extinction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.SFDMap.extinction" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns the extinction for different filters.</p>
+<p>Do not use this function; copied from old code. 
+Use <a class="reference internal" href="#model.sfdmap.SFDMap.ebv" title="model.sfdmap.SFDMap.ebv"><code class="xref py py-meth docutils literal"><span class="pre">ebv()</span></code></a> instead.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="model.sfdmap.SFDMap.extinctions">
@@ -77,22 +124,6 @@
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="class">
-<dt id="model.sfdmap.anwcs_t">
-<em class="property">class </em><code class="descclassname">model.sfdmap.</code><code class="descname">anwcs_t</code><span class="sig-paren">(</span><em>filename</em>, <em>hduid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="model.sfdmap.anwcs_t.radec2pixelxy">
-<code class="descname">radec2pixelxy</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#anwcs_t.radec2pixelxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.anwcs_t.radec2pixelxy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="model.sfdmap.radectolb">
-<code class="descclassname">model.sfdmap.</code><code class="descname">radectolb</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/sfdmap.html#radectolb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.sfdmap.radectolb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 

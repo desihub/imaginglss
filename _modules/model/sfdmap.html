@@ -47,8 +47,14 @@
           <div class="body" role="main">
             
   <h1>Source code for model.sfdmap</h1><div class="highlight"><pre>
-<span class="c"># most code taken from https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py</span>
-<span class="c"># replaced the transformation with ours</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Accesing SFD98 maps.</span>
+
+<span class="sd">Most code taken from </span>
+<span class="sd">https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py</span>
+<span class="sd">, </span>
+<span class="sd">replaced the transformation with ours.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">fitsio</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">wcs_simplezea</span>
@@ -57,29 +63,40 @@
 
 <span class="c"># to run need to </span>
 <span class="c"># export DUST_DIR=/project/projectdirs/desi/software/edison/dust/v0_0/</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;SFDMap&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="anwcs_t"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.anwcs_t">[docs]</a><span class="k">class</span> <span class="nc">anwcs_t</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">anwcs_t</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">hduid</span><span class="p">):</span>
         <span class="n">header</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">fitsio</span><span class="o">.</span><span class="n">read_header</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hduid</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crpix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsgp</span> <span class="o">=</span> <span class="n">wcs_simplezea</span><span class="o">.</span><span class="n">parse_header</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">zero_offset</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<div class="viewcode-block" id="anwcs_t.radec2pixelxy"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.anwcs_t.radec2pixelxy">[docs]</a>    <span class="k">def</span> <span class="nf">radec2pixelxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">radec2pixelxy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">])</span>
         <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">wcs_simplezea</span><span class="o">.</span><span class="n">ang2pix</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">SCALE</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="n">CRPIX</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">crpix</span><span class="p">,</span> <span class="n">NSGP</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nsgp</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div></div>
-<div class="viewcode-block" id="radectolb"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.radectolb">[docs]</a><span class="k">def</span> <span class="nf">radectolb</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+<span class="k">def</span> <span class="nf">radectolb</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
     <span class="n">l</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">euler</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">l</span><span class="p">,</span> <span class="n">b</span> </div>
+    <span class="k">return</span> <span class="n">l</span><span class="p">,</span> <span class="n">b</span> 
 <div class="viewcode-block" id="SFDMap"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.SFDMap">[docs]</a><span class="k">class</span> <span class="nc">SFDMap</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="c"># These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1</span>
-    <span class="c"># but updated (and adding DES u) via email from Schlafly,</span>
-    <span class="c"># decam-data thread from 11/13/2014, &quot;New recommended SFD coefficients for DECam.&quot;</span>
-    <span class="c">#</span>
-    <span class="c"># The coefficients for the four WISE filters are derived from Fitzpatrick 1999,</span>
-    <span class="c"># as recommended by Schafly &amp; Finkbeiner, considered better than either the</span>
-    <span class="c"># Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve</span>
-    <span class="c"># not vetted beyond 2 micron).</span>
-    <span class="c"># These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910. </span>
-    <span class="c">#</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SFDMap accesses the SFD98 Map. The map file shall be given in the constructor.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    extinctions: dict</span>
+<span class="sd">        These values are not useful for us, but we keep them for reference.</span>
+
+<span class="sd">        These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1</span>
+<span class="sd">        but updated (and adding DES u) via email from Schlafly,</span>
+<span class="sd">        decam-data thread from 11/13/2014, &quot;New recommended SFD coefficients for DECam.&quot;</span>
+<span class="sd">       </span>
+<span class="sd">        The coefficients for the four WISE filters are derived from Fitzpatrick 1999,</span>
+<span class="sd">        as recommended by Schafly &amp; Finkbeiner, considered better than either the</span>
+<span class="sd">        Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve</span>
+<span class="sd">        not vetted beyond 2 micron).</span>
+<span class="sd">        These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910. </span>
+
+<span class="sd">    Use :py:meth:`ebv` to query the E(B-V) values. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">extinctions</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;SDSS u&#39;</span><span class="p">:</span> <span class="mf">4.239</span><span class="p">,</span>
         <span class="s">&#39;DES u&#39;</span><span class="p">:</span> <span class="mf">3.995</span><span class="p">,</span>
@@ -95,6 +112,18 @@
         <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ngp_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sgp_filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dustdir</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ngp_filename: string</span>
+<span class="sd">            filename of the north plane data</span>
+<span class="sd">        sgp_filename: string</span>
+<span class="sd">            filename of the sourth plane data</span>
+<span class="sd">        dustdir: string</span>
+<span class="sd">            directory to look for data files, overrides ngp_filename and sgp_filename,</span>
+<span class="sd">            Will use `DUST_DIR` environment variable if not supplied.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dustdir</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">dustdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;DUST_DIR&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">dustdir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
@@ -141,6 +170,21 @@
         <span class="k">return</span> <span class="n">ebv</span>
 </div>
 <div class="viewcode-block" id="SFDMap.ebv"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.SFDMap.ebv">[docs]</a>    <span class="k">def</span> <span class="nf">ebv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Directly query the SFD map and returns E(B-V).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ra: array_like</span>
+<span class="sd">            RA in degrees.</span>
+<span class="sd">        dec: array_like</span>
+<span class="sd">            DEC in degrees.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ebv: array_like</span>
+<span class="sd">            E(B-V)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">l</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">radectolb</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
         <span class="n">ebv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
@@ -161,6 +205,12 @@
         <span class="k">return</span> <span class="n">ebv</span>
 </div>
 <div class="viewcode-block" id="SFDMap.extinction"><a class="viewcode-back" href="../../model.sfdmap.html#model.sfdmap.SFDMap.extinction">[docs]</a>    <span class="k">def</span> <span class="nf">extinction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filts</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">get_ebv</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the extinction for different filters.</span>
+
+<span class="sd">        Do not use this function; copied from old code. </span>
+<span class="sd">        Use :py:meth:`ebv` instead. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ebv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ebv</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filts</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SFDMap</span><span class="o">.</span><span class="n">extinctions</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filts</span><span class="p">])</span>

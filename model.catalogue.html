@@ -56,19 +56,20 @@
             
   <div class="section" id="module-model.catalogue">
 <span id="model-catalogue-module"></span><h1>model.catalogue module<a class="headerlink" href="#module-model.catalogue" title="Permalink to this headline">¶</a></h1>
+<p>Python class for handling object catalogs associated with
+a data release.  The catalogs are obtained from FITS files.
+This class does some caching for speed.</p>
 <dl class="class">
 <dt id="model.catalogue.Catalogue">
 <em class="property">class </em><code class="descclassname">model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>filenames</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="model.utils.columnstore.html#model.utils.columnstore.DiskColumnStore" title="model.utils.columnstore.DiskColumnStore"><code class="xref py py-class docutils literal"><span class="pre">model.utils.columnstore.DiskColumnStore</span></code></a></p>
-<p>Class for handling object catalogs associated with a data release.
-The catalogs are contained in FITS files, but this class caches the
-information for speed and only columns that are accessed are loaded
-into memory.
-The columns are cached into cachedir, which is initialized 
-by the DataRelease object.
-We assume the catalogue is split into multiple files.
-and the list of file names are provided as an input.
-The main method is fetch.</p>
+<p>Class for handling object catalogs associated with a data release.</p>
+<p>The catalogs are contained in many small FITS files. Accesing them 
+directly is slow. This class caches the
+information on disk for speed. 
+Only columns that are accessed are loaded into memory.</p>
+<p>The columns are cached on disk into cachedir, which is initialized 
+by the DataRelease object.</p>
 <dl class="method">
 <dt id="model.catalogue.Catalogue.fetch">
 <code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
@@ -85,12 +86,32 @@ The main method is fetch.</p>
 <dt id="model.catalogue.coord2xyz">
 <code class="descclassname">model.catalogue.</code><code class="descname">coord2xyz</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#coord2xyz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.coord2xyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<blockquote>
+<div><p>coord = (RA, DEC) in degrees.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">vector: array_like</p>
+<blockquote class="last">
+<div><p>Unit vectors corresponding to RA, DEC, in (, 3).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.catalogue.uppercase_dtype">
 <code class="descclassname">model.catalogue.</code><code class="descname">uppercase_dtype</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/catalogue.html#uppercase_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.catalogue.uppercase_dtype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convert a dtype to upper case. A helper function.</p>
+<p>Do not use.</p>
+</dd></dl>
 
 </div>
 

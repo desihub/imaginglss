@@ -47,10 +47,12 @@
           <div class="body" role="main">
             
   <h1>Source code for model.catalogue</h1><div class="highlight"><pre>
-<span class="c"># Python class for handling object catalogs associated with</span>
-<span class="c"># a data release.  The catalogs are obtained from FITS files.</span>
-<span class="c"># This class does some caching for speed.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python class for handling object catalogs associated with</span>
+<span class="sd">a data release.  The catalogs are obtained from FITS files.</span>
+<span class="sd">This class does some caching for speed.</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 
 <span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">fits</span>
@@ -68,6 +70,17 @@
 <div class="viewcode-block" id="coord2xyz"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.coord2xyz">[docs]</a><span class="k">def</span> <span class="nf">coord2xyz</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coord: array_like</span>
+<span class="sd">        coord = (RA, DEC) in degrees.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    vector: array_like</span>
+<span class="sd">        Unit vectors corresponding to RA, DEC, in (, 3).</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">RA</span><span class="p">,</span> <span class="n">DEC</span> <span class="o">=</span> <span class="n">coord</span>
     <span class="n">xyz</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">RA</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;f4&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -78,6 +91,10 @@
     <span class="k">return</span> <span class="n">xyz</span><span class="o">.</span><span class="n">T</span>
 </div>
 <div class="viewcode-block" id="uppercase_dtype"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.uppercase_dtype">[docs]</a><span class="k">def</span> <span class="nf">uppercase_dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Convert a dtype to upper case. A helper function.</span>
+<span class="sd">        </span>
+<span class="sd">        Do not use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pairs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">])</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dtype</span>
@@ -85,21 +102,30 @@
 <div class="viewcode-block" id="Catalogue"><a class="viewcode-back" href="../../model.catalogue.html#model.catalogue.Catalogue">[docs]</a><span class="k">class</span> <span class="nc">Catalogue</span><span class="p">(</span><span class="n">DiskColumnStore</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for handling object catalogs associated with a data release.</span>
-<span class="sd">    The catalogs are contained in FITS files, but this class caches the</span>
-<span class="sd">    information for speed and only columns that are accessed are loaded</span>
-<span class="sd">    into memory.</span>
-<span class="sd">    The columns are cached into cachedir, which is initialized </span>
+
+<span class="sd">    The catalogs are contained in many small FITS files. Accesing them </span>
+<span class="sd">    directly is slow. This class caches the</span>
+<span class="sd">    information on disk for speed. </span>
+<span class="sd">    Only columns that are accessed are loaded into memory.</span>
+
+
+<span class="sd">    The columns are cached on disk into cachedir, which is initialized </span>
 <span class="sd">    by the DataRelease object.</span>
-<span class="sd">    We assume the catalogue is split into multiple files.</span>
-<span class="sd">    and the list of file names are provided as an input.</span>
-<span class="sd">    The main method is fetch.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cachedir</span><span class="p">,</span> <span class="n">filenames</span><span class="p">,</span> <span class="n">aliases</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        cachedir is the location for caching.</span>
-<span class="sd">        filenames are a list of fits file names for the DR</span>
-<span class="sd">        aliases is a list of fields to rename (fields in old DRs are renamed to newer DRs,</span>
-<span class="sd">        so that code written for new DR can work on old DRs.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cachedir: string</span>
+<span class="sd">            the location for caching.</span>
+<span class="sd">        filenames: list</span>
+<span class="sd">            a list of fits file names that the catalogue is stored.</span>
+<span class="sd">        aliases: list</span>
+<span class="sd">            a list of fields to transform; this is to support migration</span>
+<span class="sd">            of schema from older data release to newer ones. The list</span>
+<span class="sd">            is of from (oldname, newname, transformfunction)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="n">filenames</span>
         <span class="n">fn</span> <span class="o">=</span> <span class="n">filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
