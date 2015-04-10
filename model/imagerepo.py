@@ -38,7 +38,7 @@ class ImageRepo(object):
 
             Parameters
             ----------
-            bricks: list of Brick
+            bricks: list of :py:class:`~model.brick.Brick`
                 the bricks whose images will be loaded
 
         """
@@ -55,7 +55,7 @@ class ImageRepo(object):
 
             Parameters
             ----------
-            brick: Brick
+            brick: :py:class:`~model.brick.Brick`
                 the brick whose image will be loaded
             
             Returns
@@ -77,7 +77,7 @@ class ImageRepo(object):
 
             Parameters
             ----------
-            brick: Brick
+            brick: :py:class:`~model.brick.Brick`
                 the brick whose metadata will be loaded
             
             Returns
@@ -103,7 +103,7 @@ class ImageRepo(object):
 
             Parameters
             ----------
-            brick: Brick
+            brick: :py:class:`~model.brick.Brick`
                 the brick whose filename will be generated.
              
         """

@@ -1,5 +1,11 @@
-# most code taken from https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py
-# replaced the transformation with ours
+"""
+Accesing SFD98 maps.
+
+Most code taken from 
+https://raw.githubusercontent.com/dstndstn/tractor/master/projects/desi/common.py
+, 
+replaced the transformation with ours.
+"""
 import fitsio
 import os
 from utils import wcs_simplezea
@@ -8,6 +14,7 @@ import numpy as np
 
 # to run need to 
 # export DUST_DIR=/project/projectdirs/desi/software/edison/dust/v0_0/
+__all__ = ['SFDMap']
 
 class anwcs_t(object):
     def __init__(self, filename, hduid):
@@ -21,16 +28,29 @@ def radectolb(ra, dec):
     l, b = euler(ra, dec, 1)
     return l, b 
 class SFDMap(object):
-    # These come from Schlafly & Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1
-    # but updated (and adding DES u) via email from Schlafly,
-    # decam-data thread from 11/13/2014, "New recommended SFD coefficients for DECam."
-    #
-    # The coefficients for the four WISE filters are derived from Fitzpatrick 1999,
-    # as recommended by Schafly & Finkbeiner, considered better than either the
-    # Cardelli et al 1989 curves or the newer Fitzpatrick & Massa 2009 NIR curve
-    # not vetted beyond 2 micron).
-    # These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910. 
-    #
+    """
+    SFDMap accesses the SFD98 Map. The map file shall be given in the constructor.
+
+    Attributes
+    ----------
+    extinctions: dict
+        These values are not useful for us, but we keep them for reference.
+
+        These come from Schlafly & Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1
+        but updated (and adding DES u) via email from Schlafly,
+        decam-data thread from 11/13/2014, "New recommended SFD coefficients for DECam."
+       
+        The coefficients for the four WISE filters are derived from Fitzpatrick 1999,
+        as recommended by Schafly & Finkbeiner, considered better than either the
+        Cardelli et al 1989 curves or the newer Fitzpatrick & Massa 2009 NIR curve
+        not vetted beyond 2 micron).
+        These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910. 
+
+    Notes
+    -----
+    Use :py:meth:`ebv` to query the E(B-V) values. 
+
+    """
     extinctions = {
         'SDSS u': 4.239,
         'DES u': 3.995,
@@ -46,6 +66,18 @@ class SFDMap(object):
         }
 
     def __init__(self, ngp_filename=None, sgp_filename=None, dustdir=None):
+        """
+        Parameters
+        ----------
+        ngp_filename: string
+            filename of the north plane data
+        sgp_filename: string
+            filename of the sourth plane data
+        dustdir: string
+            directory to look for data files, overrides ngp_filename and sgp_filename,
+            Will use `DUST_DIR` environment variable if not supplied.
+    
+        """
         if dustdir is None:
             dustdir = os.environ.get('DUST_DIR', None)
         if dustdir is not None:
@@ -92,6 +124,21 @@ class SFDMap(object):
         return ebv
 
     def ebv(self, ra, dec):
+        """
+        Directly query the SFD map and returns E(B-V).
+        
+        Parameters
+        ----------
+        ra: array_like
+            RA in degrees.
+        dec: array_like
+            DEC in degrees.
+
+        Returns
+        -------
+        ebv: array_like
+            E(B-V)
+        """
         l,b = radectolb(ra, dec)
         ebv = np.zeros_like(l)
         N = (b >= 0)
@@ -112,6 +159,12 @@ class SFDMap(object):
         return ebv
 
     def extinction(self, filts, ra, dec, get_ebv=False):
+        """
+        Returns the extinction for different filters.
+
+        Do not use this function; copied from old code. 
+        Use :py:meth:`ebv` instead. 
+        """
         ebv = self.ebv(ra, dec)
         if filts is not None:
             factors = np.array([SFDMap.extinctions[f] for f in filts])

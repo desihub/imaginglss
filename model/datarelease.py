@@ -131,22 +131,32 @@ class DataRelease(object):
     data release.  Uses several "helper" classes and has methods for
     looking at pixelized data or catalogs arranged in bricks.
 
-
     Attributes
     ----------
 
-    brickindex : model.brickindex.BrickIndex
+    brickindex : :py:class:`~model.brickindex.BrickIndex`
         an index object of all of the bricks (covering the entire sky)
     bands      : dict
         a dictionary translating from band name to integer used in Tractor catalogue
-    catalogue  : model.catalogue.Catalogue
+    catalogue  : :py:class:`~model.catalogue.Catalogue`
         the concatenated tractor catalogue, accessed by attributes.
     extinction : array_like
-        an array stroing the extinction coeffcients
-    images :      model.imagerepo.ImageRepo
-        image repositories (depth, image, model are by bands, ebv is the extinction map)
-    footprint  : Footprint 
-        the footprint of the data release
+        an array storing the extinction coeffcients. 
+        The array matches the defination of `DECAM_FLUX` column of 
+        the catalogue, u, g, r, i, z, Y.
+    images     : :py:class:`~model.imagerepo.ImageRepo`
+        Image repositories. These image repositories are used by
+        py:meth:`readout`.
+    footprint  : :py:class:`Footprint`
+        the footprint of the data release.
+
+    Examples
+    --------
+    >>> dr = DataRelease()
+    >>> dr.images['depth']['r']  # r band depth images.
+    >>> dr.images['image']['r']  # r band coadd images.
+    >>> dr.images['model']['r']  # r band tractor model images.
+
 
     """
     def __init__(self, root=None, cacheroot=None, version=None):

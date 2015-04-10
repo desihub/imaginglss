@@ -1,8 +1,9 @@
-# Python code to provide a high level table/list/index of
-# bricks, and methods for organizing and querying them and
-# returning brick objects.
-#
-#
+"""
+Python code to provide a high level table/list/index of
+bricks, and methods for organizing and querying them and
+returning brick objects.
+
+"""
 
 import numpy
 
@@ -16,18 +17,38 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 class BrickIndex(object):
     """
-    Manages a high level table/list/index of bricks.
-    Contains methods for organizing and querying bricks
+    BrickIndex manages a high level table/list/index of bricks.
+
+    It contains methods for organizing and querying bricks
     or returning brick objects.
+
+    The FITS file 'bricks.fits' within each imaging data release
+    contains meta-data about each of the bricks in the release.
+
+    We generate an index from bricks.fits , e.g.
+
+    >>> brickdata = fits.read_table('bricks.fits')
+    >>> bi = BrickIndex(brickdata) 
+
+    However, a BrickIndex object is usually automatically handled by 
+    :py:class:`~model.datarelease.DataRelease`, and one shall use
+
+    >>> dr = DataRelease()
+    >>> dr.brickindex
+
+    Notes
+    -----
+    The bricks in DECALS are first divided as uniform DEC rows. 
+    The number of bricks changes with DEC, such that each brick
+    as apporximately same area.
+
     """
     def __init__(self, brickdata):
         """ 
-        The FITS file 'bricks.fits' within each imaging data release
-        contains meta-data about each of the bricks in the release.
-
-        We generate an index from bricks.fits , e.g.
-        brickdata = fits.read_table('bricks.fits')
-        bi = BrickIndex(brickdata) 
+        Parameters
+        ----------
+        brickdata: array_like
+            contents of `bricks.fits`.
     
         """
         self.brickdata = numpy.array(brickdata[:], copy=True)
@@ -61,10 +82,28 @@ class BrickIndex(object):
     def get_brick(self, index):
         """
         Obtain a single brick from index.
+
         The returned Brick object is immutable; there is only
         a single instance per BrickIndex.
+    
+        Parameters
+        ----------
+        index: integer
+            The internal index of a brick. This differ from BRICKID
+            in the catalogue.
+
+        Returns
+        -------
+        brick: :py:class:`~model.brick.Brick`
+            A brick object at index.
+
+        Notes
+        -----
         The lack of a vector version is on purpose to emphasize
-        we are dealing with objects. (YF: maybe not a good idea?)
+        we are dealing with objects. 
+
+        Use :py:meth:`get_bricks` to create a list of objects.
+
         """
         if index not in self.cache:
             brick = Brick(self.brickdata['BRICKID'][index], 
@@ -78,11 +117,40 @@ class BrickIndex(object):
             self.cache[index] = brick
         return self.cache[index]
 
+    def get_bricks(self, indices):
+        """
+        Obtain a list of bricks.
+
+        Parameters
+        ----------
+        indices: array_like
+            Indices to obtain bricks
+
+        Returns
+        -------
+        bricks: list
+            A list of bricks.
+
+        """ 
+        return [self.get_brick(i) for i in indices]
+
     def search_by_name(self, brickname):
         """
-        search the brickindex for bricks with a given name.
-        returns the internal index of bricks.
-        Get Brick objects by iterating over the result and using get_brick(i)
+        Search the brickindex for bricks with a given name.
+
+        Parameters
+        ----------
+        brickname: string
+            the matching BRICKNAME.
+
+        Returns
+        -------
+        index: integer
+            The internal index of bricks.
+
+        Notes
+        -----
+        This function is not vectorized.
         """
         foo = numpy.empty(1, self.brickdata['BRICKNAME'].dtype)
         foo[0] = brickname
@@ -91,9 +159,22 @@ class BrickIndex(object):
  
     def search_by_id(self, brickid):
         """
-        search the brickindex for bricks with a given brickid.
-        returns the internal index of bricks.
-        Get Brick objects by iterating over the result and using get_brick(i)
+        Search the brickindex for bricks with a given brickid.
+        
+        Parameters
+        ----------
+        brickid: integer or array_like
+            the matching BRICKID or list of BRICKIDs
+
+        Returns
+        ------- 
+        index:  integer or array_like
+            the internal index of brick or bricks (for array_like input)
+
+        Notes
+        -----
+        Get Brick objects with :py:meth:`get_bricks` or :py:meth:`get_brick`.
+        
         """
         rt = self.brickdata['BRICKID'].searchsorted(brickid)
         rt = rt.clip(0, len(self.brickdata) - 1)
@@ -106,8 +187,17 @@ class BrickIndex(object):
     def query(self, coord):
         """ 
         Returns the internal index of a brick at coord=(RA,DEC) in
-        decimal degrees.  This internal index can differ from BRICKID.
-        Get Brick objects by iterating over the result and using get_brick(i)
+        decimal degrees.  
+
+        Parameters
+        ----------
+        coord: array_like
+            coord = (RA, DEC) in degrees, vectorized.
+
+        Notes
+        -----
+        Get Brick objects with :py:meth:`get_bricks` or :py:meth:`get_brick`.
+
         """
         RA, DEC = coord
         RA = numpy.asarray(RA)
@@ -123,24 +213,33 @@ class BrickIndex(object):
     def optimize(self, coord, return_index=False, return_inverse=False):
         """
         Optimize the ordering of coord=(RA,DEC) to make later queries faster.
+
         RA and DEC are sorted by their brickid, to group future queries.
 
-        if return_inverse is True, returns the array that can be used to
-        reconstruct coord from the returned coord.
+        Parameters
+        ----------
+        return_inverse: boolean
+            if True, returns the array that can be used to
+            reconstruct coord from the returned coord.
+        return_index: boolean
+            if True, returns the array that can be used to
+            construct sorted_coord from coord:
 
-                sorted_ra[ iindices] == ra
-                sorted_dec[iindices] == dec
+        Returns
+        -------
+        Depending or return_inverse and return_index, may return
+        (sorted_coord, indices, iindices), (sorted_coord, iindices)
+        (sorted_coord, indices), or sorted_coord
 
-        if return_index is True, returns the array that can be used to
-        construct sorted_coord from coord:
+        sorted_coord: array_like
+            Optimized coord array, that is sorted by bricks.
+        iindeces: array_like
+            sorted_ra[ iindices] == ra
+            sorted_dec[iindices] == dec
+        indices: array_like
+            sorted_ra == ra[indices]
+            sorted_dec == dec[indices]
 
-                sorted_ra == ra[indices]
-                sorted_dec == dec[indices]
-
-        returns sorted_coord, indices, iindices or
-                sorted_coord, iindices or
-                sorted_coord, indices or
-                sorted_coord
         """
         coord = numpy.array(coord)
         bid = self.query(coord)

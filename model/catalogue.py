@@ -1,7 +1,9 @@
-# Python class for handling object catalogs associated with
-# a data release.  The catalogs are obtained from FITS files.
-# This class does some caching for speed.
+"""
+Python class for handling object catalogs associated with
+a data release.  The catalogs are obtained from FITS files.
+This class does some caching for speed.
 
+"""
 import numpy
 
 from utils import fits
@@ -19,6 +21,17 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 def coord2xyz(coord):
     """
     Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.
+    
+    Parameters
+    ----------
+    coord: array_like
+        coord = (RA, DEC) in degrees.
+    
+    Returns
+    -------
+    vector: array_like
+        Unit vectors corresponding to RA, DEC, in (, 3).
+
     """
     RA, DEC = coord
     xyz = numpy.empty(len(RA), ('f4', 3))
@@ -29,6 +42,10 @@ def coord2xyz(coord):
     return xyz.T
 
 def uppercase_dtype(dtype):
+    """ Convert a dtype to upper case. A helper function.
+        
+        Do not use.
+    """
     pairs = dict([(key.upper(), dtype.fields[key]) for key in dtype.names])
     dtype = numpy.dtype(pairs)
     return dtype
@@ -36,21 +53,30 @@ def uppercase_dtype(dtype):
 class Catalogue(DiskColumnStore):
     """
     Class for handling object catalogs associated with a data release.
-    The catalogs are contained in FITS files, but this class caches the
-    information for speed and only columns that are accessed are loaded
-    into memory.
-    The columns are cached into cachedir, which is initialized 
+
+    The catalogs are contained in many small FITS files. Accesing them 
+    directly is slow. This class caches the
+    information on disk for speed. 
+    Only columns that are accessed are loaded into memory.
+
+
+    The columns are cached on disk into cachedir, which is initialized 
     by the DataRelease object.
-    We assume the catalogue is split into multiple files.
-    and the list of file names are provided as an input.
-    The main method is fetch.
+
     """
     def __init__(self, cachedir, filenames, aliases):
         """
-        cachedir is the location for caching.
-        filenames are a list of fits file names for the DR
-        aliases is a list of fields to rename (fields in old DRs are renamed to newer DRs,
-        so that code written for new DR can work on old DRs.
+        Parameters
+        ----------
+        cachedir: string
+            the location for caching.
+        filenames: list
+            a list of fits file names that the catalogue is stored.
+        aliases: list
+            a list of fields to transform; this is to support migration
+            of schema from older data release to newer ones. The list
+            is of from (oldname, newname, transformfunction)
+
         """
         self.filenames = filenames
         fn = filenames[0]
