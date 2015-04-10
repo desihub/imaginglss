@@ -141,13 +141,13 @@ Important attributes are</p>
 for coordinates on the sky.</li>
 </ul>
 </div></blockquote>
-<p>Catalog information is handled by catalog.Catalogue, which stores the
+<p>Catalog information is handled by <code class="xref py py-class docutils literal"><span class="pre">model.datarelease.catalog.Catalogue</span></code>, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files,
 but this class caches the
 information for speed and only columns that are accessed are loaded
 into memory. Use &#8216;forget_cache.py&#8217; to clear this cache.</p>
-<p>The images are represented by imagerepo.ImageRepo objects.
+<p>The images are represented by <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">model.imagerepo.ImageRepo</span></code></a> objects.
 An ImageRepo object takes care of reading the image tile of a Brick.
 An image tile contains a padded region around the Brick,
 which is sometimes mentioned as a margin, a padding, or a bleeding region.</p>
@@ -159,24 +159,32 @@ which is sometimes mentioned as a margin, a padding, or a bleeding region.</p>
 <li>DataRelease.images[&#8216;model&#8217;][&#8216;u&#8217;] : the model &#8216;u&#8217; band image in nanomaggies;</li>
 </ul>
 </div></blockquote>
-<p>or what tractor thinks the sky looks like.</p>
-<p>brick.Brick holds metadata for each Brick, including the central &#8216;ra&#8217;,
-&#8216;dec&#8217;, and the primary area covered by the brick, excluding the padding regsions. There are routines for converting from sky coordinates to image
+<p><a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">model.brick.Brick</span></code></a> holds metadata for each Brick, including the central
+<code class="xref py py-attr docutils literal"><span class="pre">ra</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec</span></code>,
+and the primary area(
+<code class="xref py py-attr docutils literal"><span class="pre">ra1</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec1</span></code>,
+<code class="xref py py-attr docutils literal"><span class="pre">ra2</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec2</span></code>
+) covered by the brick, excluding the padding region.
+There are routines for converting from sky coordinates to image
 pixels within each brick, and routines for querying the images
 handled by imagerepo.</p>
-<p>brickindex.BrickIndex holds the metadata
+<p><a class="reference internal" href="model.brickindex.html#model.brickindex.BrickIndex" title="model.brickindex.BrickIndex"><code class="xref py py-class docutils literal"><span class="pre">model.brickindex.BrickIndex</span></code></a> holds the metadata
 of of the brick decomposition scheme.
 There are routines for converting from
-sky coordinates to bricks, and acts as a factory that creates Brick
-objects.</p>
-<p>Helper routines. In order to reduce the number of dependecies,
+sky coordinates to bricks, and acts as a factory that creates
+<a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a> objects.</p>
+<div class="section" id="helper-routines">
+<h3>Helper routines<a class="headerlink" href="#helper-routines" title="Permalink to this headline">¶</a></h3>
+<p>In order to reduce the number of dependecies,
 we implemented a few coordinate transformations</p>
 <blockquote>
 <div><ul class="simple">
-<li>wcs_tangent impments the WCS tangent format.</li>
-<li>wcs_simplezea implement the WCS ZEA format, oriented at north / south pole</li>
+<li><a class="reference internal" href="model.utils.wcs_tangent.html#module-model.utils.wcs_tangent" title="model.utils.wcs_tangent"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_tangent</span></code></a> impments the WCS tangent format.</li>
+<li><a class="reference internal" href="model.utils.wcs_simplezea.html#module-model.utils.wcs_simplezea" title="model.utils.wcs_simplezea"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_simplezea</span></code></a> implement the WCS ZEA format; oriented at north / south pole</li>
+<li><a class="reference internal" href="model.utils.euler.html#module-model.utils.euler" title="model.utils.euler"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.euler</span></code></a> implements the transformation between Galactic and RA/DEC. coordinates.</li>
 </ul>
 </div></blockquote>
+</div>
 </div>
 </div>
 <div class="section" id="modules">
@@ -228,7 +236,10 @@ we implemented a few coordinate transformations</p>
   <ul>
 <li><a class="reference internal" href="#">Welcome to ImagingLSS&#8217;s documentation!</a><ul>
 <li><a class="reference internal" href="#known-issues">Known Issues</a></li>
-<li><a class="reference internal" href="#description-of-model-used-to-process-decals-imaging-data">Description of model used to process DECALS imaging data.</a></li>
+<li><a class="reference internal" href="#description-of-model-used-to-process-decals-imaging-data">Description of model used to process DECALS imaging data.</a><ul>
+<li><a class="reference internal" href="#helper-routines">Helper routines</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#modules">Modules</a></li>
