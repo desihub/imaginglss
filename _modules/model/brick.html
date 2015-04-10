@@ -75,20 +75,20 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    id:   integer</span>
+<span class="sd">    id   :   integer</span>
 <span class="sd">        ID of the brick as in the Tractor catalogue (unique).</span>
 <span class="sd">        Note that we do not use it in indexing.</span>
-<span class="sd">    name: string_like </span>
+<span class="sd">    name : string_like </span>
 <span class="sd">        name of the brick as in the Tractor catalogue (unique)</span>
-<span class="sd">    ra: float</span>
+<span class="sd">    ra   : float</span>
 <span class="sd">        center coordinate ra</span>
-<span class="sd">    dec: float</span>
+<span class="sd">    dec  : float</span>
 <span class="sd">        center coordinate dec</span>
-<span class="sd">    ra1: float</span>
+<span class="sd">    ra1  : float</span>
 <span class="sd">        min coordinate ra</span>
-<span class="sd">    dec1: float</span>
+<span class="sd">    dec1 : float</span>
 <span class="sd">        min coordinate dec</span>
-<span class="sd">    ra2: float</span>
+<span class="sd">    ra2  : float</span>
 <span class="sd">        max coordinate ra</span>
 <span class="sd">    dec2: float</span>
 <span class="sd">        max coordinate dec</span>
@@ -122,16 +122,16 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        coord: array_like</span>
+<span class="sd">        coord  : array_like</span>
 <span class="sd">            Coordinate of the pixels, coord=(RA, DEC)</span>
-<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
+<span class="sd">        repo   : :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            Image repository to read from. Refer to DataRelease.images.</span>
-<span class="sd">        default:</span>
+<span class="sd">        default : float</span>
 <span class="sd">            Default value to return if the pixel is outside of the brick.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        values: array_like</span>
+<span class="sd">        values : array_like</span>
 <span class="sd">            values read out from repo.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -159,15 +159,15 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
+<span class="sd">        repo   : :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            image repository that contains the necessary transformation</span>
 <span class="sd">            for this brick</span>
-<span class="sd">        coord: array_like </span>
+<span class="sd">        coord  : array_like </span>
 <span class="sd">            coord = (RA, DEC) tuple of arrays</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        xy: array_like</span>
+<span class="sd">        xy     : array_like</span>
 <span class="sd">            a (2xN) array, xy=(x, y).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -183,14 +183,14 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        repo: :py:class:`~model.imagerepo.ImageRepo`</span>
+<span class="sd">        repo   : :py:class:`~model.imagerepo.ImageRepo`</span>
 <span class="sd">            image repository that contains the necessary transformation</span>
 <span class="sd">            for this brick</span>
-<span class="sd">        xy: array_like</span>
+<span class="sd">        xy     : array_like</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        coord: array_like</span>
+<span class="sd">        coord  : array_like</span>
 <span class="sd">            coord=(RA, DEC) for each given position.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">meta</span>      <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>

@@ -70,30 +70,30 @@ looking up the pixel-level information.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="15%" />
-<col width="85%" />
+<col width="9%" />
+<col width="91%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>id:   integer</td>
-<td>ID of the brick as in the Tractor catalogue (unique). Note that we do not use it in indexing.</td>
+<tr class="row-odd"><td>id</td>
+<td>(  integer) ID of the brick as in the Tractor catalogue (unique). Note that we do not use it in indexing.</td>
 </tr>
-<tr class="row-even"><td>name: string_like</td>
-<td>name of the brick as in the Tractor catalogue (unique)</td>
+<tr class="row-even"><td>name</td>
+<td>(string_like) name of the brick as in the Tractor catalogue (unique)</td>
 </tr>
-<tr class="row-odd"><td>ra: float</td>
-<td>center coordinate ra</td>
+<tr class="row-odd"><td>ra</td>
+<td>(float) center coordinate ra</td>
 </tr>
-<tr class="row-even"><td>dec: float</td>
-<td>center coordinate dec</td>
+<tr class="row-even"><td>dec</td>
+<td>(float) center coordinate dec</td>
 </tr>
-<tr class="row-odd"><td>ra1: float</td>
-<td>min coordinate ra</td>
+<tr class="row-odd"><td>ra1</td>
+<td>(float) min coordinate ra</td>
 </tr>
-<tr class="row-even"><td>dec1: float</td>
-<td>min coordinate dec</td>
+<tr class="row-even"><td>dec1</td>
+<td>(float) min coordinate dec</td>
 </tr>
-<tr class="row-odd"><td>ra2: float</td>
-<td>max coordinate ra</td>
+<tr class="row-odd"><td>ra2</td>
+<td>(float) max coordinate ra</td>
 </tr>
 <tr class="row-even"><td>dec2: float</td>
 <td>max coordinate dec</td>
@@ -110,18 +110,18 @@ To index the ndarray image, use [y, x].</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo</strong> : <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></a></p>
 <blockquote>
 <div><p>image repository that contains the necessary transformation
 for this brick</p>
 </div></blockquote>
-<p><strong>coord: array_like</strong></p>
+<p><strong>coord</strong> : array_like</p>
 <blockquote>
 <div><p>coord = (RA, DEC) tuple of arrays</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>xy</strong> : array_like</p>
 <blockquote class="last">
 <div><p>a (2xN) array, xy=(x, y).</p>
 </div></blockquote>
@@ -139,21 +139,21 @@ for this brick</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote>
 <div><p>Coordinate of the pixels, coord=(RA, DEC)</p>
 </div></blockquote>
-<p><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
+<p><strong>repo</strong> : <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></a></p>
 <blockquote>
 <div><p>Image repository to read from. Refer to DataRelease.images.</p>
 </div></blockquote>
-<p><strong>default:</strong></p>
+<p><strong>default</strong> : float</p>
 <blockquote>
 <div><p>Default value to return if the pixel is outside of the brick.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">values: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values</strong> : array_like</p>
 <blockquote class="last">
 <div><p>values read out from repo.</p>
 </div></blockquote>
@@ -171,15 +171,15 @@ for this brick</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo: :py:class:`~model.imagerepo.ImageRepo`</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo</strong> : <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></a></p>
 <blockquote>
 <div><p>image repository that contains the necessary transformation
 for this brick</p>
 </div></blockquote>
-<p><strong>xy: array_like</strong></p>
+<p><strong>xy</strong> : array_like</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote class="last">
 <div><p>coord=(RA, DEC) for each given position.</p>
 </div></blockquote>

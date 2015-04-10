@@ -93,14 +93,14 @@ a single instance per BrickIndex.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>index: integer</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>index</strong> : integer</p>
 <blockquote>
 <div><p>The internal index of a brick. This differ from BRICKID
 in the catalogue.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">brick: <a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>brick</strong> : <a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a></p>
 <blockquote class="last">
 <div><p>A brick object at index.</p>
 </div></blockquote>
@@ -122,13 +122,13 @@ we are dealing with objects.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>indices: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>indices</strong> : array_like</p>
 <blockquote>
 <div><p>Indices to obtain bricks</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bricks: list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>bricks</strong> : list</p>
 <blockquote class="last">
 <div><p>A list of bricks.</p>
 </div></blockquote>
@@ -147,12 +147,12 @@ we are dealing with objects.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>return_inverse: boolean</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>return_inverse</strong> : boolean</p>
 <blockquote>
 <div><p>if True, returns the array that can be used to
 reconstruct coord from the returned coord.</p>
 </div></blockquote>
-<p><strong>return_index: boolean</strong></p>
+<p><strong>return_index</strong> : boolean</p>
 <blockquote>
 <div><p>if True, returns the array that can be used to
 construct sorted_coord from coord:</p>
@@ -162,16 +162,16 @@ construct sorted_coord from coord:</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Depending or return_inverse and return_index, may return</p>
 <p>(sorted_coord, indices, iindices), (sorted_coord, iindices)</p>
 <p>(sorted_coord, indices), or sorted_coord</p>
-<p>sorted_coord: array_like</p>
+<p><strong>sorted_coord</strong> : array_like</p>
 <blockquote>
 <div><p>Optimized coord array, that is sorted by bricks.</p>
 </div></blockquote>
-<p>iindeces: array_like</p>
+<p><strong>iindeces</strong> : array_like</p>
 <blockquote>
 <div><p>sorted_ra[ iindices] == ra
 sorted_dec[iindices] == dec</p>
 </div></blockquote>
-<p>indices: array_like</p>
+<p><strong>indices</strong> : array_like</p>
 <blockquote class="last">
 <div><p>sorted_ra == ra[indices]
 sorted_dec == dec[indices]</p>
@@ -191,7 +191,7 @@ decimal degrees.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote class="last">
 <div><p>coord = (RA, DEC) in degrees, vectorized.</p>
 </div></blockquote>
@@ -211,13 +211,13 @@ decimal degrees.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brickid: integer or array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brickid</strong> : integer or array_like</p>
 <blockquote>
 <div><p>the matching BRICKID or list of BRICKIDs</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">index:  integer or array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index</strong> : integer or array_like</p>
 <blockquote class="last">
 <div><p>the internal index of brick or bricks (for array_like input)</p>
 </div></blockquote>
@@ -237,13 +237,13 @@ decimal degrees.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brickname: string</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>brickname</strong> : string</p>
 <blockquote>
 <div><p>the matching BRICKNAME.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">index: integer</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>index</strong> : integer</p>
 <blockquote class="last">
 <div><p>The internal index of bricks.</p>
 </div></blockquote>

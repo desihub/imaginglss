@@ -67,12 +67,12 @@ replaced the transformation with ours.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="3%" />
-<col width="97%" />
+<col width="2%" />
+<col width="98%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>extinctions: dict</td>
-<td>These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, &#8220;New recommended SFD coefficients for DECam.&#8221;  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
+<tr class="row-odd"><td>extinctions</td>
+<td>(dict) These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, &#8220;New recommended SFD coefficients for DECam.&#8221;  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
 </tr>
 </tbody>
 </table>
@@ -89,17 +89,17 @@ replaced the transformation with ours.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ra: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ra</strong> : array_like</p>
 <blockquote>
 <div><p>RA in degrees.</p>
 </div></blockquote>
-<p><strong>dec: array_like</strong></p>
+<p><strong>dec</strong> : array_like</p>
 <blockquote>
 <div><p>DEC in degrees.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ebv: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ebv</strong> : array_like</p>
 <blockquote class="last">
 <div><p>E(B-V)</p>
 </div></blockquote>

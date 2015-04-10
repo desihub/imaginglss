@@ -95,14 +95,11 @@
 <div class="viewcode-block" id="contains"><a class="viewcode-back" href="../../model.datarelease.html#model.datarelease.contains">[docs]</a><span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; test if needle is in haystack. </span>
 
-<span class="sd">        </span>
-<span class="sd">        returns mask:</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        haystack: array_like</span>
+<span class="sd">        haystack  : array_like</span>
 <span class="sd">            Sorted array</span>
-<span class="sd">        needle: array_like</span>
+<span class="sd">        needle    : array_like</span>
 <span class="sd">            items to look for</span>
 
 <span class="sd">        Returns</span>
@@ -161,12 +158,13 @@
 
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">                coord: array_like, must be compatible with (RA, DEC)</span>
+<span class="sd">            coord : array_like</span>
+<span class="sd">                must be compatible with (RA, DEC)</span>
 
 <span class="sd">            Returns</span>
 <span class="sd">            -------</span>
-<span class="sd">                coord_in_footprint: array_like</span>
-<span class="sd">                    items in the input coord that is in the footprint</span>
+<span class="sd">            coord_in_footprint : array_like</span>
+<span class="sd">                items in the input coord that is in the footprint</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
@@ -284,13 +282,13 @@
 <span class="sd">            </span>
 <span class="sd">            Parameters</span>
 <span class="sd">            ----------</span>
-<span class="sd">            coord: array_like</span>
+<span class="sd">            coord  : array_like</span>
 <span class="sd">                coordinates of the pixels, (RA, DEC)</span>
-<span class="sd">            repo: ImageRepo</span>
+<span class="sd">            repo   : ImageRepo</span>
 <span class="sd">                the images to read from.</span>
-<span class="sd">            default: scalar</span>
+<span class="sd">            default : scalar</span>
 <span class="sd">                value to return if the pixel is not in the footprint.</span>
-<span class="sd">            image_missing: boolean</span>
+<span class="sd">            image_missing : boolean</span>
 <span class="sd">                When ignore_missing is True, missing brick files are treated</span>
 <span class="sd">                as not in the footprint.</span>
 

@@ -96,7 +96,7 @@
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        brickdata: array_like</span>
+<span class="sd">        brickdata : array_like</span>
 <span class="sd">            contents of `bricks.fits`.</span>
 <span class="sd">    </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -137,13 +137,13 @@
 <span class="sd">    </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        index: integer</span>
+<span class="sd">        index : integer</span>
 <span class="sd">            The internal index of a brick. This differ from BRICKID</span>
 <span class="sd">            in the catalogue.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        brick: :py:class:`~model.brick.Brick`</span>
+<span class="sd">        brick : :py:class:`~model.brick.Brick`</span>
 <span class="sd">            A brick object at index.</span>
 
 <span class="sd">        Notes</span>
@@ -172,12 +172,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        indices: array_like</span>
+<span class="sd">        indices : array_like</span>
 <span class="sd">            Indices to obtain bricks</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        bricks: list</span>
+<span class="sd">        bricks  : list</span>
 <span class="sd">            A list of bricks.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span> 
@@ -189,12 +189,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        brickname: string</span>
+<span class="sd">        brickname : string</span>
 <span class="sd">            the matching BRICKNAME.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        index: integer</span>
+<span class="sd">        index  : integer</span>
 <span class="sd">            The internal index of bricks.</span>
 
 <span class="sd">        Notes</span>
@@ -212,12 +212,12 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        brickid: integer or array_like</span>
+<span class="sd">        brickid : integer or array_like</span>
 <span class="sd">            the matching BRICKID or list of BRICKIDs</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        ------- </span>
-<span class="sd">        index:  integer or array_like</span>
+<span class="sd">        index   : integer or array_like</span>
 <span class="sd">            the internal index of brick or bricks (for array_like input)</span>
 
 <span class="sd">        Notes</span>
@@ -240,7 +240,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        coord: array_like</span>
+<span class="sd">        coord  : array_like</span>
 <span class="sd">            coord = (RA, DEC) in degrees, vectorized.</span>
 
 <span class="sd">        Notes</span>
@@ -267,10 +267,10 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        return_inverse: boolean</span>
+<span class="sd">        return_inverse : boolean</span>
 <span class="sd">            if True, returns the array that can be used to</span>
 <span class="sd">            reconstruct coord from the returned coord.</span>
-<span class="sd">        return_index: boolean</span>
+<span class="sd">        return_index   : boolean</span>
 <span class="sd">            if True, returns the array that can be used to</span>
 <span class="sd">            construct sorted_coord from coord:</span>
 
@@ -280,12 +280,12 @@
 <span class="sd">        (sorted_coord, indices, iindices), (sorted_coord, iindices)</span>
 <span class="sd">        (sorted_coord, indices), or sorted_coord</span>
 
-<span class="sd">        sorted_coord: array_like</span>
+<span class="sd">        sorted_coord : array_like</span>
 <span class="sd">            Optimized coord array, that is sorted by bricks.</span>
-<span class="sd">        iindeces: array_like</span>
+<span class="sd">        iindeces     : array_like</span>
 <span class="sd">            sorted_ra[ iindices] == ra</span>
 <span class="sd">            sorted_dec[iindices] == dec</span>
-<span class="sd">        indices: array_like</span>
+<span class="sd">        indices      : array_like</span>
 <span class="sd">            sorted_ra == ra[indices]</span>
 <span class="sd">            sorted_dec == dec[indices]</span>
 

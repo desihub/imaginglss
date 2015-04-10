@@ -110,19 +110,19 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote>
 <div><p>coordinates of the pixels, (RA, DEC)</p>
 </div></blockquote>
-<p><strong>repo: ImageRepo</strong></p>
+<p><strong>repo</strong> : ImageRepo</p>
 <blockquote>
 <div><p>the images to read from.</p>
 </div></blockquote>
-<p><strong>default: scalar</strong></p>
+<p><strong>default</strong> : scalar</p>
 <blockquote>
 <div><p>value to return if the pixel is not in the footprint.</p>
 </div></blockquote>
-<p><strong>image_missing: boolean</strong></p>
+<p><strong>image_missing</strong> : boolean</p>
 <blockquote class="last">
 <div><p>When ignore_missing is True, missing brick files are treated
 as not in the footprint.</p>
@@ -173,10 +173,13 @@ have readout in ImageRepo.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like, must be compatible with (RA, DEC)</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote>
+<div><p>must be compatible with (RA, DEC)</p>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord_in_footprint: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coord_in_footprint</strong> : array_like</p>
 <blockquote class="last">
 <div><p>items in the input coord that is in the footprint</p>
 </div></blockquote>
@@ -199,16 +202,15 @@ have readout in ImageRepo.</p>
 <dt id="model.datarelease.contains">
 <code class="descclassname">model.datarelease.</code><code class="descname">contains</code><span class="sig-paren">(</span><em>haystack</em>, <em>needle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/datarelease.html#contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.datarelease.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>test if needle is in haystack.</p>
-<p>returns mask:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>haystack: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>haystack</strong> : array_like</p>
 <blockquote>
 <div><p>Sorted array</p>
 </div></blockquote>
-<p><strong>needle: array_like</strong></p>
+<p><strong>needle</strong> : array_like</p>
 <blockquote>
 <div><p>items to look for</p>
 </div></blockquote>

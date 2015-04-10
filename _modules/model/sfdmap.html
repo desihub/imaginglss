@@ -82,7 +82,7 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    extinctions: dict</span>
+<span class="sd">    extinctions : dict</span>
 <span class="sd">        These values are not useful for us, but we keep them for reference.</span>
 
 <span class="sd">        These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1</span>
@@ -118,11 +118,11 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ngp_filename: string</span>
+<span class="sd">        ngp_filename : string</span>
 <span class="sd">            filename of the north plane data</span>
-<span class="sd">        sgp_filename: string</span>
+<span class="sd">        sgp_filename : string</span>
 <span class="sd">            filename of the sourth plane data</span>
-<span class="sd">        dustdir: string</span>
+<span class="sd">        dustdir      : string</span>
 <span class="sd">            directory to look for data files, overrides ngp_filename and sgp_filename,</span>
 <span class="sd">            Will use `DUST_DIR` environment variable if not supplied.</span>
 <span class="sd">    </span>
@@ -178,14 +178,14 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        ra: array_like</span>
+<span class="sd">        ra   : array_like</span>
 <span class="sd">            RA in degrees.</span>
-<span class="sd">        dec: array_like</span>
+<span class="sd">        dec  : array_like</span>
 <span class="sd">            DEC in degrees.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        ebv: array_like</span>
+<span class="sd">        ebv  : array_like</span>
 <span class="sd">            E(B-V)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">l</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">radectolb</span><span class="p">(</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
