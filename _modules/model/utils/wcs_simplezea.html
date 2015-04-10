@@ -137,25 +137,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</span>
 <span class="sd">    </span>
-<span class="sd">    A convenience function for calling pix2ang, with the transformations</span>
-<span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
-<span class="sd">    transformations.  </span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    xy: array_like </span>
-<span class="sd">        (x, y), x and y in pixel numbers, vectorized</span>
-<span class="sd">    hdr:   dict</span>
-<span class="sd">        WCS header as a dictionary</span>
-<span class="sd">    zero_offset: boolean, optional,</span>
-<span class="sd">        If True, the routine assumes 0-indexed pixel coordinates</span>
-<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 (as in</span>
-<span class="sd">        Fortran).</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    coord: array_like</span>
-<span class="sd">        coord = (RA, DEC) in degrees.</span>
+<span class="sd">    See :py:meth:`ang2pix_hdr`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
@@ -268,7 +250,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert x, y to RA, DEC with simple ZEA transformation.</span>
 
-<span class="sd">    See the document of py:meth:ang2pix</span>
+<span class="sd">    See :py:meth:`ang2pix`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>

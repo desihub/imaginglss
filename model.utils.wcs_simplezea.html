@@ -118,7 +118,7 @@ to pixel xy coordinate according the the WCS header.</p>
 <dt id="model.utils.wcs_simplezea.pix2ang">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang</code><span class="sig-paren">(</span><em>xy</em>, <em>SCALE</em>, <em>CRPIX</em>, <em>NSGP</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert x, y to RA, DEC with simple ZEA transformation.</p>
-<p>See the document of py:meth:ang2pix</p>
+<p>See <a class="reference internal" href="#model.utils.wcs_simplezea.ang2pix" title="model.utils.wcs_simplezea.ang2pix"><code class="xref py py-meth docutils literal"><span class="pre">ang2pix()</span></code></a></p>
 </dd></dl>
 
 <dl class="function">
@@ -162,37 +162,7 @@ Fortran).</p>
 <dt id="model.utils.wcs_simplezea.pix2ang_hdr">
 <code class="descclassname">model.utils.wcs_simplezea.</code><code class="descname">pix2ang_hdr</code><span class="sig-paren">(</span><em>xy</em>, <em>hdr</em>, <em>zero_offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/model/utils/wcs_simplezea.html#pix2ang_hdr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.utils.wcs_simplezea.pix2ang_hdr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</p>
-<p>A convenience function for calling pix2ang, with the transformations
-described in a dictionary in the usual FITS header style for WCS
-transformations.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xy: array_like</strong></p>
-<blockquote>
-<div><p>(x, y), x and y in pixel numbers, vectorized</p>
-</div></blockquote>
-<p><strong>hdr:   dict</strong></p>
-<blockquote>
-<div><p>WCS header as a dictionary</p>
-</div></blockquote>
-<p><strong>zero_offset: boolean, optional,</strong></p>
-<blockquote>
-<div><p>If True, the routine assumes 0-indexed pixel coordinates
-(useful in Python or C) while if it is False pixels run from 1 (as in
-Fortran).</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">coord: array_like</p>
-<blockquote class="last">
-<div><p>coord = (RA, DEC) in degrees.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p>See <a class="reference internal" href="#model.utils.wcs_simplezea.ang2pix_hdr" title="model.utils.wcs_simplezea.ang2pix_hdr"><code class="xref py py-meth docutils literal"><span class="pre">ang2pix_hdr()</span></code></a></p>
 </dd></dl>
 
 </div>
