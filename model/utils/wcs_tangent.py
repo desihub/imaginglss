@@ -1,17 +1,19 @@
-# Python routines to apply world-coordinate system transformations
-# based on the tangent-plane projection.
-# This code is designed to be light-weight, and specialized.
-#
-# The tangent-plane projection is described in
-# http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html
-# and in:
-# "Representations of celestial coordinates in FITS"
-# -- Calabretta, M. R., and Greisen, E. W.,
-# -- Astronomy & Astrophysics, 395, 1077-1122, 2002.
-# and the source code in 
-#   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
-# is also a very useful reference.
-#
+"""
+Python routines to apply world-coordinate system transformations
+based on the tangent-plane projection.
+This code is designed to be light-weight, and specialized.
+
+The tangent-plane projection is described in
+http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html
+and in:
+"Representations of celestial coordinates in FITS",
+Calabretta, M. R., and Greisen, E. W.,
+Astronomy & Astrophysics, 395, 1077-1122, 2002.
+
+The source code in
+   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
+
+"""
 from __future__ import print_function
 
 __author__ = "Yu Feng and Martin White"
@@ -26,13 +28,28 @@ import math
 
 def ang2pix_hdr(coord,hdr,zero_offset=True):
     """
+    Apply forward (ra,dec)->(x,y) TAN transformation
+    
     A convenience function for calling ang2pix, with the transformations
     described in a dictionary in the usual FITS header style for WCS
-    transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
-    degrees, vectorized) and the routine returns pixel numbers.
-    If zero_offset is True, the routine returns 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
-    Fortran).
+    transformations.  
+    
+    Parameters
+    ----------
+    coord: array_like 
+        (ra, dec), RA and DEC (in decimal degrees, vectorized) 
+    hdr:   dict
+        WCS header as a dictionary
+    zero_offset: boolean, optional,
+        If True, the routine returns 0-indexed pixel coordinates
+        (useful in Python or C) while if it is False pixels run from 1 (as in
+        Fortran).
+
+    Returns
+    -------
+    xy: array_like
+        xy = (x, y) pixel numbers.
+    
     """
     if ('TAN' not in hdr['CTYPE1'])|('TAN' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a tangent plane projection."
@@ -42,13 +59,9 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
 
 def pix2ang_hdr(xy,hdr,zero_offset=True):
     """
-    A convenience function for calling pix2ang, with the transformations
-    described in a dictionary in the usual FITS header style for WCS
-    transformations.  Given input pixel numbers xy the routine returns
-    coordinates (RA,DEC) in decimal degrees.
-    If zero_offset is True, the routine takes 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
-    Fortran).
+    Apply backward (x,y)->(ra,dec) TAN transformation
+    
+    See :py:meth:`ang2pix_hdr`
     """
     if ('TAN' not in hdr['CTYPE1'])|('TAN' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a tangent plane projection."
@@ -58,8 +71,31 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
 
 def parse_header(hdr, zero_offset):
     """
-    If zero_offset is True, the routine takes 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
+    Parse a WCS header to arguments of pix2ang and ang2pix.
+
+    Parameters
+    ----------
+    hdr: dict
+        WCS header
+    zero_offset: boolean
+        If zero_offset is True, the routine assumes 0-indexed pixel coordinates
+        (useful in Python or C) while if it is False pixels run from 1 
+        (as in Fortran and Julia)
+
+    Returns
+    -------
+    cd: array_like
+        Transformation matrix (2, 2)
+    crpix: array_like
+        Centeral pixel number, compensated for `zero_offset`
+    crval: array_like
+        Centeral RA, DEC
+
+    Raises
+    ------
+    RuntimeError:
+        if the header does not contain enough fields.
+
     """
     # Check to see whether the "hdr" dictionary contains the necessary
     # keywords.
@@ -80,21 +116,30 @@ def parse_header(hdr, zero_offset):
 
 def ang2pix(coord,CD,CRPIX,CRVAL):
     """
-    TAN Transform from coord = (ra, dec) to pixel xy coordinate 
-    according the the WCS header. Look up Section 5.1.3 of 
-    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
-    Although the source code in 
-      https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
-    maybe a better explanation of what is done.
-    coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-    returns the pixel xy = (x, y). 
-
-    CD is the tranformation matrix in CD1_1, CD1_2, CD2_1, CD_2_2,
-
-    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
+    Convert RA, DEC to x,y, with TAN transformation
 
     Obviously PV distortion is not supported.
+
     No checking is performed if a given RA, DEC lies outside the range.
+
+    Parameters
+    ----------
+    coord: array_like
+        coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) 
+    CD: array_like
+        transformation matrix (2, 2)
+    CRPIX: array_like
+        center pixel number of (x, y), compensated by offset.
+    CRVAL: array_like
+        center coordinate of (RA, DEC), in degrees.
+
+    Notes
+    -----
+    Look up Section 5.?.? of 
+    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
+    
+    The code large follows implementation at
+    https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
     """
     coord = numpy.array(coord, dtype='f8').copy()
     xy    = numpy.empty_like(coord)
@@ -119,11 +164,10 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
 
 def pix2ang(xy,CD,CRPIX,CRVAL):
     """
-    This is the invert transformation of ang2pix. (TAN)
-    xy = (x, y): coordinate in pixels
-    Returns coord = (RA, DEC), in decimal degrees.
+    Convert x, y to RA, DEC with TAN transformation.
 
-    RA/DEC at CRVAL shall map exactly to x/y at CRPIX.
+    See :py:meth:`ang2pix`
+    
     """
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)

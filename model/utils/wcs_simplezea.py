@@ -1,19 +1,29 @@
-# Python routines to apply world-coordinate system transformations
-# based on the simpler ZEA projection used SFD98 milky way dust map
-# This code is designed to be light-weight, and specialized.
-#
-# We handle two special cases 
-# CRVAL = -90 -90 (south) and 90 90 (north)
-# The ZEA projection is described in
-# http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html
-# and in:
-# "Representations of celestial coordinates in FITS"
-# -- Calabretta, M. R., and Greisen, E. W.,
-# -- Astronomy & Astrophysics, 395, 1077-1122, 2002.
-# and the source code in 
-#   https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
-# is also a very useful reference.
-#
+"""
+Python routines to apply world-coordinate system transformations
+based on the simpler ZEA projection used SFD98 milky way dust map
+
+This code is designed to be light-weight, and specialized. The general
+ZEA projection is UNSUPPORTED.  We handle two special cases 
+
+   - CRVAL = -90 -90 (south) 
+   - CRVAL = 90 90 (north)
+
+The ZEA projection is described in
+http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html
+and in:
+"Representations of celestial coordinates in FITS"
+Calabretta, M. R., and Greisen, E. W.,
+Astronomy & Astrophysics, 395, 1077-1122, 2002.
+
+"""
+from __future__ import print_function
+
+__author__ = "Yu Feng and Martin White"
+__version__ = "0.9"
+__email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
+__all__ = ['ang2pix','pix2ang','ang2pix_hdr','pix2ang_hdr']
+
+
 """
 example header:
 SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999
@@ -39,27 +49,34 @@ LAM_NSGP=                    1 / NSGP=+1 for north polar, =-1 for south polar
 LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg
 AUTHOR  = 'David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis' /
 """
-from __future__ import print_function
-
-__author__ = "Yu Feng and Martin White"
-__version__ = "0.9"
-__email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
-__all__ = ['ang2pix','pix2ang','ang2pix_hdr','pix2ang_hdr']
-
-
 
 import numpy 
 import math
 
 def ang2pix_hdr(coord,hdr,zero_offset=True):
     """
+    Apply forward (ra,dec)->(x,y) simple ZEA transformation
+    
     A convenience function for calling ang2pix, with the transformations
     described in a dictionary in the usual FITS header style for WCS
-    transformations.  Upon input coord = (ra, dec), RA and DEC (in decimal
-    degrees, vectorized) and the routine returns pixel numbers.
-    If zero_offset is True, the routine returns 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
-    Fortran).
+    transformations.  
+    
+    Parameters
+    ----------
+    coord: array_like 
+        (ra, dec), RA and DEC (in decimal degrees, vectorized) 
+    hdr:   dict
+        WCS header as a dictionary
+    zero_offset: boolean, optional,
+        If True, the routine returns 0-indexed pixel coordinates
+        (useful in Python or C) while if it is False pixels run from 1 (as in
+        Fortran).
+
+    Returns
+    -------
+    xy: array_like
+        xy = (x, y) pixel numbers.
+    
     """
     if ('ZEA' not in hdr['CTYPE1'])|('ZEA' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a zea projection."
@@ -69,13 +86,10 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
 
 def pix2ang_hdr(xy,hdr,zero_offset=True):
     """
-    A convenience function for calling pix2ang, with the transformations
-    described in a dictionary in the usual FITS header style for WCS
-    transformations.  Given input pixel numbers xy the routine returns
-    coordinates (RA,DEC) in decimal degrees.
-    If zero_offset is True, the routine takes 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
-    Fortran).
+    Apply backward (x,y)->(ra,dec) simple ZEA transformation
+    
+    See :py:meth:`ang2pix_hdr`
+
     """
     if ('ZEA' not in hdr['CTYPE1'])|('ZEA' not in hdr['CTYPE2']):
         raise RuntimeError,"Not a zea plane projection."
@@ -85,8 +99,31 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
 
 def parse_header(hdr, zero_offset):
     """
-    If zero_offset is True, the routine takes 0-indexed pixel coordinates
-    (useful in Python or C) while if it is False pixels run from 1 (as in
+    Parse a WCS header to arguments of pix2ang and ang2pix.
+
+    Parameters
+    ----------
+    hdr: dict
+        WCS header
+    zero_offset: boolean
+        If zero_offset is True, the routine assumes 0-indexed pixel coordinates
+        (useful in Python or C) while if it is False pixels run from 1 
+        (as in Fortran and Julia)
+
+    Returns
+    -------
+    scale: float
+        Scaling factor
+    crpix: array_like
+        center pixel coordniate; compensated for `zero_offset`
+    nsgp: int
+        North or South galactic pool.
+
+    Raises
+    ------
+    RuntimeError:
+        if the header does not contain enough fields.
+
     """
     # Check to see whether the "hdr" dictionary contains the necessary
     # keywords.
@@ -107,18 +144,39 @@ def parse_header(hdr, zero_offset):
 
 def ang2pix(coord,SCALE,CRPIX,NSGP):
     """
-    A simplified version of the ZEA Transform from coord = (ra, dec) to pixel xy coordinate 
-    according the the WCS header. Look up Section 5.?.? of 
-    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
-    Although the source code in 
-      https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py?r=93bcf1e49124f3fe06f8369ac290fe7d8a8f80fc
+    Convert RA, DEC to x,y, with simple ZEA transformation
 
-    maybe a better explanation of what is done.
-    coord = (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-    returns the pixel xy = (x, y). 
+    A simplified version of the ZEA Transform from coord = (ra, dec) 
+    to pixel xy coordinate according the the WCS header. 
 
     Obviously PV distortion is not supported.
+
     No checking is performed if a given RA, DEC lies outside the range.
+
+    Parameters
+    ----------
+    coord: array_like
+        coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) 
+    SCALE: int
+        scaling factor
+    CRPIX: array_like
+        center pixel number of x, y
+    NSGP: int
+        +1 for North, -1 for Sourth.
+
+    Notes
+    -----
+    Look up Section 5.?.? of 
+
+    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf 
+
+    Although the source code in 
+
+    https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py
+
+    maybe a better explanation of what is done.
+
+    The transformation is used by SFD98 dust maps.
     """
     coord = numpy.array(coord, dtype='f8').copy()
     xy    = numpy.empty_like(coord)
@@ -141,9 +199,9 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
 
 def pix2ang(xy,SCALE,CRPIX,NSGP):
     """
-    This is the invert transformation of ang2pix. (TAN)
-    xy = (x, y): coordinate in pixels
-    Returns coord = (RA, DEC), in decimal degrees.
+    Convert x, y to RA, DEC with simple ZEA transformation.
+
+    See :py:meth:`ang2pix`
 
     """
     xy    = numpy.array(xy, dtype='f8').copy()

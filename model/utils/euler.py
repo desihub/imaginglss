@@ -2,48 +2,45 @@ from numpy import *
 
 def euler(ai, bi, select=1, fk4=False):
    """
-    NAME:
-        EULER
-    PURPOSE:
-        Transform between Galactic, celestial, and ecliptic coordinates.
-    EXPLANATION:
-        Use the procedure ASTRO to use this routine interactively
+    Transform between Galactic, celestial, and ecliptic coordinates.
+
+    Use the procedure ASTRO to use this routine interactively
    
-    CALLING SEQUENCE:
-         EULER, AI, BI, AO, BO, [ SELECT, /FK4, SELECT = ]
-   
-    INPUTS:
-          AI - Input Longitude in DEGREES, scalar or vector.  If only two
+    Parameters
+    ---------- 
+    AI: array_like
+        Input Longitude in DEGREES, scalar or vector.  If only two
                   parameters are supplied, then  AI and BI will be modified to
                   contain the output longitude and latitude.
-          BI - Input Latitude in DEGREES
+    BI: array_like 
+        Input Latitude in DEGREES
+    SELECT: integer (1-6), optional
+        Specifying type of coordinate transformation.
    
-    OPTIONAL INPUT:
-          SELECT - Integer (1-6) specifying type of coordinate transformation.
-   
-         SELECT   From          To        |   SELECT      From            To
+        SELECT   From          To        |   SELECT      From            To
           1     RA-Dec (2000)  Galactic   |     4       Ecliptic      RA-Dec
           2     Galactic       RA-DEC     |     5       Ecliptic      Galactic
           3     RA-Dec         Ecliptic   |     6       Galactic      Ecliptic
    
-         If not supplied as a parameter or keyword, then EULER will prompt for
-         the value of SELECT
-         Celestial coordinates (RA, Dec) should be given in equinox J2000
-         unless the /FK4 keyword is set.
-    OUTPUTS:
-          AO - Output Longitude in DEGREES
-          BO - Output Latitude in DEGREES
+        If not supplied as a parameter or keyword, then EULER will prompt for
+        the value of SELECT
+        Celestial coordinates (RA, Dec) should be given in equinox J2000
+        unless the /FK4 keyword is set.
+    FK4: boolean
+        If this keyword is set and non-zero, then input and output
+            celestial and ecliptic coordinates should be given in equinox
+            B1950.
+
+    Returns
+    -------
+        AO - Output Longitude in DEGREES
+        BO - Output Latitude in DEGREES
    
-    INPUT KEYWORD:
-          /FK4 - If this keyword is set and non-zero, then input and output
-                celestial and ecliptic coordinates should be given in equinox
-                B1950.
-          /SELECT  - The coordinate conversion integer (1-6) may alternatively be
-                 specified as a keyword
-    NOTES:
+    NOTES
+    -----
           EULER was changed in December 1998 to use J2000 coordinates as the
           default, ** and may be incompatible with earlier versions***.
-    REVISION HISTORY:
+
           Written W. Landsman,  February 1987
           Adapted from Fortran by Daryl Yentis NRL
           Converted to IDL V5.0   W. Landsman   September 1997

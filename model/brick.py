@@ -1,7 +1,9 @@
-# The base Python object corresponding to an imaging brick.
-# This object contains only the meta-data, and it calls
-# imagerepo to handle looking up the pixel-level information.
+"""
+The base Python object corresponding to an imaging brick.
+This object contains only the meta-data, and it calls
+imagerepo to handle looking up the pixel-level information.
 
+"""
 from __future__ import print_function
 
 import numpy
@@ -17,9 +19,30 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 class Brick(object):
     """
     The base (immutable) object corresponding to an imaging brick.
-    This object contains only the meta-data, and it calls
-    imagerepo to handle looking up the pixel-level information.
-    Major methods are "readout", "query" and "revert".
+    This object contains only the meta-data, and is immutable.
+
+    Use ImageRepo to handle looking up the pixel-level information.
+
+    Attributes
+    ----------
+    id:   integer
+        ID of the brick as in the Tractor catalogue (unique).
+        Note that we do not use it in indexing.
+    name: string_like 
+        name of the brick as in the Tractor catalogue (unique)
+    ra: float
+        center coordinate ra
+    dec: float
+        center coordinate dec
+    ra1: float
+        min coordinate ra
+    dec1: float
+        min coordinate dec
+    ra2: float
+        max coordinate ra
+    dec2: float
+        max coordinate dec
+
     """
     def __init__(self, id, name, ra, dec, ra1, ra2, dec1, dec2):
         """
@@ -45,9 +68,22 @@ class Brick(object):
 
     def readout(self, coord, repo, default=numpy.nan):
         """
-        Return image values at coord=(RA, DEC) using the imagerepository repo.
-        If the image in this brick does not cover this region,
-        put in `default'.
+        Return image values from an image repository.
+
+        Parameters
+        ----------
+        coord: array_like
+            Coordinate of the pixels, coord=(RA, DEC)
+        repo: ImageRepo
+            Image repository to read from. Refer to DataRelease.images.
+        default:
+            Default value to return if the pixel is outside of the brick.
+
+        Returns
+        -------
+        values: array_like
+            values read out from repo.
+
         """
         coord     = numpy.array(coord)
         RA, DEC   = coord
@@ -66,13 +102,24 @@ class Brick(object):
  
     def query(self, repo, coord):
         """
-        Returns the xy index of pixels at coord
-        coord can be:
-            (RA, DEC) tuple of arrays
-             array of shape (2xN) RA DEC
-        In either case returns a (2xN) array
+        Query the pixel coordinate in 'xy' system from RA/DEC system.
+
         Note that the returned array is in a x-first-varying order.
         To index the ndarray image, use [y, x].
+
+        Parameters
+        ----------
+        repo: ImageRepo
+            image repository that contains the necessary transformation
+            for this brick
+        coord: array_like 
+            coord = (RA, DEC) tuple of arrays
+        
+        Returns
+        -------
+        xy: array_like
+            a (2xN) array, xy=(x, y).
+
         """
         meta      = repo.metadata(self)
         coord     = numpy.array(coord)
@@ -82,11 +129,19 @@ class Brick(object):
 
     def revert(self, repo, xy):
         """
-        Returns the RA, DEC index of pixels for coord
-        coord can be:
-            (x, y) tuple of arrays
-            array of shape (2xN) x, y
-        In either case returns a (2xN) array.
+        Look up RA/DEC coord from pixels coordinate in 'xy' system.
+
+        Parameters
+        ----------
+        repo: ImageRepo
+            image repository that contains the necessary transformation
+            for this brick
+        xy: array_like
+        
+        Returns
+        -------
+        coord: array_like
+            coord=(RA, DEC) for each given position.
         """
         meta      = repo.metadata(self)
         xy = numpy.array(xy)
