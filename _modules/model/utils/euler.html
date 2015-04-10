@@ -57,13 +57,13 @@
 <span class="sd">   </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ---------- </span>
-<span class="sd">    AI: array_like</span>
+<span class="sd">    AI : array_like</span>
 <span class="sd">        Input Longitude in DEGREES, scalar or vector.  If only two</span>
 <span class="sd">                  parameters are supplied, then  AI and BI will be modified to</span>
 <span class="sd">                  contain the output longitude and latitude.</span>
-<span class="sd">    BI: array_like </span>
+<span class="sd">    BI : array_like </span>
 <span class="sd">        Input Latitude in DEGREES</span>
-<span class="sd">    SELECT: integer (1-6), optional</span>
+<span class="sd">    SELECT : integer (1-6), optional</span>
 <span class="sd">        Specifying type of coordinate transformation.</span>
 <span class="sd">   </span>
 <span class="sd">        SELECT   From          To        |   SELECT      From            To</span>
@@ -75,26 +75,28 @@
 <span class="sd">        the value of SELECT</span>
 <span class="sd">        Celestial coordinates (RA, Dec) should be given in equinox J2000</span>
 <span class="sd">        unless the /FK4 keyword is set.</span>
-<span class="sd">    FK4: boolean</span>
+<span class="sd">    FK4 : boolean</span>
 <span class="sd">        If this keyword is set and non-zero, then input and output</span>
 <span class="sd">            celestial and ecliptic coordinates should be given in equinox</span>
 <span class="sd">            B1950.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">        AO - Output Longitude in DEGREES</span>
-<span class="sd">        BO - Output Latitude in DEGREES</span>
+<span class="sd">    AO : array_like</span>
+<span class="sd">        Output Longitude in DEGREES</span>
+<span class="sd">    BO : array_like</span>
+<span class="sd">        Output Latitude in DEGREES</span>
 <span class="sd">   </span>
 <span class="sd">    NOTES</span>
 <span class="sd">    -----</span>
-<span class="sd">          EULER was changed in December 1998 to use J2000 coordinates as the</span>
-<span class="sd">          default, ** and may be incompatible with earlier versions***.</span>
+<span class="sd">    EULER was changed in December 1998 to use J2000 coordinates as the</span>
+<span class="sd">    default, ** and may be incompatible with earlier versions***.</span>
 
-<span class="sd">          Written W. Landsman,  February 1987</span>
-<span class="sd">          Adapted from Fortran by Daryl Yentis NRL</span>
-<span class="sd">          Converted to IDL V5.0   W. Landsman   September 1997</span>
-<span class="sd">          Made J2000 the default, added /FK4 keyword  W. Landsman December 1998</span>
-<span class="sd">          Add option to specify SELECT as a keyword W. Landsman March 2003</span>
+<span class="sd">    Written W. Landsman,  February 1987</span>
+<span class="sd">    Adapted from Fortran by Daryl Yentis NRL</span>
+<span class="sd">    Converted to IDL V5.0   W. Landsman   September 1997</span>
+<span class="sd">    Made J2000 the default, added /FK4 keyword  W. Landsman December 1998</span>
+<span class="sd">    Add option to specify SELECT as a keyword W. Landsman March 2003</span>
 <span class="sd">   &quot;&quot;&quot;</span>
 
    <span class="n">n_params</span> <span class="o">=</span> <span class="mi">5</span>

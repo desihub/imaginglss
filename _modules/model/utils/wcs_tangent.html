@@ -85,18 +85,18 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    coord: array_like </span>
+<span class="sd">    coord  : array_like </span>
 <span class="sd">        (ra, dec), RA and DEC (in decimal degrees, vectorized) </span>
-<span class="sd">    hdr:   dict</span>
+<span class="sd">    hdr    :   dict</span>
 <span class="sd">        WCS header as a dictionary</span>
-<span class="sd">    zero_offset: boolean, optional,</span>
+<span class="sd">    zero_offset : boolean, optional,</span>
 <span class="sd">        If True, the routine returns 0-indexed pixel coordinates</span>
 <span class="sd">        (useful in Python or C) while if it is False pixels run from 1 (as in</span>
 <span class="sd">        Fortran).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    xy: array_like</span>
+<span class="sd">    xy    : array_like</span>
 <span class="sd">        xy = (x, y) pixel numbers.</span>
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -124,20 +124,20 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    hdr: dict</span>
+<span class="sd">    hdr         : dict</span>
 <span class="sd">        WCS header</span>
-<span class="sd">    zero_offset: boolean</span>
+<span class="sd">    zero_offset : boolean</span>
 <span class="sd">        If zero_offset is True, the routine assumes 0-indexed pixel coordinates</span>
 <span class="sd">        (useful in Python or C) while if it is False pixels run from 1 </span>
 <span class="sd">        (as in Fortran and Julia)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    cd: array_like</span>
+<span class="sd">    cd    : array_like</span>
 <span class="sd">        Transformation matrix (2, 2)</span>
-<span class="sd">    crpix: array_like</span>
+<span class="sd">    crpix : array_like</span>
 <span class="sd">        Centeral pixel number, compensated for `zero_offset`</span>
-<span class="sd">    crval: array_like</span>
+<span class="sd">    crval : array_like</span>
 <span class="sd">        Centeral RA, DEC</span>
 
 <span class="sd">    Raises</span>
@@ -173,13 +173,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    coord: array_like</span>
+<span class="sd">    coord : array_like</span>
 <span class="sd">        coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) </span>
-<span class="sd">    CD: array_like</span>
+<span class="sd">    CD    : array_like</span>
 <span class="sd">        transformation matrix (2, 2)</span>
-<span class="sd">    CRPIX: array_like</span>
+<span class="sd">    CRPIX : array_like</span>
 <span class="sd">        center pixel number of (x, y), compensated by offset.</span>
-<span class="sd">    CRVAL: array_like</span>
+<span class="sd">    CRVAL : array_like</span>
 <span class="sd">        center coordinate of (RA, DEC), in degrees.</span>
 
 <span class="sd">    Notes</span>

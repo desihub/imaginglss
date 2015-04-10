@@ -85,15 +85,15 @@ to pixel xy coordinate according the the WCS header.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote>
 <div><p>coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized)</p>
 </div></blockquote>
-<p><strong>SCALE: int</strong></p>
+<p><strong>SCALE</strong> : int</p>
 <blockquote>
 <div><p>scaling factor</p>
 </div></blockquote>
-<p><strong>CRPIX: array_like</strong></p>
+<p><strong>CRPIX</strong> : array_like</p>
 <blockquote>
 <div><p>center pixel number of x, y</p>
 </div></blockquote>
@@ -132,15 +132,15 @@ transformations.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
 <blockquote>
 <div><p>(ra, dec), RA and DEC (in decimal degrees, vectorized)</p>
 </div></blockquote>
-<p><strong>hdr:   dict</strong></p>
+<p><strong>hdr</strong> :   dict</p>
 <blockquote>
 <div><p>WCS header as a dictionary</p>
 </div></blockquote>
-<p><strong>zero_offset: boolean, optional,</strong></p>
+<p><strong>zero_offset</strong> : boolean, optional,</p>
 <blockquote>
 <div><p>If True, the routine returns 0-indexed pixel coordinates
 (useful in Python or C) while if it is False pixels run from 1 (as in
@@ -148,7 +148,7 @@ Fortran).</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">xy: array_like</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>xy</strong> : array_like</p>
 <blockquote class="last">
 <div><p>xy = (x, y) pixel numbers.</p>
 </div></blockquote>

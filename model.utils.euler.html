@@ -66,7 +66,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>AI: array_like</strong></p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>AI</strong> : array_like</p>
 <blockquote>
 <div><dl class="docutils">
 <dt>Input Longitude in DEGREES, scalar or vector.  If only two</dt>
@@ -75,11 +75,11 @@ contain the output longitude and latitude.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p><strong>BI: array_like</strong></p>
+<p><strong>BI</strong> : array_like</p>
 <blockquote>
 <div><p>Input Latitude in DEGREES</p>
 </div></blockquote>
-<p><strong>SELECT: integer (1-6), optional</strong></p>
+<p><strong>SELECT</strong> : integer (1-6), optional</p>
 <blockquote>
 <div><p>Specifying type of coordinate transformation.</p>
 <dl class="docutils">
@@ -94,7 +94,7 @@ the value of SELECT
 Celestial coordinates (RA, Dec) should be given in equinox J2000
 unless the /FK4 keyword is set.</p>
 </div></blockquote>
-<p><strong>FK4: boolean</strong></p>
+<p><strong>FK4</strong> : boolean</p>
 <blockquote>
 <div><dl class="docutils">
 <dt>If this keyword is set and non-zero, then input and output</dt>
@@ -105,9 +105,13 @@ B1950.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">AO - Output Longitude in DEGREES</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>AO</strong> : array_like</p>
+<blockquote>
+<div><p>Output Longitude in DEGREES</p>
+</div></blockquote>
+<p><strong>BO</strong> : array_like</p>
 <blockquote class="last">
-<div><p>BO - Output Latitude in DEGREES</p>
+<div><p>Output Latitude in DEGREES</p>
 </div></blockquote>
 </td>
 </tr>
