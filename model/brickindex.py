@@ -47,7 +47,7 @@ class BrickIndex(object):
         """ 
         Parameters
         ----------
-        brickdata: array_like
+        brickdata : array_like
             contents of `bricks.fits`.
     
         """
@@ -88,13 +88,13 @@ class BrickIndex(object):
     
         Parameters
         ----------
-        index: integer
+        index : integer
             The internal index of a brick. This differ from BRICKID
             in the catalogue.
 
         Returns
         -------
-        brick: :py:class:`~model.brick.Brick`
+        brick : :py:class:`~model.brick.Brick`
             A brick object at index.
 
         Notes
@@ -123,12 +123,12 @@ class BrickIndex(object):
 
         Parameters
         ----------
-        indices: array_like
+        indices : array_like
             Indices to obtain bricks
 
         Returns
         -------
-        bricks: list
+        bricks  : list
             A list of bricks.
 
         """ 
@@ -140,12 +140,12 @@ class BrickIndex(object):
 
         Parameters
         ----------
-        brickname: string
+        brickname : string
             the matching BRICKNAME.
 
         Returns
         -------
-        index: integer
+        index  : integer
             The internal index of bricks.
 
         Notes
@@ -163,12 +163,12 @@ class BrickIndex(object):
         
         Parameters
         ----------
-        brickid: integer or array_like
+        brickid : integer or array_like
             the matching BRICKID or list of BRICKIDs
 
         Returns
         ------- 
-        index:  integer or array_like
+        index   : integer or array_like
             the internal index of brick or bricks (for array_like input)
 
         Notes
@@ -191,7 +191,7 @@ class BrickIndex(object):
 
         Parameters
         ----------
-        coord: array_like
+        coord  : array_like
             coord = (RA, DEC) in degrees, vectorized.
 
         Notes
@@ -218,10 +218,10 @@ class BrickIndex(object):
 
         Parameters
         ----------
-        return_inverse: boolean
+        return_inverse : boolean
             if True, returns the array that can be used to
             reconstruct coord from the returned coord.
-        return_index: boolean
+        return_index   : boolean
             if True, returns the array that can be used to
             construct sorted_coord from coord:
 
@@ -231,12 +231,12 @@ class BrickIndex(object):
         (sorted_coord, indices, iindices), (sorted_coord, iindices)
         (sorted_coord, indices), or sorted_coord
 
-        sorted_coord: array_like
+        sorted_coord : array_like
             Optimized coord array, that is sorted by bricks.
-        iindeces: array_like
+        iindeces     : array_like
             sorted_ra[ iindices] == ra
             sorted_dec[iindices] == dec
-        indices: array_like
+        indices      : array_like
             sorted_ra == ra[indices]
             sorted_dec == dec[indices]
 

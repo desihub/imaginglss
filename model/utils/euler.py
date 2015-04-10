@@ -8,13 +8,13 @@ def euler(ai, bi, select=1, fk4=False):
    
     Parameters
     ---------- 
-    AI: array_like
+    AI : array_like
         Input Longitude in DEGREES, scalar or vector.  If only two
                   parameters are supplied, then  AI and BI will be modified to
                   contain the output longitude and latitude.
-    BI: array_like 
+    BI : array_like 
         Input Latitude in DEGREES
-    SELECT: integer (1-6), optional
+    SELECT : integer (1-6), optional
         Specifying type of coordinate transformation.
    
         SELECT   From          To        |   SELECT      From            To
@@ -26,26 +26,28 @@ def euler(ai, bi, select=1, fk4=False):
         the value of SELECT
         Celestial coordinates (RA, Dec) should be given in equinox J2000
         unless the /FK4 keyword is set.
-    FK4: boolean
+    FK4 : boolean
         If this keyword is set and non-zero, then input and output
             celestial and ecliptic coordinates should be given in equinox
             B1950.
 
     Returns
     -------
-        AO - Output Longitude in DEGREES
-        BO - Output Latitude in DEGREES
+    AO : array_like
+        Output Longitude in DEGREES
+    BO : array_like
+        Output Latitude in DEGREES
    
     NOTES
     -----
-          EULER was changed in December 1998 to use J2000 coordinates as the
-          default, ** and may be incompatible with earlier versions***.
+    EULER was changed in December 1998 to use J2000 coordinates as the
+    default, ** and may be incompatible with earlier versions***.
 
-          Written W. Landsman,  February 1987
-          Adapted from Fortran by Daryl Yentis NRL
-          Converted to IDL V5.0   W. Landsman   September 1997
-          Made J2000 the default, added /FK4 keyword  W. Landsman December 1998
-          Add option to specify SELECT as a keyword W. Landsman March 2003
+    Written W. Landsman,  February 1987
+    Adapted from Fortran by Daryl Yentis NRL
+    Converted to IDL V5.0   W. Landsman   September 1997
+    Made J2000 the default, added /FK4 keyword  W. Landsman December 1998
+    Add option to specify SELECT as a keyword W. Landsman March 2003
    """
 
    n_params = 5

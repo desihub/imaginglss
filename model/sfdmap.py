@@ -33,7 +33,7 @@ class SFDMap(object):
 
     Attributes
     ----------
-    extinctions: dict
+    extinctions : dict
         These values are not useful for us, but we keep them for reference.
 
         These come from Schlafly & Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1
@@ -69,11 +69,11 @@ class SFDMap(object):
         """
         Parameters
         ----------
-        ngp_filename: string
+        ngp_filename : string
             filename of the north plane data
-        sgp_filename: string
+        sgp_filename : string
             filename of the sourth plane data
-        dustdir: string
+        dustdir      : string
             directory to look for data files, overrides ngp_filename and sgp_filename,
             Will use `DUST_DIR` environment variable if not supplied.
     
@@ -129,14 +129,14 @@ class SFDMap(object):
         
         Parameters
         ----------
-        ra: array_like
+        ra   : array_like
             RA in degrees.
-        dec: array_like
+        dec  : array_like
             DEC in degrees.
 
         Returns
         -------
-        ebv: array_like
+        ebv  : array_like
             E(B-V)
         """
         l,b = radectolb(ra, dec)

@@ -26,20 +26,20 @@ class Brick(object):
 
     Attributes
     ----------
-    id:   integer
+    id   :   integer
         ID of the brick as in the Tractor catalogue (unique).
         Note that we do not use it in indexing.
-    name: string_like 
+    name : string_like 
         name of the brick as in the Tractor catalogue (unique)
-    ra: float
+    ra   : float
         center coordinate ra
-    dec: float
+    dec  : float
         center coordinate dec
-    ra1: float
+    ra1  : float
         min coordinate ra
-    dec1: float
+    dec1 : float
         min coordinate dec
-    ra2: float
+    ra2  : float
         max coordinate ra
     dec2: float
         max coordinate dec
@@ -73,16 +73,16 @@ class Brick(object):
 
         Parameters
         ----------
-        coord: array_like
+        coord  : array_like
             Coordinate of the pixels, coord=(RA, DEC)
-        repo: :py:class:`~model.imagerepo.ImageRepo`
+        repo   : :py:class:`~model.imagerepo.ImageRepo`
             Image repository to read from. Refer to DataRelease.images.
-        default:
+        default : float
             Default value to return if the pixel is outside of the brick.
 
         Returns
         -------
-        values: array_like
+        values : array_like
             values read out from repo.
 
         """
@@ -110,15 +110,15 @@ class Brick(object):
 
         Parameters
         ----------
-        repo: :py:class:`~model.imagerepo.ImageRepo`
+        repo   : :py:class:`~model.imagerepo.ImageRepo`
             image repository that contains the necessary transformation
             for this brick
-        coord: array_like 
+        coord  : array_like 
             coord = (RA, DEC) tuple of arrays
         
         Returns
         -------
-        xy: array_like
+        xy     : array_like
             a (2xN) array, xy=(x, y).
 
         """
@@ -134,14 +134,14 @@ class Brick(object):
 
         Parameters
         ----------
-        repo: :py:class:`~model.imagerepo.ImageRepo`
+        repo   : :py:class:`~model.imagerepo.ImageRepo`
             image repository that contains the necessary transformation
             for this brick
-        xy: array_like
+        xy     : array_like
         
         Returns
         -------
-        coord: array_like
+        coord  : array_like
             coord=(RA, DEC) for each given position.
         """
         meta      = repo.metadata(self)

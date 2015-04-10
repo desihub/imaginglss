@@ -46,14 +46,11 @@ class Lazy(object):
 def contains(haystack, needle):
     """ test if needle is in haystack. 
 
-        
-        returns mask:
-
         Parameters
         ----------
-        haystack: array_like
+        haystack  : array_like
             Sorted array
-        needle: array_like
+        needle    : array_like
             items to look for
 
         Returns
@@ -112,12 +109,13 @@ class Footprint(object):
 
             Parameters
             ----------
-                coord: array_like, must be compatible with (RA, DEC)
+            coord : array_like
+                must be compatible with (RA, DEC)
 
             Returns
             -------
-                coord_in_footprint: array_like
-                    items in the input coord that is in the footprint
+            coord_in_footprint : array_like
+                items in the input coord that is in the footprint
         
         """
         coord = numpy.array(coord)
@@ -235,13 +233,13 @@ class DataRelease(object):
             
             Parameters
             ----------
-            coord: array_like
+            coord  : array_like
                 coordinates of the pixels, (RA, DEC)
-            repo: ImageRepo
+            repo   : ImageRepo
                 the images to read from.
-            default: scalar
+            default : scalar
                 value to return if the pixel is not in the footprint.
-            image_missing: boolean
+            image_missing : boolean
                 When ignore_missing is True, missing brick files are treated
                 as not in the footprint.
 

@@ -24,12 +24,12 @@ def coord2xyz(coord):
     
     Parameters
     ----------
-    coord: array_like
+    coord  : array_like
         coord = (RA, DEC) in degrees.
     
     Returns
     -------
-    vector: array_like
+    vector : array_like
         Unit vectors corresponding to RA, DEC, in (, 3).
 
     """
@@ -68,11 +68,11 @@ class Catalogue(DiskColumnStore):
         """
         Parameters
         ----------
-        cachedir: string
+        cachedir  : string
             the location for caching.
-        filenames: list
+        filenames : list
             a list of fits file names that the catalogue is stored.
-        aliases: list
+        aliases   : list
             a list of fields to transform; this is to support migration
             of schema from older data release to newer ones. The list
             is of from (oldname, newname, transformfunction)

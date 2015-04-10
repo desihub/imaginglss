@@ -36,18 +36,18 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
     
     Parameters
     ----------
-    coord: array_like 
+    coord  : array_like 
         (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-    hdr:   dict
+    hdr    :   dict
         WCS header as a dictionary
-    zero_offset: boolean, optional,
+    zero_offset : boolean, optional,
         If True, the routine returns 0-indexed pixel coordinates
         (useful in Python or C) while if it is False pixels run from 1 (as in
         Fortran).
 
     Returns
     -------
-    xy: array_like
+    xy    : array_like
         xy = (x, y) pixel numbers.
     
     """
@@ -75,20 +75,20 @@ def parse_header(hdr, zero_offset):
 
     Parameters
     ----------
-    hdr: dict
+    hdr         : dict
         WCS header
-    zero_offset: boolean
+    zero_offset : boolean
         If zero_offset is True, the routine assumes 0-indexed pixel coordinates
         (useful in Python or C) while if it is False pixels run from 1 
         (as in Fortran and Julia)
 
     Returns
     -------
-    cd: array_like
+    cd    : array_like
         Transformation matrix (2, 2)
-    crpix: array_like
+    crpix : array_like
         Centeral pixel number, compensated for `zero_offset`
-    crval: array_like
+    crval : array_like
         Centeral RA, DEC
 
     Raises
@@ -124,13 +124,13 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
 
     Parameters
     ----------
-    coord: array_like
+    coord : array_like
         coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) 
-    CD: array_like
+    CD    : array_like
         transformation matrix (2, 2)
-    CRPIX: array_like
+    CRPIX : array_like
         center pixel number of (x, y), compensated by offset.
-    CRVAL: array_like
+    CRVAL : array_like
         center coordinate of (RA, DEC), in degrees.
 
     Notes

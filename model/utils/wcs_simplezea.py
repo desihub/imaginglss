@@ -63,18 +63,18 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
     
     Parameters
     ----------
-    coord: array_like 
+    coord  : array_like 
         (ra, dec), RA and DEC (in decimal degrees, vectorized) 
-    hdr:   dict
+    hdr    :   dict
         WCS header as a dictionary
-    zero_offset: boolean, optional,
+    zero_offset : boolean, optional,
         If True, the routine returns 0-indexed pixel coordinates
         (useful in Python or C) while if it is False pixels run from 1 (as in
         Fortran).
 
     Returns
     -------
-    xy: array_like
+    xy  : array_like
         xy = (x, y) pixel numbers.
     
     """
@@ -103,20 +103,20 @@ def parse_header(hdr, zero_offset):
 
     Parameters
     ----------
-    hdr: dict
+    hdr         : dict
         WCS header
-    zero_offset: boolean
+    zero_offset : boolean
         If zero_offset is True, the routine assumes 0-indexed pixel coordinates
         (useful in Python or C) while if it is False pixels run from 1 
         (as in Fortran and Julia)
 
     Returns
     -------
-    scale: float
+    scale : float
         Scaling factor
-    crpix: array_like
+    crpix : array_like
         center pixel coordniate; compensated for `zero_offset`
-    nsgp: int
+    nsgp  : int
         North or South galactic pool.
 
     Raises
@@ -155,11 +155,11 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
 
     Parameters
     ----------
-    coord: array_like
+    coord : array_like
         coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) 
-    SCALE: int
+    SCALE : int
         scaling factor
-    CRPIX: array_like
+    CRPIX : array_like
         center pixel number of x, y
     NSGP: int
         +1 for North, -1 for Sourth.
