@@ -9,27 +9,27 @@ FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.
 
 The main way to access the DECALS imaging data is via DataRelease
-objects defined in "datarelease.py". Important attributes are
+objects defined in :py:class:`model.datarelease.DataRelease`.
+Important attributes are
 
- - DataRelease.footprint : the survey footprint. 
- - DataRelease.brickindex: the Brick geometry (BrickIndex)
- - DataRelease.images    : the images released in the DR
- - DataRelease.catalogue : the imaging catalogue reported by tractor
+ - :py:attr:`~model.datarelease.DataRelease.footprint` : the survey footprint. 
+ - :py:attr:`~model.datarelease.DataRelease.brickindex`: the Brick geometry (BrickIndex)
+ - :py:attr:`~model.datarelease.DataRelease.images`    : the images released in the DR
+ - :py:attr:`~model.datarelease.DataRelease.catalogue` : the imaging catalogue reported by tractor
 
 The member methods are
 
- - DataRelease.readout   : reading out pixel value of an image 
-                           for coordinates on the sky.
+ - :py:meth:`~model.datarelease.DataRelease.readout`   : reading out pixel value of an image 
+   for coordinates on the sky.
 
-Catalog information is handled by catalog.Catalogue, which stores the
+Catalog information is handled by :py:class:`model.datarelease.catalog.Catalogue`, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files, 
 but this class caches the
 information for speed and only columns that are accessed are loaded
 into memory. Use 'forget_cache.py' to clear this cache.
 
-
-The images are represented by imagerepo.ImageRepo objects. 
+The images are represented by :py:class:`model.imagerepo.ImageRepo` objects. 
 An ImageRepo object takes care of reading the image tile of a Brick. 
 An image tile contains a padded region around the Brick, 
 which is sometimes mentioned as a margin, a padding, or a bleeding region.
@@ -40,22 +40,28 @@ A DataRelease has several image repositories, for example,
  - DataRelease.images['image']['u'] : the coadded 'u' band image in nanomaggies
  - DataRelease.images['model']['u'] : the model 'u' band image in nanomaggies; 
 
-or what tractor thinks the sky looks like.
-
-brick.Brick holds metadata for each Brick, including the central 'ra',
-'dec', and the primary area covered by the brick, excluding the padding regsions. There are routines for converting from sky coordinates to image
+:py:class:`model.brick.Brick` holds metadata for each Brick, including the central 
+:py:attr:`~model.brick.Brick.ra`, :py:attr:`~model.brick.Brick.dec`, 
+and the primary area(
+:py:attr:`~model.brick.Brick.ra1`, :py:attr:`~model.brick.Brick.dec1`, 
+:py:attr:`~model.brick.Brick.ra2`, :py:attr:`~model.brick.Brick.dec2`
+) covered by the brick, excluding the padding region. 
+There are routines for converting from sky coordinates to image
 pixels within each brick, and routines for querying the images
 handled by imagerepo. 
 
-brickindex.BrickIndex holds the metadata
+:py:class:`model.brickindex.BrickIndex` holds the metadata
 of of the brick decomposition scheme. 
 There are routines for converting from
-sky coordinates to bricks, and acts as a factory that creates Brick
-objects.
+sky coordinates to bricks, and acts as a factory that creates 
+:py:class:`~model.brick.Brick` objects.
 
-Helper routines. In order to reduce the number of dependecies, 
+Helper routines
+--------------- 
+In order to reduce the number of dependecies, 
 we implemented a few coordinate transformations 
 
- - wcs_tangent impments the WCS tangent format.
- - wcs_simplezea implement the WCS ZEA format, oriented at north / south pole
+ - :py:mod:`model.utils.wcs_tangent` impments the WCS tangent format.
+ - :py:mod:`model.utils.wcs_simplezea` implement the WCS ZEA format; oriented at north / south pole
+ - :py:mod:`model.utils.euler` implements the transformation between Galactic and RA/DEC. coordinates.
 
