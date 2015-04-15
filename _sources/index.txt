@@ -29,7 +29,7 @@ Users Guide
    modules
 
 Known Issues
-++++++++++++
+============
 
 - Due to internal caching of the catalogue, the running time is faster after first time.
 
