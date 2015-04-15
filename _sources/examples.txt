@@ -1,6 +1,9 @@
 Examples
 ========
 
+.. contents:: 
+    :depth: 2
+
 Selecting ELGs
 --------------
 .. literalinclude:: ../select_elgs.py
