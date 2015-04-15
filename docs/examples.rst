@@ -1,9 +1,18 @@
 Examples
 ========
 
-.. literalinclude:: ../make_random.py
+.. contents:: 
+    :depth: 2
 
+Selecting ELGs
+--------------
 .. literalinclude:: ../select_elgs.py
 
+Randoms
+-------
+.. literalinclude:: ../make_random.py
+
+Example Job script on Edison
+----------------------------
 .. literalinclude:: ../edison_example.sh
 
