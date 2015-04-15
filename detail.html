@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Description of model used to process DECALS imaging data. &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Known Issues" href="intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Known Issues"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="description-of-model-used-to-process-decals-imaging-data">
+<h1>Description of model used to process DECALS imaging data.<a class="headerlink" href="#description-of-model-used-to-process-decals-imaging-data" title="Permalink to this headline">¶</a></h1>
+<p>The DECALS imaging data are processed in &#8220;Brick&#8221;s on the sky,
+each Brick being a small, contiguous regions of sky (roughly
+0.5x0.5 degrees).  The data, including information on depths,
+extinction, etc. are stored in pixelized images within the
+FITS files.  There are also catalogs of objects, produced by
+Tractor, which are associated with each brick.</p>
+<p>The main way to access the DECALS imaging data is via DataRelease
+objects defined in <a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease" title="model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.DataRelease</span></code></a>.
+Important attributes are</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="xref py py-attr docutils literal"><span class="pre">footprint</span></code> : the survey footprint.</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">brickindex</span></code>: the Brick geometry (BrickIndex)</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">images</span></code>    : the images released in the DR</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">catalogue</span></code> : the imaging catalogue reported by tractor</li>
+</ul>
+</div></blockquote>
+<p>The member methods are</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease.readout" title="model.datarelease.DataRelease.readout"><code class="xref py py-meth docutils literal"><span class="pre">readout()</span></code></a>   : reading out pixel value of an image
+for coordinates on the sky.</li>
+</ul>
+</div></blockquote>
+<p>Catalog information is handled by <code class="xref py py-class docutils literal"><span class="pre">model.datarelease.catalog.Catalogue</span></code>, which stores the
+object catalogs associated with a data release.
+The catalogs are contained in many small FITS files,
+but this class caches the
+information for speed and only columns that are accessed are loaded
+into memory. Use &#8216;forget_cache.py&#8217; to clear this cache.</p>
+<p>The images are represented by <a class="reference internal" href="model.imagerepo.html#model.imagerepo.ImageRepo" title="model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">model.imagerepo.ImageRepo</span></code></a> objects.
+An ImageRepo object takes care of reading the image tile of a Brick.
+An image tile contains a padded region around the Brick,
+which is sometimes mentioned as a margin, a padding, or a bleeding region.</p>
+<p>A DataRelease has several image repositories, for example,</p>
+<blockquote>
+<div><ul class="simple">
+<li>DataRelease.images[&#8216;depth&#8217;][&#8216;u&#8217;] : the &#8216;u&#8217; band inverse variance depth images</li>
+<li>DataRelease.images[&#8216;image&#8217;][&#8216;u&#8217;] : the coadded &#8216;u&#8217; band image in nanomaggies</li>
+<li>DataRelease.images[&#8216;model&#8217;][&#8216;u&#8217;] : the model &#8216;u&#8217; band image in nanomaggies;</li>
+</ul>
+</div></blockquote>
+<p><a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">model.brick.Brick</span></code></a> holds metadata for each Brick, including the central
+<code class="xref py py-attr docutils literal"><span class="pre">ra</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec</span></code>,
+and the primary area(
+<code class="xref py py-attr docutils literal"><span class="pre">ra1</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec1</span></code>,
+<code class="xref py py-attr docutils literal"><span class="pre">ra2</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec2</span></code>
+) covered by the brick, excluding the padding region.
+There are routines for converting from sky coordinates to image
+pixels within each brick, and routines for querying the images
+handled by imagerepo.</p>
+<p><a class="reference internal" href="model.brickindex.html#model.brickindex.BrickIndex" title="model.brickindex.BrickIndex"><code class="xref py py-class docutils literal"><span class="pre">model.brickindex.BrickIndex</span></code></a> holds the metadata
+of of the brick decomposition scheme.
+There are routines for converting from
+sky coordinates to bricks, and acts as a factory that creates
+<a class="reference internal" href="model.brick.html#model.brick.Brick" title="model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a> objects.</p>
+<div class="section" id="helper-routines">
+<h2>Helper routines<a class="headerlink" href="#helper-routines" title="Permalink to this headline">¶</a></h2>
+<p>In order to reduce the number of dependecies,
+we implemented a few coordinate transformations</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="model.utils.wcs_tangent.html#module-model.utils.wcs_tangent" title="model.utils.wcs_tangent"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_tangent</span></code></a> impments the WCS tangent format.</li>
+<li><a class="reference internal" href="model.utils.wcs_simplezea.html#module-model.utils.wcs_simplezea" title="model.utils.wcs_simplezea"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_simplezea</span></code></a> implement the WCS ZEA format; oriented at north / south pole</li>
+<li><a class="reference internal" href="model.utils.euler.html#module-model.utils.euler" title="model.utils.euler"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.euler</span></code></a> implements the transformation between Galactic and RA/DEC. coordinates.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Description of model used to process DECALS imaging data.</a><ul>
+<li><a class="reference internal" href="#helper-routines">Helper routines</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Known Issues</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">Examples</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/detail.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Known Issues"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>

@@ -1,4 +1,5 @@
-Examples:
+Examples
+========
 
 .. literalinclude:: ../make_random.py
 

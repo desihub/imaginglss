@@ -11,11 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. include:: ../README.rst
+   intro
+   detail
+   examples
 
-.. include:: ../model/README.rst
-
-.. include:: examples.rst
 
 Modules
 =======
