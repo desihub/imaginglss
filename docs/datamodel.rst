@@ -1,5 +1,5 @@
-Description of model used to process DECALS imaging data.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Data Model
+==========
 
 The DECALS imaging data are processed in "Brick"s on the sky,
 each Brick being a small, contiguous regions of sky (roughly
@@ -56,12 +56,4 @@ There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates 
 :py:class:`~model.brick.Brick` objects.
 
-Helper routines
---------------- 
-In order to reduce the number of dependecies, 
-we implemented a few coordinate transformations 
-
- - :py:mod:`model.utils.wcs_tangent` impments the WCS tangent format.
- - :py:mod:`model.utils.wcs_simplezea` implement the WCS ZEA format; oriented at north / south pole
- - :py:mod:`model.utils.euler` implements the transformation between Galactic and RA/DEC. coordinates.
-
+For additional information please refer to :doc:`modules`.

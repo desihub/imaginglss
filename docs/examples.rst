@@ -1,0 +1,9 @@
+Examples
+========
+
+.. literalinclude:: ../make_random.py
+
+.. literalinclude:: ../select_elgs.py
+
+.. literalinclude:: ../edison_example.sh
+
