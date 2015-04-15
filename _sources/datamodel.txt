@@ -56,4 +56,4 @@ There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates 
 :py:class:`~model.brick.Brick` objects.
 
-For details, please refer to the :doc:`modules`.
+For additional information please refer to :doc:`modules`.
