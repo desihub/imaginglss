@@ -2,7 +2,7 @@ Helper routines
 ===============
 
 .. contents::
-    :depth:2
+   :depth: 2
  
 In order to reduce the number of dependecies, 
 we implemented a few coordinate transformations 
