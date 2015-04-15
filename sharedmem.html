@@ -48,6 +48,9 @@
 <h1>sharedmem<a class="headerlink" href="#sharedmem" title="Permalink to this headline">¶</a></h1>
 <p>sharedmem implements a MapReduce object for in core parallel execution.
 The spirit of sharedmem is similar to multiprocessing.</p>
+<p>It relies on &#8216;fork&#8217; for sharing resource between process. Functions does
+not need to be picklable. The above example won&#8217;t work with multiprocessing.</p>
+<p>The full document is hosted at <a class="reference external" href="http://github.com/rainwoodman/sharedmem">http://github.com/rainwoodman/sharedmem</a></p>
 <p>Here is a dumb example.</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">model.utils</span> <span class="kn">import</span> <span class="n">sharedmem</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
@@ -65,8 +68,6 @@ The spirit of sharedmem is similar to multiprocessing.</p>
 <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>It relies on &#8216;fork&#8217; for sharing resource between process. Functions does
-not need to be picklable. The above example won&#8217;t work with multiprocessing.</p>
 </div>
 
 

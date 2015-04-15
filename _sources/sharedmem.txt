@@ -4,6 +4,11 @@ sharedmem
 sharedmem implements a MapReduce object for in core parallel execution. 
 The spirit of sharedmem is similar to multiprocessing.
 
+It relies on 'fork' for sharing resource between process. Functions does
+not need to be picklable. The above example won't work with multiprocessing.
+
+The full document is hosted at http://github.com/rainwoodman/sharedmem
+
 Here is a dumb example.
 
 .. code::
@@ -22,8 +27,5 @@ Here is a dumb example.
             b = numpy.concatenate(pool.map(work, range(0, len(a), chunksize)))
     
     main()
-
-It relies on 'fork' for sharing resource between process. Functions does
-not need to be picklable. The above example won't work with multiprocessing.
 
 
