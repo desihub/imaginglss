@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="#" />
-    <link rel="next" title="Known Issues" href="intro.html" /> 
+    <link rel="next" title="&lt;no title&gt;" href="intro.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +37,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="Known Issues"
+          <a href="intro.html" title="&lt;no title&gt;"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
@@ -50,15 +50,34 @@
             
   <div class="section" id="welcome-to-imaginglss-s-documentation">
 <h1>Welcome to ImagingLSS&#8217;s documentation!<a class="headerlink" href="#welcome-to-imaginglss-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+<p>This is a data model of the DECAM imaging survey data
+and potentially also for other desi targeting imaging survey,
+for Large scale structure analysis.</p>
+<p>The modelled data is a product from the Tractor, the source identification
+software used in by DESI.</p>
+<p>We have support on
+<a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles">Early Data Release (EDR) data</a>
+and <a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1">DR1</a> .</p>
+</div>
+<div class="section" id="users-guide">
+<h1>Users Guide<a class="headerlink" href="#users-guide" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Known Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="edison.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detail.html">Description of model used to process DECALS imaging data.</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="detail.html#helper-routines">Helper routines</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</div>
+<div class="section" id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Due to internal caching of the catalogue, the running time is faster after first time.</li>
+<li>If the data release has updated (rare but it happened),
+and the cache files are out of date.
+Run forget_cache.py to clear the cache.</li>
 </ul>
 </div>
 </div>
@@ -110,6 +129,10 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to ImagingLSS&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#users-guide">Users Guide</a><ul>
+<li><a class="reference internal" href="#known-issues">Known Issues</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#modules">Modules</a></li>
 <li><a class="reference internal" href="#model">model</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
@@ -117,7 +140,7 @@
 
   <h4>Next topic</h4>
   <p class="topless"><a href="intro.html"
-                        title="next chapter">Known Issues</a></p>
+                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -152,7 +175,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="Known Issues"
+          <a href="intro.html" title="&lt;no title&gt;"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
