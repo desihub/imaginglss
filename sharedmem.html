@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Helper routines &mdash; ImagingLSS 0.9 documentation</title>
+    <title>sharedmem &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,9 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="next" title="Examples" href="examples.html" />
-    <link rel="prev" title="Data Model" href="datamodel.html" /> 
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,12 +35,6 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="examples.html" title="Examples"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="datamodel.html" title="Data Model"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -52,18 +44,29 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="helper-routines">
-<h1>Helper routines<a class="headerlink" href="#helper-routines" title="Permalink to this headline">¶</a></h1>
-<p>In order to reduce the number of dependecies,
-we implemented a few coordinate transformations</p>
-<blockquote>
-<div><ul class="simple">
-<li><a class="reference internal" href="model.utils.wcs_tangent.html#module-model.utils.wcs_tangent" title="model.utils.wcs_tangent"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_tangent</span></code></a> impments the WCS tangent format.</li>
-<li><a class="reference internal" href="model.utils.wcs_simplezea.html#module-model.utils.wcs_simplezea" title="model.utils.wcs_simplezea"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.wcs_simplezea</span></code></a> implement the WCS ZEA format; oriented at north / south pole</li>
-<li><a class="reference internal" href="model.utils.euler.html#module-model.utils.euler" title="model.utils.euler"><code class="xref py py-mod docutils literal"><span class="pre">model.utils.euler</span></code></a> implements the transformation between Galactic and RA/DEC. coordinates.</li>
-<li><code class="xref py py-mod docutils literal"><span class="pre">model.utils.sharedmem</span></code> implements a MapReduce pool object for in-node parallellism. See <a class="reference internal" href="sharedmem.html"><em>sharedmem</em></a></li>
-</ul>
-</div></blockquote>
+  <div class="section" id="sharedmem">
+<h1>sharedmem<a class="headerlink" href="#sharedmem" title="Permalink to this headline">¶</a></h1>
+<p>sharedmem implements a MapReduce object for in core parallel execution.
+The spirit of sharedmem is similar to multiprocessing.</p>
+<p>Here is a dumb example.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">model.utils</span> <span class="kn">import</span> <span class="n">sharedmem</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">sharedmem</span><span class="o">.</span><span class="n">MapReduce</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">1024</span>
+        <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunksize</span><span class="p">])</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">chunksize</span><span class="p">)))</span>
+
+<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It relies on &#8216;fork&#8217; for sharing resource between process. Functions does
+not need to be picklable. The above example won&#8217;t work with multiprocessing.</p>
 </div>
 
 
@@ -72,16 +75,10 @@ we implemented a few coordinate transformations</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="datamodel.html"
-                        title="previous chapter">Data Model</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="examples.html"
-                        title="next chapter">Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/helpers.txt"
+      <li><a href="_sources/sharedmem.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -111,12 +108,6 @@ we implemented a few coordinate transformations</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="right" >
-          <a href="examples.html" title="Examples"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="datamodel.html" title="Data Model"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
