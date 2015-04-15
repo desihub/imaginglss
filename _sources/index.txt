@@ -22,11 +22,11 @@ Users Guide
 .. toctree::
    :maxdepth: 2
 
-   intro
-   edison
-   detail
+   install
+   datamodel
+   helpers
    examples
-
+   modules
 
 Known Issues
 ++++++++++++
@@ -36,12 +36,6 @@ Known Issues
 - If the data release has updated (rare but it happened), 
   and the cache files are out of date. 
   Run forget_cache.py to clear the cache.
-
-
-Modules
-=======
-
-.. include:: modules.rst
 
 Indices and tables
 ==================
