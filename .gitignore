@@ -1,1 +1,4 @@
 *.pyc
+*.png
+*.e*
+docs/model.*.rst
