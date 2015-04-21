@@ -8,6 +8,9 @@
     The `version` parameter of `DataRelease.__init__` picks the correct
     schema. 
 """
+import re
+import os.path
+
 class Schema:
     pass
 
@@ -96,3 +99,8 @@ class DR1(EDR4):
     """
     pass
 
+class DR1J(EDR4):
+    """ Schema for DR1J. Same as EDR4.
+
+    """
+    pass
