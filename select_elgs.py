@@ -46,8 +46,13 @@ def select_elgs():
     ZFLUX = flux[4] / trn[4]
     # Now do the selection ...
     primary= dr.catalogue['BRICK_PRIMARY']
-    mask   = (primary == 1)
-    mask  &= cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX).all(axis=-1)
+    pmask = primary == 1
+    mask  = cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX)
+    mask &= pmask[:, None]
+
+    print ('Selected Fraction by cuts', 1.0 * mask.sum(axis=0) / pmask.sum())
+
+    mask = mask.all(axis=-1)
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
@@ -61,14 +66,18 @@ def select_elgs():
         (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
         chunksize = 1024
         def work(i):
-            print(i, '/', len(RA)), 
+            print('', end='.')
+#            print(i, '/', len(RA))
             coord = (RA[i:i+chunksize],DEC[i:i+chunksize])
             lim = cuts.findlim(dr,sfd,coord,['g','r','z'])
-            print('done',i)
+#            print('done',i)
             return(lim)
         # the ordering is the same as the call to findlim
         glim,rlim,zlim = N.concatenate(\
             pool.map(work,range(0,len(RA),chunksize)),axis=1)
+
+        print('', end='\n')
+
         mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim).all(axis=-1)
         ra   = RA [mask]
         dc   = DEC[mask]
