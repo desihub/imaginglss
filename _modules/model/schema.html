@@ -57,6 +57,9 @@
 <span class="sd">    The `version` parameter of `DataRelease.__init__` picks the correct</span>
 <span class="sd">    schema. </span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
 <div class="viewcode-block" id="Schema"><a class="viewcode-back" href="../../model.schema.html#model.schema.Schema">[docs]</a><span class="k">class</span> <span class="nc">Schema</span><span class="p">:</span>
     <span class="k">pass</span>
 </div>
@@ -126,7 +129,7 @@
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="EDR3.parse_filename"><a class="viewcode-back" href="../../model.schema.html#model.schema.EDR3.parse_filename">[docs]</a>    <span class="k">def</span> <span class="nf">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">brickindex</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span> <span class="k">raise</span> <span class="ne">ValueError</span>
-        <span class="n">brickname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([p0123456789]+)\.&#39;</span><span class="p">,</span> 
+        <span class="n">brickname</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;-([pm0123456789]+)\.&#39;</span><span class="p">,</span> 
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">search_by_name</span><span class="p">(</span><span class="n">brickname</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bid</span>
@@ -144,7 +147,13 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
-</pre></div></div>
+</div>
+<div class="viewcode-block" id="DR1J"><a class="viewcode-back" href="../../model.schema.html#model.schema.DR1J">[docs]</a><span class="k">class</span> <span class="nc">DR1J</span><span class="p">(</span><span class="n">EDR4</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Schema for DR1J. Same as EDR4.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+</pre></div>
 
           </div>
         </div>
