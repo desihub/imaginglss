@@ -80,7 +80,7 @@ class EDR3(Schema):
     @staticmethod
     def parse_filename(filename, brickindex):
         if not filename.endswith('.fits'): raise ValueError
-        brickname = re.search('-([p0123456789]+)\.', 
+        brickname = re.search('-([pm0123456789]+)\.', 
                 os.path.basename(filename)).group(1)
         bid = brickindex.search_by_name(brickname)
         return bid
