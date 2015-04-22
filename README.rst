@@ -10,3 +10,6 @@ and `DR1 <https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1>`_ .
 
 Refer to the document at http://desihub.github.io/imaginglss
 
+We provide an example using the scripts at:
+
+http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/NotebookDemo.ipynb
