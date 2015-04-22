@@ -50,32 +50,40 @@ class Fluxes:
     """
     @staticmethod
     def LRG(rflux,zflux,wflux):
-        mask  = rflux > 10**((22.5-23.00)/2.5)
-        mask &= zflux > 10**((22.5-20.56)/2.5)
-        mask &= wflux > 10**((22.5-19.50)/2.5)
-        mask &= zflux > 10**((1.6)       /2.5)*rflux
-        mask &= wflux*rflux**(1.33-1)>zflux**1.33*10**(-0.33/2.5)
+        mask = N.array([
+         rflux > 10**((22.5-23.00)/2.5),
+         zflux > 10**((22.5-20.56)/2.5),
+         wflux > 10**((22.5-19.50)/2.5),
+         zflux > 10**((1.6)       /2.5)*rflux,
+         wflux*rflux**(1.33-1)>zflux**1.33*10**(-0.33/2.5),
+        ]).T
         return(mask)
     #
     @staticmethod
     def ELG(gflux,rflux,zflux):
-        mask  = rflux    > 10**((22.5-23.4)/2.5)
-        mask &= zflux    > 10**((0.3)      /2.5)*rflux
-        mask &= zflux    < 10**((1.5)      /2.5)*rflux
-        mask &= rflux**2 < gflux*zflux*10**(-0.2/2.5)
-        mask &= zflux    > gflux*10**(1.2/2.5)
+        mask = N.array([
+         rflux    > 10**((22.5-23.4)/2.5),
+         zflux    > 10**((0.3)      /2.5)*rflux,
+         zflux    < 10**((1.5)      /2.5)*rflux,
+         rflux**2 < gflux*zflux*10**(-0.2/2.5),
+         zflux    > gflux*10**(1.2/2.5),
+        ]).T
         return(mask)
     #
     @staticmethod
     def QSO(gflux,rflux,w1flux,w2flux):
-        wflux = 0.67*w1flux + 0.33*w2flux
-        mask  = rflux > 10**((22.5-23.0)/2.5)
-        mask &= rflux < 10**((1.0)      /2.5)*gflux
-        mask &= wflux*gflux**1.2 > 10**(2./2.5)*rflux**(1+1.2)
+        mask = N.array([
+         0.67*w1flux + 0.33*w2flux,
+         rflux > 10**((22.5-23.0)/2.5),
+         rflux < 10**((1.0)      /2.5)*gflux,
+         wflux*gflux**1.2 > 10**(2./2.5)*rflux**(1+1.2),
+        ]).T
         return(mask)
     @staticmethod
     def BGS(rflux):
-        mask  = rflux > 10**((22.5-19.5)/2.5)
+        mask = N.array([
+         rflux > 10**((22.5-19.5)/2.5),
+        ]).T
         return(mask)
     #
  
@@ -98,29 +106,37 @@ class Completeness:
     def LRG(rlim,zlim,wlim):
         # This is not finished yet.
         raise UnimplementedError
-        mask  = rlim<10**((22.5-23.00    )/2.5)
-        mask &= zlim<10**((22.5-20.56    )/2.5)
-        mask &= wlim<10**((22.5-19.50    )/2.5)
-        mask &= zlim<10**((22.5-23.00+1.6)/2.5)
+        mask = N.array([
+         rlim<10**((22.5-23.00    )/2.5),
+         zlim<10**((22.5-20.56    )/2.5),
+         wlim<10**((22.5-19.50    )/2.5),
+         zlim<10**((22.5-23.00+1.6)/2.5),
+        ]).T
         return(mask)
     #
     @staticmethod
     def ELG(glim,rlim,zlim):
-        mask  = rlim < 10**((22.5-23.4        )/2.5) 
-        mask &= zlim < 10**((22.5-23.4+0.3    )/2.5)
-        mask &= glim < 10**((22.5-23.4-1.5+0.2)/2.5)
+        mask = N.array([
+         rlim < 10**((22.5-23.4        )/2.5),
+         zlim < 10**((22.5-23.4+0.3    )/2.5),
+         glim < 10**((22.5-23.4-1.5+0.2)/2.5),
+        ]).T
         return(mask)
     #
     @staticmethod
     def QSO(glim,rlim,w1lim,w2lim):
         # This is not finished yet.
         raise UnimplementedError
-        mask  = rlim<10**((22.5-23.00    )/2.5)
-        mask &= glim<10**((22.5-23.00-1.0)/2.5)
+        mask = N.array([
+         rlim<10**((22.5-23.00    )/2.5),
+         glim<10**((22.5-23.00-1.0)/2.5),
+        ]).T
         return(mask)
     #
     @staticmethod
     def BGS(rlim):
-        mask  = rlim<10**((22.5-19.5)/2.5)
+        mask = N.array([
+         rlim<10**((22.5-19.5)/2.5),
+        ]).T
         return(mask)
     #

@@ -110,10 +110,9 @@ def apply_samp_cut(coord, dr, sfd, samp):
         mask = cuts.Completeness.QSO(glim,rlim,w1lim,w2lim)
     else:
         raise RuntimeError,"Unknown sample "+samp
-    ww = N.nonzero(mask)[0]
     # It's also useful to have r magnitude later.
     rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
-    return( (ww,rmag) )
+    return( (mask,rmag) )
     #
 
 
@@ -151,20 +150,31 @@ def make_random(samp,Nran=10000000):
             # Work out which points belong on which slice.
             mycoord = coord[:, i:i+chunksize]
             # Apply the cut for sample type on my slice
-            ww,rmag = apply_samp_cut(mycoord,dr,sfd,samp)
+            mask,rmag = apply_samp_cut(mycoord,dr,sfd,samp)
             # Notify user this slice is done
+        
             if verbose:
                 print(i, '/', len(coord.T))
-            return( (mycoord,ww,rmag) )
-        def reduce(mycoord, ww, rmag):
+
+            maska = mask.all(axis=-1)
+            mycoord = mycoord[:, maska]
+            rmag = rmag[maska]
+
+            return( (mycoord,rmag, mask.sum(axis=0)) )
+
+        def reduce(mycoord, rmag, kept):
             # and take turns writing this out:
             with open(fout, 'a') as ff:
-                for j in ww:
+                for j in range(0, len(rmag)):
                     ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
                       (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
-            return len(ww)
-        total=sum(pool.map(work,range(0,len(coord.T),chunksize),reduce=reduce))
+            return N.concatenate([[len(rmag)], kept])
+
+        summary = sum(pool.map(work,range(0,len(coord.T),chunksize),reduce=reduce))
+        total = summary[0]
+         
     print('Total area (sq.deg.) ',dr.footprint.area*1.0*total/len(coord.T))
+    print('Rejection rate', 1.0 * summary[1:] / len(coord.T))
     print('Done!')
     #
 

@@ -47,7 +47,7 @@ def select_elgs():
     # Now do the selection ...
     primary= dr.catalogue['BRICK_PRIMARY']
     mask   = (primary == 1)
-    mask  &= cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX)
+    mask  &= cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX).all(axis=-1)
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
@@ -69,11 +69,10 @@ def select_elgs():
         # the ordering is the same as the call to findlim
         glim,rlim,zlim = N.concatenate(\
             pool.map(work,range(0,len(RA),chunksize)),axis=1)
-        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
-        [ww] = N.nonzero(mask)
-        ra   = RA[ ww]
-        dc   = DEC[ww]
-        mag  = mag[:,arg[ww]]
+        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim).all(axis=-1)
+        ra   = RA [mask]
+        dc   = DEC[mask]
+        mag  = mag[:,arg[mask]]
     return( (ra,dc,mag) )
     #
 
