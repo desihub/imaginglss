@@ -1,36 +1,46 @@
-Install
-=======
+Installation
+============
 
-To use this imaing data model on edison:
+ImagingLSS is supposed to be used without installation.
 
-1. set environments
-  
+However, some basic packages need to be set up before using the scripts
+
+Depencency
+----------
+
+ImagingLSS is light on dependency.
+It depends only on fitsio or astropy:
+
+.. code-block:: bash
+
+    easy_install --user fitsio
+    #easy_install --user astropy
+
+On Edison,
+
+.. code-block:: bash
+
+    module load fitsio
+
+File Paths
+----------
+ 
+ImagingLSS core libary and the tools scripts defaults to use :code:`DECALS_IMAGING` as the root path of the data release.
+
+In addition, :code:`DECALS_CACHE` must be set to a directory with large free storage space, for caching the catalogue data.
+
 .. code-block:: bash
 
     export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
     export DECALS_CACHE=$GSCRATCH/desicache
  
-2. install astropy or fitsio (prefered)
-
-.. code-block:: bash
-
-    easy_install --user fitsio
-
-or
-
-.. code-block:: bash  
-
-    easy_install --user astropy
-
-3. try if usecase.py runs.
-
-.. code-block:: bash
-
-    python usecase.py
-
-4. start hacking with
+Getting Started
+---------------
 
 .. code-block:: bash
 
     from model.datarelease import DataRelease
     dr = DataRelease()
+
+Also refer to the :doc:`examples` of the documentation.
+

@@ -7,17 +7,13 @@ Examples
 Notebook
 --------
 
-See
+imaginglss is compatible with IPython Notebook. 
+The catch is the notebook must be stored in the main imaginglss directory.
+This is because imaginglss is intended to be used without installation.
+
+We provide an example at
 
 http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/NotebookDemo.ipynb
-
-Selecting ELGs
---------------
-.. literalinclude:: ../select_elgs.py
-
-Randoms
--------
-.. literalinclude:: ../make_random.py
 
 Example Job script on Edison
 ----------------------------
