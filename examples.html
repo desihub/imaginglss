@@ -69,47 +69,14 @@
 <p>imaginglss is compatible with IPython Notebook.
 The catch is the notebook must be stored in the main imaginglss directory.
 This is because imaginglss is intended to be used without installation.</p>
-<p>We provide an example at</p>
+<p>We provide a comprensive example at</p>
 <p><a class="reference external" href="http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/NotebookDemo.ipynb">http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/NotebookDemo.ipynb</a></p>
+<p>Here is an example note book investigating selectiong ELG based on color / mag cuts
+and completeness cuts.</p>
+<p><a class="reference external" href="http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/SelectELG.ipynb">http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/SelectELG.ipynb</a></p>
 </div>
 <div class="section" id="example-job-script-on-edison">
 <h2><a class="toc-backref" href="#id3">Example Job script on Edison</a><a class="headerlink" href="#example-job-script-on-edison" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre>#PBS -S /bin/bash
-#PBS -l mppwidth=24,walltime=00:05:00
-#PBS -N Example
-#PBS -o Example.out
-#PBS -e Example.err
-#PBS -q debug
-#PBS -A m779
-#
-# An example &quot;submit&quot; script, to work on Edison at NERSC,
-# to read a catalog of Decals objects and print some
-# basic statics about them.
-#
-cd $PBS_O_WORKDIR
-#
-# Load the modules we need.
-source /project/projectdirs/desi/software/modules/desi_environment.sh
-#
-# Set the path to the imaging data.
-export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/cats/edr3
-export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/release/edr/
-export DECALS_IMAGING=/project/projectdirs/cosmo/work/decam/release/dr1/
-export DECALS_CACHE=$GSCRATCH/desicache
-#
-# and set up the Python path...this is an example.
-export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
-#
-export OMP_NUM_THREADS=24
-aprun -n 1 -d 24 python &lt;&lt; EOF
-from model.datarelease import DataRelease
-dr    = DataRelease()
-foot  = dr.footprint
-print foot
-EOF
-#
-</pre></div>
-</div>
 </div>
 </div>
 

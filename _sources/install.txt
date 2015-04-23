@@ -16,7 +16,7 @@ It depends only on fitsio or astropy:
     easy_install --user fitsio
     #easy_install --user astropy
 
-On some Edison,
+On Edison,
 
 .. code-block:: bash
 
