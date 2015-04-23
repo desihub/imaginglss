@@ -26,6 +26,7 @@ export PYTHONPATH=${PYTHONPATH}:${PBS_O_WORKDIR}
 #
 export OMP_NUM_THREADS=24
 aprun -n 1 -d 24 python << EOF
+#import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from model.datarelease import DataRelease
 dr    = DataRelease()
 foot  = dr.footprint

@@ -16,9 +16,7 @@ __email__  = "yfeng1@berkeley.edu and mjwhite@lbl.gov"
 import math  as M
 from model.datarelease import DataRelease
 
-
-
-
+import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 def write_poly(capslist,arealist,fname):
     """
