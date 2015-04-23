@@ -67,10 +67,30 @@
 
 <div class="viewcode-block" id="findlim"><a class="viewcode-back" href="../../analysis.cuts.html#analysis.cuts.findlim">[docs]</a><span class="k">def</span> <span class="nf">findlim</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span><span class="n">sfd</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">bands</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">5.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    findlim(dr,sfd,coord,bands,sigma=5.0):</span>
 <span class="sd">    Get the flux depths (corrected for MW transmission) in the relevant</span>
-<span class="sd">    filters.  For out-of-bounds points, return 0.</span>
+<span class="sd">    filters.  </span>
+
+<span class="sd">    For out-of-bounds points, return 0.</span>
 <span class="sd">    Currently this implements a simple N-sigma cut.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dr : :py:class:`model.datarelease.DataRelease`</span>
+<span class="sd">        data release</span>
+<span class="sd">    sfd  : :py:class:`model.sfdmap.SFDMap`</span>
+<span class="sd">        dust extinction map</span>
+<span class="sd">    coord :  array_like</span>
+<span class="sd">        coord = (RA, DEC)</span>
+<span class="sd">    bands : list</span>
+<span class="sd">        [&#39;g&#39;, &#39;u&#39;, &#39;z&#39;, ...]</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        confidence</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lims : list</span>
+<span class="sd">        one lim per band.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bands</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span>
     <span class="n">ebv</span>  <span class="o">=</span> <span class="n">sfd</span><span class="o">.</span><span class="n">ebv</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>

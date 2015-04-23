@@ -45,7 +45,8 @@
           <a href="analysis.html" title="analysis package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="analysis.html" accesskey="U">analysis package</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" accesskey="U">analysis package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -127,10 +128,44 @@ look after the flux requirements.</p>
 <dl class="function">
 <dt id="analysis.cuts.findlim">
 <code class="descclassname">analysis.cuts.</code><code class="descname">findlim</code><span class="sig-paren">(</span><em>dr</em>, <em>sfd</em>, <em>coord</em>, <em>bands</em>, <em>sigma=5.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#findlim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.findlim" title="Permalink to this definition">¶</a></dt>
-<dd><p>findlim(dr,sfd,coord,bands,sigma=5.0):
-Get the flux depths (corrected for MW transmission) in the relevant
-filters.  For out-of-bounds points, return 0.
+<dd><p>Get the flux depths (corrected for MW transmission) in the relevant
+filters.</p>
+<p>For out-of-bounds points, return 0.
 Currently this implements a simple N-sigma cut.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dr</strong> : <a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease" title="model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.DataRelease</span></code></a></p>
+<blockquote>
+<div><p>data release</p>
+</div></blockquote>
+<p><strong>sfd</strong> : <a class="reference internal" href="model.sfdmap.html#model.sfdmap.SFDMap" title="model.sfdmap.SFDMap"><code class="xref py py-class docutils literal"><span class="pre">model.sfdmap.SFDMap</span></code></a></p>
+<blockquote>
+<div><p>dust extinction map</p>
+</div></blockquote>
+<p><strong>coord</strong> :  array_like</p>
+<blockquote>
+<div><p>coord = (RA, DEC)</p>
+</div></blockquote>
+<p><strong>bands</strong> : list</p>
+<blockquote>
+<div><p>[&#8216;g&#8217;, &#8216;u&#8217;, &#8216;z&#8217;, ...]</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>confidence</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lims</strong> : list</p>
+<blockquote class="last">
+<div><p>one lim per band.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -187,7 +222,8 @@ Currently this implements a simple N-sigma cut.</p>
           <a href="analysis.html" title="analysis package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="analysis.html" >analysis package</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
