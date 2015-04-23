@@ -18,10 +18,30 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 def findlim(dr,sfd,coord,bands,sigma=5.0):
     """
-    findlim(dr,sfd,coord,bands,sigma=5.0):
     Get the flux depths (corrected for MW transmission) in the relevant
-    filters.  For out-of-bounds points, return 0.
+    filters.  
+
+    For out-of-bounds points, return 0.
     Currently this implements a simple N-sigma cut.
+
+    Parameters
+    ----------
+    dr : :py:class:`model.datarelease.DataRelease`
+        data release
+    sfd  : :py:class:`model.sfdmap.SFDMap`
+        dust extinction map
+    coord :  array_like
+        coord = (RA, DEC)
+    bands : list
+        ['g', 'u', 'z', ...]
+    sigma : float
+        confidence
+
+    Returns
+    -------
+    lims : list
+        one lim per band.
+
     """
     assert isinstance(bands,(list,tuple))
     ebv  = sfd.ebv(coord[0],coord[1])

@@ -1,13 +1,38 @@
 import numpy as N
 from model.utils import sharedmem
 
-def fill(dr,Nran,seed=999993):
+def fill(dr,Nran,seed=999993, verbose=False):
     """
-    fill_random(dr,Nran,seed=999993): 
     Generate uniformly distributed points within the boundary that lie in
-    bricks.  We generate in the ra/dec area, then remove points not in any
+    bricks.  
+
+    We generate in the ra/dec area, then remove points not in any
     bricks.  This hugely increases the memory efficiency for footprints,
     like DR1, where the survey covers several disjoint patches of the sky.
+
+    Parameters
+    ----------
+    dr  : :py:class:`model.datarelease.DataRelease`
+        the data release objects
+    Nran  : int
+        number of random points to generate
+    seed : int
+        random seed
+    verbose : boolean
+        display progress to stdout. Do not use.
+
+    Returns
+    -------
+    coord   : array_like (2, N)
+        coord = (RA, DEC) is the coordinate of the random positions with in the
+        footprint of dr.
+
+    Raises
+    ------
+    RuntimeError :
+        if the number of random points is so few it won't cover the footprint
+        with at least 1 point per brick.
+
     """
     rng = N.random.RandomState(seed)
     ramin,ramax,dcmin,dcmax = dr.footprint.range
