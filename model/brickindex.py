@@ -75,6 +75,24 @@ class BrickIndex(object):
         self.names_sorted = self.brickdata['BRICKNAME'][self.names_sortarg]
 
         assert (self.brickdata['BRICKID'] == numpy.arange(len(self.brickdata)) + 1).all()
+
+    def build(self, NROWS, NCOLS):
+        height = 180. / NROWS
+
+        gDEC = numpy.linspace(-90, 90, NROWS + 1, endpoint=True)
+        nCOL = numpy.cos(gDEC / 180. * numpy.pi) * NCOLS
+
+        for i, d in enumerate(gDEC):
+            pass            
+        RA, DEC = coord
+        RA = numpy.asarray(RA)
+        DEC = numpy.asarray(DEC)
+        row = numpy.int32(numpy.floor(DEC * self.ROWMAX / 180 + 360. + 0.5))
+        row = numpy.clip(row, 0, self.ROWMAX)
+        ncols = self.ncols[row]
+        col = numpy.int32(numpy.floor(RA * ncols / 360. ))
+        hash = row * (self.COLMAX + 1) + col
+        ind = self.hash.searchsorted(hash)
          
     def __len__(self):
         return len(self.brickdata)
