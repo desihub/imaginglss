@@ -157,14 +157,14 @@ class DataRelease(object):
 
 
     """
-    def __init__(self, root=None, cacheroot=None, version=None):
+    def __init__(self, root=None, cache=None, version=None):
         if root is None:
             root = os.environ.get("DECALS_IMAGING", '.') 
         root = os.path.normpath(root)
         self.root = root
 
-        if cacheroot is None:
-            cacheroot = os.path.normpath(os.environ.get("DECALS_CACHE", '.'))
+        if cache is None:
+            cache = os.path.normpath(os.environ.get("DECALS_CACHE", '.'))
 
         if version is None:
             version = os.path.basename(root).upper()
@@ -174,7 +174,7 @@ class DataRelease(object):
 
         config = getattr(schema, version)
 
-        self.cacheroot = os.path.join(cacheroot, version)
+        self.cache = os.path.join(cache, version)
 
         try:
             brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
@@ -201,7 +201,7 @@ class DataRelease(object):
         def image_filename(brick, 
             PATTERN='aux/%(pre)s/%(brickname)s/decals-%(brickname)s-ebv.fits'):
             return PATTERN % dict(pre=brick.name[:3], brickname=brick.name)
-        self.images['ebv'] = imagerepo.ImageRepo(self.cacheroot, image_filename)
+        self.images['ebv'] = imagerepo.ImageRepo(self.cache, image_filename)
             
         _covered_brickids = [ ]
         for roots, dirnames, filenames in \
@@ -220,7 +220,7 @@ class DataRelease(object):
         self.footprint = Footprint(self) # build the footprint property
 
         self.catalogue = catalogue.Catalogue(
-            cachedir=os.path.join(self.cacheroot, 'catalogue'),
+            cachedir=os.path.join(self.cache, 'catalogue'),
             filenames=[
                 os.path.join(self.root, 
                 config.format_catalogue_filename(brick))
