@@ -26,7 +26,7 @@ Users Guide
    datamodel
    helpers
    examples
-   modules
+   allmodules
 
 Known Issues
 ============
