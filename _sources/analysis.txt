@@ -1,0 +1,16 @@
+analysis package
+================
+
+.. automodule:: analysis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   analysis.cuts
+   analysis.random
+

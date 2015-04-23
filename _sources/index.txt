@@ -26,7 +26,8 @@ Users Guide
    datamodel
    helpers
    examples
-   modules
+   model
+   analysis
 
 Known Issues
 ============

@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>analysis.cuts module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="analysis package" href="analysis.html" />
+    <link rel="next" title="analysis.random module" href="analysis.random.html" />
+    <link rel="prev" title="analysis package" href="analysis.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.random.html" title="analysis.random module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="analysis package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="analysis.html" accesskey="U">analysis package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-analysis.cuts">
+<span id="analysis-cuts-module"></span><h1>analysis.cuts module<a class="headerlink" href="#module-analysis.cuts" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="analysis.cuts.Completeness">
+<em class="property">class </em><code class="descclassname">analysis.cuts.</code><code class="descname">Completeness</code><a class="reference internal" href="_modules/analysis/cuts.html#Completeness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Completeness" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of helpful (static) methods to check whether a given
+position has imaging deep enough to be 100% complete to a certain
+selection (e.g. LRG, ELG or QSO).
+We should probably modify this later to easily allow querying of
+brighter limits.
+The methods assume they are passed N-sigma limits, corrected for
+MW transmission.
+Note: for a region to pass the N-sigma &#8220;noise&#8221; must be LESS THAN the
+required depth.
+The requirements on colors are tricky to implement here.</p>
+<dl class="staticmethod">
+<dt id="analysis.cuts.Completeness.BGS">
+<em class="property">static </em><code class="descname">BGS</code><span class="sig-paren">(</span><em>rlim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Completeness.BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Completeness.BGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Completeness.ELG">
+<em class="property">static </em><code class="descname">ELG</code><span class="sig-paren">(</span><em>glim</em>, <em>rlim</em>, <em>zlim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Completeness.ELG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Completeness.ELG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Completeness.LRG">
+<em class="property">static </em><code class="descname">LRG</code><span class="sig-paren">(</span><em>rlim</em>, <em>zlim</em>, <em>wlim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Completeness.LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Completeness.LRG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Completeness.QSO">
+<em class="property">static </em><code class="descname">QSO</code><span class="sig-paren">(</span><em>glim</em>, <em>rlim</em>, <em>w1lim</em>, <em>w2lim</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Completeness.QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Completeness.QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="analysis.cuts.Fluxes">
+<em class="property">class </em><code class="descclassname">analysis.cuts.</code><code class="descname">Fluxes</code><a class="reference internal" href="_modules/analysis/cuts.html#Fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Fluxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of helpful (static) methods to check whether an object&#8217;s
+flux passes a given selection criterion (e.g. LRG, ELG or QSO).
+These cuts assume we are passed the extinction-corrected fluxes
+(flux/mw_transmission) and are taken from:</p>
+<blockquote>
+<div><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></div></blockquote>
+<p>The requirement on BRICK_PRIMARY is handled elsewhere, these methods just
+look after the flux requirements.</p>
+<dl class="staticmethod">
+<dt id="analysis.cuts.Fluxes.BGS">
+<em class="property">static </em><code class="descname">BGS</code><span class="sig-paren">(</span><em>rflux</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Fluxes.BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Fluxes.BGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Fluxes.ELG">
+<em class="property">static </em><code class="descname">ELG</code><span class="sig-paren">(</span><em>gflux</em>, <em>rflux</em>, <em>zflux</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Fluxes.ELG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Fluxes.ELG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Fluxes.LRG">
+<em class="property">static </em><code class="descname">LRG</code><span class="sig-paren">(</span><em>rflux</em>, <em>zflux</em>, <em>wflux</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Fluxes.LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Fluxes.LRG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="analysis.cuts.Fluxes.QSO">
+<em class="property">static </em><code class="descname">QSO</code><span class="sig-paren">(</span><em>gflux</em>, <em>rflux</em>, <em>w1flux</em>, <em>w2flux</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#Fluxes.QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.Fluxes.QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="analysis.cuts.findlim">
+<code class="descclassname">analysis.cuts.</code><code class="descname">findlim</code><span class="sig-paren">(</span><em>dr</em>, <em>sfd</em>, <em>coord</em>, <em>bands</em>, <em>sigma=5.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/cuts.html#findlim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.cuts.findlim" title="Permalink to this definition">¶</a></dt>
+<dd><p>findlim(dr,sfd,coord,bands,sigma=5.0):
+Get the flux depths (corrected for MW transmission) in the relevant
+filters.  For out-of-bounds points, return 0.
+Currently this implements a simple N-sigma cut.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analysis.html"
+                        title="previous chapter">analysis package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysis.random.html"
+                        title="next chapter">analysis.random module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/analysis.cuts.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.random.html" title="analysis.random module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="analysis package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="analysis.html" >analysis package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.
+    </div>
+  </body>
+</html>
