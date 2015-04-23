@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Install &mdash; ImagingLSS 0.9 documentation</title>
+    <title>Installation &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -52,38 +52,39 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="install">
-<h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
-<p>To use this imaing data model on edison:</p>
-<ol class="arabic simple">
-<li>set environments</li>
-</ol>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>ImagingLSS is supposed to be used without installation.</p>
+<p>However, some basic packages need to be set up before using the scripts</p>
+<div class="section" id="depencency">
+<h2>Depencency<a class="headerlink" href="#depencency" title="Permalink to this headline">¶</a></h2>
+<p>ImagingLSS is light on dependency.
+It depends only on fitsio or astropy:</p>
+<div class="highlight-bash"><div class="highlight"><pre>easy_install --user fitsio
+<span class="c">#easy_install --user astropy</span>
+</pre></div>
+</div>
+<p>On some Edison,</p>
+<div class="highlight-bash"><div class="highlight"><pre>module load fitsio
+</pre></div>
+</div>
+</div>
+<div class="section" id="file-paths">
+<h2>File Paths<a class="headerlink" href="#file-paths" title="Permalink to this headline">¶</a></h2>
+<p>ImagingLSS core libary and the tools scripts defaults to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.</p>
+<p>In addition, <code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span>/global/project/projectdirs/cosmo/work/decam/release/edr/
 <span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$GSCRATCH</span>/desicache
 </pre></div>
 </div>
-<ol class="arabic simple" start="2">
-<li>install astropy or fitsio (prefered)</li>
-</ol>
-<div class="highlight-bash"><div class="highlight"><pre>easy_install --user fitsio
-</pre></div>
 </div>
-<p>or</p>
-<div class="highlight-bash"><div class="highlight"><pre>easy_install --user astropy
-</pre></div>
-</div>
-<ol class="arabic simple" start="3">
-<li>try if usecase.py runs.</li>
-</ol>
-<div class="highlight-bash"><div class="highlight"><pre>python usecase.py
-</pre></div>
-</div>
-<ol class="arabic simple" start="4">
-<li>start hacking with</li>
-</ol>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash"><div class="highlight"><pre>from model.datarelease import DataRelease
 <span class="nv">dr</span> <span class="o">=</span> DataRelease<span class="o">()</span>
 </pre></div>
+</div>
+<p>Also refer to the <a class="reference internal" href="examples.html"><em>Examples</em></a> of the documentation.</p>
 </div>
 </div>
 
@@ -93,6 +94,16 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#depencency">Depencency</a></li>
+<li><a class="reference internal" href="#file-paths">File Paths</a></li>
+<li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to ImagingLSS&#8217;s documentation!</a></p>
