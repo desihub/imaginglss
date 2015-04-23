@@ -1,5 +1,5 @@
-API Reference: analysis
-=======================
+API Reference
+=============
 
 .. toctree::
    :maxdepth: 4
