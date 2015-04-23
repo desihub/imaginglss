@@ -41,7 +41,7 @@
           <a href="analysis.cuts.html" title="analysis.cuts module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference: analysis</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" accesskey="U">analysis package</a> &raquo;</li> 
       </ul>
     </div>  
@@ -56,11 +56,49 @@
 <dl class="function">
 <dt id="analysis.random.fill">
 <code class="descclassname">analysis.random.</code><code class="descname">fill</code><span class="sig-paren">(</span><em>dr</em>, <em>Nran</em>, <em>seed=999993</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/analysis/random.html#fill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#analysis.random.fill" title="Permalink to this definition">¶</a></dt>
-<dd><p>fill_random(dr,Nran,seed=999993): 
-Generate uniformly distributed points within the boundary that lie in
-bricks.  We generate in the ra/dec area, then remove points not in any
+<dd><p>Generate uniformly distributed points within the boundary that lie in
+bricks.</p>
+<p>We generate in the ra/dec area, then remove points not in any
 bricks.  This hugely increases the memory efficiency for footprints,
 like DR1, where the survey covers several disjoint patches of the sky.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dr</strong> : <a class="reference internal" href="model.datarelease.html#model.datarelease.DataRelease" title="model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">model.datarelease.DataRelease</span></code></a></p>
+<blockquote>
+<div><p>the data release objects</p>
+</div></blockquote>
+<p><strong>Nran</strong> : int</p>
+<blockquote>
+<div><p>number of random points to generate</p>
+</div></blockquote>
+<p><strong>seed</strong> : int</p>
+<blockquote>
+<div><p>random seed</p>
+</div></blockquote>
+<p><strong>verbose</strong> : boolean</p>
+<blockquote>
+<div><p>display progress to stdout. Do not use.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like (2, N)</p>
+<blockquote>
+<div><p>coord = (RA, DEC) is the coordinate of the random positions with in the
+footprint of dr.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>RuntimeError :</strong></p>
+<blockquote class="last">
+<div><p>if the number of random points is so few it won&#8217;t cover the footprint
+with at least 1 point per brick.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -111,7 +149,7 @@ like DR1, where the survey covers several disjoint patches of the sky.</p>
           <a href="analysis.cuts.html" title="analysis.cuts module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference: analysis</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="allmodules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="analysis.html" >analysis package</a> &raquo;</li> 
       </ul>
     </div>
