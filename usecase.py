@@ -17,10 +17,11 @@ def test398599():
     brick = dr.footprint.bricks[0]
     dr.images['image']['z'].preload([brick])
 
-    img2 = dr.images['image']['z'].open(brick)
-    assert (img2[300:-300, 300:-300] != 0).any()
-
     print 'Testing on', brick
+    img2 = dr.images['image']['z'].open(brick)
+#    print img2
+#    assert (img2[300:-300, 300:-300] != 0).any()
+
     print dr.images['image']['z'].get_filename(brick)
     y, x = numpy.indices(img2.shape)
     x = numpy.ravel(x) + 0.5
@@ -49,7 +50,7 @@ def test398599():
 
 def testrandom():
     dr = DataRelease()
-    ebv = dr.images['ebv']
+    #ebv = dr.images['ebv']
     print dr.footprint.range
     u1, u2 = numpy.random.random(size=(2, 4))
     RA = (dr.footprint.range.ramax - dr.footprint.range.ramin) * u1 + dr.footprint.range.ramin
@@ -63,8 +64,8 @@ def testrandom():
     coord = (RA, DEC)
     print coord
     depth = dr.readout(coord, dr.images['depth']['z'])
-    ebv = dr.readout(coord, ebv)
-    print depth, ebv
+    #ebv = dr.readout(coord, ebv)
+    print depth#, ebv
 
 def testebv():
     dr = DataRelease()
@@ -85,7 +86,8 @@ def testcat():
     dr = DataRelease()
     print dr.catalogue 
     print dr.catalogue['RA']
-testebv()
+
+test398599()
+#testebv()
 testrandom()
 testcat()
-test398599()
