@@ -5,7 +5,10 @@ Helper routines
     :depth: 2
  
 In order to reduce the number of dependecies, 
-we implemented a few coordinate transformations 
+we implemented a few coordinate transformations of the WCS system. Only
+relevant special cases are implemented.
+
+There is also a sub-package for in-node parallel multiprocess. 
 
 WCS
 ---
