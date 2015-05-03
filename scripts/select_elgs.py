@@ -37,7 +37,7 @@ def select_elgs():
     """
     # Get instances of a data release and SFD dust map.
     dr = DataRelease()
-    sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
+    sfd= SFDMap()
     # Define the fluxes, corrected for MW transmission.
     brickname = dr.catalogue['BRICKNAME']
     flux  = dr.catalogue['DECAM_FLUX'].T
@@ -87,6 +87,7 @@ def select_elgs():
             pool.map(work,range(0,len(RA),chunksize)),axis=-1)
 
         print('', end='\n')
+        print('lim', glim, rlim, zlim)
 
         mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
         print ('Selected Fraction by Completeness cuts')
