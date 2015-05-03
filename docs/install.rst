@@ -62,12 +62,17 @@ with :code:`.git` directory)
 
 .. code-block:: bash
 
+    mkdir testdata
+    cd testdata
+
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz
     tar -xzvf dr1j.tar.gz
 
     export DECALS_IMAGING=$PWD/dr1j
     export DECALS_CACHE=$PWD/dr1j/cache
     export DUST_DIR=$PWD/dr1j
+
+    cd -
     
 
 
