@@ -72,7 +72,7 @@ def select_elgs():
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
-    print(N.unique(brickname[mask][:100]))
+
 #    print(dr.images['depth']['z'].open(dr.brickindex.get_brick(325914)))
     with sharedmem.MapReduce() as pool:
         (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
