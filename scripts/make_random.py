@@ -102,13 +102,13 @@ def apply_samp_cut(coord, dr, sfd, samp):
     # by calls to "cuts".
     if samp=="LRG":
         rlim,zlim,wlim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
-        mask = cuts.Completeness.LRG(rlim,zlim,wlim)
+        mask = cuts.Completeness.LRG(rlim=rlim,zlim=zlim,w1lim=wlim)
     elif samp=="ELG":
         glim,rlim,zlim = cuts.findlim(dr,sfd,coord,['g','r','z'])
-        mask = cuts.Completeness.ELG(glim,rlim,zlim)
+        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
     elif samp=="QSO":
         glim,rlim,w1lim,w2lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
-        mask = cuts.Completeness.QSO(glim,rlim,w1lim,w2lim)
+        mask = cuts.Completeness.QSO(glim=glim,rlim=rlim,w1lim=w1lim,w2lim=w2lim)
     else:
         raise RuntimeError,"Unknown sample "+samp
     # It's also useful to have r magnitude later.
@@ -127,8 +127,8 @@ def make_random(samp,Nran=10000000):
         raise RuntimeError,"Unknown sample "+samp
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    dr = DataRelease(version='DR1') #, _covered_brickids=subset)
-    sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
+    dr = DataRelease()
+    sfd= SFDMap()
     print('Making randoms in the survey footprint.')
     coord = fill_random(dr, Nran)
     #
@@ -175,7 +175,7 @@ def make_random(samp,Nran=10000000):
         total = summary[0]
          
     print('Total area (sq.deg.) ',dr.footprint.area*1.0*total/len(coord.T))
-    print('Rejection rate', 1.0 * summary[1:] / len(coord.T))
+    print('Accept rate', 1.0 * summary[1:] / len(coord.T))
     print('Done!')
     #
 
