@@ -26,7 +26,7 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-
+import warnings
 
 
 class Lazy(object):
@@ -203,17 +203,25 @@ class DataRelease(object):
             return PATTERN % dict(pre=brick.name[:3], brickname=brick.name)
         self.images['ebv'] = imagerepo.ImageRepo(self.cache, image_filename)
             
-        _covered_brickids = [ ]
-        for roots, dirnames, filenames in \
-            os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
-            for filename in filenames:
-                try:
-                    _covered_brickids.append(
-                        config.parse_filename(filename, self.brickindex))
-                except ValueError:
-                    pass 
-        
-        self._covered_brickids = numpy.array(_covered_brickids, dtype='i8')
+        try: 
+            _covered_brickids = numpy.fromfile(
+                os.path.join(self.cache, 'covered_brickids.i8'), dtype='i8')
+        except IOError:
+            
+            _covered_brickids = [ ]
+            for roots, dirnames, filenames in \
+                os.walk(os.path.join(self.root, 'tractor'), followlinks=True):
+                for filename in filenames:
+                    try:
+                        _covered_brickids.append(
+                            config.parse_filename(filename, self.brickindex))
+                    except ValueError:
+                        pass 
+            _covered_brickids = numpy.array(_covered_brickids, dtype='i8')
+            _covered_brickids.tofile(os.path.join(self.cache, 'covered_brickids.i8'))
+            
+        self._covered_brickids = _covered_brickids
+
         # the list of covered bricks must be sorted.
         self._covered_brickids.sort()
 
@@ -287,10 +295,14 @@ class DataRelease(object):
 
             try:
                 img = brick.readout(coord[:, sl], repo, default=default)
+                #print( 'readout', b, img)
                 pixels[sl] = img
-            except IOError:
+            except IOError as e:
+                #print( 'readout', b, self.brickindex.get_brick(b), 'error', e, coord)
                 if not ignore_missing:
                     raise
+                else:
+                    warnings.warn(str(e), stacklevel=2)
         #
         images[mask] = pixels[invarg]
             
