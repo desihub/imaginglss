@@ -26,7 +26,13 @@ Users Guide
    datamodel
    helpers
    examples
-   allmodules
+
+API Reference
+=============
+.. toctree::
+   :maxdepth: 2
+
+   modules
 
 Known Issues
 ============
