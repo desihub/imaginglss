@@ -177,6 +177,11 @@ class DataRelease(object):
         self.cache = os.path.join(cache, version)
 
         try:
+            os.makedirs(self.cache)
+        except :
+            pass
+
+        try:
             brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
         except :
             brickdata = fits.read_table(os.path.join(os.path.dirname(__file__), '..', 'fallback', 'default-bricks.fits'))
