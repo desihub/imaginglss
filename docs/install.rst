@@ -84,6 +84,8 @@ see the following steps.
     cd -
     
 
+Replace dr1j with edr3 to get the EDR3 dataset; EDR3 is older than DR1J, but
+seems to be more complete.
 
 
 
