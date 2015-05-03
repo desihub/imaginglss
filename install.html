@@ -92,21 +92,27 @@ the values from the environment variables are used.</p>
 </div>
 <div class="section" id="example-dataset">
 <h2>Example Dataset<a class="headerlink" href="#example-dataset" title="Permalink to this headline">¶</a></h2>
-<p>We provide a small sampling data set for testing imaginglss. The small dataset is
-based on the DR1J data release of DECALS. It can be downloaded at</p>
+<p>We provide a small sampling data set that contains only 1 brick for testing imaginglss.
+The small dataset is based on the DR1J data release of DECALS. It can be downloaded at</p>
 <p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz</a></p>
-<p>The total size is less than 200 MB after decompressing. To deploy this dataset with
-the source code tree, in imainginglss toplevel directory (that is the directory
-with <code class="code docutils literal"><span class="pre">.git</span></code> directory)</p>
+<p>The total size is less than 30 MB after decompressing.</p>
+<p>Note that the SFD98 dust map is also required for most of the ImagingLSS operations.
+The SFD98 file is somewhat larger, on the order of 100 MB.</p>
+<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz</a></p>
+<p>To deploy this dataset with the source code tree,
+see the following steps.</p>
 <div class="highlight-bash"><div class="highlight"><pre>mkdir testdata
 <span class="nb">cd </span>testdata
 
 wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz
 tar -xzvf dr1j.tar.gz
 
+wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
+tar -xzvf SFD98.tar.gz
+
 <span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j
-<span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j/cache
-<span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j
+<span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$PWD</span>/cache
+<span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span><span class="nv">$PWD</span>/SFD98
 
 <span class="nb">cd</span> -
 </pre></div>
