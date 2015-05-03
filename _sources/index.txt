@@ -23,8 +23,8 @@ Users Guide
    :maxdepth: 2
 
    install
-   imaginglss.model
-   imaginglss.utils
+   datamodel
+   helpers
    examples
 
 API Reference
