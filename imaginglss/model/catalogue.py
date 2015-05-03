@@ -6,9 +6,9 @@ This class does some caching for speed.
 """
 import numpy
 
-from utils import fits
-from utils import sharedmem
-from utils.columnstore import DiskColumnStore
+from ..utils import fits
+from ..utils import sharedmem
+from ..utils.columnstore import DiskColumnStore
 import multiprocessing.pool
 
 __author__ = "Yu Feng and Martin White"

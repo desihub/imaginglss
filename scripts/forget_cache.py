@@ -12,7 +12,7 @@ __email__  = "yfeng1@berkeley.edu or mwhite@berkeley.edu"
 
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-from model.datarelease import DataRelease
+from imaginglss.datarelease import DataRelease
 
 dr = DataRelease()
 cat = dr.catalogue

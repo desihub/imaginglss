@@ -1,5 +1,5 @@
 import numpy as N
-from model.utils import sharedmem
+from ..utils import sharedmem
 
 def fill(dr,Nran,seed=999993, verbose=False):
     """

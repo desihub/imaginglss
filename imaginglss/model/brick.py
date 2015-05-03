@@ -7,7 +7,7 @@ imagerepo to handle looking up the pixel-level information.
 from __future__ import print_function
 
 import numpy
-from utils import wcs_tangent
+from ..utils import wcs_tangent
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"

@@ -1,4 +1,4 @@
-from utils import fits
+from ..utils import fits
 import os.path
 
 class ImageRepo(object):

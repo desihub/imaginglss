@@ -8,8 +8,8 @@ replaced the transformation with ours.
 """
 import fitsio
 import os
-from utils import wcs_simplezea
-from utils.euler import euler
+from ..utils import wcs_simplezea
+from ..utils.euler import euler
 import numpy as np
 
 # to run need to 

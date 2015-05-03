@@ -15,7 +15,7 @@ import glob
 import re
 from collections import namedtuple
 
-from utils import fits
+from ..utils import fits
 
 from . import brickindex
 from . import imagerepo

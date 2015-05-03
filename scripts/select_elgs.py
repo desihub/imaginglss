@@ -21,10 +21,10 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import numpy as N
-from model.utils       import sharedmem
-from model.sfdmap      import SFDMap
-from model.datarelease import DataRelease
-from analysis import cuts
+from imaginglss.utils       import sharedmem
+from imaginglss             import SFDMap
+from imaginglss             import DataRelease
+from imaginglss.analysis    import cuts
 
 
 
