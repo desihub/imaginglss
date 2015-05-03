@@ -6,13 +6,6 @@ imaginglss.utils package
     :undoc-members:
     :show-inheritance:
 
-Subpackages
------------
-
-.. toctree::
-
-    imaginglss.utils.sharedmem
-
 Submodules
 ----------
 

@@ -23,9 +23,15 @@ Users Guide
    :maxdepth: 2
 
    install
-   datamodel
-   helpers
+   imaginglss.model
+   imaginglss.utils
    examples
+
+API Reference
+=============
+.. toctree::
+   :maxdepth: 2
+
    modules
 
 Known Issues
