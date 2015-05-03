@@ -28,12 +28,11 @@ import numpy             as N
 from   model.utils       import sharedmem
 from   model.sfdmap      import SFDMap
 from   model.datarelease import DataRelease
-import cuts
-import sys
+from   analysis          import cuts
 
 #from mpi4py            import MPI
 
-verbose = False
+verbose = True
 
 
 def fill_random(dr,Nran,seed=999993):
@@ -158,11 +157,11 @@ def make_random(samp,Nran=10000000):
             if verbose:
                 print(i, '/', len(coord.T))
 
-            maska = mask.all(axis=-1)
+            maska = mask.all(axis=0)
             mycoord = mycoord[:, maska]
             rmag = rmag[maska]
 
-            return( (mycoord,rmag, mask.sum(axis=0)) )
+            return( (mycoord,rmag, mask.sum(axis=-1)) )
 
         def reduce(mycoord, rmag, kept):
             # and take turns writing this out:

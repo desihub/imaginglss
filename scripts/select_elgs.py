@@ -24,7 +24,7 @@ import numpy as N
 from model.utils       import sharedmem
 from model.sfdmap      import SFDMap
 from model.datarelease import DataRelease
-import cuts
+from analysis import cuts
 
 
 
@@ -39,6 +39,7 @@ def select_elgs():
     dr = DataRelease()
     sfd= SFDMap(dustdir="/project/projectdirs/desi/software/edison/dust/v0_0/")
     # Define the fluxes, corrected for MW transmission.
+    brickname = dr.catalogue['BRICKNAME']
     flux  = dr.catalogue['DECAM_FLUX'].T
     trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
     GFLUX = flux[1] / trn[1]
@@ -47,21 +48,30 @@ def select_elgs():
     # Now do the selection ...
     primary= dr.catalogue['BRICK_PRIMARY']
     pmask = primary == 1
+
     mask  = cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX)
-    mask &= pmask[:, None]
+    mask &= pmask[None, :]
 
-    print ('Selected Fraction by cuts', 1.0 * mask.sum(axis=0) / pmask.sum())
+    print ('Selected Fraction by Fluxes cuts')
 
-    mask = mask.all(axis=-1)
+    print ('\n'.join([
+        '%s : %g' % v for v in
+        zip(cuts.Fluxes.ELG, 1.0 * mask.sum(axis=1) / pmask.sum())]))
+
+    mask = mask.all(axis=0)
+
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
     ra   = dr.catalogue[ 'RA'][mask]
     dc   = dr.catalogue['DEC'][mask]
+    print ('working on ', len(ra), 'items')
     mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
+    print(N.unique(brickname[mask][:100]))
+#    print(dr.images['depth']['z'].open(dr.brickindex.get_brick(325914)))
     with sharedmem.MapReduce() as pool:
         (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
         chunksize = 1024
@@ -74,11 +84,19 @@ def select_elgs():
             return(lim)
         # the ordering is the same as the call to findlim
         glim,rlim,zlim = N.concatenate(\
-            pool.map(work,range(0,len(RA),chunksize)),axis=1)
+            pool.map(work,range(0,len(RA),chunksize)),axis=-1)
 
         print('', end='\n')
 
-        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim).all(axis=-1)
+        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
+        print ('Selected Fraction by Completeness cuts')
+
+        print ('\n'.join([
+            '%s : %g' % v for v in
+            zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask))]))
+
+        mask = mask.all(axis=0)
+        print(mask.sum())
         ra   = RA [mask]
         dc   = DEC[mask]
         mag  = mag[:,arg[mask]]
