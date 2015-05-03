@@ -23,7 +23,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" /> 
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="imaginglss package" href="imaginglss.html" />
+    <link rel="next" title="imaginglss.utils.sharedmem package" href="imaginglss.utils.sharedmem.html" />
+    <link rel="prev" title="imaginglss.model.sfdmap module" href="imaginglss.model.sfdmap.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,7 +38,15 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="imaginglss.utils.sharedmem.html" title="imaginglss.utils.sharedmem package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference: model</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" accesskey="U">imaginglss package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -46,6 +57,26 @@
             
   <div class="section" id="module-imaginglss.utils">
 <span id="imaginglss-utils-package"></span><h1>imaginglss.utils package<a class="headerlink" href="#module-imaginglss.utils" title="Permalink to this headline">¶</a></h1>
+<p>In order to reduce the number of dependecies, 
+we implemented a few coordinate transformations</p>
+<div class="section" id="wcs">
+<h2>WCS<a class="headerlink" href="#wcs" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="imaginglss.utils.wcs_tangent.html#module-imaginglss.utils.wcs_tangent" title="imaginglss.utils.wcs_tangent"><code class="xref py py-mod docutils literal"><span class="pre">imaginglss.utils.wcs_tangent</span></code></a> impments the WCS tangent format.</li>
+<li><a class="reference internal" href="imaginglss.utils.wcs_simplezea.html#module-imaginglss.utils.wcs_simplezea" title="imaginglss.utils.wcs_simplezea"><code class="xref py py-mod docutils literal"><span class="pre">imaginglss.utils.wcs_simplezea</span></code></a> implement the WCS ZEA format; oriented at north / south pole</li>
+<li><a class="reference internal" href="imaginglss.utils.euler.html#module-imaginglss.utils.euler" title="imaginglss.utils.euler"><code class="xref py py-mod docutils literal"><span class="pre">imaginglss.utils.euler</span></code></a> implements the transformation between Galactic and RA/DEC. coordinates.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="sharedmem">
+<h2>Sharedmem<a class="headerlink" href="#sharedmem" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="imaginglss.utils.sharedmem.html#module-imaginglss.utils.sharedmem" title="imaginglss.utils.sharedmem"><code class="xref py py-mod docutils literal"><span class="pre">imaginglss.utils.sharedmem</span></code></a> implements a MapReduce pool object for in-node parallellism. See <a class="reference internal" href="sharedmem.html"><em>sharedmem</em></a></li>
+</ul>
+</div></blockquote>
+</div>
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -90,12 +121,20 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">imaginglss.utils package</a><ul>
+<li><a class="reference internal" href="#wcs">WCS</a></li>
+<li><a class="reference internal" href="#sharedmem">Sharedmem</a></li>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imaginglss.model.sfdmap.html"
+                        title="previous chapter">imaginglss.model.sfdmap module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="imaginglss.utils.sharedmem.html"
+                        title="next chapter">imaginglss.utils.sharedmem package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -129,7 +168,15 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+        <li class="right" >
+          <a href="imaginglss.utils.sharedmem.html" title="imaginglss.utils.sharedmem package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference: model</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
