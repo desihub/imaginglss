@@ -83,7 +83,9 @@ see the following steps.
 
     cd -
     
+.. notes::
 
+    Replace dr1j with edr3 to get the EDR3 dataset.
 
 
 
