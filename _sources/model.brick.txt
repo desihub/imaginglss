@@ -1,7 +1,0 @@
-model.brick module
-==================
-
-.. automodule:: model.brick
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,16 @@
+imaginglss.analysis package
+===========================
+
+.. automodule:: imaginglss.analysis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   imaginglss.analysis.cuts
+   imaginglss.analysis.gen_random
+

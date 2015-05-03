@@ -1,7 +1,0 @@
-analysis.cuts module
-====================
-
-.. automodule:: analysis.cuts
-    :members:
-    :undoc-members:
-    :show-inheritance:

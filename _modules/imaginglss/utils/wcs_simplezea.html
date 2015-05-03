@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.utils.wcs_simplezea &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for imaginglss.utils.wcs_simplezea</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python routines to apply world-coordinate system transformations</span>
+<span class="sd">based on the simpler ZEA projection used SFD98 milky way dust map</span>
+
+<span class="sd">This code is designed to be light-weight, and specialized. The general</span>
+<span class="sd">ZEA projection is UNSUPPORTED.  We handle two special cases </span>
+
+<span class="sd">   - CRVAL = -90 -90 (south) </span>
+<span class="sd">   - CRVAL = 90 90 (north)</span>
+
+<span class="sd">The ZEA projection is described in</span>
+<span class="sd">http://fits.gsfc.nasa.gov/registry/tpvwcs/tpv.html</span>
+<span class="sd">and in:</span>
+<span class="sd">&quot;Representations of celestial coordinates in FITS&quot;</span>
+<span class="sd">Calabretta, M. R., and Greisen, E. W.,</span>
+<span class="sd">Astronomy &amp; Astrophysics, 395, 1077-1122, 2002.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ang2pix&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang&#39;</span><span class="p">,</span><span class="s">&#39;ang2pix_hdr&#39;</span><span class="p">,</span><span class="s">&#39;pix2ang_hdr&#39;</span><span class="p">]</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">example header:</span>
+<span class="sd">SIMPLE  =                    T / Written by IDL:  Sun May  9 11:19:26 1999</span>
+<span class="sd">BITPIX  =                  -32 /</span>
+<span class="sd">NAXIS   =                    2 /</span>
+<span class="sd">NAXIS1  =                 4096 /</span>
+<span class="sd">NAXIS2  =                 4096 /</span>
+<span class="sd">DATE    = &#39;1999-05-09&#39;         / Creation date (CCYY-MM-DD) of FITS header</span>
+<span class="sd">OBJECT  = &#39;E(B-V)  &#39;           /</span>
+<span class="sd">BUNIT   = &#39;mag     &#39;           /</span>
+<span class="sd">CRPIX1  =              2048.50 / 1-indexed X pixel number of pole</span>
+<span class="sd">CRVAL1  =              90.0000 /</span>
+<span class="sd">CTYPE1  = &#39;GLON-ZEA&#39;           / X=sqrt(1-NSGP*sin(b))*cos(l)*SCALE</span>
+<span class="sd">CRPIX2  =              2048.50 / 1-indexed Y pixel number of pole</span>
+<span class="sd">CRVAL2  =              90.0000 /</span>
+<span class="sd">CTYPE2  = &#39;GLAT-ZEA&#39;           / Y=-NSGP*sqrt(1-NSGP*sin(b))*sin(l)*SCALE</span>
+<span class="sd">CD1_1   =     -0.0395646818624 /</span>
+<span class="sd">CD1_2   =              0.00000 /</span>
+<span class="sd">CD2_1   =              0.00000 /</span>
+<span class="sd">CD2_2   =      0.0395646818624 /</span>
+<span class="sd">LONPOLE =                  180 /</span>
+<span class="sd">LAM_NSGP=                    1 / NSGP=+1 for north polar, =-1 for south polar</span>
+<span class="sd">LAM_SCAL=                 2048 / SCALE=number of pixels from b=0 to b=90 deg</span>
+<span class="sd">AUTHOR  = &#39;David J. Schlegel, Douglas P. Finkbeiner, and Marc Davis&#39; /</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> 
+<span class="kn">import</span> <span class="nn">math</span>
+
+<div class="viewcode-block" id="ang2pix_hdr"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.ang2pix_hdr">[docs]</a><span class="k">def</span> <span class="nf">ang2pix_hdr</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply forward (ra,dec)-&gt;(x,y) simple ZEA transformation</span>
+<span class="sd">    </span>
+<span class="sd">    A convenience function for calling ang2pix, with the transformations</span>
+<span class="sd">    described in a dictionary in the usual FITS header style for WCS</span>
+<span class="sd">    transformations.  </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coord  : array_like </span>
+<span class="sd">        (ra, dec), RA and DEC (in decimal degrees, vectorized) </span>
+<span class="sd">    hdr    :   dict</span>
+<span class="sd">        WCS header as a dictionary</span>
+<span class="sd">    zero_offset : boolean, optional,</span>
+<span class="sd">        If True, the routine returns 0-indexed pixel coordinates</span>
+<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 (as in</span>
+<span class="sd">        Fortran).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xy  : array_like</span>
+<span class="sd">        xy = (x, y) pixel numbers.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea projection.&quot;</span>
+    <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="c">#</span>
+</div>
+<div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</span>
+<span class="sd">    </span>
+<span class="sd">    See :py:meth:`ang2pix_hdr`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea plane projection.&quot;</span>
+    <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="c">#</span>
+</div>
+<span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a WCS header to arguments of pix2ang and ang2pix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hdr         : dict</span>
+<span class="sd">        WCS header</span>
+<span class="sd">    zero_offset : boolean</span>
+<span class="sd">        If zero_offset is True, the routine assumes 0-indexed pixel coordinates</span>
+<span class="sd">        (useful in Python or C) while if it is False pixels run from 1 </span>
+<span class="sd">        (as in Fortran and Julia)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    scale : float</span>
+<span class="sd">        Scaling factor</span>
+<span class="sd">    crpix : array_like</span>
+<span class="sd">        center pixel coordniate; compensated for `zero_offset`</span>
+<span class="sd">    nsgp  : int</span>
+<span class="sd">        North or South galactic pool.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError:</span>
+<span class="sd">        if the header does not contain enough fields.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Check to see whether the &quot;hdr&quot; dictionary contains the necessary</span>
+    <span class="c"># keywords.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s">&#39;CTYPE1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CTYPE2&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span>\
+       <span class="p">(</span><span class="s">&#39;CRVAL1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CRVAL2&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span>\
+       <span class="p">(</span><span class="s">&#39;CRPIX1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CRPIX2&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span>\
+       <span class="p">(</span><span class="s">&#39;LAM_NSGP&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;LAM_SCAL&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Unable to parse header.&quot;</span>
+    <span class="n">crpix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRPIX1&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRPIX2&#39;</span><span class="p">]])</span>
+    <span class="n">nsgp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;LAM_NSGP&#39;</span><span class="p">])</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;LAM_SCAL&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">zero_offset</span><span class="p">:</span>
+        <span class="n">crpix</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">scale</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">nsgp</span>
+               
+
+
+<div class="viewcode-block" id="ang2pix"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.ang2pix">[docs]</a><span class="k">def</span> <span class="nf">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert RA, DEC to x,y, with simple ZEA transformation</span>
+
+<span class="sd">    A simplified version of the ZEA Transform from coord = (ra, dec) </span>
+<span class="sd">    to pixel xy coordinate according the the WCS header. </span>
+
+<span class="sd">    Obviously PV distortion is not supported.</span>
+
+<span class="sd">    No checking is performed if a given RA, DEC lies outside the range.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coord : array_like</span>
+<span class="sd">        coord = (RA, DEC), RA and DEC (in decimal degrees, vectorized) </span>
+<span class="sd">    SCALE : int</span>
+<span class="sd">        scaling factor</span>
+<span class="sd">    CRPIX : array_like</span>
+<span class="sd">        center pixel number of x, y</span>
+<span class="sd">    NSGP: int</span>
+<span class="sd">        +1 for North, -1 for Sourth.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Look up Section 5.?.? of </span>
+
+<span class="sd">    http://www.aanda.org/articles/aa/pdf/2002/45/aah3860.pdf </span>
+
+<span class="sd">    Although the source code in </span>
+
+<span class="sd">    https://code.google.com/p/astropysics/source/browse/astropysics/extinct.py</span>
+
+<span class="sd">    maybe a better explanation of what is done.</span>
+
+<span class="sd">    The transformation is used by SFD98 dust maps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+    <span class="c"># watch out, this may be wrong if the matrix is not diagonal</span>
+
+    <span class="n">l</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">coord</span> <span class="o">*</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span><span class="p">)</span>
+       
+    <span class="c">#project from galactic longitude/latitude to lambert pixels (see SFD98)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">NSGP</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="o">-</span> <span class="n">NSGP</span> <span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">NSGP</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="c">#now remap indecies - numpy arrays have y and x convention switched</span>
+    <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="n">xy</span> <span class="o">*=</span> <span class="n">SCALE</span>
+    <span class="n">xy</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CRPIX</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="c">#</span>
+
+</div>
+<div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert x, y to RA, DEC with simple ZEA transformation.</span>
+
+<span class="sd">    See :py:meth:`ang2pix`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="n">xy</span> <span class="o">-=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CRPIX</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">xy</span> <span class="o">/=</span> <span class="n">SCALE</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">xy</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arcsin</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">NSGP</span><span class="p">)</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">NSGP</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+    <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="n">coord</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%=</span> <span class="mf">360.</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c"># perform some tests</span>
+    <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">NSGP</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">wcs</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">CTYPE1</span>  <span class="o">=</span> <span class="s">&#39;GLON-ZEA&#39;</span><span class="p">,</span><span class="c">#           / ZEA </span>
+            <span class="n">CTYPE2</span>  <span class="o">=</span> <span class="s">&#39;GLAT-ZEA&#39;</span><span class="p">,</span> <span class="c">#           / ZEA</span>
+            <span class="n">CRPIX1</span>  <span class="o">=</span>               <span class="mf">2048.5</span><span class="p">,</span> <span class="c"># / Reference x </span>
+            <span class="n">CRPIX2</span>  <span class="o">=</span>               <span class="mf">2048.5</span><span class="p">,</span> <span class="c"># / Reference y </span>
+            <span class="n">CD1_1</span>   <span class="o">=</span> <span class="n">NSGP</span><span class="o">*-</span><span class="mf">0.0395646818624</span><span class="p">,</span> <span class="c"># / CD matrix</span>
+            <span class="n">CD1_2</span>   <span class="o">=</span>                   <span class="mf">0.</span><span class="p">,</span> <span class="c"># / CD matrix</span>
+            <span class="n">CD2_1</span>   <span class="o">=</span>                   <span class="mf">0.</span><span class="p">,</span> <span class="c"># / CD matrix</span>
+            <span class="n">CD2_2</span>   <span class="o">=</span> <span class="n">NSGP</span><span class="o">*</span><span class="mf">0.0395646818624</span><span class="p">,</span> <span class="c"># / CD matrix</span>
+            <span class="n">LONPOLE</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">header</span><span class="p">[</span><span class="s">&#39;CRVAL1&#39;</span><span class="p">]</span>  <span class="o">=</span>     <span class="n">NSGP</span> <span class="o">*</span> <span class="mf">90.</span> <span class="c"># / Reference RA                                   </span>
+        <span class="n">header</span><span class="p">[</span><span class="s">&#39;CRVAL2&#39;</span><span class="p">]</span>  <span class="o">=</span>     <span class="n">NSGP</span> <span class="o">*</span> <span class="mf">90.</span><span class="c"># / Reference Dec                                  </span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">wcs</span><span class="o">.</span><span class="n">WCS</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        
+        <span class="n">ra</span> <span class="o">=</span> <span class="p">[</span><span class="n">ra</span><span class="p">]</span>
+        <span class="n">dec</span> <span class="o">=</span> <span class="p">[</span><span class="n">dec</span><span class="p">]</span>
+        <span class="n">astropy</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">all_world2pix</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ours</span> <span class="o">=</span> <span class="n">ang2pix</span><span class="p">((</span><span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">),</span> 
+                <span class="n">SCALE</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+                <span class="n">CRPIX</span><span class="o">=</span><span class="p">(</span><span class="mf">2048.5</span><span class="p">,</span><span class="mf">2048.5</span><span class="p">),</span>
+                <span class="n">NSGP</span><span class="o">=</span><span class="n">NSGP</span><span class="p">)</span>
+        <span class="n">back</span> <span class="o">=</span> <span class="n">pix2ang</span><span class="p">(</span><span class="n">ours</span><span class="p">,</span> 
+                <span class="n">SCALE</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+                <span class="n">CRPIX</span><span class="o">=</span><span class="p">(</span><span class="mf">2048.5</span><span class="p">,</span><span class="mf">2048.5</span><span class="p">),</span>
+                <span class="n">NSGP</span><span class="o">=</span><span class="n">NSGP</span><span class="p">)</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;transforming&#39;</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="s">&#39;at&#39;</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;roundtrip&#39;</span><span class="p">,</span> <span class="n">back</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;astropy has&#39;</span><span class="p">,</span> <span class="n">astropy</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;we have    &#39;</span><span class="p">,</span> <span class="n">ours</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ours</span> <span class="o">-</span> <span class="n">astropy</span>
+
+    <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+        <span class="n">compare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">181.</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">30.</span><span class="p">,</span> <span class="o">-</span><span class="mi">31</span><span class="p">)</span>
+        <span class="n">compare</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">181.</span><span class="p">,</span> <span class="o">-</span><span class="mi">31</span><span class="p">)</span>
+    <span class="n">test</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

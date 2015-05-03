@@ -1,7 +1,0 @@
-model.utils.wcs_tangent module
-==============================
-
-.. automodule:: model.utils.wcs_tangent
-    :members:
-    :undoc-members:
-    :show-inheritance:

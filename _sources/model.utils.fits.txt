@@ -1,7 +1,0 @@
-model.utils.fits module
-=======================
-
-.. automodule:: model.utils.fits
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,0 @@
-model.utils.euler module
-========================
-
-.. automodule:: model.utils.euler
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.analysis.cuts module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-imaginglss.analysis.cuts">
+<span id="imaginglss-analysis-cuts-module"></span><h1>imaginglss.analysis.cuts module<a class="headerlink" href="#module-imaginglss.analysis.cuts" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="imaginglss.analysis.cuts.Completeness">
+<em class="property">class </em><code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">Completeness</code><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#Completeness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.Completeness" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of helpful (static) methods to check whether a given
+position has imaging deep enough to be 100% complete to a certain
+selection (e.g. LRG, ELG or QSO).
+We should probably modify this later to easily allow querying of
+brighter limits.
+The methods assume they are passed N-sigma limits, corrected for
+MW transmission.
+Note: for a region to pass the N-sigma &#8220;noise&#8221; must be LESS THAN the
+required depth.
+The requirements on colors are tricky to implement here. We currently
+require a 100% completeness.</p>
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Completeness.BGS">
+<code class="descname">BGS</code><a class="headerlink" href="#imaginglss.analysis.cuts.Completeness.BGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Completeness.ELG">
+<code class="descname">ELG</code><a class="headerlink" href="#imaginglss.analysis.cuts.Completeness.ELG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Completeness.LRG">
+<code class="descname">LRG</code><a class="headerlink" href="#imaginglss.analysis.cuts.Completeness.LRG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Completeness.QSO">
+<code class="descname">QSO</code><a class="headerlink" href="#imaginglss.analysis.cuts.Completeness.QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.analysis.cuts.Cuts">
+<em class="property">class </em><code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">Cuts</code><span class="sig-paren">(</span><em>cuts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#Cuts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.Cuts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A convenient representation of a Cut</p>
+<p>A <code class="xref py py-class docutils literal"><span class="pre">Cut</span></code> object stores the cut expression
+as a string, but can be called with the corresponding
+replacements as keyward arguments. A boolean is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*local</strong> : dict</p>
+<blockquote>
+<div><p>the arguments to eval the cut expression. for example, rflux=[1.1, 2.3, ...]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>mask</strong> : array_like (Ncuts, Nitem)</p>
+<blockquote class="last">
+<div><p>True if item passed the cut, False if not.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="4%" />
+<col width="96%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>cuts</td>
+<td>(list) a list of python expressions as strings. For example,  [&#8220;rflux &gt; 10**((22.5-23.00)/2.5)&#8221;]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.analysis.cuts.Fluxes">
+<em class="property">class </em><code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">Fluxes</code><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#Fluxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.Fluxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collection of helpful (static) methods to check whether an object&#8217;s
+flux passes a given selection criterion (e.g. LRG, ELG or QSO).
+These cuts assume we are passed the extinction-corrected fluxes
+(flux/mw_transmission) and are taken from:</p>
+<blockquote>
+<div><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></div></blockquote>
+<p>The requirement on BRICK_PRIMARY is handled elsewhere, these methods just
+look after the flux requirements.</p>
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Fluxes.BGS">
+<code class="descname">BGS</code><a class="headerlink" href="#imaginglss.analysis.cuts.Fluxes.BGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Fluxes.ELG">
+<code class="descname">ELG</code><a class="headerlink" href="#imaginglss.analysis.cuts.Fluxes.ELG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Fluxes.LRG">
+<code class="descname">LRG</code><a class="headerlink" href="#imaginglss.analysis.cuts.Fluxes.LRG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.analysis.cuts.Fluxes.QSO">
+<code class="descname">QSO</code><a class="headerlink" href="#imaginglss.analysis.cuts.Fluxes.QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.analysis.cuts.findlim">
+<code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">findlim</code><span class="sig-paren">(</span><em>dr</em>, <em>sfd</em>, <em>coord</em>, <em>bands</em>, <em>sigma=5.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#findlim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.findlim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the flux depths (corrected for MW transmission) in the relevant
+filters.</p>
+<p>For out-of-bounds points, return 0.
+Currently this implements a simple N-sigma cut.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dr</strong> : <code class="xref py py-class docutils literal"><span class="pre">model.datarelease.DataRelease</span></code></p>
+<blockquote>
+<div><p>data release</p>
+</div></blockquote>
+<p><strong>sfd</strong> : <code class="xref py py-class docutils literal"><span class="pre">model.sfdmap.SFDMap</span></code></p>
+<blockquote>
+<div><p>dust extinction map</p>
+</div></blockquote>
+<p><strong>coord</strong> :  array_like</p>
+<blockquote>
+<div><p>coord = (RA, DEC)</p>
+</div></blockquote>
+<p><strong>bands</strong> : list</p>
+<blockquote>
+<div><p>[&#8216;g&#8217;, &#8216;u&#8217;, &#8216;z&#8217;, ...]</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>confidence</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lims</strong> : list</p>
+<blockquote class="last">
+<div><p>one lim per band.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imaginglss.analysis.cuts.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

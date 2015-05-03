@@ -1,0 +1,21 @@
+imaginglss.model package
+========================
+
+.. automodule:: imaginglss.model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   imaginglss.model.brick
+   imaginglss.model.brickindex
+   imaginglss.model.catalogue
+   imaginglss.model.datarelease
+   imaginglss.model.imagerepo
+   imaginglss.model.schema
+   imaginglss.model.sfdmap
+

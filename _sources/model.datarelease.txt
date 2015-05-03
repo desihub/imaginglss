@@ -1,7 +1,0 @@
-model.datarelease module
-========================
-
-.. automodule:: model.datarelease
-    :members:
-    :undoc-members:
-    :show-inheritance:

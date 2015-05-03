@@ -1,7 +1,0 @@
-model.sfdmap module
-===================
-
-.. automodule:: model.sfdmap
-    :members:
-    :undoc-members:
-    :show-inheritance:

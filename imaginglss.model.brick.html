@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.model.brick module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-imaginglss.model.brick">
+<span id="imaginglss-model-brick-module"></span><h1>imaginglss.model.brick module<a class="headerlink" href="#module-imaginglss.model.brick" title="Permalink to this headline">¶</a></h1>
+<p>The base Python object corresponding to an imaging brick.
+This object contains only the meta-data, and it calls
+imagerepo to handle looking up the pixel-level information.</p>
+<dl class="class">
+<dt id="imaginglss.model.brick.Brick">
+<em class="property">class </em><code class="descclassname">imaginglss.model.brick.</code><code class="descname">Brick</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>ra</em>, <em>dec</em>, <em>ra1</em>, <em>ra2</em>, <em>dec1</em>, <em>dec2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The base (immutable) object corresponding to an imaging brick.
+This object contains only the meta-data, and is immutable.</p>
+<p>It uses <code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code> to handle 
+looking up the pixel-level information.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>id</td>
+<td>(  integer) ID of the brick as in the Tractor catalogue (unique). Note that we do not use it in indexing.</td>
+</tr>
+<tr class="row-even"><td>name</td>
+<td>(string_like) name of the brick as in the Tractor catalogue (unique)</td>
+</tr>
+<tr class="row-odd"><td>ra</td>
+<td>(float) center coordinate ra</td>
+</tr>
+<tr class="row-even"><td>dec</td>
+<td>(float) center coordinate dec</td>
+</tr>
+<tr class="row-odd"><td>ra1</td>
+<td>(float) min coordinate ra</td>
+</tr>
+<tr class="row-even"><td>dec1</td>
+<td>(float) min coordinate dec</td>
+</tr>
+<tr class="row-odd"><td>ra2</td>
+<td>(float) max coordinate ra</td>
+</tr>
+<tr class="row-even"><td>dec2: float</td>
+<td>max coordinate dec</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="imaginglss.model.brick.Brick.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>repo</em>, <em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the pixel coordinate in &#8216;xy&#8217; system from RA/DEC system.</p>
+<p>Note that the returned array is in a x-first-varying order.
+To index the ndarray image, use [y, x].</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo</strong> : <code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></p>
+<blockquote>
+<div><p>image repository that contains the necessary transformation
+for this brick</p>
+</div></blockquote>
+<p><strong>coord</strong> : array_like</p>
+<blockquote>
+<div><p>coord = (RA, DEC) tuple of arrays</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>xy</strong> : array_like</p>
+<blockquote class="last">
+<div><p>a (2xN) array, xy=(x, y).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.brick.Brick.readout">
+<code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return image values from an image repository.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote>
+<div><p>Coordinate of the pixels, coord=(RA, DEC)</p>
+</div></blockquote>
+<p><strong>repo</strong> : <code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></p>
+<blockquote>
+<div><p>Image repository to read from. Refer to DataRelease.images.</p>
+</div></blockquote>
+<p><strong>default</strong> : float</p>
+<blockquote>
+<div><p>Default value to return if the pixel is outside of the brick.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>values</strong> : array_like</p>
+<blockquote class="last">
+<div><p>values read out from repo.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.brick.Brick.revert">
+<code class="descname">revert</code><span class="sig-paren">(</span><em>repo</em>, <em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick.revert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick.revert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up RA/DEC coord from pixels coordinate in &#8216;xy&#8217; system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>repo</strong> : <code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code></p>
+<blockquote>
+<div><p>image repository that contains the necessary transformation
+for this brick</p>
+</div></blockquote>
+<p><strong>xy</strong> : array_like</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote class="last">
+<div><p>coord=(RA, DEC) for each given position.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imaginglss.model.brick.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.utils.sharedmem.backends &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for imaginglss.utils.sharedmem.backends</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">Queue</span> <span class="kn">as</span> <span class="nn">queue</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="c">#logger = multiprocessing.log_to_stderr()</span>
+<span class="c">#logger.setLevel(multiprocessing.SUBDEBUG)</span>
+
+<span class="n">__shmdebug__</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;set_debug&#39;</span><span class="p">,</span> <span class="s">&#39;get_debug&#39;</span><span class="p">,</span> <span class="s">&#39;total_memory&#39;</span><span class="p">,</span> <span class="s">&#39;cpu_count&#39;</span><span class="p">,</span> <span class="s">&#39;ThreadBackend&#39;</span><span class="p">,</span>
+        <span class="s">&#39;ProcessBackend&#39;</span><span class="p">,</span> <span class="s">&#39;SlaveException&#39;</span><span class="p">,</span> <span class="s">&#39;StopProcessGroup&#39;</span><span class="p">,</span>
+        <span class="s">&#39;ProcessGroup&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="set_debug"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.set_debug">[docs]</a><span class="k">def</span> <span class="nf">set_debug</span><span class="p">(</span><span class="n">flag</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; in debug mode (flag==True), no slaves are spawn,</span>
+<span class="sd">      rather all work are done in serial on the master thread/process.</span>
+<span class="sd">      so that if the worker throws out exceptions, debugging from the main</span>
+<span class="sd">      process context is possible. (in iptyhon, with debug magic command, eg)</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">global</span> <span class="n">__shmdebug__</span>
+  <span class="n">__shmdebug__</span> <span class="o">=</span> <span class="n">flag</span>
+</div>
+<div class="viewcode-block" id="get_debug"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.get_debug">[docs]</a><span class="k">def</span> <span class="nf">get_debug</span><span class="p">():</span>
+  <span class="k">global</span> <span class="n">__shmdebug__</span>
+  <span class="k">return</span> <span class="n">__shmdebug__</span>
+</div>
+<div class="viewcode-block" id="total_memory"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.total_memory">[docs]</a><span class="k">def</span> <span class="nf">total_memory</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot; the amount of memory available for use.</span>
+<span class="sd">      default is the Free Memory entry in /proc/meminfo &quot;&quot;&quot;</span>
+  <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="s">&#39;/proc/meminfo&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+          <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+          <span class="k">if</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;MEMTOTAL:&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">1024</span>
+  <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;MemTotal unknown&#39;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="cpu_count"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.cpu_count">[docs]</a><span class="k">def</span> <span class="nf">cpu_count</span><span class="p">():</span>
+  <span class="sd">&quot;&quot;&quot; The cpu count defaults to the number of physical cpu cores</span>
+<span class="sd">      but can be set with OMP_NUM_THREADS environment variable.</span>
+<span class="sd">      OMP_NUM_THREADS is used because if you hybrid sharedmem with</span>
+<span class="sd">      some openMP extenstions one environment will do it all.</span>
+
+<span class="sd">      On PBS/torque systems if OMP_NUM_THREADS is empty, we try to</span>
+<span class="sd">      use the value of PBS_NUM_PPN variable.</span>
+
+<span class="sd">      on some machines the physical number of cores does not equal</span>
+<span class="sd">      the number of cpus shall be used. PSC Blacklight for example.</span>
+
+<span class="sd">      Pool defaults to use cpu_count() slaves. however it can be overridden</span>
+<span class="sd">      in Pool.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">num</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;OMP_NUM_THREADS&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="n">num</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;PBS_NUM_PPN&quot;</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+  <span class="k">except</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SlaveException"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.SlaveException">[docs]</a><span class="k">class</span> <span class="nc">SlaveException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">tracebackstr</span><span class="p">):</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">tracebackstr</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="StopProcessGroup"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.StopProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">StopProcessGroup</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; StopProcessGroup will terminate the slave process/thread &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="ne">Exception</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;StopProcessGroup&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup">[docs]</a><span class="k">class</span> <span class="nc">ProcessGroup</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">main</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">QueueFactory</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">StorageFactory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main</span> <span class="o">=</span> <span class="n">main</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_guardMain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errorguard</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_errorGuard</span><span class="p">)</span>
+        <span class="c"># this has to be from backend because the slaves will check</span>
+        <span class="c"># this variable.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">EventFactory</span><span class="p">()</span>
+        <span class="c"># each dead child releases one sempahore</span>
+        <span class="c"># when all dead guard will proceed to set guarddead</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">semaphore</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">RawValue</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">SlaveFactory</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_slaveMain</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">rank</span><span class="p">,))</span> \
+                <span class="k">for</span> <span class="n">rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_slaveGuard</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">[</span><span class="n">rank</span><span class="p">]))</span> \
+                <span class="k">for</span> <span class="n">rank</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">_slaveMain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tls</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">SlaveException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RuntimError</span><span class="p">(</span><span class="s">&quot;slave exception shall never be caught by a slave&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">StopProcessGroup</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">e</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">e</span><span class="p">,</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">finally</span><span class="p">:</span>
+<span class="c">#            self.Errors.close()</span>
+<span class="c">#            self.Errors.join_thread()</span>
+            <span class="c"># making all slaves exit one after another</span>
+            <span class="c"># on some Linuxes if many slaves (56+) access</span>
+            <span class="c"># mmap randomly the termination of the slaves</span>
+            <span class="c"># run into a deadlock.</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">rank</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">pass</span>
+
+<div class="viewcode-block" id="ProcessGroup.killall"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.killall">[docs]</a>    <span class="k">def</span> <span class="nf">killall</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span> <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span> <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">_popen</span><span class="o">.</span><span class="n">pid</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">e</span>
+                <span class="k">continue</span>
+</div>
+    <span class="k">def</span> <span class="nf">_errorGuard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># this guard will kill every child if</span>
+        <span class="c"># an error is observed. We watch for this every 0.5 seconds</span>
+        <span class="c"># (errors do not happen very often)</span>
+        <span class="c"># if guardDead is set or killall is emitted, this will end immediately.</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">killall</span><span class="p">()</span>
+                <span class="k">break</span>
+            <span class="c"># for python 2.6.x wait returns None XXX</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_slaveGuard</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">process</span><span class="p">):</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">process</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">exitcode</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">process</span><span class="o">.</span><span class="n">exitcode</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">5</span><span class="p">:</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&quot;slave process </span><span class="si">%d</span><span class="s"> killed by signal </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="o">-</span>
+                    <span class="n">process</span><span class="o">.</span><span class="n">exitcode</span><span class="p">))</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">e</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">semaphore</span><span class="o">.</span><span class="n">release</span><span class="p">()</span> 
+
+    <span class="k">def</span> <span class="nf">_guardMain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># this guard will wait till all children are dead.</span>
+        <span class="c"># we then set the guardDead event</span>
+        <span class="k">def</span> <span class="nf">waitone</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">semaphore</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="nb">map</span><span class="p">(</span><span class="n">waitone</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ProcessGroup.start"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">JoinedProcesses</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c"># collect the garbages before forking so that the left-over</span>
+        <span class="c"># junk won&#39;t throw out assertion errors due to</span>
+        <span class="c"># wrong pid in multiprocess.heap</span>
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+        <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">)</span>
+
+        <span class="c"># p is alive from the moment start returns.</span>
+        <span class="c"># thus we can join them immediately after start returns.</span>
+        <span class="c"># guardMain will check if the slave has been</span>
+        <span class="c"># killed by the os, and simulate an error if so.</span>
+        <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errorguard</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup.get_exception"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.get_exception">[docs]</a>    <span class="k">def</span> <span class="nf">get_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SlaveException</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup.get"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Protected get. Get an item from Q.</span>
+<span class="sd">            Will block. but if the process group has errors,</span>
+<span class="sd">            raise an StopProcessGroup exception.</span>
+
+<span class="sd">            A slave process will terminate upon StopProcessGroup.</span>
+<span class="sd">            The master process shall read the error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="n">StopProcessGroup</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">StopProcessGroup</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup.put"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">Q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Full</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="n">StopProcessGroup</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">StopProcessGroup</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup.is_alive"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.is_alive">[docs]</a>    <span class="k">def</span> <span class="nf">is_alive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">is_set</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ProcessGroup.join"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessGroup.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guardDead</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">join</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errorguard</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">guard</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">SlaveException</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Errors</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+</div></div>
+<span class="k">class</span> <span class="nc">Ordered</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">):</span>
+      <span class="c">#  self.counter = lambda : None</span>
+        <span class="c">#multiprocessing.RawValue(&#39;l&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">EventFactory</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">RawValue</span><span class="p">(</span><span class="s">&#39;l&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tls</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">StorageFactory</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">iter</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tls</span><span class="o">.</span><span class="n">iter</span> <span class="o">=</span> <span class="nb">iter</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tls</span><span class="o">.</span><span class="n">iter</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="c"># increase counter before releasing the value</span>
+        <span class="c"># so that the others waiting will see the new counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ThreadBackend"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ThreadBackend">[docs]</a><span class="k">class</span> <span class="nc">ThreadBackend</span><span class="p">:</span>
+      <span class="n">QueueFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span>
+      <span class="n">EventFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>
+      <span class="n">LockFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">)</span>
+      <span class="n">StorageFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">)</span>
+      <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ThreadBackend.SlaveFactory"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ThreadBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">slave</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">slave</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">slave</span>
+</div></div>
+<div class="viewcode-block" id="ProcessBackend"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessBackend">[docs]</a><span class="k">class</span> <span class="nc">ProcessBackend</span><span class="p">:</span>
+      <span class="n">QueueFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span>
+      <span class="n">EventFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Event</span><span class="p">)</span>
+      <span class="n">LockFactory</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">Lock</span><span class="p">)</span>
+
+      <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ProcessBackend.SlaveFactory"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessBackend.SlaveFactory">[docs]</a>      <span class="k">def</span> <span class="nf">SlaveFactory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">slave</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">slave</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">slave</span></div>
+      <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ProcessBackend.StorageFactory"><a class="viewcode-back" href="../../../../imaginglss.utils.sharedmem.backends.html#imaginglss.utils.sharedmem.backends.ProcessBackend.StorageFactory">[docs]</a>      <span class="k">def</span> <span class="nf">StorageFactory</span><span class="p">():</span>
+          <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span><span class="bp">None</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

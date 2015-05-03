@@ -1,7 +1,0 @@
-model.utils.kdtree module
-=========================
-
-.. automodule:: model.utils.kdtree
-    :members:
-    :undoc-members:
-    :show-inheritance:
