@@ -60,6 +60,8 @@ def select_elgs():
 
     mask = mask.all(axis=0)
 
+    print ('Total %d out of %d, ratio=%g' % (mask.sum(), pmask.sum(), 1.0 * mask.sum() / pmask.sum()))
+
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
@@ -87,7 +89,9 @@ def select_elgs():
             pool.map(work,range(0,len(RA),chunksize)),axis=-1)
 
         print('', end='\n')
-        print('lim', glim, rlim, zlim)
+        print('glim', glim)
+        print('rlim', rlim)
+        print('zlim', zlim)
 
         mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
         print ('Selected Fraction by Completeness cuts')
