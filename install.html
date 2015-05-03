@@ -71,10 +71,14 @@ It depends only on fitsio or astropy:</p>
 </div>
 <div class="section" id="file-paths">
 <h2>File Paths<a class="headerlink" href="#file-paths" title="Permalink to this headline">¶</a></h2>
-<p>ImagingLSS core libary and the tools scripts defaults to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.</p>
-<p>In addition, <code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.</p>
+<p>ImagingLSS core libary and the tools scripts defaults to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.
+In addition, <code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.
+The dust extinction map shall be given in <code class="code docutils literal"><span class="pre">DUST_DIR</span></code> variable.</p>
+<p>If a directory is not specified at the creation of an <code class="xref py py-class docutils literal"><span class="pre">imaginglss.DataRelease</span></code> or <code class="xref py py-class docutils literal"><span class="pre">imaginglss.SFDMap</span></code>,
+the values from the environment variables are used.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span>/global/project/projectdirs/cosmo/work/decam/release/edr/
 <span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$GSCRATCH</span>/desicache
+<span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span>/project/projectdirs/desi/software/edison/dust/v0_0/
 </pre></div>
 </div>
 </div>
@@ -85,6 +89,23 @@ It depends only on fitsio or astropy:</p>
 </pre></div>
 </div>
 <p>Also refer to the <a class="reference internal" href="examples.html"><em>Examples</em></a> of the documentation.</p>
+</div>
+<div class="section" id="example-dataset">
+<h2>Example Dataset<a class="headerlink" href="#example-dataset" title="Permalink to this headline">¶</a></h2>
+<p>We provide a small sampling data set for testing imaginglss. The small dataset is
+based on the DR1J data release of DECALS. It can be downloaded at</p>
+<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz</a></p>
+<p>The total size is less than 200 MB after decompressing. To deploy this dataset with
+the source code tree, in imainginglss toplevel directory (that is the directory
+with <code class="code docutils literal"><span class="pre">.git</span></code> directory)</p>
+<div class="highlight-bash"><div class="highlight"><pre>wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz
+tar -xzvf dr1j.tar.gz
+
+<span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j
+<span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j/cache
+<span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -100,6 +121,7 @@ It depends only on fitsio or astropy:</p>
 <li><a class="reference internal" href="#depencency">Depencency</a></li>
 <li><a class="reference internal" href="#file-paths">File Paths</a></li>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li><a class="reference internal" href="#example-dataset">Example Dataset</a></li>
 </ul>
 </li>
 </ul>
