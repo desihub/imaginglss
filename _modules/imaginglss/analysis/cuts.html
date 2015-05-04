@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="imaginglss" href="../../imaginglss.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +37,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -96,12 +97,19 @@
     <span class="n">ebv</span>  <span class="o">=</span> <span class="n">sfd</span><span class="o">.</span><span class="n">ebv</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bands</span><span class="p">:</span>
-        <span class="n">rdep</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">],</span>\
-                          <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">ignore_missing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="n">rtrn</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">ebv</span><span class="o">*</span><span class="n">dr</span><span class="o">.</span><span class="n">extinction</span><span class="p">[</span><span class="n">band</span><span class="p">]</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
+
+        <span class="n">rdep</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">],</span>\
+                          <span class="n">default</span><span class="o">=+</span><span class="mf">0.0</span><span class="p">,</span><span class="n">ignore_missing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
         <span class="c"># For now we use an N-sigma cut in extinction-correct flux as our limit.</span>
         <span class="c"># Recall &quot;depth&quot; is stored as inverse variance.</span>
-        <span class="n">rlim</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">/</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">rdep</span><span class="o">+</span><span class="mf">1e-30</span><span class="p">)</span> <span class="o">/</span> <span class="n">rtrn</span>
+        
+        <span class="c"># Bricks with missing depth images are simply passed as 0.0</span>
+        <span class="c"># which would become +inf</span>
+        <span class="c"># we will use this to detect objects on missing bricks.</span>
+
+        <span class="n">rlim</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">rdep</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">rtrn</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rlim</span><span class="p">)</span>
     <span class="k">return</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
     <span class="c">#</span>
@@ -255,7 +263,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

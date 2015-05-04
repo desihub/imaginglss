@@ -69,13 +69,24 @@ It depends only on fitsio or astropy:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="file-paths">
-<h2>File Paths<a class="headerlink" href="#file-paths" title="Permalink to this headline">¶</a></h2>
-<p>ImagingLSS core libary and the tools scripts defaults to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.
-In addition, <code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.
+<div class="section" id="location-of-data-release">
+<h2>Location of Data Release<a class="headerlink" href="#location-of-data-release" title="Permalink to this headline">¶</a></h2>
+<p>ImagingLSS tries to initialize the DECALS data release from a configuration file, by
+either passing in the file name as an argument to <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a>
+or by setting the environment variable <code class="code docutils literal"><span class="pre">DECALS_PY_CONFIG</span></code>.</p>
+<p>Here is an example configuration file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># dr1j.conf.py</span>
+
+<span class="n">decals_root</span> <span class="o">=</span> <span class="s">&quot;/scratch1/scratchdirs/desiproc/dr1j&quot;</span>
+<span class="n">decals_cache</span> <span class="o">=</span> <span class="s">&quot;/global/scratch2/sd/yfeng1/desicache/dr1j&quot;</span><span class="p">)</span>
+<span class="n">decals_release</span> <span class="o">=</span> <span class="s">&quot;DR1J&quot;</span>
+<span class="n">dust_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/desi/software/edison/dust/v0_0/&quot;</span>
+</pre></div>
+</div>
+<p>If the file does not exist, ImagingLSS core libary and the tools scripts defaults
+to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.
+<code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.
 The dust extinction map shall be given in <code class="code docutils literal"><span class="pre">DUST_DIR</span></code> variable.</p>
-<p>If a directory is not specified at the creation of an <code class="xref py py-class docutils literal"><span class="pre">imaginglss.DataRelease</span></code> or <code class="xref py py-class docutils literal"><span class="pre">imaginglss.SFDMap</span></code>,
-the values from the environment variables are used.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span>/global/project/projectdirs/cosmo/work/decam/release/edr/
 <span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$GSCRATCH</span>/desicache
 <span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span>/project/projectdirs/desi/software/edison/dust/v0_0/
@@ -84,8 +95,10 @@ the values from the environment variables are used.</p>
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash"><div class="highlight"><pre>from model.datarelease import DataRelease
-<span class="nv">dr</span> <span class="o">=</span> DataRelease<span class="o">()</span>
+<div class="highlight-bash"><div class="highlight"><pre>from imaginglss import DECALS
+<span class="nv">decals</span> <span class="o">=</span> DECALS<span class="o">()</span>
+
+<span class="nv">dr</span> <span class="o">=</span> decals.datarelease
 </pre></div>
 </div>
 <p>Also refer to the <a class="reference internal" href="examples.html"><em>Examples</em></a> of the documentation.</p>
@@ -110,9 +123,7 @@ tar -xzvf dr1j.tar.gz
 wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
 tar -xzvf SFD98.tar.gz
 
-<span class="nb">export </span><span class="nv">DECALS_IMAGING</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j
-<span class="nb">export </span><span class="nv">DECALS_CACHE</span><span class="o">=</span><span class="nv">$PWD</span>/cache
-<span class="nb">export </span><span class="nv">DUST_DIR</span><span class="o">=</span><span class="nv">$PWD</span>/SFD98
+<span class="nb">export </span><span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j/dr1j.conf.py
 
 <span class="nb">cd</span> -
 </pre></div>
@@ -132,7 +143,7 @@ seems to be more complete.</p>
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#depencency">Depencency</a></li>
-<li><a class="reference internal" href="#file-paths">File Paths</a></li>
+<li><a class="reference internal" href="#location-of-data-release">Location of Data Release</a></li>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li><a class="reference internal" href="#example-dataset">Example Dataset</a></li>
 </ul>

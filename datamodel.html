@@ -60,8 +60,14 @@ each Brick being a small, contiguous regions of sky (roughly
 extinction, etc. are stored in pixelized images within the
 FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.</p>
-<p>The main way to access the DECALS imaging data is via DataRelease
-objects defined in <a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease" title="imaginglss.model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.datarelease.DataRelease</span></code></a>.
+<p>The main way to access the DECALS imaging data is via DECALS
+objects defined in <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a>.</p>
+<p>The DECALS object constructs the DECALS data release and dust extinction
+map objects from environment variables or a configuration file. Please refer
+to the documentation of <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a> for details.</p>
+<p>The <code class="xref py py-attr docutils literal"><span class="pre">imaginglss.DECALS.datarelease</span></code> attribute is represents the data
+release. It is an instance of
+<a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease" title="imaginglss.model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.datarelease.DataRelease</span></code></a>.
 Important attributes are</p>
 <blockquote>
 <div><ul class="simple">
@@ -110,7 +116,9 @@ of of the brick decomposition scheme.
 There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates
 <a class="reference internal" href="imaginglss.model.brick.html#imaginglss.model.brick.Brick" title="imaginglss.model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a> objects.</p>
-<p>For additional information please refer to <a class="reference internal" href="modules.html"><em>API Reference: model</em></a>.</p>
+<p>The <code class="xref py py-attr docutils literal"><span class="pre">imaginglss.DECALS.sfdmap</span></code> attribute is represents the dust extinction map
+. It is an instance of <a class="reference internal" href="imaginglss.model.sfdmap.html#imaginglss.model.sfdmap.SFDMap" title="imaginglss.model.sfdmap.SFDMap"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.sfdmap.SFDMap</span></code></a>.</p>
+<p>For additional information please refer to <a class="reference internal" href="modules.html"><em>API Reference</em></a>.</p>
 </div>
 
 

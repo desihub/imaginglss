@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="imaginglss" href="../../imaginglss.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +37,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -206,24 +207,18 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DECALS_IMAGING&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> 
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="n">cache</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
-
-        <span class="k">if</span> <span class="n">cache</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">cache</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DECALS_CACHE&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Data Release of version </span><span class="si">%s</span><span class="s"> is not supported&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
 
-        <span class="n">config</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="n">myschema</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">)</span>
@@ -231,7 +226,7 @@
             <span class="k">pass</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">brickdata</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">BRICKS_FILENAME</span><span class="p">))</span>
+            <span class="n">brickdata</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">myschema</span><span class="o">.</span><span class="n">BRICKS_FILENAME</span><span class="p">))</span>
         <span class="k">except</span> <span class="p">:</span>
             <span class="n">brickdata</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;..&#39;</span><span class="p">,</span> <span class="s">&#39;fallback&#39;</span><span class="p">,</span> <span class="s">&#39;default-bricks.fits&#39;</span><span class="p">))</span>
 
@@ -244,7 +239,7 @@
             <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="n">band</span><span class="p">,</span> <span class="s">&#39;f8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="s">&#39;ugrizY&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">image_filenames</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">format_image_filenames</span><span class="p">()</span>
+        <span class="n">image_filenames</span> <span class="o">=</span> <span class="n">myschema</span><span class="o">.</span><span class="n">format_image_filenames</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_filenames</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -268,7 +263,7 @@
                 <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">_covered_brickids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="n">config</span><span class="o">.</span><span class="n">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">))</span>
+                            <span class="n">myschema</span><span class="o">.</span><span class="n">parse_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">))</span>
                     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                         <span class="k">pass</span> 
             <span class="n">_covered_brickids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_covered_brickids</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;i8&#39;</span><span class="p">)</span>
@@ -285,9 +280,9 @@
             <span class="n">cachedir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="s">&#39;catalogue&#39;</span><span class="p">),</span>
             <span class="n">filenames</span><span class="o">=</span><span class="p">[</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
-                <span class="n">config</span><span class="o">.</span><span class="n">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">))</span>
+                <span class="n">myschema</span><span class="o">.</span><span class="n">format_catalogue_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">))</span>
                 <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">footprint</span><span class="o">.</span><span class="n">bricks</span><span class="p">],</span>
-            <span class="n">aliases</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
+            <span class="n">aliases</span><span class="o">=</span><span class="n">myschema</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
             <span class="p">)</span>
 
 <div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -395,7 +390,8 @@
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

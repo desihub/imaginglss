@@ -56,6 +56,35 @@
             
   <div class="section" id="module-imaginglss">
 <span id="imaginglss-package"></span><h1>imaginglss package<a class="headerlink" href="#module-imaginglss" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="imaginglss.DECALS">
+<em class="property">class </em><code class="descclassname">imaginglss.</code><code class="descname">DECALS</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss.html#DECALS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.DECALS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>DECALS configuration object</p>
+<p>Load DECALS configuration from a configuration file.
+The configuration file describes where and how to
+access the data release.</p>
+<p>The main objects for access this data release are created
+as the configuration object is parsed.</p>
+<p>If <code class="code docutils literal"><span class="pre">filename</span></code> is None, the file pointed by environment
+variable <code class="code docutils literal"><span class="pre">DECALS_PY_CONFIG</span></code> is used.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>datarelease</td>
+<td>(<code class="xref py py-class docutils literal"><span class="pre">imaginglss.DataRelease</span></code>) The datarelease object described by this configuration file</td>
+</tr>
+<tr class="row-even"><td>sfdmap</td>
+<td>(<code class="xref py py-class docutils literal"><span class="pre">imaginglss.SFDMap</span></code>) The dust extinction object described by this configuration file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <div class="section" id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
