@@ -157,24 +157,18 @@ class DataRelease(object):
 
 
     """
-    def __init__(self, root=None, cache=None, version=None):
-        if root is None:
-            root = os.environ.get("DECALS_IMAGING", '.') 
+    def __init__(self, root, cache, version):
         root = os.path.normpath(root)
+
+        cache = os.path.join(cache, version)
+
         self.root = root
-
-        if cache is None:
-            cache = os.path.normpath(os.environ.get("DECALS_CACHE", '.'))
-
-        if version is None:
-            version = os.path.basename(root).upper()
+        self.cache = cache
 
         if not hasattr(schema, version):
             raise KeyError("Data Release of version %s is not supported" % version)
 
-        config = getattr(schema, version)
-
-        self.cache = os.path.join(cache, version)
+        myschema = getattr(schema, version)
 
         try:
             os.makedirs(self.cache)
@@ -182,7 +176,7 @@ class DataRelease(object):
             pass
 
         try:
-            brickdata = fits.read_table(os.path.join(self.root, config.BRICKS_FILENAME))
+            brickdata = fits.read_table(os.path.join(self.root, myschema.BRICKS_FILENAME))
         except :
             brickdata = fits.read_table(os.path.join(os.path.dirname(__file__), '..', 'fallback', 'default-bricks.fits'))
 
@@ -195,7 +189,7 @@ class DataRelease(object):
             .view(dtype=[(band, 'f8') for band in 'ugrizY'])[0]
 
         self.images = {}
-        image_filenames = config.format_image_filenames()
+        image_filenames = myschema.format_image_filenames()
         for image in image_filenames:
             if isinstance(image_filenames[image], dict):
                 self.images[image] = {}
@@ -219,7 +213,7 @@ class DataRelease(object):
                 for filename in filenames:
                     try:
                         _covered_brickids.append(
-                            config.parse_filename(filename, self.brickindex))
+                            myschema.parse_filename(filename, self.brickindex))
                     except ValueError:
                         pass 
             _covered_brickids = numpy.array(_covered_brickids, dtype='i8')
@@ -236,9 +230,9 @@ class DataRelease(object):
             cachedir=os.path.join(self.cache, 'catalogue'),
             filenames=[
                 os.path.join(self.root, 
-                config.format_catalogue_filename(brick))
+                myschema.format_catalogue_filename(brick))
                 for brick in self.footprint.bricks],
-            aliases=config.CATALOGUE_ALIASES
+            aliases=myschema.CATALOGUE_ALIASES
             )
 
     def readout(self, coord, repo, default=numpy.nan, ignore_missing=False):

@@ -8,8 +8,16 @@ extinction, etc. are stored in pixelized images within the
 FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.
 
-The main way to access the DECALS imaging data is via DataRelease
-objects defined in :py:class:`imaginglss.model.datarelease.DataRelease`.
+The main way to access the DECALS imaging data is via DECALS
+objects defined in :py:class:`imaginglss.DECALS`. 
+
+The DECALS object constructs the DECALS data release and dust extinction
+map objects from environment variables or a configuration file. Please refer
+to the documentation of :py:class:`imaginglss.DECALS` for details.
+
+The :py:attr:`imaginglss.DECALS.datarelease` attribute is represents the data
+release. It is an instance of
+:py:class:`imaginglss.model.datarelease.DataRelease`.
 Important attributes are
 
  - :py:attr:`~imaginglss.model.datarelease.DataRelease.footprint` : the survey footprint. 
@@ -55,5 +63,8 @@ of of the brick decomposition scheme.
 There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates 
 :py:class:`~imaginglss.model.brick.Brick` objects.
+
+The :py:attr:`imaginglss.DECALS.sfdmap` attribute is represents the dust extinction map
+. It is an instance of :py:class:`imaginglss.model.sfdmap.SFDMap`.
 
 For additional information please refer to :doc:`modules`.

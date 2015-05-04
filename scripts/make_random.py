@@ -25,8 +25,7 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import numpy             as N
-from   imaginglss             import SFDMap
-from   imaginglss             import DataRelease
+from   imaginglss             import DECALS
 from   imaginglss.utils       import sharedmem
 from   imaginglss.analysis    import cuts
 
@@ -127,8 +126,10 @@ def make_random(samp,Nran=10000000):
         raise RuntimeError,"Unknown sample "+samp
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    dr = DataRelease()
-    sfd= SFDMap()
+    decals = DECALS()
+    dr = decals.datarelease
+    sfd= decals.sfdmap
+
     print('Making randoms in the survey footprint.')
     coord = fill_random(dr, Nran)
     #

@@ -22,8 +22,7 @@ import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__fi
 
 import numpy as N
 from imaginglss.utils       import sharedmem
-from imaginglss             import SFDMap
-from imaginglss             import DataRelease
+from imaginglss             import DECALS
 from imaginglss.analysis    import cuts
 
 
@@ -36,8 +35,10 @@ def select_elgs():
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
-    dr = DataRelease()
-    sfd= SFDMap()
+    decals = DECALS()
+    dr = decals.datarelease
+    sfd= decals.sfdmap
+
     # Define the fluxes, corrected for MW transmission.
     brickname = dr.catalogue['BRICKNAME']
     flux  = dr.catalogue['DECAM_FLUX'].T
@@ -88,23 +89,24 @@ def select_elgs():
         glim,rlim,zlim = N.concatenate(\
             pool.map(work,range(0,len(RA),chunksize)),axis=-1)
 
-        print('', end='\n')
-        print('glim', glim)
-        print('rlim', rlim)
-        print('zlim', zlim)
+    print('', end='\n')
+    print(glim)
+    print('Objects in missing depth-g images: %d' % N.isinf(glim).sum())
+    print('Objects in missing depth-r images: %d' % N.isinf(rlim).sum())
+    print('Objects in missing depth-z images: %d' % N.isinf(zlim).sum())
 
-        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
-        print ('Selected Fraction by Completeness cuts')
+    mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
+    print ('Selected Fraction by Completeness cuts')
 
-        print ('\n'.join([
-            '%s : %g' % v for v in
-            zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask))]))
+    print ('\n'.join([
+        '%s : %g' % v for v in
+        zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask))]))
 
-        mask = mask.all(axis=0)
-        print(mask.sum())
-        ra   = RA [mask]
-        dc   = DEC[mask]
-        mag  = mag[:,arg[mask]]
+    mask = mask.all(axis=0)
+    print(mask.sum())
+    ra   = RA [mask]
+    dc   = DEC[mask]
+    mag  = mag[:,arg[mask]]
     return( (ra,dc,mag) )
     #
 

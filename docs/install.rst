@@ -22,15 +22,30 @@ On Edison,
 
     module load fitsio
 
-File Paths
-----------
+Location of Data Release
+------------------------
  
-ImagingLSS core libary and the tools scripts defaults to use :code:`DECALS_IMAGING` as the root path of the data release.
-In addition, :code:`DECALS_CACHE` must be set to a directory with large free storage space, for caching the catalogue data.
-The dust extinction map shall be given in :code:`DUST_DIR` variable.
+ImagingLSS tries to initialize the DECALS data release from a configuration file, by
+either passing in the file name as an argument to :py:class:`imaginglss.DECALS` 
+or by setting the environment variable :code:`DECALS_PY_CONFIG`.
 
-If a directory is not specified at the creation of an :py:class:`imaginglss.DataRelease` or :py:class:`imaginglss.SFDMap`,
-the values from the environment variables are used.
+Here is an example configuration file:
+
+.. code-block:: python
+
+    # dr1j.conf.py
+
+    decals_root = "/scratch1/scratchdirs/desiproc/dr1j"
+    decals_cache = "/global/scratch2/sd/yfeng1/desicache/dr1j")
+    decals_release = "DR1J"
+    dust_dir = "/project/projectdirs/desi/software/edison/dust/v0_0/"
+
+
+If the file does not exist, ImagingLSS core libary and the tools scripts defaults 
+to use :code:`DECALS_IMAGING` as the root path of the data release.
+:code:`DECALS_CACHE` must be set to a directory with large free storage space, for caching the catalogue data.
+The dust extinction map shall be given in :code:`DUST_DIR` variable. 
+
 
 .. code-block:: bash
 
@@ -43,8 +58,10 @@ Getting Started
 
 .. code-block:: bash
 
-    from model.datarelease import DataRelease
-    dr = DataRelease()
+    from imaginglss import DECALS
+    decals = DECALS()
+
+    dr = decals.datarelease
 
 Also refer to the :doc:`examples` of the documentation.
 
@@ -77,9 +94,7 @@ see the following steps.
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
     tar -xzvf SFD98.tar.gz
 
-    export DECALS_IMAGING=$PWD/dr1j
-    export DECALS_CACHE=$PWD/cache
-    export DUST_DIR=$PWD/SFD98
+    export DECALS_PY_CONFIG=$PWD/dr1j/dr1j.conf.py
 
     cd -
     
