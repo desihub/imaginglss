@@ -40,6 +40,9 @@ Here is an example configuration file:
     decals_release = "DR1J"
     dust_dir = "/project/projectdirs/desi/software/edison/dust/v0_0/"
 
+.. code-block:: bash
+
+    export DECALS_PY_CONFIG=/path/to/dr1j.conf.py
 
 If the file does not exist, ImagingLSS core libary and the tools scripts defaults 
 to use :code:`DECALS_IMAGING` as the root path of the data release.
@@ -71,7 +74,7 @@ Example Dataset
 We provide a small sampling data set that contains only 1 brick for testing imaginglss. 
 The small dataset is based on the DR1J data release of DECALS. It can be downloaded at 
 
-http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz 
+http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz 
 
 The total size is less than 30 MB after decompressing. 
 
@@ -88,19 +91,22 @@ see the following steps.
     mkdir testdata
     cd testdata
 
-    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz
-    tar -xzvf dr1j.tar.gz
+    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz
+    tar -xzvf dr1j-mini.tar.gz
 
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
     tar -xzvf SFD98.tar.gz
 
-    export DECALS_PY_CONFIG=$PWD/dr1j/dr1j.conf.py
+    export DECALS_PY_CONFIG=$PWD/dr1j-mini/dr1j-mini.conf.py
 
     cd -
     
 
-Replace dr1j with edr3 to get the EDR3 dataset; EDR3 is older than DR1J, but
-seems to be more complete.
+Replace dr1j-mini with edr3 to get the EDR3 dataset. 
+(
+http://imaginglss.s3-website-us-west-1.amazonaws.com/edr3.tar.gz 
+)
+EDR3 is older than DR1J, but with more bricks than the mini dataset.
 
 
 

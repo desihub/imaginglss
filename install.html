@@ -83,6 +83,9 @@ or by setting the environment variable <code class="code docutils literal"><span
 <span class="n">dust_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/desi/software/edison/dust/v0_0/&quot;</span>
 </pre></div>
 </div>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span>/path/to/dr1j.conf.py
+</pre></div>
+</div>
 <p>If the file does not exist, ImagingLSS core libary and the tools scripts defaults
 to use <code class="code docutils literal"><span class="pre">DECALS_IMAGING</span></code> as the root path of the data release.
 <code class="code docutils literal"><span class="pre">DECALS_CACHE</span></code> must be set to a directory with large free storage space, for caching the catalogue data.
@@ -107,7 +110,7 @@ The dust extinction map shall be given in <code class="code docutils literal"><s
 <h2>Example Dataset<a class="headerlink" href="#example-dataset" title="Permalink to this headline">¶</a></h2>
 <p>We provide a small sampling data set that contains only 1 brick for testing imaginglss.
 The small dataset is based on the DR1J data release of DECALS. It can be downloaded at</p>
-<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz</a></p>
+<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz</a></p>
 <p>The total size is less than 30 MB after decompressing.</p>
 <p>Note that the SFD98 dust map is also required for most of the ImagingLSS operations.
 The SFD98 file is somewhat larger, on the order of 100 MB.</p>
@@ -117,19 +120,22 @@ see the following steps.</p>
 <div class="highlight-bash"><div class="highlight"><pre>mkdir testdata
 <span class="nb">cd </span>testdata
 
-wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j.tar.gz
-tar -xzvf dr1j.tar.gz
+wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz
+tar -xzvf dr1j-mini.tar.gz
 
 wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
 tar -xzvf SFD98.tar.gz
 
-<span class="nb">export </span><span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j/dr1j.conf.py
+<span class="nb">export </span><span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span><span class="nv">$PWD</span>/dr1j-mini/dr1j-mini.conf.py
 
 <span class="nb">cd</span> -
 </pre></div>
 </div>
-<p>Replace dr1j with edr3 to get the EDR3 dataset; EDR3 is older than DR1J, but
-seems to be more complete.</p>
+<p>Replace dr1j-mini with edr3 to get the EDR3 dataset.
+(
+<a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/edr3.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/edr3.tar.gz</a>
+)
+EDR3 is older than DR1J, but with more bricks than the mini dataset.</p>
 </div>
 </div>
 
