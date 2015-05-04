@@ -47,12 +47,19 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
     ebv  = sfd.ebv(coord[0],coord[1])
     ret = []
     for band in bands:
-        rdep = dr.readout(coord,dr.images['depth'][band],\
-                          default=0,ignore_missing=True)
         rtrn = 10.0**(-ebv*dr.extinction[band]/2.5)
+
+        rdep = dr.readout(coord,dr.images['depth'][band],\
+                          default=+0.0,ignore_missing=True)
+
         # For now we use an N-sigma cut in extinction-correct flux as our limit.
         # Recall "depth" is stored as inverse variance.
-        rlim = sigma / N.sqrt(rdep+1e-30) / rtrn
+        
+        # Bricks with missing depth images are simply passed as 0.0
+        # which would become +inf
+        # we will use this to detect objects on missing bricks.
+
+        rlim = sigma * rdep ** -0.5 / rtrn
         ret.append(rlim)
     return(ret)
     #
