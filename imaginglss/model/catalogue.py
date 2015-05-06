@@ -154,7 +154,7 @@ class Catalogue(ColumnStore):
             data = None
 
         with sharedmem.MapReduce() as pool:
-            pool.map(work, range(0, len(filenames), chunksize), reduce=reduce)
+            pool.map(work, range(1, len(filenames), chunksize), reduce=reduce)
 
         d = {
             'nfiles': numpy.array([total],dtype='i8') 

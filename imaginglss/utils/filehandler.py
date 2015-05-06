@@ -193,6 +193,7 @@ def write(fname, data, mode='w'):
             d.byteswap(True)
         with open(filename, mode) as ff:
             d.tofile(ff)
+
         if order != '<':
             d.byteswap(True)
     #
