@@ -36,16 +36,22 @@ comm.barrier()
 
 if comm.rank == 0:
     print("writing cache ...")
-for i in range(comm.size):
-    comm.barrier()
-    if i != comm.rank: continue
-    mode = 'w' if comm.rank == 0 else 'a'
-    filehandler.write(cat.cachedir, data, mode=mode)
-    print("chunk %d / %d done" %( comm.rank, comm.size))
+
+if comm.rank == 0:
+    filehandler.write(cat.cachedir, data, mode='w')
 
 comm.barrier()
 
+N = comm.allgather(len(data))
+
+filehandler.write(cat.cachedir, data, mode='r+', offset=sum(N[:comm.rank]))
+
+
+print("chunk %d / %d done" %( comm.rank, comm.size))
+comm.barrier()
+
 if comm.rank == 0:
+    print("%d items are written" % sum(N))
     total = len(filenames)
     d = {
         'nfiles': numpy.array([total],dtype='i8') 
