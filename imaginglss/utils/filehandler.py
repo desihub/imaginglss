@@ -82,6 +82,13 @@ def list(fname):
         ret[key] = dtype
     return ret
          
+def build_dtype(data):
+    if len(data.shape) >= 2:
+        return N.dtype((data.dtype, data.shape[1:]))
+    elif len(data.shape) == 1:
+        return data.dtype
+    else:
+        raise TypeError("data is not at least 1d")
 
 def format_filename(key, data_or_dtype):
     """ Generate a filename from base name for data 
@@ -103,20 +110,16 @@ def format_filename(key, data_or_dtype):
             
     """
     if not isinstance(data_or_dtype, N.dtype):
-        data = data_or_dtype
-        if len(data.shape) >= 2:
-           vectorsize = 'x'.join(['%d' % x for x in data.shape[1:]])
-        elif len(data.shape) == 1:
-           vectorsize = '0'
-        dtype = data.dtype
+        dtype = build_dtype(data_or_dtype)
     else:
         dtype = data_or_dtype
-        if len(dtype.shape) > 0:
-            vectorsize = 'x'.join(['%d' % x for x in dtype.shape[:]])
-        else:
-            vectorsize = '0'
 
-        dtype = dtype.base
+    if len(dtype.shape) > 0:
+        vectorsize = 'x'.join(['%d' % x for x in dtype.shape[:]])
+    else:
+        vectorsize = '0'
+
+    dtype = dtype.base
 
     suffix = dtype.str[1:]
 
@@ -155,7 +158,7 @@ def parse_filename(filename):
         objt = N.dtype((objt, tuple(vectorsize)))
     return key, objt
 
-def write(fname, data, mode='w'):
+def write(fname, data, mode='w', offset=None):
     """
     Writes the dictionary, data, which is meant to contain only
     NumPy arrays, to a "file" of name fname. The file is always
@@ -168,14 +171,23 @@ def write(fname, data, mode='w'):
     data : dict alike
         key and array pairs. Each item must be a numerical numpy array
     mode : string 
-        'w' for writing or 'a' for appending.
-    
+        'w' for writing or 'a' for appending, or 'r+' for writing at
+        offset.
+    offset : int or None
+        if the mode is 'r+',
+        offset in a file for the write operation, in units of items.
+        None to append to the end.
+ 
     Notes
     -----
     Does minimal checking, assuming you know what you're doing.
 
 
     """
+    if offset is not None:
+        if mode != 'r+':
+            raise ValueError("To use an offset, mode must be 'r+'")
+
     # Put in a little object type converter.
     if not os.path.exists(fname):
         os.makedirs(fname)
@@ -184,7 +196,7 @@ def write(fname, data, mode='w'):
         keys = data.dtype.names
     else:
         keys = data.keys()
-
+        
     for key in keys:
         filename = os.path.join(
                 fname, format_filename(key, data[key]))
@@ -192,7 +204,10 @@ def write(fname, data, mode='w'):
         order = d.dtype.base.str[0]
         if order != '<':
             d.byteswap(True)
+        dtype = build_dtype(d)
         with open(filename, mode) as ff:
+            if offset is not None:
+                ff.seek(offset * dtype.itemsize, 0)
             d.tofile(ff)
 
         if order != '<':
@@ -207,10 +222,11 @@ def test():
     }
     write('filehandler-test', a, mode='w')
     write('filehandler-test', a, mode='a')
+    write('filehandler-test', a, mode='r+', offset=20)
     data = read('filehandler-test')
-    assert len(data['a']) == 20
-    assert len(data['b']) == 20
-    assert len(data['c']) == 4
+    assert len(data['a']) == 30
+    assert len(data['b']) == 30
+    assert len(data['c']) == 22
     print(data)
 
 if __name__ == '__main__':
