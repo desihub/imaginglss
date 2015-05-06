@@ -8,6 +8,7 @@ import numpy
 
 from ..utils import fits
 from ..utils import filehandler
+from ..utils import sharedmem
 from ..utils.columnstore import ColumnStore
 
 __author__ = "Yu Feng and Martin White"
@@ -85,16 +86,16 @@ class Catalogue(ColumnStore):
     """
     def __init__(self, cachedir, filenames, aliases):
         self.filenames = filenames
-        fn = filenames[0]
-        first = fits.read_table(fn)
         self.aliases = dict([(new, (old, transform)) 
                 for old, new, transform in aliases])
-        dtype = native_dtype(uppercase_dtype(first.dtype))
-
         self.cachedir = cachedir
-        ColumnStore.__init__(self, dtype)
+        ColumnStore.__init__(self)
 
-    def build_cache(self):
+    @property
+    def dtype(self):
+        return numpy.dtype(filehandler.list(self.cachedir))
+
+    def build_cache(self, report=lambda processed, total: None):
         """
         Build Cache of the catalogue.
 
@@ -124,12 +125,39 @@ class Catalogue(ColumnStore):
 
         filehandler.write(cachedir, first.view(dtype), mode='w')
 
-        for filename in filenames[1:]:
-            table = fits.read_table(filename)
-            filehandler.write(cachedir, table.view(dtype), mode='a')
+        total = len(filenames)
+
+        chunksize = 100
+        def work(i):
+            mine = filenames[i:i+chunksize]
+            data = None
+            for filename in mine:
+                table = fits.read_table(filename)
+                table = table.view(uppercase_dtype(table.dtype))
+
+                data1 = numpy.zeros(len(table), dtype)
+                for name in table.dtype.names:
+                    # only preserve those in both 'first' and all
+                    if name not in dtype.names: continue
+                    data1[name][...] = table[name]
+
+                if data is None:
+                    data = data1
+                else:
+                    data = numpy.append(data, data1)
+     
+            return i, data
+
+        def reduce(i, data):
+            filehandler.write(cachedir, data, mode='a')
+            report(i, total)
+            data = None
+
+        with sharedmem.MapReduce() as pool:
+            pool.map(work, range(0, len(filenames), chunksize), reduce=reduce)
 
         d = {
-            'nfiles': numpy.array([len(filenames)],dtype='i8') 
+            'nfiles': numpy.array([total],dtype='i8') 
             }
 
         filehandler.write(cachedir, d)

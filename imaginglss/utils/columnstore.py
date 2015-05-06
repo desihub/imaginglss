@@ -7,9 +7,10 @@ class ColumnStore(object):
         from a data source.
 
     """
-    def __init__(self, dtype):
+    def __init__(self, dtype=None):
         self.cache = {}
-        self.dtype = dtype
+        if dtype is not None:
+            self.dtype = dtype
 
     def __setitem__(self, column, value):
         value = numpy.array(value)
