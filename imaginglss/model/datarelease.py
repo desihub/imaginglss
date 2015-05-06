@@ -223,12 +223,14 @@ class DataRelease(object):
 
         self.footprint = Footprint(self) # build the footprint property
 
-        self.catalogue = catalogue.Catalogue(
-            cachedir=os.path.join(self.cache, 'catalogue'),
-            filenames=[
+        catalogue_filenames = [
                 os.path.join(self.root, 
                 myschema.format_catalogue_filename(brick))
-                for brick in self.footprint.bricks],
+                for brick in self.footprint.bricks]
+
+        self.catalogue = catalogue.Catalogue(
+            cachedir=os.path.join(self.cache, 'catalogue'),
+            filenames=catalogue_filenames,
             aliases=myschema.CATALOGUE_ALIASES
             )
 

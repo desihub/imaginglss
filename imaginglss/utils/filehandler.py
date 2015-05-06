@@ -16,8 +16,12 @@ import glob
 import re
 import os
 import os.path
+class MissingColumn(IOError):
+    pass
+class BadFileName(IOError):
+    pass
 
-def read_file(fname,keys=None):
+def read(fname,keys=None):
     """
     Reads a specificed list of "keys" in a "file" of name fname.
 
@@ -41,19 +45,19 @@ def read_file(fname,keys=None):
 
     """
     # Get a list of all of the "fields" in the "file".
-    flist = glob.glob(fname+"/*[fi][48]")
     # and start filling in my dictionary.
     ret = {}
 
+    columns = list(fname)
     if keys is None:
-        keys = [parse_filename(os.path.basename(fn))[0] for fn in flist]
+        keys = columns.keys()
 
-    for fn in flist:
-        key, dtype = parse_filename(os.path.basename(fn))
+    for key in keys:
+        dtype = columns[key]
         # and add it to the dictionary
-        if key not in keys: continue
-        order = dtype.str[0]
-        with open(fn, "r") as ff:
+        order = dtype.base.str[0]
+        fn = format_filename(key, dtype)
+        with open(os.path.join(fname, fn), "r") as ff:
             d = N.fromfile(ff, dtype=dtype)
         if order != '<':
             d.byteswap(True)
@@ -62,19 +66,32 @@ def read_file(fname,keys=None):
     # Now check we got everything.
     for key in keys:
         if key in ret.keys(): continue
-        raise RuntimeError("Unable to find "+key+" in "+fname)
+        raise MissingColumn("Unable to find "+key+" in "+fname)
 
     return(ret)
     #
 
-def format_filename(key, data):
+def list(fname):
+    # Get a list of all of the "fields" in the "file".
+    flist = glob.glob(fname+"/*.*.*")
+    # and start filling in my dictionary.
+    ret = {}
+
+    for fn in flist:
+        key, dtype = parse_filename(os.path.basename(fn))
+        ret[key] = dtype
+    return ret
+         
+
+def format_filename(key, data_or_dtype):
     """ Generate a filename from base name for data 
 
         Parameters
         ----------
-        data : array_like
+        data_or_dtype : array_like or dtype
             Must be 1d or 2d array. For 2d array, the shape
             of the last dimension is used as the size of the vector.
+            Or a dtype with shape
 
         key: string
             key
@@ -85,21 +102,27 @@ def format_filename(key, data):
             key.vectorsize.datatype
             
     """
-    assert len(data.shape) <= 2
-    if len(data.shape) == 2:
-       vectorsize = data.shape[-1] 
-    elif len(data.shape) == 1:
-       vectorsize = 0
+    if not isinstance(data_or_dtype, N.dtype):
+        data = data_or_dtype
+        if len(data.shape) >= 2:
+           vectorsize = 'x'.join(['%d' % x for x in data.shape[1:]])
+        elif len(data.shape) == 1:
+           vectorsize = '0'
+        dtype = data.dtype
+    else:
+        dtype = data_or_dtype
+        if len(dtype.shape) > 0:
+            vectorsize = 'x'.join(['%d' % x for x in dtype.shape[:]])
+        else:
+            vectorsize = '0'
 
-    suffix={}
-    suffix['int32']='i4'
-    suffix['int64']='i8'
-    suffix['float32']='f4'
-    suffix['float64']='f8'
+        dtype = dtype.base
 
-    return "%s.%d.%s" % (key,
+    suffix = dtype.str[1:]
+
+    return "%s.%s.%s" % (key,
         vectorsize,
-        suffix[data.dtype.name])
+        suffix)
 
 def parse_filename(filename):
     """ 
@@ -118,22 +141,21 @@ def parse_filename(filename):
             dtype
 
     """
-    mm = re.search(r"(\w*)\.([0-9]+)\.([fi][48])", filename)
+    mm = re.search(r"(\w*)\.([0-9x]+)\.([a-zA-Z][0-9]*)", filename)
 
     if mm==None:
-        raise RuntimeError("Unable to parse file name `%s`." % filename)
+        raise BadFileName("Unable to parse file name `%s`." % filename)
     else:
         key = mm.group(1)
-        vectorsize = int(mm.group(2))
+        vectorsize = [int(x) for x in mm.group(2).split('x')]
         # force the endianness
         objt= N.dtype(mm.group(3))
 
-    if vectorsize > 0:
-        objt = N.dtype((objt, vectorsize))
-        
+    if not (len(vectorsize) == 1 and vectorsize[0] == 0):
+        objt = N.dtype((objt, tuple(vectorsize)))
     return key, objt
 
-def write_file(fname, data, mode='w'):
+def write(fname, data, mode='w'):
     """
     Writes the dictionary, data, which is meant to contain only
     NumPy arrays, to a "file" of name fname. The file is always
@@ -157,11 +179,16 @@ def write_file(fname, data, mode='w'):
     # Put in a little object type converter.
     if not os.path.exists(fname):
         os.mkdir(fname)
-    for key in data.keys():
+    if isinstance(data, N.ndarray):
+        keys = data.dtype.names
+    else:
+        keys = data.keys()
+
+    for key in keys:
         filename = os.path.join(
                 fname, format_filename(key, data[key]))
         d = data[key]
-        order = d.dtype.str[0]
+        order = d.dtype.base.str[0]
         if order != '<':
             d.byteswap(True)
         with open(filename, mode) as ff:
@@ -174,12 +201,14 @@ def test():
     a = {
         'a': N.arange(10),
         'b': N.arange(10, dtype='>f4'),
+        'c': N.arange(10, dtype='>i4').reshape(2, 5),
     }
-    write_file('filehandler-test', a, mode='w')
-    write_file('filehandler-test', a, mode='a')
-    data = read_file('filehandler-test')
+    write('filehandler-test', a, mode='w')
+    write('filehandler-test', a, mode='a')
+    data = read('filehandler-test')
     assert len(data['a']) == 20
     assert len(data['b']) == 20
+    assert len(data['c']) == 4
     print(data)
 
 if __name__ == '__main__':

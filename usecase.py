@@ -1,9 +1,9 @@
-from imaginglss import DataRelease
+from imaginglss import DECALS
 from imaginglss.model.imagerepo import ImageRepo
 from pprint import pprint
 import numpy
 
-dr = DataRelease()
+dr = DECALS().datarelease
 
 brick = dr.footprint.bricks[0]
 print dr.footprint
@@ -13,7 +13,6 @@ print '\n'.join(sorted([str(f) for f in dr.catalogue.dtype.fields]))
 def test398599():
     """ test image readout on brick-398599. 
     """
-    dr = DataRelease()
     brick = dr.footprint.bricks[1]
     dr.images['depth']['z'].preload([brick])
 
@@ -49,7 +48,6 @@ def test398599():
 
 
 def testrandom():
-    dr = DataRelease()
     #ebv = dr.images['ebv']
     print dr.footprint.range
     u1, u2 = numpy.random.random(size=(2, 4))
@@ -68,7 +66,6 @@ def testrandom():
     print depth#, ebv
 
 def testebv():
-    dr = DataRelease()
     RA = dr.catalogue['RA']
     DEC = dr.catalogue['DEC']
     EBV = -2.5 * numpy.log10(dr.catalogue['DECAM_MW_TRANSMISSION'][:, 2]) / dr.extinction[2]
@@ -83,7 +80,6 @@ def testebv():
     assert numpy.allclose(ebv, EBV, 1e-2)
 
 def testcat():
-    dr = DataRelease()
     print dr.catalogue 
     print dr.catalogue['RA']
 

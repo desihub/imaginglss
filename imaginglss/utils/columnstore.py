@@ -1,8 +1,11 @@
 import numpy
 
 class ColumnStore(object):
-    """ a cached column store 
-        subclass shall implement
+    """ A cached column store 
+
+        Subclass shall implement :py:method:`fetch` that loads data
+        from a data source.
+
     """
     def __init__(self, dtype):
         self.cache = {}

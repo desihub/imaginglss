@@ -100,7 +100,7 @@ def select_elgs():
 
     print ('\n'.join([
         '%s : %g' % v for v in
-        zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask))]))
+        zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask.T))]))
 
     mask = mask.all(axis=0)
     print(mask.sum())
