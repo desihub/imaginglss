@@ -17,7 +17,7 @@ from imaginglss             import DECALS
 
 decals = DECALS()
 def report(processed, total):
-    stdout.write("processing %d/%d ... \r" %( processed, total))
+    stdout.write("processing %d/%d ... \n" %( processed, total))
     stdout.flush()
 decals.datarelease.catalogue.build_cache(report=report)
 print("done")
