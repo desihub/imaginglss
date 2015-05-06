@@ -93,11 +93,12 @@ class Catalogue(ColumnStore):
 
     @property
     def dtype(self):
-        return numpy.dtype(filehandler.list(self.cachedir))
+        columns = filehandler.list(self.cachedir)
+        return numpy.dtype([(key, columns[key]) for key in columns])
 
-    def build_cache(self, report=lambda processed, total: None):
+    def build_cache(self, filenames):
         """
-        Build Cache of the catalogue.
+        Build cache of the catalogue files listed in filenames
 
         The fits files are converted to file handler format.
         Each column becomes a single file.
@@ -114,53 +115,35 @@ class Catalogue(ColumnStore):
         filenames : list
             list of FITS files to read from
        
+        Returns
+        -------
+        concatenated catalogue for filenames
+
         """ 
         
-        filenames = self.filenames
         cachedir = self.cachedir
 
-        fn = filenames[0]
+        fn = self.filenames[0]
         first = fits.read_table(fn)
         dtype = uppercase_dtype(first.dtype)
 
-        filehandler.write(cachedir, first.view(dtype), mode='w')
-
         total = len(filenames)
 
-        chunksize = 100
-        def work(i):
-            mine = filenames[i:i+chunksize]
-            data = None
-            for filename in mine:
-                table = fits.read_table(filename)
-                table = table.view(uppercase_dtype(table.dtype))
+        data = numpy.empty(0, dtype)
 
-                data1 = numpy.zeros(len(table), dtype)
-                for name in table.dtype.names:
-                    # only preserve those in both 'first' and all
-                    if name not in dtype.names: continue
-                    data1[name][...] = table[name]
+        for filename in filenames:
+            table = fits.read_table(filename)
+            table = table.view(uppercase_dtype(table.dtype))
 
-                if data is None:
-                    data = data1
-                else:
-                    data = numpy.append(data, data1)
-     
-            return i, data
+            data1 = numpy.zeros(len(table), dtype)
+            for name in table.dtype.names:
+                # only preserve those in both 'first' and all
+                if name not in dtype.names: continue
+                data1[name][...] = table[name]
 
-        def reduce(i, data):
-            filehandler.write(cachedir, data, mode='a')
-            report(i, total)
-            data = None
-
-        with sharedmem.MapReduce() as pool:
-            pool.map(work, range(1, len(filenames), chunksize), reduce=reduce)
-
-        d = {
-            'nfiles': numpy.array([total],dtype='i8') 
-            }
-
-        filehandler.write(cachedir, d)
+            data = numpy.append(data, data1)
+ 
+        return data
 
     def check_cache(self):
         """ Check if cache is consistent 

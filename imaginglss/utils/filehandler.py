@@ -178,7 +178,8 @@ def write(fname, data, mode='w'):
     """
     # Put in a little object type converter.
     if not os.path.exists(fname):
-        os.mkdir(fname)
+        os.makedirs(fname)
+
     if isinstance(data, N.ndarray):
         keys = data.dtype.names
     else:
