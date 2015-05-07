@@ -10,7 +10,7 @@ export PYTHON_MPI_HOME=/dev/shm
 export PYTHONPATH=`echo $PYTHONPATH|sed -e 's;/scratch2/usg-python/;/dev/shm/;g'`
 export PYTHONHOME=/dev/shm/2.7.9
 
-aprun -n 256 -d 1 /project/projectdirs/m779/mpiimport/python-mpi \
+aprun -n 256 -d 1 /project/projectdirs/m779/python-mpi/python-mpi \
     -bcast /project/projectdirs/m779/usg-python-2.7.9.tar.gz \
     ./build_cache.py
 
