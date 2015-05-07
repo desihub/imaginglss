@@ -1,0 +1,16 @@
+#PBS -j eo
+#PBS -l mppwidth=256
+#PBS -q debug
+
+cd $PBS_O_WORKDIR
+
+export OMP_NUM_THREADS=1
+export DECALS_PY_CONFIG=/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
+export PYTHON_MPI_HOME=/dev/shm
+export PYTHONPATH=`echo $PYTHONPATH|sed -e 's;/scratch2/usg-python/;/dev/shm/;g'`
+export PYTHONHOME=/dev/shm/2.7.9
+
+aprun -n 256 -d 1 /project/projectdirs/m779/mpiimport/python-mpi \
+    -bcast /project/projectdirs/m779/usg-python-2.7.9.tar.gz \
+    ./build_cache.py
+
