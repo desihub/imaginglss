@@ -8,7 +8,6 @@ import numpy
 
 from ..utils import fits
 from ..utils import filehandler
-from ..utils import sharedmem
 from ..utils.columnstore import ColumnStore
 
 __author__ = "Yu Feng and Martin White"
