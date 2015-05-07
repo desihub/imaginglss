@@ -30,6 +30,7 @@ myend = len(filenames) * (comm.rank + 1)// comm.size
 
 if comm.rank == 0:
     print("reading files ...")
+
 data = cat.build_cache(filenames[mystart:myend])
 
 comm.barrier()
