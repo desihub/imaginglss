@@ -91,6 +91,10 @@ class Catalogue(ColumnStore):
         ColumnStore.__init__(self)
 
     @property
+    def size(self):
+        return filehandler.size(self.cachedir, 'BRICK_PRIMARY')
+
+    @property
     def dtype(self):
         columns = filehandler.list(self.cachedir)
         return numpy.dtype([(key, columns[key]) for key in columns])
@@ -166,11 +170,11 @@ class Catalogue(ColumnStore):
         else:
             return ColumnStore.__getitem__(self, column)
 
-    def fetch(self, column):
+    def fetch(self, column, start, end):
         if not self.check_cache():
             raise CacheExpired("The cache is too old. Regenerate it with imaginglss.model.catalogue.build_cache")
 
-        return filehandler.read(self.cachedir, [column])[column]
+        return filehandler.read(self.cachedir, [column], offset=start, count=end-start)[column]
 
     def __repr__(self):
         return 'Catalogue: %s' % str(self.dtype)

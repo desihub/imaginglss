@@ -21,7 +21,7 @@ class MissingColumn(IOError):
 class BadFileName(IOError):
     pass
 
-def read(fname,keys=None):
+def read(fname, keys=None, offset=0, count=None):
     """
     Reads a specificed list of "keys" in a "file" of name fname.
 
@@ -31,6 +31,10 @@ def read(fname,keys=None):
         location to look for the data columns
     keys : list or None
         list of the keys; all if keys==None.  
+    offset : int
+        offset to start reading, in unit of items
+    count  : int
+        total number to read. None for read to the end of the file
 
     Returns
     -------
@@ -58,7 +62,10 @@ def read(fname,keys=None):
         order = dtype.base.str[0]
         fn = format_filename(key, dtype)
         with open(os.path.join(fname, fn), "r") as ff:
-            d = N.fromfile(ff, dtype=dtype)
+            ff.seek(dtype.itemsize * offset, 0)
+            if count is None:
+                count = -1
+            d = N.fromfile(ff, dtype=dtype, count=count)
         if order != '<':
             d.byteswap(True)
         ret[key] = d
@@ -81,7 +88,19 @@ def list(fname):
         key, dtype = parse_filename(os.path.basename(fn))
         ret[key] = dtype
     return ret
-         
+
+def size(fname, key):
+    """ Number of items in this column """
+
+    columns = list(fname)
+    if key not in columns:
+        raise MissingColumn("Unable to find "+key+" in "+fname)
+
+    dtype = columns[key]
+    size = os.path.getsize(os.path.join(fname, format_filename(key, dtype)))
+    assert size % dtype.itemsize == 0
+    return size // dtype.itemsize
+
 def build_dtype(data):
     if len(data.shape) >= 2:
         return N.dtype((data.dtype, data.shape[1:]))

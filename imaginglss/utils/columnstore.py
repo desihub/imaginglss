@@ -1,5 +1,20 @@
 import numpy
 
+class Column(object):
+    def __init__(self, parent, column):
+        self.parent = parent
+        self.column = column
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            a, b, c = index.indices(self.parent.size)
+            assert c == 1
+            return self.parent.fetch(self.column, a, b)
+        else:
+            a = int(index)
+            b = a + 1
+            return self.parent.fetch(self.column, a, b)[0]
+
 class ColumnStore(object):
     """ A cached column store 
 
@@ -7,26 +22,16 @@ class ColumnStore(object):
         from a data source.
 
     """
-    def __init__(self, dtype=None):
-        self.cache = {}
-        if dtype is not None:
-            self.dtype = dtype
+    def __init__(self):
+        pass
 
-    def __setitem__(self, column, value):
-        value = numpy.array(value)
-        if column in self.dtype.fields:
-            self.cache[column] = value.astype(self.dtype[column].base)
-        else:
-            self.updatedtype(column, value)
+    @property
+    def dtype(self):
+        return None
 
-    def updatedtype(self, column, value):
-        d = dict(self.dtype.fields)
-        subshape = value.shape[1:]
-        if len(subshape) == 0:
-            d[column] = (value.dtype.base, ())
-        else:
-            d[column] = (value.dtype.base, subshape)
-        self.dtype = numpy.dtype([(n, d[n]) for n in d])
+    @property
+    def size(self):
+        return 0
 
     def __iter__(self):
         return iter(self.dtype.names)
@@ -35,46 +40,7 @@ class ColumnStore(object):
         return column in self.dtype.names
 
     def __getitem__(self, column):
-        if column not in self.cache:
-            value = self.fetch(column) 
-            self[column] = value
-        return self.cache[column]
-
-    def __delitem__(self, column):
-        del self.cache[column]
-
-import os.path
-class DiskColumnStore(ColumnStore):
-    def __init__(self, root, dtype):
-        self.root = root
-        ColumnStore.__init__(self, dtype)
-
-    def getfilename(self, column):
-        return os.path.join(self.root, column)
-    
-    def __getitem__(self, column):
-        if column not in self.cache:
-            filename = self.getfilename(column)
-            try:
-                data = numpy.fromfile(filename,
-                    dtype=self.dtype[column])
-            except IOError:
-                data = ColumnStore.__getitem__(self, column)
-                try:
-                    os.makedirs(os.path.dirname(filename))
-                except OSError:
-                    pass
-                data.tofile(filename)
-            self[column] = data
-        return self.cache[column]
-
-    def forget(self, column):
-        try:
-            os.unlink(self.getfilename(column))
-        except OSError:
-            pass
-        try:
-            del self[column]
-        except KeyError:
-            pass
-
+        if column in self:
+            return Column(self, column)
+        else:
+            raise KeyError('column `%s` not found' % column)
