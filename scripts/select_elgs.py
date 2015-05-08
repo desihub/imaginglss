@@ -88,7 +88,7 @@ def select_elgs(comm=MPI.COMM_WORLD):
     # the ordering is the same as the call to findlim
     glim,rlim,zlim = lim
 
-    missing_depth = sum(comm.allgather(N.isinf(glim).sum(axis=-1))))
+    missing_depth = sum(comm.allgather(N.isinf(glim).sum(axis=-1)))
 
     if comm.rank == 0:
         print('Objects in missing depth images: ', missing_depth)
@@ -101,7 +101,7 @@ def select_elgs(comm=MPI.COMM_WORLD):
         print ('Selected Fraction by Completeness cuts')
         print ('\n'.join([
             '%s : %g' % v for v in
-            zip(cuts.Completeness.ELG, selected_fraction)
+            zip(cuts.Completeness.ELG, selected_fraction)]))
 
     mask = mask.all(axis=0)
     total_complete = sum(comm.allgather(mask.sum()))
@@ -114,8 +114,8 @@ def select_elgs(comm=MPI.COMM_WORLD):
 
     RA = N.concatenate(comm.allgather(RA))
     DEC = N.concatenate(comm.allgather(DEC))
-    MAG = N.concatenate(comm.allgather(MAG))
-    return( (RA,DC,MAG) )
+    MAG = N.concatenate(comm.allgather(MAG), axis=-1)
+    return( (RA,DEC,MAG) )
     #
 
 
