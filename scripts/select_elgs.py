@@ -27,6 +27,7 @@ from imaginglss.analysis    import cuts
 from mpi4py import MPI
 
 
+N.seterr(divide='ignore', invalid='ignore')
 
 def select_elgs(comm=MPI.COMM_WORLD):
     """
