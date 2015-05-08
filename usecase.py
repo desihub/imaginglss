@@ -66,8 +66,8 @@ def testrandom():
     print depth#, ebv
 
 def testebv():
-    RA = dr.catalogue['RA']
-    DEC = dr.catalogue['DEC']
+    RA = dr.catalogue['RA'][:]
+    DEC = dr.catalogue['DEC'][:]
     EBV = -2.5 * numpy.log10(dr.catalogue['DECAM_MW_TRANSMISSION'][:, 2]) / dr.extinction[2]
     ebv = dr.images['ebv']
     coord = (RA, DEC)
@@ -80,10 +80,11 @@ def testebv():
     assert numpy.allclose(ebv, EBV, 1e-2)
 
 def testcat():
-    print dr.catalogue 
-    print dr.catalogue['RA']
+    print dr.catalogue.size
+    assert len(dr.catalogue['RA'][:]) == dr.catalogue.size
+    assert len(dr.catalogue['RA'][0:dr.catalogue.size]) == dr.catalogue.size
 
+testcat()
 test398599()
 #testebv()
 testrandom()
-testcat()
