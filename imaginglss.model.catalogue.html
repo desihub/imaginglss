@@ -61,20 +61,127 @@
 <p>Python class for handling object catalogs associated with
 a data release.  The catalogs are obtained from FITS files.
 This class does some caching for speed.</p>
+<dl class="exception">
+<dt id="imaginglss.model.catalogue.CacheExpired">
+<em class="property">exception </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">CacheExpired</code><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CacheExpired"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CacheExpired" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.RuntimeError</span></code></p>
+</dd></dl>
+
 <dl class="class">
 <dt id="imaginglss.model.catalogue.Catalogue">
 <em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>filenames</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.DiskColumnStore" title="imaginglss.utils.columnstore.DiskColumnStore"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.columnstore.DiskColumnStore</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.ColumnStore" title="imaginglss.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.columnstore.ColumnStore</span></code></a></p>
 <p>Class for handling object catalogs associated with a data release.</p>
+<p>Access via the <code class="xref py py-attr docutils literal"><span class="pre">catalogue</span></code> attribute of <code class="xref py py-class docutils literal"><span class="pre">DataRelease</span></code>
+object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cachedir</strong> : string</p>
+<blockquote>
+<div><p>the location for caching.</p>
+</div></blockquote>
+<p><strong>filenames</strong> : list</p>
+<blockquote>
+<div><p>a list of fits file names that the catalogue is stored.</p>
+</div></blockquote>
+<p><strong>aliases</strong> : list</p>
+<blockquote class="last">
+<div><p>a list of fields to transform; this is to support migration
+of schema from older data release to newer ones. The list
+is of from (oldname, newname, transformfunction)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>The catalogs are contained in many small FITS files. Accesing them 
-directly is slow. This class caches the
-information on disk for speed. 
+directly is slow. 
+The columns must be first converted from the many-small file original
+format to a cache format via a script, <code class="code docutils literal"><span class="pre">scripts/build_cache.py</span></code>.
+The scripts calls the function <a class="reference internal" href="#imaginglss.model.catalogue.Catalogue.build_cache" title="imaginglss.model.catalogue.Catalogue.build_cache"><code class="xref py py-meth docutils literal"><span class="pre">build_cache()</span></code></a> to build the cache
+for chunks of catalogue in parallel, then write them to the correct cache
+directory.</p>
+<p>This class caches the information on disk for speed. 
 Only columns that are accessed are loaded into memory.</p>
-<p>The columns are cached on disk into cachedir, which is initialized 
-by the DataRelease object.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">catalogue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:</span><span class="mi">100</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:]</span> <span class="c"># may be huge!</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>dtype</td>
+<td>(dtype) A container of the data type of columns in <code class="xref py py-class docutils literal"><span class="pre">numpy.dtype</span></code></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="imaginglss.model.catalogue.Catalogue.build_cache">
+<code class="descname">build_cache</code><span class="sig-paren">(</span><em>filenames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue.build_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.build_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build cache of the catalogue files listed in filenames</p>
+<p>The fits files are converted to file handler format.
+Each column becomes a single file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cachedir</strong> : string</p>
+<blockquote>
+<div><p>directory for holding the cache</p>
+</div></blockquote>
+<p><strong>filenames</strong> : list</p>
+<blockquote>
+<div><p>list of FITS files to read from</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">concatenated catalogue for filenames</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This shall be run before using the catalogue. 
+And it takes a long time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.catalogue.Catalogue.check_cache">
+<code class="descname">check_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue.check_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.check_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if cache is consistent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>consistent</strong> : boolean</p>
+<blockquote class="last">
+<div><p>True if consistent, Falst if need to rebuild with <a class="reference internal" href="#imaginglss.model.catalogue.Catalogue.build_cache" title="imaginglss.model.catalogue.Catalogue.build_cache"><code class="xref py py-meth docutils literal"><span class="pre">build_cache()</span></code></a>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.catalogue.Catalogue.dtype">
+<code class="descname">dtype</code><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="imaginglss.model.catalogue.Catalogue.fetch">
-<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.fetch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -82,6 +189,17 @@ by the DataRelease object.</p>
 <code class="descname">neighbours</code><span class="sig-paren">(</span><em>coord</em>, <em>sep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue.neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.neighbours" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="imaginglss.model.catalogue.Catalogue.size">
+<code class="descname">size</code><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.model.catalogue.TransformedColumn">
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">TransformedColumn</code><span class="sig-paren">(</span><em>ref</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#TransformedColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.TransformedColumn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 </dd></dl>
 
 <dl class="function">
@@ -106,6 +224,13 @@ by the DataRelease object.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.model.catalogue.native_dtype">
+<code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">native_dtype</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#native_dtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.native_dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dtype to native dtype. A helper function.</p>
+<p>Do not use.</p>
 </dd></dl>
 
 <dl class="function">

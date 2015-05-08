@@ -59,31 +59,38 @@
   <div class="section" id="module-imaginglss.utils.columnstore">
 <span id="imaginglss-utils-columnstore-module"></span><h1>imaginglss.utils.columnstore module<a class="headerlink" href="#module-imaginglss.utils.columnstore" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="imaginglss.utils.columnstore.ColumnStore">
-<em class="property">class </em><code class="descclassname">imaginglss.utils.columnstore.</code><code class="descname">ColumnStore</code><span class="sig-paren">(</span><em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#ColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore" title="Permalink to this definition">¶</a></dt>
+<dt id="imaginglss.utils.columnstore.Column">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.columnstore.</code><code class="descname">Column</code><span class="sig-paren">(</span><em>parent</em>, <em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#Column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.Column" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>a cached column store 
-subclass shall implement</p>
-<dl class="method">
-<dt id="imaginglss.utils.columnstore.ColumnStore.updatedtype">
-<code class="descname">updatedtype</code><span class="sig-paren">(</span><em>column</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#ColumnStore.updatedtype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore.updatedtype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="class">
-<dt id="imaginglss.utils.columnstore.DiskColumnStore">
-<em class="property">class </em><code class="descclassname">imaginglss.utils.columnstore.</code><code class="descname">DiskColumnStore</code><span class="sig-paren">(</span><em>root</em>, <em>dtype</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#DiskColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.DiskColumnStore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore" title="imaginglss.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.columnstore.ColumnStore</span></code></a></p>
-<dl class="method">
-<dt id="imaginglss.utils.columnstore.DiskColumnStore.forget">
-<code class="descname">forget</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#DiskColumnStore.forget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.DiskColumnStore.forget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="imaginglss.utils.columnstore.ColumnStore">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.columnstore.</code><code class="descname">ColumnStore</code><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#ColumnStore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A ColumnStore</p>
+<p>Columns are accessed via <a href="#id1"><span class="problematic" id="id2">:py:code:`[columnname]`</span></a>.</p>
+<p>Subclass shall implement <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.fetch" title="imaginglss.utils.columnstore.ColumnStore.fetch"><code class="xref py py-meth docutils literal"><span class="pre">fetch()</span></code></a>, <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.dtype" title="imaginglss.utils.columnstore.ColumnStore.dtype"><code class="xref py py-attr docutils literal"><span class="pre">dtype</span></code></a>, <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.size" title="imaginglss.utils.columnstore.ColumnStore.size"><code class="xref py py-attr docutils literal"><span class="pre">size</span></code></a>.</p>
+<p class="rubric">Notes</p>
+<p>To retrive the contents of a columns use <a href="#id3"><span class="problematic" id="id4">:py:code:`[columnname][:]`</span></a>, or
+other slicing syntax with a step size of 1.</p>
+<dl class="attribute">
+<dt id="imaginglss.utils.columnstore.ColumnStore.dtype">
+<code class="descname">dtype</code><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>dtype of each item</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="imaginglss.utils.columnstore.DiskColumnStore.getfilename">
-<code class="descname">getfilename</code><span class="sig-paren">(</span><em>column</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#DiskColumnStore.getfilename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.DiskColumnStore.getfilename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="imaginglss.utils.columnstore.ColumnStore.fetch">
+<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#ColumnStore.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load data from start to end for a column</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.utils.columnstore.ColumnStore.size">
+<code class="descname">size</code><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of items</p>
+</dd></dl>
 
 </dd></dl>
 
