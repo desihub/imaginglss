@@ -123,7 +123,6 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     Nbricks = len(dr.footprint.bricks)
     mybricks = dr.footprint.bricks[comm.rank * Nbricks // comm.size
                      : (comm.rank + 1) * Nbricks // comm.size]
-    print (comm.rank, mybricks)
     footprint = Footprint(mybricks, dr.brickindex)
 
     Nbricks = comm.allgather(len(mybricks))
@@ -134,9 +133,10 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     myNran = sum(Nbricks[:comm.rank+1]) * Nran // sum(Nbricks) \
            -  sum(Nbricks[:comm.rank]) * Nran // sum(Nbricks)
 
-    print (comm.rank, myNran, len(mybricks))
     # fill it with random points 
     coord = fill_random(footprint, myNran, seeds[comm.rank])
+
+    print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
 
     mask, rmag, cut = apply_samp_cut(coord, dr, sfd, samp)
 
@@ -167,7 +167,7 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
         with open(fout,'w') as ff:
             for j in range(0, len(rmag)):
                 ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
-                  (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
+                  (coord[0][j],coord[1][j],0.5,rmag[j]))
 
         fraction = len(coord[0]) * 1.0 / Nran
         print('Accept rate', fraction)
