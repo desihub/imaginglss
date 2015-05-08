@@ -59,17 +59,40 @@ def native_dtype(dtype):
 class CacheExpired(RuntimeError):
     pass
 
+class TransformedColumn(object):
+    def __init__(self, ref):
+        self.ref = ref
+        self.transform = transfrom
+    def __getitem__(self, index):
+        return self.transform(self.ref[index])
+
 class Catalogue(ColumnStore):
     """
     Class for handling object catalogs associated with a data release.
 
+    Access via the :py:attr:`catalogue` attribute of :py:class:`DataRelease`
+    object.
+
+    Notes
+    -----
     The catalogs are contained in many small FITS files. Accesing them 
     directly is slow. 
     The columns must be first converted from the many-small file original
-    format to a cache format via :py:func:`build_cache`.
+    format to a cache format via a script, :code:`scripts/build_cache.py`.
+    The scripts calls the function :py:meth:`build_cache` to build the cache
+    for chunks of catalogue in parallel, then write them to the correct cache
+    directory.
 
     This class caches the information on disk for speed. 
     Only columns that are accessed are loaded into memory.
+
+    Examples
+    --------
+    >>> d = DECALS()
+    >>> cat = d.datarelease.catalogue
+    >>> print cat['BRICK_PRIMARY'][:100]
+    >>> print cat['BRICK_PRIMARY'][10]
+    >>> print cat['BRICK_PRIMARY'][:] # may be huge!
 
     Parameters
     ----------
@@ -82,6 +105,13 @@ class Catalogue(ColumnStore):
         of schema from older data release to newer ones. The list
         is of from (oldname, newname, transformfunction)
 
+    Attributes
+    ----------
+    dtype : dtype
+        A container of the data type of columns
+        in :py:class:`numpy.dtype`
+
+    
     """
     def __init__(self, cachedir, filenames, aliases):
         self.filenames = filenames
@@ -166,13 +196,13 @@ class Catalogue(ColumnStore):
     def __getitem__(self, column):
         if column in self.aliases:
             old, transform = self.aliases[column]
-            return transform(self[old])
+            return TransformedColumn(self[old], transform)
         else:
             return ColumnStore.__getitem__(self, column)
 
     def fetch(self, column, start, end):
         if not self.check_cache():
-            raise CacheExpired("The cache is too old. Regenerate it with imaginglss.model.catalogue.build_cache")
+            raise CacheExpired("The cache is too old. Regenerate it with scripts/build_cache.py")
 
         return filehandler.read(self.cachedir, [column], offset=start, count=end-start)[column]
 

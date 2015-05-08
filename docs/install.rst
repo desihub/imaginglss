@@ -9,18 +9,30 @@ Depencency
 ----------
 
 ImagingLSS is light on dependency.
-It depends only on fitsio or astropy:
+
+It depends on mpi4py, for the parallel infrastructure. 
+It also depends on fitsio or astropy for accessing FITS files.
 
 .. code-block:: bash
 
     easy_install --user fitsio
     #easy_install --user astropy
 
-On Edison,
+We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
+the dependencies of ImagingLSS. For example, on Edison.
 
 .. code-block:: bash
 
-    module load fitsio
+    export PYTHONUSERBASE=$SCRATCH
+
+    easy_install --user fitsio
+    #easy_install --user astropy
+
+Note that fitsio 0.9.8+ is capable to properly handle the boolean columns in DECALS 
+catalogue files. Since 0.9.8 has not yet been released, you may need to install this
+this version of fitsio which contains this crucial fix: 
+
+https://github.com/esheldon/fitsio/tree/150cd
 
 Location of Data Release
 ------------------------
@@ -44,27 +56,40 @@ Here is an example configuration file:
 
     export DECALS_PY_CONFIG=/path/to/dr1j.conf.py
 
-If the file does not exist, ImagingLSS core libary and the tools scripts defaults 
-to use :code:`DECALS_IMAGING` as the root path of the data release.
-:code:`DECALS_CACHE` must be set to a directory with large free storage space, for caching the catalogue data.
-The dust extinction map shall be given in :code:`DUST_DIR` variable. 
 
+Getting Started
+---------------
+
+Before start using imaginglss, it is crucial to build the catalogue cache. 
+
+Building the cache takes a long time, and we provide a script :code:`scripts/build_cache.py`. 
+
+This is an MPI capable script with good weak scaling and only bound by the file system bandwidth; 
+We recommend running it with a modest number of cores, 128 or 256.
+
+Python starts slowly on Edison, depending on the condition of the meta data server of the file systems. 
+We are narrowing down to a permanant solution to this.
 
 .. code-block:: bash
 
-    export DECALS_IMAGING=/global/project/projectdirs/cosmo/work/decam/release/edr/
-    export DECALS_CACHE=$GSCRATCH/desicache
-    export DUST_DIR=/project/projectdirs/desi/software/edison/dust/v0_0/
- 
-Getting Started
----------------
+    # in a job script or an interactive job.
+    # replace mpirun with aprun on Cray
+
+    mpirun -n 256 python-mpi scripts/build_cache.py
+
+For DR1 this takes about 10 mins and produces 300 to 400 GB of data in the
+cache directory. Be ready for it. 
+
+Now we are ready for some interactive sessions
 
 .. code-block:: bash
 
     from imaginglss import DECALS
-    decals = DECALS()
+    decals = DECALS() # or DECALS('/path/to/dr1.conf.py')
 
     dr = decals.datarelease
+    cat = decals.datarelease.catalogue
+    sfd = decals.sfdmap
 
 Also refer to the :doc:`examples` of the documentation.
 
@@ -108,5 +133,18 @@ http://imaginglss.s3-website-us-west-1.amazonaws.com/edr3.tar.gz
 )
 EDR3 is older than DR1J, but with more bricks than the mini dataset.
 
+DR1 on Edison
+-------------
 
+ImagingLSS has been prepackaged for DR1 at Edison in the following locations:
+
+.. code-block:: bash
+
+    export DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
+
+Most of code development is happening at that location as well.
+
+.. code-block:: bash
+
+    tree DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/source
 

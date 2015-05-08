@@ -16,10 +16,16 @@ class Column(object):
             return self.parent.fetch(self.column, a, b)[0]
 
 class ColumnStore(object):
-    """ A cached column store 
+    """ A ColumnStore
 
-        Subclass shall implement :py:method:`fetch` that loads data
-        from a data source.
+        Columns are accessed via :py:code:`[columnname]`. 
+        
+        Subclass shall implement :py:meth:`fetch`, :py:attr:`dtype`, :py:attr:`size`.
+
+        Notes
+        -----
+        To retrive the contents of a columns use :py:code:`[columnname][:]`, or
+        other slicing syntax with a step size of 1.
 
     """
     def __init__(self):
@@ -27,12 +33,18 @@ class ColumnStore(object):
 
     @property
     def dtype(self):
-        return None
+        """dtype of each item"""
+        raise NotImplementedError
 
     @property
     def size(self):
-        return 0
+        """Total number of items """
+        raise NotImplementedError
 
+    def fetch(self, column, start, end):
+        """Load data from start to end for a column """
+        raise NotImplementedError
+    
     def __iter__(self):
         return iter(self.dtype.names)
 
