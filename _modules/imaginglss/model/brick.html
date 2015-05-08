@@ -76,7 +76,9 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    id   :   integer</span>
+<span class="sd">    index   :   integer</span>
+<span class="sd">        Internal index used by :py:class:`~imaginglss.brickindex.BrickIndex`</span>
+<span class="sd">    id :   integer</span>
 <span class="sd">        ID of the brick as in the Tractor catalogue (unique).</span>
 <span class="sd">        Note that we do not use it in indexing.</span>
 <span class="sd">    name : string_like </span>
@@ -95,10 +97,11 @@
 <span class="sd">        max coordinate dec</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">ra1</span><span class="p">,</span> <span class="n">ra2</span><span class="p">,</span> <span class="n">dec1</span><span class="p">,</span> <span class="n">dec2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">ra1</span><span class="p">,</span> <span class="n">ra2</span><span class="p">,</span> <span class="n">dec1</span><span class="p">,</span> <span class="n">dec2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize a brick object.  Brick is immutable.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span>   <span class="o">=</span> <span class="n">index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span>   <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ra</span>   <span class="o">=</span> <span class="n">ra</span>

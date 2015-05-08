@@ -174,7 +174,9 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
-            <span class="n">brick</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+            <span class="n">brick</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span>
+                    <span class="n">index</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
                     <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
                     <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
                     <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 

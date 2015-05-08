@@ -63,7 +63,7 @@ This object contains only the meta-data, and it calls
 imagerepo to handle looking up the pixel-level information.</p>
 <dl class="class">
 <dt id="imaginglss.model.brick.Brick">
-<em class="property">class </em><code class="descclassname">imaginglss.model.brick.</code><code class="descname">Brick</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>ra</em>, <em>dec</em>, <em>ra1</em>, <em>ra2</em>, <em>dec1</em>, <em>dec2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.model.brick.</code><code class="descname">Brick</code><span class="sig-paren">(</span><em>index</em>, <em>id</em>, <em>name</em>, <em>ra</em>, <em>dec</em>, <em>ra1</em>, <em>ra2</em>, <em>dec1</em>, <em>dec2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The base (immutable) object corresponding to an imaging brick.
 This object contains only the meta-data, and is immutable.</p>
@@ -76,28 +76,31 @@ looking up the pixel-level information.</p>
 <col width="91%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>id</td>
+<tr class="row-odd"><td>index</td>
+<td>(  integer) Internal index used by <code class="xref py py-class docutils literal"><span class="pre">BrickIndex</span></code></td>
+</tr>
+<tr class="row-even"><td>id</td>
 <td>(  integer) ID of the brick as in the Tractor catalogue (unique). Note that we do not use it in indexing.</td>
 </tr>
-<tr class="row-even"><td>name</td>
+<tr class="row-odd"><td>name</td>
 <td>(string_like) name of the brick as in the Tractor catalogue (unique)</td>
 </tr>
-<tr class="row-odd"><td>ra</td>
+<tr class="row-even"><td>ra</td>
 <td>(float) center coordinate ra</td>
 </tr>
-<tr class="row-even"><td>dec</td>
+<tr class="row-odd"><td>dec</td>
 <td>(float) center coordinate dec</td>
 </tr>
-<tr class="row-odd"><td>ra1</td>
+<tr class="row-even"><td>ra1</td>
 <td>(float) min coordinate ra</td>
 </tr>
-<tr class="row-even"><td>dec1</td>
+<tr class="row-odd"><td>dec1</td>
 <td>(float) min coordinate dec</td>
 </tr>
-<tr class="row-odd"><td>ra2</td>
+<tr class="row-even"><td>ra2</td>
 <td>(float) max coordinate ra</td>
 </tr>
-<tr class="row-even"><td>dec2: float</td>
+<tr class="row-odd"><td>dec2: float</td>
 <td>max coordinate dec</td>
 </tr>
 </tbody>
