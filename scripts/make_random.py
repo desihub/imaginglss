@@ -8,13 +8,6 @@
 # properties required for target selection per random.
 # Then a query on this file would return randoms appropriate
 # for whatever selection is desired.
-# Alternatively we could impose the cuts before writing the
-# files, thus generating specific randoms "at once".
-# This code takes the latter approach, while "mpirandom" takes
-# the former approach.
-#
-# Currently this code uses OpenMP parallelization, the switch to
-# using MPI is relatively straightforward.
 #
 from __future__ import print_function,division
 
@@ -27,11 +20,10 @@ import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__fi
 import numpy             as N
 from   imaginglss             import DECALS
 from   imaginglss.analysis    import cuts
-
+from   imaginglss.model.datarelease import Footprint
 from mpi4py            import MPI
 
-verbose = True
-
+N.seterr(divide='ignore', invalid='ignore')
 
 def fill_random(footprint, Nran, seed):
     """
@@ -50,10 +42,10 @@ def fill_random(footprint, Nran, seed):
     ramin,ramax,dcmin,dcmax = footprint.range
 
     start = 0
-    while start != myend - mystart:
+    while start != Nran:
         # prepare for a parallel section.
         chunksize = 1024 * 512
-        u1,u2= rng.uniform(size=(2, 1024 * 1024 * 32))
+        u1,u2= rng.uniform(size=(2, 1024 * 1024) )
 
         #
         cmin = N.sin(dcmin*N.pi/180)
@@ -106,8 +98,6 @@ def apply_samp_cut(coord, dr, sfd, samp):
     rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
 
     return mask, rmag, cut
-    #
-
 
 
 def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
@@ -123,19 +113,36 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     dr = decals.datarelease
     sfd= decals.sfdmap
 
-    rng = numpy.random.RandomState(99934123)
-    seeds = rng.randint(size=comm.size)
-    mystart = comm.rank * Nran // comm.size
-    myend = (comm.rank + 1) * Nran // comm.size
+    rng = N.random.RandomState(99934123)
+    seeds = rng.randint(99999999, size=comm.size)
     if comm.rank == 0:
         print('Making randoms in the survey footprint.')
 
-    coord = fill_random(dr.footprint, myend - mystart, seeds[comm.rank])
+    # create a smaller footprint for just this rank
+
+    Nbricks = len(dr.footprint.bricks)
+    mybricks = dr.footprint.bricks[comm.rank * Nbricks // comm.size
+                     : (comm.rank + 1) * Nbricks // comm.size]
+    print (comm.rank, mybricks)
+    footprint = Footprint(mybricks, dr.brickindex)
+
+    Nbricks = comm.allgather(len(mybricks))
+
+    # Distribute myNran, proportional to the number of bricks
+    # important if a rank has no bricks, it expects no randoms
+
+    myNran = sum(Nbricks[:comm.rank+1]) * Nran // sum(Nbricks) \
+           -  sum(Nbricks[:comm.rank]) * Nran // sum(Nbricks)
+
+    print (comm.rank, myNran, len(mybricks))
+    # fill it with random points 
+    coord = fill_random(footprint, myNran, seeds[comm.rank])
 
     mask, rmag, cut = apply_samp_cut(coord, dr, sfd, samp)
 
-    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=0))) \
+    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=-1))) \
                     / sum(comm.allgather(len(coord[0])))
+
     if comm.rank == 0:
         print("Selected fraction:\n",
               "\n".join([
