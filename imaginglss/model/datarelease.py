@@ -82,9 +82,11 @@ class Footprint(object):
         area  : float
             Covered outline area in square degrees
     """
-    def __init__(self, dr):
-        self.bricks = [dr.brickindex.get_brick(bid) for bid in dr._covered_brickids]
-        self.area = 41253. * len(dr._covered_brickids) / len(dr.brickindex)
+    def __init__(self, bricks, brickindex):
+        self.bricks = bricks 
+        self.area = 41253. * len(bricks) / len(brickindex)
+        self._covered_brickids = numpy.array(
+                    [b.index for b in bricks], dtype='i8')
 
         # range of ra dec of covered bricks
         FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
@@ -94,8 +96,7 @@ class Footprint(object):
             decmin=min([brick.dec1 for brick in self.bricks]),
             decmax=max([brick.dec2 for brick in self.bricks]),)
 
-        self._covered_brickids = dr._covered_brickids
-        self.brickindex = dr.brickindex
+        self.brickindex = brickindex
 
     def __repr__(self):
         return "Footprint: len(bricks)=%d , area=%g degrees, range=%s" % (
@@ -221,7 +222,8 @@ class DataRelease(object):
         # the list of covered bricks must be sorted.
         self._covered_brickids.sort()
 
-        self.footprint = Footprint(self) # build the footprint property
+        bricks = [dr.brickindex.get_brick(bid) for bid in dr._covered_brickids]
+        self.footprint = Footprint(bricks) # build the footprint property
 
         catalogue_filenames = [
                 os.path.join(self.root, 

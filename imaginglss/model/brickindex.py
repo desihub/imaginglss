@@ -124,7 +124,9 @@ class BrickIndex(object):
 
         """
         if index not in self.cache:
-            brick = Brick(self.brickdata['BRICKID'][index], 
+            brick = Brick(
+                    index,
+                    self.brickdata['BRICKID'][index], 
                     self.brickdata['BRICKNAME'][index], 
                     self.brickdata['RA'][index], 
                     self.brickdata['DEC'][index], 

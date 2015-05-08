@@ -26,7 +26,9 @@ class Brick(object):
 
     Attributes
     ----------
-    id   :   integer
+    index   :   integer
+        Internal index used by :py:class:`~imaginglss.brickindex.BrickIndex`
+    id :   integer
         ID of the brick as in the Tractor catalogue (unique).
         Note that we do not use it in indexing.
     name : string_like 
@@ -45,10 +47,11 @@ class Brick(object):
         max coordinate dec
 
     """
-    def __init__(self, id, name, ra, dec, ra1, ra2, dec1, dec2):
+    def __init__(self, index, id, name, ra, dec, ra1, ra2, dec1, dec2):
         """
         Initialize a brick object.  Brick is immutable.
         """
+        self.index   = index
         self.id   = id
         self.name = name
         self.ra   = ra
