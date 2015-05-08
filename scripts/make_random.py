@@ -26,63 +26,51 @@ import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__fi
 
 import numpy             as N
 from   imaginglss             import DECALS
-from   imaginglss.utils       import sharedmem
 from   imaginglss.analysis    import cuts
 
-#from mpi4py            import MPI
+from mpi4py            import MPI
 
 verbose = True
 
 
-def fill_random(dr,Nran,seed=999993):
+def fill_random(footprint, Nran, seed):
     """
-    fill_random(dr,Nran,seed=999993): 
     Generate uniformly distributed points within the boundary that lie in
     bricks.  We generate in the ra/dec area, then remove points not in any
     bricks.  This hugely increases the memory efficiency for footprints,
     like DR1, where the survey covers several disjoint patches of the sky.
+
     """
+
+    # initialize the random generator
     rng = N.random.RandomState(seed)
-    ramin,ramax,dcmin,dcmax = dr.footprint.range
+
     coord = N.empty((2, Nran))
+
+    ramin,ramax,dcmin,dcmax = footprint.range
+
     start = 0
-    while start != Nran:
-        with sharedmem.MapReduce() as pool:
-            # prepare for a parallel section.
-            chunksize = 1024 * 512
-            u1,u2= rng.uniform(size=(2, 1024 * 1024 * 32))
-            def work(i):
-                # Find my slice
-                myu1 = u1[i:i+chunksize]
-                myu2 = u2[i:i+chunksize]
-                #
-                cmin = N.sin(dcmin*N.pi/180)
-                cmax = N.sin(dcmax*N.pi/180)
-                #
-                RA   = ramin + myu1*(ramax-ramin)
-                DEC  = 90-N.arccos(cmin+myu2*(cmax-cmin))*180./N.pi
-                # Filter out those not in any bricks: only very few points remain
-                coord1 = dr.footprint.filter((RA, DEC))
-                return(coord1)
-            # Run; the number here is just make sure each batch won't 
-            # use too much memory
-            coord1 = N.concatenate(
-                    pool.map(work, range(0,1024*1024*32,chunksize)),
-                    axis=-1)
+    while start != myend - mystart:
+        # prepare for a parallel section.
+        chunksize = 1024 * 512
+        u1,u2= rng.uniform(size=(2, 1024 * 1024 * 32))
+
+        #
+        cmin = N.sin(dcmin*N.pi/180)
+        cmax = N.sin(dcmax*N.pi/180)
+        #
+        RA   = ramin + u1*(ramax-ramin)
+        DEC  = 90-N.arccos(cmin+u2*(cmax-cmin))*180./N.pi
+        # Filter out those not in any bricks: only very few points remain
+        coord1 = footprint.filter((RA, DEC))
+
         # Are we full?
         coord1 = coord1[:, :min(len(coord1.T), Nran - start)]
         sl = slice(start, start + len(coord1.T))
         coord[:, sl] = coord1
         start = start + len(coord1.T)
-        if verbose:
-            print(start, '/', Nran, 'filled')
-    if len(N.unique(dr.brickindex.query(coord))) != len(dr.footprint.bricks):
-        # If this happens, we don't have enough points to cover the foot print
-        # fairly. Some bricks have no random points.
-        raise RuntimeError("Too few random points, increase Nran")
+    
     return coord
-
-
 
 
 def apply_samp_cut(coord, dr, sfd, samp):
@@ -101,83 +89,83 @@ def apply_samp_cut(coord, dr, sfd, samp):
     # by calls to "cuts".
     if samp=="LRG":
         rlim,zlim,wlim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
-        mask = cuts.Completeness.LRG(rlim=rlim,zlim=zlim,w1lim=wlim)
+        cut = cuts.Completeness.LRG
+        mask = cut(rlim=rlim,zlim=zlim,w1lim=wlim)
     elif samp=="ELG":
         glim,rlim,zlim = cuts.findlim(dr,sfd,coord,['g','r','z'])
-        mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
+        cut = cuts.Completeness.ELG
+        mask = cut(glim=glim,rlim=rlim,zlim=zlim)
     elif samp=="QSO":
         glim,rlim,w1lim,w2lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
-        mask = cuts.Completeness.QSO(glim=glim,rlim=rlim,w1lim=w1lim,w2lim=w2lim)
+        cut = cuts.Completeness.QSO
+        mask = cut(glim=glim,rlim=rlim,w1lim=w1lim,w2lim=w2lim)
     else:
         raise RuntimeError,"Unknown sample "+samp
+
     # It's also useful to have r magnitude later.
     rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
-    return( (mask,rmag) )
+
+    return mask, rmag, cut
     #
 
 
 
-def make_random(samp,Nran=10000000):
+def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     """
-    make_random(samp,Nran=1000000)
     Does the work of making randoms.  The sample type is passed as a string.
     """
     if samp not in ["LRG","ELG","QSO"]:
         raise RuntimeError,"Unknown sample "+samp
+
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
     decals = DECALS()
     dr = decals.datarelease
     sfd= decals.sfdmap
 
-    print('Making randoms in the survey footprint.')
-    coord = fill_random(dr, Nran)
-    #
-    # The call to optimize reorders the array to be brick-ordered.
-    # Read out is faster this way
-    coord = dr.brickindex.optimize(coord)
-    bid   = dr.brickindex.query(coord)
-    print("Have %d unique bricks"%len(N.unique(bid)))
-    #
-    with sharedmem.MapReduce() as pool:
-        # prepare a parallel section
-        chunksize = max(len(coord.T) // (pool.np * 4), 1)
-        # purge the file once for all
-        fout  = "randoms_%s.rdz"%samp
+    rng = numpy.random.RandomState(99934123)
+    seeds = rng.randint(size=comm.size)
+    mystart = comm.rank * Nran // comm.size
+    myend = (comm.rank + 1) * Nran // comm.size
+    if comm.rank == 0:
+        print('Making randoms in the survey footprint.')
+
+    coord = fill_random(dr.footprint, myend - mystart, seeds[comm.rank])
+
+    mask, rmag, cut = apply_samp_cut(coord, dr, sfd, samp)
+
+    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=0))) \
+                    / sum(comm.allgather(len(coord[0])))
+    if comm.rank == 0:
+        print("Selected fraction:\n",
+              "\n".join([
+                "%s : %g" % (c, f)
+                for c, f in zip(cut, selected_fraction)
+                ])
+            )
+
+    mask = mask.all(axis=0)
+    coord = coord[:, mask]
+    rmag = rmag[mask]
+
+    coord = comm.gather(coord)
+    rmag = comm.gather(rmag)
+
+    if comm.rank == 0:
+        coord = N.concatenate(coord, axis=-1)
+        rmag = N.concatenate(rmag)
+
+        fout = "randoms_%s.rdz" % samp
+
         with open(fout,'w') as ff:
-            pass
-        def work(i):
-            if verbose:
-                print(i)
-            # Work out which points belong on which slice.
-            mycoord = coord[:, i:i+chunksize]
-            # Apply the cut for sample type on my slice
-            mask,rmag = apply_samp_cut(mycoord,dr,sfd,samp)
-            # Notify user this slice is done
-        
-            if verbose:
-                print(i, '/', len(coord.T))
+            for j in range(0, len(rmag)):
+                ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
+                  (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
 
-            maska = mask.all(axis=0)
-            mycoord = mycoord[:, maska]
-            rmag = rmag[maska]
-
-            return( (mycoord,rmag, mask.sum(axis=-1)) )
-
-        def reduce(mycoord, rmag, kept):
-            # and take turns writing this out:
-            with open(fout, 'a') as ff:
-                for j in range(0, len(rmag)):
-                    ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
-                      (mycoord[0][j],mycoord[1][j],0.5,rmag[j]))
-            return N.concatenate([[len(rmag)], kept])
-
-        summary = sum(pool.map(work,range(0,len(coord.T),chunksize),reduce=reduce))
-        total = summary[0]
-         
-    print('Total area (sq.deg.) ',dr.footprint.area*1.0*total/len(coord.T))
-    print('Accept rate', 1.0 * summary[1:] / len(coord.T))
-    print('Done!')
+        fraction = len(coord[0]) * 1.0 / Nran
+        print('Accept rate', fraction)
+        print('Total area (sq.deg.) ',dr.footprint.area * fraction)
+        print('Done!')
     #
 
 
