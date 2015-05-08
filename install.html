@@ -65,8 +65,12 @@ It also depends on fitsio or astropy for accessing FITS files.</p>
 <span class="c">#easy_install --user astropy</span>
 </pre></div>
 </div>
-<p>On Edison,</p>
-<div class="highlight-bash"><div class="highlight"><pre>module load fitsio
+<p>We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
+the dependencies of ImagingLSS. For example, on Edison.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">PYTHONUSERBASE</span><span class="o">=</span><span class="nv">$SCRATCH</span>
+
+easy_install --user fitsio
+<span class="c">#easy_install --user astropy</span>
 </pre></div>
 </div>
 <p>Note that fitsio 0.9.8+ is capable to properly handle the boolean columns in DECALS
@@ -94,18 +98,21 @@ or by setting the environment variable <code class="code docutils literal"><span
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
-<p>Before start using imaginglss, it is crucial to build the catalogue cache, as this step
-takes a long time, we provide a script <code class="code docutils literal"><span class="pre">scripts/build_cache.py</span></code>. This is an MPI
-capable script; run it with a modest number of cores, 128 or 256.
-.. code-block:: bash</p>
-<blockquote>
-<div><p># in a job script or an interactive job.
-# replace mpirun with aprun on Cray</p>
-<p>mpirun -n 128 python-mpi scripts/build_cache.py</p>
-</div></blockquote>
+<p>Before start using imaginglss, it is crucial to build the catalogue cache.</p>
+<p>Building the cache takes a long time, and we provide a script <code class="code docutils literal"><span class="pre">scripts/build_cache.py</span></code>.</p>
+<p>This is an MPI capable script with good weak scaling and only bound by the file system bandwidth;
+We recommend running it with a modest number of cores, 128 or 256.</p>
+<p>Python starts slowly on Edison, depending on the condition of the meta data server of the file systems.
+We are narrowing down to a permanant solution to this.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># in a job script or an interactive job.</span>
+<span class="c"># replace mpirun with aprun on Cray</span>
+
+mpirun -n <span class="m">256</span> python-mpi scripts/build_cache.py
+</pre></div>
+</div>
 <p>For DR1 this takes about 10 mins and produces 300 to 400 GB of data in the
-cache directory. Be ready for it. Python starts slowly on Edison. We are narrowing down
-to a permanant solution to this.</p>
+cache directory. Be ready for it.</p>
+<p>Now we are ready for some interactive sessions</p>
 <div class="highlight-bash"><div class="highlight"><pre>from imaginglss import DECALS
 <span class="nv">decals</span> <span class="o">=</span> DECALS<span class="o">()</span> <span class="c"># or DECALS(&#39;/path/to/dr1.conf.py&#39;)</span>
 
@@ -147,6 +154,17 @@ tar -xzvf SFD98.tar.gz
 )
 EDR3 is older than DR1J, but with more bricks than the mini dataset.</p>
 </div>
+<div class="section" id="dr1-on-edison">
+<h2>DR1 on Edison<a class="headerlink" href="#dr1-on-edison" title="Permalink to this headline">¶</a></h2>
+<p>ImagingLSS has been prepackaged for DR1 at Edison in the following locations:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span>/global/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
+</pre></div>
+</div>
+<p>Most of code development is happening at that location as well.</p>
+<div class="highlight-bash"><div class="highlight"><pre>tree <span class="nv">DECALS_PY_CONFIG</span><span class="o">=</span>/global/project/projectdirs/m779/imaginglss/source
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -162,6 +180,7 @@ EDR3 is older than DR1J, but with more bricks than the mini dataset.</p>
 <li><a class="reference internal" href="#location-of-data-release">Location of Data Release</a></li>
 <li><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li><a class="reference internal" href="#example-dataset">Example Dataset</a></li>
+<li><a class="reference internal" href="#dr1-on-edison">DR1 on Edison</a></li>
 </ul>
 </li>
 </ul>

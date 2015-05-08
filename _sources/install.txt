@@ -18,11 +18,15 @@ It also depends on fitsio or astropy for accessing FITS files.
     easy_install --user fitsio
     #easy_install --user astropy
 
-On Edison,
+We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
+the dependencies of ImagingLSS. For example, on Edison.
 
 .. code-block:: bash
 
-    module load fitsio
+    export PYTHONUSERBASE=$SCRATCH
+
+    easy_install --user fitsio
+    #easy_install --user astropy
 
 Note that fitsio 0.9.8+ is capable to properly handle the boolean columns in DECALS 
 catalogue files. Since 0.9.8 has not yet been released, you may need to install this
@@ -56,20 +60,27 @@ Here is an example configuration file:
 Getting Started
 ---------------
 
-Before start using imaginglss, it is crucial to build the catalogue cache, as this step
-takes a long time, we provide a script :code:`scripts/build_cache.py`. This is an MPI 
-capable script; run it with a modest number of cores, 128 or 256.
+Before start using imaginglss, it is crucial to build the catalogue cache. 
+
+Building the cache takes a long time, and we provide a script :code:`scripts/build_cache.py`. 
+
+This is an MPI capable script with good weak scaling and only bound by the file system bandwidth; 
+We recommend running it with a modest number of cores, 128 or 256.
+
+Python starts slowly on Edison, depending on the condition of the meta data server of the file systems. 
+We are narrowing down to a permanant solution to this.
+
 .. code-block:: bash
 
     # in a job script or an interactive job.
     # replace mpirun with aprun on Cray
 
-    mpirun -n 128 python-mpi scripts/build_cache.py
-
+    mpirun -n 256 python-mpi scripts/build_cache.py
 
 For DR1 this takes about 10 mins and produces 300 to 400 GB of data in the
-cache directory. Be ready for it. Python starts slowly on Edison. We are narrowing down
-to a permanant solution to this.
+cache directory. Be ready for it. 
+
+Now we are ready for some interactive sessions
 
 .. code-block:: bash
 
@@ -122,5 +133,18 @@ http://imaginglss.s3-website-us-west-1.amazonaws.com/edr3.tar.gz
 )
 EDR3 is older than DR1J, but with more bricks than the mini dataset.
 
+DR1 on Edison
+-------------
 
+ImagingLSS has been prepackaged for DR1 at Edison in the following locations:
+
+.. code-block:: bash
+
+    export DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
+
+Most of code development is happening at that location as well.
+
+.. code-block:: bash
+
+    tree DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/source
 
