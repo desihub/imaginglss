@@ -66,6 +66,9 @@ def contains(haystack, needle):
     """
     haystack = numpy.asarray(haystack)
     ind = haystack.searchsorted(needle)
+    if len(haystack) == 0:
+        # build a False array of the right shape
+        return ind != ind
     ind.clip(0, len(haystack) - 1, ind)
     return haystack[ind] == needle
 
@@ -90,11 +93,14 @@ class Footprint(object):
 
         # range of ra dec of covered bricks
         FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
-        self.range = FootPrintRange(
-            ramin=min([brick.ra1 for brick in self.bricks]),
-            ramax=max([brick.ra2 for brick in self.bricks]),
-            decmin=min([brick.dec1 for brick in self.bricks]),
-            decmax=max([brick.dec2 for brick in self.bricks]),)
+        if len(bricks) == 0:
+            self.range = FootPrintRange(ramin=0, ramax=0, decmin=0, decmax=0)
+        else:
+            self.range = FootPrintRange(
+                ramin=min([brick.ra1 for brick in self.bricks]),
+                ramax=max([brick.ra2 for brick in self.bricks]),
+                decmin=min([brick.dec1 for brick in self.bricks]),
+                decmax=max([brick.dec2 for brick in self.bricks]),)
 
         self.brickindex = brickindex
 
@@ -222,8 +228,8 @@ class DataRelease(object):
         # the list of covered bricks must be sorted.
         self._covered_brickids.sort()
 
-        bricks = [dr.brickindex.get_brick(bid) for bid in dr._covered_brickids]
-        self.footprint = Footprint(bricks) # build the footprint property
+        bricks = [self.brickindex.get_brick(bid) for bid in self._covered_brickids]
+        self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
 
         catalogue_filenames = [
                 os.path.join(self.root, 
