@@ -30,7 +30,7 @@ The member methods are
  - :py:meth:`~imaginglss.model.datarelease.DataRelease.readout`   : reading out pixel value of an image 
    for coordinates on the sky.
 
-Catalog information is handled by :py:class:`imaginglss.model.catalog.Catalogue`, which stores the
+Catalog information is handled by :py:class:`imaginglss.model.catalogue.Catalogue`, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files, 
 but this class caches the
