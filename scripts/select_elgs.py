@@ -21,101 +21,106 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 import numpy as N
-from imaginglss.utils       import sharedmem
 from imaginglss             import DECALS
 from imaginglss.analysis    import cuts
 
+from mpi4py import MPI
 
 
 
-
-def select_elgs():
+def select_elgs(comm=MPI.COMM_WORLD):
     """
-    select_elgs()
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
     decals = DECALS()
     dr = decals.datarelease
     sfd= decals.sfdmap
+    cat = dr.catalogue
 
+    mystart = cat.size * comm.rank // comm.size
+    myend = cat.size * (comm.rank + 1) // comm.size
+
+    mine = slice(mystart, myend)
     # Define the fluxes, corrected for MW transmission.
-    brickname = dr.catalogue['BRICKNAME']
-    flux  = dr.catalogue['DECAM_FLUX'].T
-    trn   = dr.catalogue['DECAM_MW_TRANSMISSION'].T
-    GFLUX = flux[1] / trn[1]
-    RFLUX = flux[2] / trn[2]
-    ZFLUX = flux[4] / trn[4]
-    # Now do the selection ...
-    primary= dr.catalogue['BRICK_PRIMARY']
-    pmask = primary == 1
 
-    mask  = cuts.Fluxes.ELG(gflux=GFLUX,rflux=RFLUX,zflux=ZFLUX)
+    flux  = cat['DECAM_FLUX'][mine].T
+    flux /= cat['DECAM_MW_TRANSMISSION'][mine].T
+    # Now do the selection ...
+    pmask = cat['BRICK_PRIMARY'][mine] == 1
+
+    mask  = cuts.Fluxes.ELG(gflux=flux[1],rflux=flux[2],zflux=flux[4])
+
     mask &= pmask[None, :]
 
-    print ('Selected Fraction by Fluxes cuts')
+    select_fraction = sum(comm.allgather(mask.sum(axis=1))) / sum(comm.allgather(pmask.sum()))
 
-    print ('\n'.join([
-        '%s : %g' % v for v in
-        zip(cuts.Fluxes.ELG, 1.0 * mask.sum(axis=1) / pmask.sum())]))
+    if comm.rank == 0:
+        print ('Selected Fraction by Fluxes cuts')
+
+        print ('\n'.join([
+            '%s : %g' % v for v in
+            zip(cuts.Fluxes.ELG, select_fraction)]))
 
     mask = mask.all(axis=0)
 
-    print ('Total %d out of %d, ratio=%g' % (mask.sum(), pmask.sum(), 1.0 * mask.sum() / pmask.sum()))
+    total_elg = sum(comm.allgather(mask.sum()))
+    total_primary = sum(comm.allgather(pmask.sum()))
+    select_fraction = 1.0 * total_elg / total_primary
+    if comm.rank == 0:
+        print ('Total %d out of %d, ratio=%g' % (total_elg, total_primary, select_fraction))
 
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
-    ra   = dr.catalogue[ 'RA'][mask]
-    dc   = dr.catalogue['DEC'][mask]
-    print ('working on ', len(ra), 'items')
-    mag  = 22.5-2.5*N.log10( (flux[:,mask]/trn[:,mask]).clip(1e-15,1e15) )
+    RA   = cat[ 'RA'][mine][mask]
+    DEC   = cat['DEC'][mine][mask]
+    MAG  = 22.5-2.5*N.log10((flux[:,mask]).clip(1e-15,1e15) )
+
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
 
-#    print(dr.images['depth']['z'].open(dr.brickindex.get_brick(325914)))
-    with sharedmem.MapReduce() as pool:
-        (RA,DEC),arg = dr.brickindex.optimize((ra,dc),return_index=True)
-        chunksize = 1024
-        def work(i):
-            print('', end='.')
-#            print(i, '/', len(RA))
-            coord = (RA[i:i+chunksize],DEC[i:i+chunksize])
-            lim = cuts.findlim(dr,sfd,coord,['g','r','z'])
-#            print('done',i)
-            return(lim)
-        # the ordering is the same as the call to findlim
-        glim,rlim,zlim = N.concatenate(\
-            pool.map(work,range(0,len(RA),chunksize)),axis=-1)
+    lim = cuts.findlim(dr, sfd, 
+                (RA, DEC), 
+                ['g','r','z'])
 
-    print('', end='\n')
-    print(glim)
-    print('Objects in missing depth-g images: %d' % N.isinf(glim).sum())
-    print('Objects in missing depth-r images: %d' % N.isinf(rlim).sum())
-    print('Objects in missing depth-z images: %d' % N.isinf(zlim).sum())
+    # the ordering is the same as the call to findlim
+    glim,rlim,zlim = lim
+
+    missing_depth = sum(comm.allgather(N.isinf(glim).sum(axis=-1))))
+
+    if comm.rank == 0:
+        print('Objects in missing depth images: ', missing_depth)
 
     mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
-    print ('Selected Fraction by Completeness cuts')
 
-    print ('\n'.join([
-        '%s : %g' % v for v in
-        zip(cuts.Completeness.ELG, 1.0 * mask.sum(axis=1) / len(mask.T))]))
+    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1))) \
+            / sum(comm.allgather(len(mask.T)))
+    if comm.rank == 0:
+        print ('Selected Fraction by Completeness cuts')
+        print ('\n'.join([
+            '%s : %g' % v for v in
+            zip(cuts.Completeness.ELG, selected_fraction)
 
     mask = mask.all(axis=0)
-    print(mask.sum())
-    ra   = RA [mask]
-    dc   = DEC[mask]
-    mag  = mag[:,arg[mask]]
-    return( (ra,dc,mag) )
+    total_complete = sum(comm.allgather(mask.sum()))
+    if comm.rank == 0:
+        print("total number of complete ELGs:", total_complete)
+
+    RA   = RA [mask]
+    DEC   = DEC[mask]
+    MAG  = MAG[:, mask]
+
+    RA = N.concatenate(comm.allgather(RA))
+    DEC = N.concatenate(comm.allgather(DEC))
+    MAG = N.concatenate(comm.allgather(MAG))
+    return( (RA,DC,MAG) )
     #
-
-
 
 
 def diagnostic_plots(ra,dec,mag):
     """
-    diagnostic_plots(ra,dec,mag):
     Makes some "useful" diagnostic plots.
     """
     from matplotlib.figure import Figure
@@ -163,15 +168,16 @@ if __name__=="__main__":
     from sys import argv
     #
     ra,dc,mag = select_elgs()
-    if len(argv) > 1 and argv[1] == '--plot':
-        diagnostic_plots(ra, dc, mag)
-    else:
-        # Just write the sample to an ascii text file.
-        ff = open("elgs.rdz","w")
-        ff.write("# %13s %15s %15s %15s %15s %15s\n"%\
-          ("RA","DEC","PhotoZ","g","r","z"))
-        for i in range(ra.size):
-            ff.write("%15.10f %15.10f %15.10f %15.10f %15.10f %15.10f\n"%\
-              (ra[i],dc[i],0.5,mag[1,i],mag[2,i],mag[4,i]))
-        ff.close()
-    #
+    if MPI.COMM_WORLD.rank == 0:
+        if len(argv) > 1 and argv[1] == '--plot':
+            diagnostic_plots(ra, dc, mag)
+        else:
+            # Just write the sample to an ascii text file.
+            ff = open("elgs.rdz","w")
+            ff.write("# %13s %15s %15s %15s %15s %15s\n"%\
+              ("RA","DEC","PhotoZ","g","r","z"))
+            for i in range(ra.size):
+                ff.write("%15.10f %15.10f %15.10f %15.10f %15.10f %15.10f\n"%\
+                  (ra[i],dc[i],0.5,mag[1,i],mag[2,i],mag[4,i]))
+            ff.close()
+        #
