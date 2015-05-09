@@ -10,16 +10,26 @@ Depencency
 
 ImagingLSS is light on dependency.
 
-It depends on mpi4py, for the parallel infrastructure. 
-It also depends on fitsio or astropy for accessing FITS files.
+ - numpy 1.8+. 
+   Do not use 1.7.x for this bug: https://github.com/numpy/numpy/issues/3469
 
-.. code-block:: bash
+   .. code-block:: bash
+    
+       python -c 'import numpy; print numpy.version.version'
 
-    easy_install --user fitsio
-    #easy_install --user astropy
+ - mpi4py, for the parallel infrastructure. 
 
+ - fitsio 0.9.8 + (astropy is supported too) for accessing FITS files.
+   Do not use 0.9.7 for this bug: https://github.com/esheldon/fitsio/issues/39
+   which affects building catalogue cache. 
+   Since 0.9.8 has not yet been released, you may need to install this
+   this version of fitsio which contains this crucial fix: 
+   https://github.com/esheldon/fitsio/tree/150cd
+   
 We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
-the dependencies of ImagingLSS. For example, on Edison.
+the dependencies of ImagingLSS. This shall help the speed and consistency of the python startup time.
+
+For example, on Edison.
 
 .. code-block:: bash
 
@@ -28,11 +38,6 @@ the dependencies of ImagingLSS. For example, on Edison.
     easy_install --user fitsio
     #easy_install --user astropy
 
-Note that fitsio 0.9.8+ is capable to properly handle the boolean columns in DECALS 
-catalogue files. Since 0.9.8 has not yet been released, you may need to install this
-this version of fitsio which contains this crucial fix: 
-
-https://github.com/esheldon/fitsio/tree/150cd
 
 Location of Data Release
 ------------------------

@@ -59,24 +59,34 @@
 <div class="section" id="depencency">
 <h2>Depencency<a class="headerlink" href="#depencency" title="Permalink to this headline">¶</a></h2>
 <p>ImagingLSS is light on dependency.</p>
-<p>It depends on mpi4py, for the parallel infrastructure.
-It also depends on fitsio or astropy for accessing FITS files.</p>
-<div class="highlight-bash"><div class="highlight"><pre>easy_install --user fitsio
-<span class="c">#easy_install --user astropy</span>
+<blockquote>
+<div><ul>
+<li><p class="first">numpy 1.8+.
+Do not use 1.7.x for this bug: <a class="reference external" href="https://github.com/numpy/numpy/issues/3469">https://github.com/numpy/numpy/issues/3469</a></p>
+<div class="highlight-bash"><div class="highlight"><pre>python -c <span class="s1">&#39;import numpy; print numpy.version.version&#39;</span>
 </pre></div>
 </div>
+</li>
+<li><p class="first">mpi4py, for the parallel infrastructure.</p>
+</li>
+<li><p class="first">fitsio 0.9.8 + (astropy is supported too) for accessing FITS files.
+Do not use 0.9.7 for this bug: <a class="reference external" href="https://github.com/esheldon/fitsio/issues/39">https://github.com/esheldon/fitsio/issues/39</a>
+which affects building catalogue cache.
+Since 0.9.8 has not yet been released, you may need to install this
+this version of fitsio which contains this crucial fix:
+<a class="reference external" href="https://github.com/esheldon/fitsio/tree/150cd">https://github.com/esheldon/fitsio/tree/150cd</a></p>
+</li>
+</ul>
+</div></blockquote>
 <p>We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
-the dependencies of ImagingLSS. For example, on Edison.</p>
+the dependencies of ImagingLSS. This shall help the speed and consistency of the python startup time.</p>
+<p>For example, on Edison.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nb">export </span><span class="nv">PYTHONUSERBASE</span><span class="o">=</span><span class="nv">$SCRATCH</span>
 
 easy_install --user fitsio
 <span class="c">#easy_install --user astropy</span>
 </pre></div>
 </div>
-<p>Note that fitsio 0.9.8+ is capable to properly handle the boolean columns in DECALS
-catalogue files. Since 0.9.8 has not yet been released, you may need to install this
-this version of fitsio which contains this crucial fix:</p>
-<p><a class="reference external" href="https://github.com/esheldon/fitsio/tree/150cd">https://github.com/esheldon/fitsio/tree/150cd</a></p>
 </div>
 <div class="section" id="location-of-data-release">
 <h2>Location of Data Release<a class="headerlink" href="#location-of-data-release" title="Permalink to this headline">¶</a></h2>
