@@ -128,10 +128,12 @@ class Fluxes:
         ])
 
     QSO = Cuts([
-        "0.67*w1flux + 0.33*w2flux",
+#        "0.67*w1flux + 0.33*w2flux",
+        "wflux = 0.75*w1flux + 0.25*w2flux",
         "rflux > 10**((22.5-23.0)/2.5)",
         "rflux < 10**((1.0)      /2.5)*gflux",
-        "wflux*gflux**1.2 > 10**(2./2.5)*rflux**(1+1.2)",
+#        "wflux*gflux**1.2 > 10**(2./2.5)*rflux**(1+1.2)",
+        "wflux*gflux**1.2 > 10**(-0.4./2.5)*rflux**(1+1.2)", #Check this later(updated May 8th)
         ])
 
     BGS = Cuts([
