@@ -73,7 +73,7 @@ def use_fitsio():
             Read the zeroth image HDU from a fits file
 
         """
-        file = FITS(filename)
+        file = FITS(filename, upper=True)
         #    A copy of data is made before the file object
         #    is dereferenced. This is to ensure no back references
         #    to the fits object and file gets closed in a timely
@@ -84,14 +84,14 @@ def use_fitsio():
         """ 
             Read the first HDU table from a fits file
         """
-        file = FITS(filename)
+        file = FITS(filename, upper=True)
         return numpy.array(file[hdu].read(), copy=True)
 
     def read_metadata(filename, hdu=0):
         """ 
             Read the metadata of a HDU table
         """
-        file = FITS(filename)
+        file = FITS(filename, upper=True)
         return dict(file[hdu].read_header())
 
 _priorities = [use_fitsio, use_astropy]
