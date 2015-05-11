@@ -60,6 +60,10 @@ class Brick(object):
         self.ra2  = ra2
         self.dec1 = dec1
         self.dec2 = dec2
+        deg = numpy.pi / 180.
+        self.area = (numpy.sin(dec2 * deg) \
+            - numpy.sin(dec1 * deg )) * (ra2 - ra1) * deg \
+            * 129600 / numpy.pi / (4 * numpy.pi)
         #print(self.query(([self.ra], [self.dec])))
         #print(self.revert(([1799.], [1799.])))
 
@@ -67,8 +71,8 @@ class Brick(object):
         return self.id
 
     def __repr__(self):
-        return ("Brick(id=%d, name=%s, ra=%g, dec=%g, ...)"\
-            % (self.id, self.name, self.ra, self.dec ))
+        return ("Brick(id=%d, name=%s, area=%g, ra=%g, dec=%g, ...)"\
+            % (self.id, self.name, self.area, self.ra, self.dec ))
 
     def readout(self, coord, repo, default=numpy.nan):
         """

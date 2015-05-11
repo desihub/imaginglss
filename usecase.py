@@ -6,6 +6,8 @@ import numpy
 dr = DECALS().datarelease
 
 brick = dr.footprint.bricks[0]
+print brick
+print 41253. / len(dr.brickindex)
 print dr.footprint
 print dr.images['depth']['z'].metadata(brick)
 print '\n'.join(sorted([str(f) for f in dr.catalogue.dtype.fields]))

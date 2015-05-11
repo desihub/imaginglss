@@ -87,7 +87,7 @@ class Footprint(object):
     """
     def __init__(self, bricks, brickindex):
         self.bricks = bricks 
-        self.area = 41253. * len(bricks) / len(brickindex)
+        self.area = sum([b.area for b in bricks])
         self._covered_brickids = numpy.array(
                     [b.index for b in bricks], dtype='i8')
 
