@@ -25,7 +25,7 @@ from mpi4py            import MPI
 
 N.seterr(divide='ignore', invalid='ignore')
 
-def fill_random(footprint, Nran, seed):
+def fill_random(footprint, Nran, rng):
     """
     Generate uniformly distributed points within the boundary that lie in
     bricks.  We generate in the ra/dec area, then remove points not in any
@@ -34,8 +34,6 @@ def fill_random(footprint, Nran, seed):
 
     """
 
-    # initialize the random generator
-    rng = N.random.RandomState(seed)
 
     coord = N.empty((2, Nran))
 
@@ -115,6 +113,7 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
 
     rng = N.random.RandomState(99934123)
     seeds = rng.randint(99999999, size=comm.size)
+    rng = N.random.RandomState(seeds[comm.rank])
     if comm.rank == 0:
         print('Making randoms in the survey footprint.')
 
@@ -130,11 +129,11 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     # Distribute myNran, proportional to the number of bricks
     # important if a rank has no bricks, it expects no randoms
 
-    myNran = int(footprint.area / dr.footprint.area * Nran)
+    myNran = rng.poisson(footprint.area / dr.footprint.area * Nran)
     
     print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
     # fill it with random points 
-    coord = fill_random(footprint, myNran, seeds[comm.rank])
+    coord = fill_random(footprint, myNran, rng)
 
     Nran = sum(comm.allgather(len(coord[0])))
 
