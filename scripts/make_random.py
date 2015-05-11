@@ -130,18 +130,17 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     # Distribute myNran, proportional to the number of bricks
     # important if a rank has no bricks, it expects no randoms
 
-    myNran = sum(Nbricks[:comm.rank+1]) * Nran // sum(Nbricks) \
-           -  sum(Nbricks[:comm.rank]) * Nran // sum(Nbricks)
-
+    myNran = int(footprint.area / dr.footprint.area * Nran)
+    
+    print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
     # fill it with random points 
     coord = fill_random(footprint, myNran, seeds[comm.rank])
 
-    print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
+    Nran = sum(comm.allgather(len(coord[0])))
 
     mask, rmag, cut = apply_samp_cut(coord, dr, sfd, samp)
 
-    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=-1))) \
-                    / sum(comm.allgather(len(coord[0])))
+    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=-1))) / Nran 
 
     if comm.rank == 0:
         print("Selected fraction:\n",
