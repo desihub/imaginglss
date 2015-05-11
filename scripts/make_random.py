@@ -25,22 +25,24 @@ from mpi4py            import MPI
 
 N.seterr(divide='ignore', invalid='ignore')
 
-def fill_random(footprint, Nran, rng, comm):
+def fill_random(footprint, Nran, seed):
     """
     Generate uniformly distributed points within the boundary that lie in
     bricks.  We generate in the ra/dec area, then remove points not in any
     bricks.  This hugely increases the memory efficiency for footprints,
     like DR1, where the survey covers several disjoint patches of the sky.
 
-    Nran is the minimal
     """
 
-    coord = N.empty((2, 0))
+    # initialize the random generator
+    rng = N.random.RandomState(seed)
+
+    coord = N.empty((2, Nran))
 
     ramin,ramax,dcmin,dcmax = footprint.range
 
-    total = 0
-    while total < Nran:
+    start = 0
+    while start != Nran:
         # prepare for a parallel section.
         chunksize = 1024 * 512
         u1,u2= rng.uniform(size=(2, 1024 * 1024) )
@@ -55,9 +57,11 @@ def fill_random(footprint, Nran, rng, comm):
         coord1 = footprint.filter((RA, DEC))
 
         # Are we full?
-        coord = N.append(coord, coord1, axis=-1)
-        total = comm.allreduce(len(coord[0])) 
-
+        coord1 = coord1[:, :min(len(coord1.T), Nran - start)]
+        sl = slice(start, start + len(coord1.T))
+        coord[:, sl] = coord1
+        start = start + len(coord1.T)
+    
     return coord
 
 
@@ -110,6 +114,7 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     sfd= decals.sfdmap
 
     rng = N.random.RandomState(99934123)
+    seeds = rng.randint(99999999, size=comm.size)
     if comm.rank == 0:
         print('Making randoms in the survey footprint.')
 
@@ -125,12 +130,13 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     # Distribute myNran, proportional to the number of bricks
     # important if a rank has no bricks, it expects no randoms
 
+    myNran = sum(Nbricks[:comm.rank+1]) * Nran // sum(Nbricks) \
+           -  sum(Nbricks[:comm.rank]) * Nran // sum(Nbricks)
+
     # fill it with random points 
-    coord = fill_random(footprint, Nran, rng, comm)
+    coord = fill_random(footprint, myNran, seeds[comm.rank])
 
-    Nran = comm.allreduce(len(coord[0]))
-
-    print (comm.rank, 'has', len(mybricks), 'bricks', len(coord[0]), 'randoms')
+    print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
 
     mask, rmag, cut = apply_samp_cut(coord, dr, sfd, samp)
 
