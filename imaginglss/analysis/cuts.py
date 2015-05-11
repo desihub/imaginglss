@@ -39,13 +39,13 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
 
     Returns
     -------
-    lims : list
+    lims : dict 
         one lim per band.
 
     """
     assert isinstance(bands,(list,tuple))
     ebv  = sfd.ebv(coord[0],coord[1])
-    ret = []
+    ret = {}
     for band in bands:
         rtrn = 10.0**(-ebv*dr.extinction[band]/2.5)
 
@@ -60,7 +60,7 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
         # we will use this to detect objects on missing bricks.
 
         rlim = sigma * rdep ** -0.5 / rtrn
-        ret.append(rlim)
+        ret[band] = rlim
     return(ret)
     #
 
@@ -112,32 +112,32 @@ class Fluxes:
     look after the flux requirements.
     """
     LRG = Cuts([
-        "rflux > 10**((22.5-23.00)/2.5)",
-        "zflux > 10**((22.5-20.56)/2.5)",
-        "wflux > 10**((22.5-19.50)/2.5)",
-        "zflux > 10**((1.6)       /2.5)*rflux",
-        "wflux*rflux**(1.33-1)>zflux**1.33*10**(-0.33/2.5)",
+        "r > 10**((22.5-23.00)/2.5)",
+        "z > 10**((22.5-20.56)/2.5)",
+        "w > 10**((22.5-19.50)/2.5)",
+        "z > 10**((1.6)       /2.5)*r",
+        "w *r **(1.33-1)>z **1.33*10**(-0.33/2.5)",
         ])
 
     ELG = Cuts([
-        "rflux    > 10**((22.5-23.4)/2.5)",
-        "zflux    > 10**((0.3)      /2.5)*rflux",
-        "zflux    < 10**((1.5)      /2.5)*rflux",
-        "rflux**2 < gflux*zflux*10**(-0.2/2.5)",
-        "zflux    > gflux*10**(1.2/2.5)",
+        "r > 10**((22.5-23.4)/2.5)",
+        "z > 10**((0.3)      /2.5)*r",
+        "z < 10**((1.5)      /2.5)*r",
+        "r **2 < g *z *10**(-0.2/2.5)",
+        "z > g *10**(1.2/2.5)",
         ])
 
     QSO = Cuts([
-#        "0.67*w1flux + 0.33*w2flux",
-        "wflux = 0.75*w1flux + 0.25*w2flux",
-        "rflux > 10**((22.5-23.0)/2.5)",
-        "rflux < 10**((1.0)      /2.5)*gflux",
-#        "wflux*gflux**1.2 > 10**(2./2.5)*rflux**(1+1.2)",
-        "wflux*gflux**1.2 > 10**(-0.4./2.5)*rflux**(1+1.2)", #Check this later(updated May 8th)
+#        "0.67*w1 + 0.33*w2",
+        "w = 0.75*w1 + 0.25*w2",
+        "r > 10**((22.5-23.0)/2.5)",
+        "r < 10**((1.0)      /2.5)*g",
+#        "w*g**1.2 > 10**(2./2.5)*r**(1+1.2)",
+        "w*g**1.2 > 10**(-0.4./2.5)*r**(1+1.2)", #Check this later(updated May 8th)
         ])
 
     BGS = Cuts([
-        "rflux > 10**((22.5-19.5)/2.5)",
+        "r > 10**((22.5-19.5)/2.5)",
         ])
  
 
@@ -159,25 +159,25 @@ class Completeness:
     """
 
     LRG = Cuts([
-        "rlim<10**((22.5-23.00    )/2.5)",
-        "zlim<10**((22.5-20.56    )/2.5)",
-        "zlim<10**((22.5-23.00+1.6)/2.5)",
-        "wlim<10**((22.5-19.50    )/2.5)",
-         "raise UnimplementedError",
+        "r<10**((22.5-23.00    )/2.5)",
+        "z<10**((22.5-20.56    )/2.5)",
+        "z<10**((22.5-23.00+1.6)/2.5)",
+        #"w<10**((22.5-19.50    )/2.5)",
+        # "raise UnimplementedError",
         ])
 
     ELG = Cuts([
-        "glim < 10**((22.5-23.4-1.5+0.2)/2.5)",
-        "rlim < 10**((22.5-23.4        )/2.5)",
-        "zlim < 10**((22.5-23.4+0.3    )/2.5)",
+        "g < 10**((22.5-23.4-1.5+0.2)/2.5)",
+        "r < 10**((22.5-23.4        )/2.5)",
+        "z < 10**((22.5-23.4+0.3    )/2.5)",
         ])
 
     QSO = Cuts([
-        "raise UnimplementedError",
-        "rlim<10**((22.5-23.00    )/2.5)",
-        "glim<10**((22.5-23.00-1.0)/2.5)",
+        #"raise UnimplementedError",
+        "r<10**((22.5-23.00    )/2.5)",
+        "g<10**((22.5-23.00-1.0)/2.5)",
         ])
     BGS = Cuts([
-        "rlim<10**((22.5-19.5)/2.5)",
+        "r<10**((22.5-19.5)/2.5)",
         ])
     #

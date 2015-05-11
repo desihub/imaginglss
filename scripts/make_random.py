@@ -78,22 +78,22 @@ def apply_samp_cut(coord, dr, sfd, samp):
     # Work out which points pass the cuts -- most of this work is handled
     # by calls to "cuts".
     if samp=="LRG":
-        rlim,zlim,wlim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
+        lim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
         cut = cuts.Completeness.LRG
-        mask = cut(rlim=rlim,zlim=zlim,w1lim=wlim)
+        mask = cut(**lim)
     elif samp=="ELG":
-        glim,rlim,zlim = cuts.findlim(dr,sfd,coord,['g','r','z'])
+        lim = cuts.findlim(dr,sfd,coord,['g','r','z'])
         cut = cuts.Completeness.ELG
-        mask = cut(glim=glim,rlim=rlim,zlim=zlim)
+        mask = cut(**lim)
     elif samp=="QSO":
-        glim,rlim,w1lim,w2lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
+        lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
         cut = cuts.Completeness.QSO
-        mask = cut(glim=glim,rlim=rlim,w1lim=w1lim,w2lim=w2lim)
+        mask = cut(**lim)
     else:
         raise RuntimeError,"Unknown sample "+samp
 
     # It's also useful to have r magnitude later.
-    rmag = 22.5-2.5*N.log10( rlim.clip(1e-15,1e15) )
+    rmag = 22.5-2.5*N.log10( lim['r'].clip(1e-15,1e15) )
 
     return mask, rmag, cut
 

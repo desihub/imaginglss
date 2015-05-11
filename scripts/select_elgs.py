@@ -50,7 +50,7 @@ def select_elgs(comm=MPI.COMM_WORLD):
     # Now do the selection ...
     pmask = cat['BRICK_PRIMARY'][mine] == 1
 
-    mask  = cuts.Fluxes.ELG(gflux=flux[1],rflux=flux[2],zflux=flux[4])
+    mask  = cuts.Fluxes.ELG(g=flux[1],r=flux[2],z=flux[4])
 
     mask &= pmask[None, :]
 
@@ -89,12 +89,13 @@ def select_elgs(comm=MPI.COMM_WORLD):
     # the ordering is the same as the call to findlim
     glim,rlim,zlim = lim
 
-    missing_depth = sum(comm.allgather(N.isinf(glim).sum(axis=-1)))
+    for band in lim:
+        missing_depth = sum(comm.allgather(N.isinf(lim[band]).sum()))
 
-    if comm.rank == 0:
-        print('Objects in missing depth images: ', missing_depth)
+        if comm.rank == 0:
+            print('Objects in missing depth images: ', band, missing_depth)
 
-    mask = cuts.Completeness.ELG(glim=glim,rlim=rlim,zlim=zlim)
+    mask = cuts.Completeness.ELG(**lim)
 
     selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1))) \
             / sum(comm.allgather(len(mask.T)))
