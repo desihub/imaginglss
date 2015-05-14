@@ -26,15 +26,25 @@ from imaginglss.analysis    import cuts
 
 from mpi4py import MPI
 
+from argparse import ArgumentParser
+
+ap = ArgumentParser("select_obj.py")
+ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
+ap.add_argument("output")
+ap.add_argument("--conf", default=None, 
+        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+
+ns = ap.parse_args()
+
 
 N.seterr(divide='ignore', invalid='ignore')
 
-def select_elgs(comm=MPI.COMM_WORLD):
+def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
     """
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
-    decals = DECALS()
+    decals = DECALS(conffile)
     dr = decals.datarelease
     sfd= decals.sfdmap
     cat = dr.catalogue
@@ -45,12 +55,21 @@ def select_elgs(comm=MPI.COMM_WORLD):
     mine = slice(mystart, myend)
     # Define the fluxes, corrected for MW transmission.
 
-    flux  = cat['DECAM_FLUX'][mine].T
-    flux /= cat['DECAM_MW_TRANSMISSION'][mine].T
+    decam_flux  = (cat['DECAM_FLUX'][mine] / cat['DECAM_MW_TRANSMISSION'][mine]).T
+    wise_flux  = (cat['WISE_FLUX'][mine] / cat['WISE_MW_TRANSMISSION'][mine]).T
+
     # Now do the selection ...
     pmask = cat['BRICK_PRIMARY'][mine] == 1
 
-    mask  = cuts.Fluxes.ELG(g=flux[1],r=flux[2],z=flux[4])
+    fluxcut = getattr(cuts.Fluxes, sampl)
+    flux = {}
+    for band in fluxcut.bands:
+        if band in 'ugrizY':
+            flux[band] = decam_flux[dr.bands[band]]
+        elif band in ['W1', 'W2', 'W3', 'W4']:
+            flux[band] = wise_flux[int(band[1]) - 1]
+
+    mask  = fluxcut(**flux)
 
     mask &= pmask[None, :]
 
@@ -61,7 +80,7 @@ def select_elgs(comm=MPI.COMM_WORLD):
 
         print ('\n'.join([
             '%s : %g' % v for v in
-            zip(cuts.Fluxes.ELG, select_fraction)]))
+            zip(fluxcut, select_fraction)]))
 
     mask = mask.all(axis=0)
 
@@ -76,18 +95,18 @@ def select_elgs(comm=MPI.COMM_WORLD):
     # magnitudes, ignoring errors.
     RA   = cat[ 'RA'][mine][mask]
     DEC   = cat['DEC'][mine][mask]
-    MAG  = 22.5-2.5*N.log10((flux[:,mask]).clip(1e-15,1e15) )
+    for band in flux:
+        flux[band] = flux[band][mask]
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
 
+    compcut = getattr(cuts.Completeness, sampl)
+
     lim = cuts.findlim(dr, sfd, 
                 (RA, DEC), 
-                ['g','r','z'])
-
-    # the ordering is the same as the call to findlim
-    glim,rlim,zlim = lim
+                compcut.bands)
 
     for band in lim:
         missing_depth = sum(comm.allgather(N.isinf(lim[band]).sum()))
@@ -95,7 +114,7 @@ def select_elgs(comm=MPI.COMM_WORLD):
         if comm.rank == 0:
             print('Objects in missing depth images: ', band, missing_depth)
 
-    mask = cuts.Completeness.ELG(**lim)
+    mask = compcut(**lim)
 
     selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1))) \
             / sum(comm.allgather(len(mask.T)))
@@ -103,20 +122,25 @@ def select_elgs(comm=MPI.COMM_WORLD):
         print ('Selected Fraction by Completeness cuts')
         print ('\n'.join([
             '%s : %g' % v for v in
-            zip(cuts.Completeness.ELG, selected_fraction)]))
+            zip(compcut, selected_fraction)]))
 
     mask = mask.all(axis=0)
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
-        print("total number of complete ELGs:", total_complete)
+        print("total number of objects in complete area:", total_complete)
 
     RA   = RA [mask]
     DEC   = DEC[mask]
-    MAG  = MAG[:, mask]
+    MAG = {}
+    for band in flux:
+        flux[band] = flux[band][mask]
+        
+    for band in flux:
+        MAG[band] = 22.5-2.5*N.log10((flux[band]).clip(1e-15,1e15) )
+        MAG[band] = N.concatenate(comm.allgather(MAG[band]))
 
     RA = N.concatenate(comm.allgather(RA))
     DEC = N.concatenate(comm.allgather(DEC))
-    MAG = N.concatenate(comm.allgather(MAG), axis=-1)
     return( (RA,DEC,MAG) )
     #
 
@@ -165,21 +189,22 @@ def diagnostic_plots(ra,dec,mag):
 
 
 
-
 if __name__=="__main__":
-    from sys import argv
-    #
-    ra,dc,mag = select_elgs()
+
+    ra,dc,mag = select_elgs(ns.ObjectType, ns.conf)
+
     if MPI.COMM_WORLD.rank == 0:
-        if len(argv) > 1 and argv[1] == '--plot':
-            diagnostic_plots(ra, dc, mag)
-        else:
-            # Just write the sample to an ascii text file.
-            ff = open("elgs.rdz","w")
-            ff.write("# %13s %15s %15s %15s %15s %15s\n"%\
-              ("RA","DEC","PhotoZ","g","r","z"))
+        # Just write the sample to an ascii text file.
+        ff = file(ns.output,"w")
+        with ff:
+            ff.write("# %13s %15s %15s" % ("RA","DEC","PhotoZ"))
+            for band in mag:
+                ff.write(" %15s" % band)
+            ff.write("\n")
             for i in range(ra.size):
-                ff.write("%15.10f %15.10f %15.10f %15.10f %15.10f %15.10f\n"%\
-                  (ra[i],dc[i],0.5,mag[1,i],mag[2,i],mag[4,i]))
-            ff.close()
+                ff.write("%15.10f %15.10f %15.10f"
+                    % (ra[i],dc[i],0.5))
+                for band in mag:
+                    ff.write(" %15.10f" % mag[band][i])
+                ff.write("\n")
         #
