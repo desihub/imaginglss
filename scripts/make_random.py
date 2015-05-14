@@ -17,6 +17,17 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+from argparse import ArgumentParser
+
+ap = ArgumentParser("make_random.py")
+ap.add_argument("Nran", type=int, help="Minimum number of randoms")
+ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
+ap.add_argument("output")
+ap.add_argument("--conf", default=None, 
+        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+
+ns = ap.parse_args()
+
 import numpy             as N
 from   imaginglss             import DECALS
 from   imaginglss.analysis    import cuts
@@ -75,22 +86,12 @@ def apply_samp_cut(coord, dr, sfd, samp):
     based on the survey limit (and the LF) or we could produce randoms for
     "100%" complete samples of different luminosity thresholds.
     """
-    # Work out which points pass the cuts -- most of this work is handled
-    # by calls to "cuts".
-    if samp=="LRG":
-        lim = cuts.findlim(dr,sfd,coord,['r','z','W1'])
-        cut = cuts.Completeness.LRG
-        mask = cut(**lim)
-    elif samp=="ELG":
-        lim = cuts.findlim(dr,sfd,coord,['g','r','z'])
-        cut = cuts.Completeness.ELG
-        mask = cut(**lim)
-    elif samp=="QSO":
-        lim = cuts.findlim(dr,sfd,coord,['g','r','W1','W2'])
-        cut = cuts.Completeness.QSO
-        mask = cut(**lim)
-    else:
-        raise RuntimeError,"Unknown sample "+samp
+
+    cut = getattr(cuts.Completeness, samp)
+
+    lim = cuts.findlim(dr,sfd,coord, cut.bands)
+
+    mask = cut(**lim)
 
     # It's also useful to have r magnitude later.
     rmag = 22.5-2.5*N.log10( lim['r'].clip(1e-15,1e15) )
@@ -98,12 +99,10 @@ def apply_samp_cut(coord, dr, sfd, samp):
     return mask, rmag, cut
 
 
-def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
+def make_random(samp, Nran, configfile, output, comm=MPI.COMM_WORLD):
     """
     Does the work of making randoms.  The sample type is passed as a string.
     """
-    if samp not in ["LRG","ELG","QSO"]:
-        raise RuntimeError,"Unknown sample "+samp
 
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
@@ -160,9 +159,8 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
         coord = N.concatenate(coord, axis=-1)
         rmag = N.concatenate(rmag)
 
-        fout = "randoms_%s.rdz" % samp
-
-        with open(fout,'w') as ff:
+        with open(output,'w') as ff:
+            ff.write("# ra dec weight rmag\n")
             for j in range(0, len(rmag)):
                 ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
                   (coord[0][j],coord[1][j],0.5,rmag[j]))
@@ -174,8 +172,6 @@ def make_random(samp, Nran=10000000, comm=MPI.COMM_WORLD):
     #
 
 
- 
 if __name__ == '__main__':    
-    for samp in ["ELG"]:
-        make_random(samp, Nran=1000000)
+    make_random(ns.ObjectType, configfile=ns.conf, Nran=ns.Nran, output=ns.output)
     #
