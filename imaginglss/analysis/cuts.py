@@ -76,22 +76,34 @@ class Cuts(object):
         cuts : list
             a list of python expressions as strings. 
             For example,  ["rflux > 10**((22.5-23.00)/2.5)"]
-        
+
+        transforms : kwargs
+            a dict of band = "expression"            
+            where "expressions" is like "w = 0.75*w1 + 0.25*w2",
+
         Parameters
         ----------
-        *local : dict
+        **local : dict
             the arguments to eval the cut expression. for example, rflux=[1.1, 2.3, ...]
-
+        
         Returns
         -------
         mask : array_like (Ncuts, Nitem)
             True if item passed the cut, False if not. 
 
     """
-    def __init__(self, cuts):
+    def __init__(self, cuts, bands, **transforms):
         self.cuts = cuts
+        self.transforms = transforms
+        self.bands = bands
 
     def __call__(self, **local):
+        for val in self.transforms:
+            local[val] = eval(self.transforms[val], local)
+        for band in self.bands:
+            if band not in local:
+                raise ValueError("band '%s' is not specified" % band)
+ 
         return N.array([
             eval(expr, local)
             for expr in self.cuts])
@@ -114,10 +126,10 @@ class Fluxes:
     LRG = Cuts([
         "r > 10**((22.5-23.00)/2.5)",
         "z > 10**((22.5-20.56)/2.5)",
-        "w > 10**((22.5-19.50)/2.5)",
+        "W1 > 10**((22.5-19.50)/2.5)",
         "z > 10**((1.6)       /2.5)*r",
-        "w *r **(1.33-1)>z **1.33*10**(-0.33/2.5)",
-        ])
+        "W1 *r **(1.33-1)>z **1.33*10**(-0.33/2.5)",
+        ], bands=['r', 'z', 'W1'])
 
     ELG = Cuts([
         "r > 10**((22.5-23.4)/2.5)",
@@ -125,20 +137,20 @@ class Fluxes:
         "z < 10**((1.5)      /2.5)*r",
         "r **2 < g *z *10**(-0.2/2.5)",
         "z > g *10**(1.2/2.5)",
-        ])
+        ], bands=['r', 'z', 'g'])
 
     QSO = Cuts([
-#        "0.67*w1 + 0.33*w2",
-        "w = 0.75*w1 + 0.25*w2",
         "r > 10**((22.5-23.0)/2.5)",
         "r < 10**((1.0)      /2.5)*g",
-#        "w*g**1.2 > 10**(2./2.5)*r**(1+1.2)",
-        "w*g**1.2 > 10**(-0.4./2.5)*r**(1+1.2)", #Check this later(updated May 8th)
-        ])
+        "W*g**1.2 > 10**(-0.4./2.5)*r**(1+1.2)", 
+        ], bands=['r', 'g', 'W1', 'W2'],
+        w="0.75*w1 + 0.25*w2",
+        )
 
     BGS = Cuts([
         "r > 10**((22.5-19.5)/2.5)",
-        ])
+        ], bands = ['r']
+        )
  
 
 
@@ -162,22 +174,22 @@ class Completeness:
         "r<10**((22.5-23.00    )/2.5)",
         "z<10**((22.5-20.56    )/2.5)",
         "z<10**((22.5-23.00+1.6)/2.5)",
-        #"w<10**((22.5-19.50    )/2.5)",
+        #"W<10**((22.5-19.50    )/2.5)",
         # "raise UnimplementedError",
-        ])
+        ], bands=['r', 'z'])
 
     ELG = Cuts([
         "g < 10**((22.5-23.4-1.5+0.2)/2.5)",
         "r < 10**((22.5-23.4        )/2.5)",
         "z < 10**((22.5-23.4+0.3    )/2.5)",
-        ])
+        ], bands=['g', 'z', 'r'])
 
     QSO = Cuts([
         #"raise UnimplementedError",
         "r<10**((22.5-23.00    )/2.5)",
         "g<10**((22.5-23.00-1.0)/2.5)",
-        ])
+        ], bands=['r', 'g'])
     BGS = Cuts([
         "r<10**((22.5-19.5)/2.5)",
-        ])
+        ], bands=['r'])
     #
