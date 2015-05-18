@@ -71,7 +71,7 @@ def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print('Selected fraction by flux cuts:')
         print('\n'.join([
-            '%-50s : %.3f' % v for v in
+            '%-50s : %.4f' % v for v in
             zip(fluxcut, select_fraction)]))
     mask = mask.all(axis=0)
     total_elg = sum(comm.allgather(mask.sum()))
@@ -105,7 +105,7 @@ def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print ('Selected fraction by completeness cuts:')
         print ('\n'.join([
-            '%s : %.3f' % v for v in
+            '%-50s : %.4f' % v for v in
             zip(compcut, selected_fraction)]))
     mask = mask.all(axis=0)
     total_complete = sum(comm.allgather(mask.sum()))
