@@ -67,7 +67,7 @@ def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
             flux[band] = wise_flux[int(band[1]) - 1]
     mask  = fluxcut(**flux)
     mask &= pmask[None, :]
-    select_fraction = sum(comm.allgather(mask.sum(axis=1))) / sum(comm.allgather(pmask.sum()))
+    select_fraction = (1.0*sum(comm.allgather(mask.sum(axis=1)))) / sum(comm.allgather(pmask.sum()))
     if comm.rank == 0:
         print('Selected fraction by flux cuts:')
         print('\n'.join([
