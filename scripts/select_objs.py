@@ -20,7 +20,7 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-import numpy as N
+import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import cuts
 
@@ -37,7 +37,7 @@ ap.add_argument("--conf", default=None,
 ns = ap.parse_args()
 
 
-N.seterr(divide='ignore', invalid='ignore')
+np.seterr(divide='ignore', invalid='ignore')
 
 def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
     """
@@ -54,42 +54,32 @@ def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
 
     mine = slice(mystart, myend)
     # Define the fluxes, corrected for MW transmission.
-
-    decam_flux  = (cat['DECAM_FLUX'][mine] / cat['DECAM_MW_TRANSMISSION'][mine]).T
-    wise_flux  = (cat['WISE_FLUX'][mine] / cat['WISE_MW_TRANSMISSION'][mine]).T
-
+    decam_flux = (cat['DECAM_FLUX'][mine]/cat['DECAM_MW_TRANSMISSION'][mine]).T
+    wise_flux  = (cat[ 'WISE_FLUX'][mine]/cat[ 'WISE_MW_TRANSMISSION'][mine]).T
     # Now do the selection ...
-    pmask = cat['BRICK_PRIMARY'][mine] == 1
-
+    pmask   = cat['BRICK_PRIMARY'][mine] == 1
     fluxcut = getattr(cuts.Fluxes, sampl)
-    flux = {}
+    flux    = {}
     for band in fluxcut.bands:
         if band in 'ugrizY':
             flux[band] = decam_flux[dr.bands[band]]
         elif band in ['W1', 'W2', 'W3', 'W4']:
             flux[band] = wise_flux[int(band[1]) - 1]
-
     mask  = fluxcut(**flux)
-
     mask &= pmask[None, :]
-
     select_fraction = sum(comm.allgather(mask.sum(axis=1))) / sum(comm.allgather(pmask.sum()))
-
     if comm.rank == 0:
-        print ('Selected Fraction by Fluxes cuts')
-
-        print ('\n'.join([
-            '%s : %g' % v for v in
+        print('Selected fraction by flux cuts:')
+        print('\n'.join([
+            '%s : %.3f' % v for v in
             zip(fluxcut, select_fraction)]))
-
     mask = mask.all(axis=0)
-
     total_elg = sum(comm.allgather(mask.sum()))
     total_primary = sum(comm.allgather(pmask.sum()))
     select_fraction = 1.0 * total_elg / total_primary
     if comm.rank == 0:
-        print ('Total %d out of %d, ratio=%g' % (total_elg, total_primary, select_fraction))
-
+        print('Selected %d out of %d objects (%g)' %\
+              (total_elg, total_primary, select_fraction))
     # ... and extract only the objects which passed the cuts.
     # At this point we convert fluxes to (extinction corrected)
     # magnitudes, ignoring errors.
@@ -97,50 +87,40 @@ def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
     DEC   = cat['DEC'][mine][mask]
     for band in flux:
         flux[band] = flux[band][mask]
-
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
-
     compcut = getattr(cuts.Completeness, sampl)
-
     lim = cuts.findlim(dr, sfd, 
                 (RA, DEC), 
                 compcut.bands)
-
     for band in lim:
-        missing_depth = sum(comm.allgather(N.isinf(lim[band]).sum()))
-
+        missing_depth = sum(comm.allgather(np.isinf(lim[band]).sum()))
         if comm.rank == 0:
-            print('Objects in missing depth images: ', band, missing_depth)
-
+            print('Objects in bricks with missing depth images (',band,'): ',\
+                  missing_depth)
     mask = compcut(**lim)
-
-    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1))) \
+    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1)))\
             / sum(comm.allgather(len(mask.T)))
     if comm.rank == 0:
-        print ('Selected Fraction by Completeness cuts')
+        print ('Selected fraction by completeness cuts:')
         print ('\n'.join([
-            '%s : %g' % v for v in
+            '%s : %.3f' % v for v in
             zip(compcut, selected_fraction)]))
-
     mask = mask.all(axis=0)
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
-        print("total number of objects in complete area:", total_complete)
-
-    RA   = RA [mask]
-    DEC   = DEC[mask]
+        print('Total number of objects in complete area: ', total_complete)
+    RA  = RA [mask]
+    DEC = DEC[mask]
     MAG = {}
     for band in flux:
         flux[band] = flux[band][mask]
-        
     for band in flux:
-        MAG[band] = 22.5-2.5*N.log10((flux[band]).clip(1e-15,1e15) )
-        MAG[band] = N.concatenate(comm.allgather(MAG[band]))
-
-    RA = N.concatenate(comm.allgather(RA))
-    DEC = N.concatenate(comm.allgather(DEC))
+        MAG[band] = 22.5-2.5*np.log10((flux[band]).clip(1e-15,1e15) )
+        MAG[band] = np.concatenate(comm.allgather(MAG[band]))
+    RA  = np.concatenate(comm.allgather(RA ))
+    DEC = np.concatenate(comm.allgather(DEC))
     return( (RA,DEC,MAG) )
     #
 
@@ -174,7 +154,7 @@ def diagnostic_plots(ra,dec,mag):
     #
     fig = Figure()
     ax = fig.add_subplot(111)
-    x = N.linspace(
+    x = np.linspace(
             (g - r).min(),
             (g - r).max(), 100)
     ax.plot(g - r, r - z, '. ')
