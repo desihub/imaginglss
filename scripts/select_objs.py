@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Code to select ELG targets from Tractor catalogs.
+# Code to select targets from Tractor catalogs.
 # The target selection criteria are described at:
 #   https://desi.lbl.gov/trac/wiki/TargetSelection
 #
@@ -9,7 +9,7 @@
 # catalog entries can appear in places where the
 # nominal depth is insufficient to be complete.
 #
-# Usage: python select_elg.py [--plot]
+# Usage: python select_objs.py [--plot]
 #
 from __future__ import print_function
 
@@ -28,7 +28,7 @@ from mpi4py import MPI
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("select_obj.py")
+ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
 ap.add_argument("output")
 ap.add_argument("--conf", default=None, 
@@ -39,19 +39,19 @@ ns = ap.parse_args()
 
 np.seterr(divide='ignore', invalid='ignore')
 
-def select_elgs(sampl, conffile, comm=MPI.COMM_WORLD):
+def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     """
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
     decals = DECALS(conffile)
-    dr = decals.datarelease
-    sfd= decals.sfdmap
-    cat = dr.catalogue
-
+    dr     = decals.datarelease
+    sfd    = decals.sfdmap
+    cat    = dr.catalogue
+    #
     mystart = cat.size * comm.rank // comm.size
     myend = cat.size * (comm.rank + 1) // comm.size
-
+    #
     mine = slice(mystart, myend)
     # Define the fluxes, corrected for MW transmission.
     decam_flux = (cat['DECAM_FLUX'][mine]/cat['DECAM_MW_TRANSMISSION'][mine]).T
@@ -171,7 +171,7 @@ def diagnostic_plots(ra,dec,mag):
 
 if __name__=="__main__":
 
-    ra,dc,mag = select_elgs(ns.ObjectType, ns.conf)
+    ra,dc,mag = select_objs(ns.ObjectType, ns.conf)
 
     if MPI.COMM_WORLD.rank == 0:
         # Just write the sample to an ascii text file.
