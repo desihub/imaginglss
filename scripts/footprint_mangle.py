@@ -13,10 +13,12 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu and mjwhite@lbl.gov"
 
-import math  as M
-from model.datarelease import DataRelease
-
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+import math as M
+from imaginglss import DECALS
+
+
 
 def write_poly(capslist,arealist,fname):
     """
@@ -81,7 +83,8 @@ def make_polygon_file(fn="footprint.ply"):
     the mask file.
     """
     capslist,arealist = [],[]
-    dr = DataRelease()
+    decals = DECALS(None)
+    dr = decals.datarelease
     for brick in dr.footprint.bricks:
         caps,area = make_caps(brick.ra1,brick.ra2,brick.dec1,brick.dec2)
         capslist.append(caps)
