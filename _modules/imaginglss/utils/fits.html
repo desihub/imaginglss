@@ -123,7 +123,7 @@
 <span class="sd">            Read the zeroth image HDU from a fits file</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="c">#    A copy of data is made before the file object</span>
         <span class="c">#    is dereferenced. This is to ensure no back references</span>
         <span class="c">#    to the fits object and file gets closed in a timely</span>
@@ -134,14 +134,14 @@
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">            Read the first HDU table from a fits file</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">hdu</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">            Read the metadata of a HDU table</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="n">FITS</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">file</span><span class="p">[</span><span class="n">hdu</span><span class="p">]</span><span class="o">.</span><span class="n">read_header</span><span class="p">())</span>
 
 <span class="n">_priorities</span> <span class="o">=</span> <span class="p">[</span><span class="n">use_fitsio</span><span class="p">,</span> <span class="n">use_astropy</span><span class="p">]</span>

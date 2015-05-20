@@ -96,17 +96,22 @@ require a 100% completeness.</p>
 
 <dl class="class">
 <dt id="imaginglss.analysis.cuts.Cuts">
-<em class="property">class </em><code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">Cuts</code><span class="sig-paren">(</span><em>cuts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#Cuts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.Cuts" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">Cuts</code><span class="sig-paren">(</span><em>cuts</em>, <em>bands</em>, <em>**transforms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#Cuts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.Cuts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>A convenient representation of a Cut</p>
-<p>A <code class="xref py py-class docutils literal"><span class="pre">Cut</span></code> object stores the cut expression
-as a string, but can be called with the corresponding
-replacements as keyward arguments. A boolean is returned.</p>
+<p>A convenient representation of a set of Cuts.</p>
+<p>For the ease of self-introspection, a <a class="reference internal" href="#imaginglss.analysis.cuts.Cuts" title="imaginglss.analysis.cuts.Cuts"><code class="xref py py-class docutils literal"><span class="pre">Cuts</span></code></a> object 
+stores the cut expressions as a list of strings. 
+Python provides this useful function <code class="code docutils literal"><span class="pre">eval</span></code> that evaluates the
+expression with a set of variables in a local scope. We make use
+of <code class="code docutils literal"><span class="pre">eval</span></code> to evaluate these expressions for each cut criteria.</p>
+<p>These variables used in the cuts evaluation are decleared in &#8216;bands&#8217; parameter.
+Some times a cut criteria needs a band flux that is constructed from other
+band fluxes, these can be provided in &#8216;transforms&#8217; parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*local</strong> : dict</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**local</strong> : dict</p>
 <blockquote>
 <div><p>the arguments to eval the cut expression. for example, rflux=[1.1, 2.3, ...]</p>
 </div></blockquote>
@@ -120,15 +125,45 @@ replacements as keyward arguments. A boolean is returned.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>The following code defines a QSO color cut by r, g, and W band fluxes,
+where the W band flux is obtained by interpolating W1, and W2 band fluxes.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">QSO</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
+<span class="go">&quot;r &gt; 10**((22.5-23.0)/2.5)&quot;,</span>
+<span class="go">&quot;r &lt; 10**((1.0)      /2.5)*g&quot;,</span>
+<span class="go">&quot;W*g**1.2 &gt; 10**(-0.4/2.5)*r**(1+1.2)&quot;, </span>
+<span class="go">], bands=[&#39;r&#39;, &#39;g&#39;, &#39;W1&#39;, &#39;W2&#39;],</span>
+<span class="go">W=&quot;0.75*W1 + 0.25*W2&quot;,</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span> <span class="o">=</span> <span class="n">QSO</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">rflux</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">gflux</span><span class="p">,</span> <span class="n">W1</span><span class="o">=</span><span class="n">W1flux</span><span class="p">,</span> <span class="n">W2</span><span class="o">=</span><span class="n">W2flux</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(3, ....)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">cut</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">QSO</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="k">print</span> <span class="n">cut</span><span class="p">,</span> <span class="s">&#39; : &#39;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="go">r &gt; 10**((22.5-23.0)/2.5) :  300</span>
+<span class="go">r &lt; 10**((1.0)      /2.5)*g : 400</span>
+<span class="go">W*g**1.2 &gt; 10**(-0.4/2.5)*r**(1+1.2)  : 100</span>
+</pre></div>
+</div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="4%" />
-<col width="96%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td>cuts</td>
-<td>(list) a list of python expressions as strings. For example,  [&#8220;rflux &gt; 10**((22.5-23.00)/2.5)&#8221;]</td>
+<td>(list) a list of python expressions as strings. For example,  [&#8220;r &gt; 10**((22.5-23.00)/2.5)&#8221;]</td>
+</tr>
+<tr class="row-even"><td>transforms</td>
+<td>(kwargs) a dict of band = &#8220;expression&#8221; where &#8220;expressions&#8221; is like &#8220;w = 0.75*w1 + 0.25*w2&#8221;,</td>
+</tr>
+<tr class="row-odd"><td>bands</td>
+<td>(list) a list of bands that this Cuts object uses.</td>
 </tr>
 </tbody>
 </table>
@@ -200,7 +235,7 @@ Currently this implements a simple N-sigma cut.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lims</strong> : list</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>lims</strong> : dict</p>
 <blockquote class="last">
 <div><p>one lim per band.</p>
 </div></blockquote>
