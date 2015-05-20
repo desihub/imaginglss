@@ -65,27 +65,60 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
     #
 
 class Cuts(object):
-    """ A convenient representation of a Cut 
+    """ A convenient representation of a set of Cuts.
         
-        A :py:class:`Cut` object stores the cut expression
-        as a string, but can be called with the corresponding
-        replacements as keyward arguments. A boolean is returned.
+        For the ease of self-introspection, a :py:class:`Cuts` object 
+        stores the cut expressions as a list of strings. 
+        Python provides this useful function :code:`eval` that evaluates the
+        expression with a set of variables in a local scope. We make use
+        of :code:`eval` to evaluate these expressions for each cut criteria. 
+
+        These variables used in the cuts evaluation are decleared in 'bands' parameter.
+        Some times a cut criteria needs a band flux that is constructed from other
+        band fluxes, these can be provided in 'transforms' parameter.
 
         Attributes
         ----------
         cuts : list
             a list of python expressions as strings. 
-            For example,  ["rflux > 10**((22.5-23.00)/2.5)"]
+            For example,  ["r > 10**((22.5-23.00)/2.5)"]
 
         transforms : kwargs
             a dict of band = "expression"            
             where "expressions" is like "w = 0.75*w1 + 0.25*w2",
+
+        bands : list
+            a list of bands that this Cuts object uses.
 
         Parameters
         ----------
         **local : dict
             the arguments to eval the cut expression. for example, rflux=[1.1, 2.3, ...]
         
+        Examples
+        --------
+        
+        The following code defines a QSO color cut by r, g, and W band fluxes,
+        where the W band flux is obtained by interpolating W1, and W2 band fluxes.
+
+        >>> QSO = Cuts([
+        "r > 10**((22.5-23.0)/2.5)",
+        "r < 10**((1.0)      /2.5)*g",
+        "W*g**1.2 > 10**(-0.4/2.5)*r**(1+1.2)", 
+        ], bands=['r', 'g', 'W1', 'W2'],
+        W="0.75*W1 + 0.25*W2",
+        )
+
+        >>> mask = QSO(r=rflux, g=gflux, W1=W1flux, W2=W2flux)
+        >>> mask.shape
+        (3, ....)
+        
+        >>> for m, cut in zip(mask, QSO):
+        >>>    print cut, ' : ', m.sum()
+        r > 10**((22.5-23.0)/2.5) :  300
+        r < 10**((1.0)      /2.5)*g : 400
+        W*g**1.2 > 10**(-0.4/2.5)*r**(1+1.2)  : 100
+          
         Returns
         -------
         mask : array_like (Ncuts, Nitem)
@@ -97,21 +130,29 @@ class Cuts(object):
         self.transforms = transforms
         self.bands = bands
 
-    def __call__(self, **local):
+    def __call__(self, **fluxes):
+
+        # evaluate the cuts for the input fluxes as keyword arguments
+        
+        # first build the transformed flux variables (eg. W from W1 and W2 for 
+        # QSOs
+
         for val in self.transforms:
-            local[val] = eval(self.transforms[val], local)
+            fluxes[val] = eval(self.transforms[val], fluxes)
+
         for band in self.bands:
-            if band not in local:
+            if band not in fluxes:
                 raise ValueError("band '%s' is not specified" % band)
  
         return N.array([
-            eval(expr, local)
+            eval(expr, fluxes)
             for expr in self.cuts])
+
     def __iter__(self):
         return iter(self.cuts)
 
     def __repr__(self):
-        return "Cuts(%s)" % (self.expr)
+        return "Cuts(%s, bands=%s)" % (self.expr, repr(self.bands))
     
 class Fluxes:
     """
