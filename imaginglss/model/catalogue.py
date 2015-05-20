@@ -60,9 +60,9 @@ class CacheExpired(RuntimeError):
     pass
 
 class TransformedColumn(object):
-    def __init__(self, ref):
+    def __init__(self, ref, transform):
         self.ref = ref
-        self.transform = transfrom
+        self.transform = transform
     def __getitem__(self, index):
         return self.transform(self.ref[index])
 
