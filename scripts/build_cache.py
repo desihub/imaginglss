@@ -18,9 +18,16 @@ from imaginglss.utils import filehandler
 from mpi4py import MPI
 import numpy
 
+from argparse import ArgumentParser
+
+ap = ArgumentParser("build_cache.py")
+ap.add_argument("--conf", default=None, 
+        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+
+ns = ap.parse_args()
 comm = MPI.COMM_WORLD
 
-decals = DECALS()
+decals = DECALS(ns.conf)
 cat = decals.datarelease.catalogue
 
 filenames = cat.filenames
