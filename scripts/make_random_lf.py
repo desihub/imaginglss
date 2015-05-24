@@ -261,6 +261,7 @@ def make_random(samp, Nran, pool, configfile, comm=MPI.COMM_WORLD):
 
     if comm.rank == 0:
         completeness = np.concatenate(completeness, axis=-1)
+        completeness = completeness.prod(axis=0)
         coord = np.concatenate(coord, axis=-1)
         rmag = np.concatenate(rmag)
         fraction = len(coord[0]) * 1.0 / Nran
@@ -268,7 +269,7 @@ def make_random(samp, Nran, pool, configfile, comm=MPI.COMM_WORLD):
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
 
-    return coord, completeness.prod(axis=0), rmag
+    return coord, completeness, rmag
     #
 
 
