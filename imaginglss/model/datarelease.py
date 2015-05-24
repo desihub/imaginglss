@@ -75,6 +75,15 @@ def contains(haystack, needle):
 class Footprint(object):
     """ footprint of a data release.
         
+        Use indexing to construct sub-regions of the footprint, for example
+
+        Examples
+        --------
+
+        >>> print datarelease.footprint[:100]
+        Footprint(.....)
+
+
         Attributes
         ----------
         bricks : list of model.brick.Brick
@@ -103,6 +112,12 @@ class Footprint(object):
                 decmax=max([brick.dec2 for brick in self.bricks]),)
 
         self.brickindex = brickindex
+
+    def __len__(self):
+        return len(self.bricks)
+
+    def __getitem__(self, index):
+        return Footprint(self.bricks[index], self.brickindex)
 
     def __repr__(self):
         return "Footprint: len(bricks)=%d , area=%g degrees, range=%s" % (
