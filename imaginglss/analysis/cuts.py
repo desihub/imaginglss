@@ -129,6 +129,15 @@ class Cuts(object):
         self.cuts = cuts
         self.transforms = transforms
         self.bands = bands
+        self.__doc__ = self.__class__.__doc__ + \
+        """
+        Notes
+        -----
+        Bands are : %(bands)s
+        """ % dict(bands= str(self.bands))
+
+    def __len__(self):
+        return len(self.cuts)
 
     def __call__(self, **fluxes):
 
@@ -152,7 +161,10 @@ class Cuts(object):
         return iter(self.cuts)
 
     def __repr__(self):
-        return "Cuts(%s, bands=%s)" % (self.expr, repr(self.bands))
+        return "Cut in %s\n%s\n%s" % (repr(self.bands),
+                '\n'.join(['%s = %s' % pair 
+                    for pair in self.transforms.items()]), 
+                '\n'.join(self.cuts))
     
 class Fluxes:
     """
