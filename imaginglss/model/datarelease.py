@@ -247,37 +247,25 @@ class DataRelease(object):
         if not hasattr(schema, version):
             raise KeyError("Data Release of version %s is not supported" % version)
 
-        myschema = getattr(schema, version)
+        self.version = version
 
         try:
             os.makedirs(self.cache)
         except :
             pass
 
+        myschema = getattr(schema, self.version)
+
+        self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
+
         brickdata = fits.read_table(os.path.join(self.root, myschema.BRICKS_FILENAME))
 
         self.brickindex = brickindex.BrickIndex(brickdata)
-
-        self.bands = {'u':0, 'g':1, 'r':2, 'i':3, 'z':4, 'Y':5}
 
         # E(B-V) to ugrizY bands, SFD98; used in tractor
         self.extinction = numpy.array([3.995, 3.214, 2.165, 1.592, 1.211, 1.064], dtype='f8')\
             .view(dtype=[(band, 'f8') for band in 'ugrizY'])[0]
 
-        self.images = {}
-        image_filenames = myschema.format_image_filenames()
-        for image in image_filenames:
-            if isinstance(image_filenames[image], dict):
-                self.images[image] = {}
-                for band in image_filenames[image]:
-                    self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
-            else:
-                self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image])
-        def image_filename(brick, 
-            PATTERN='aux/%(pre)s/%(brickname)s/decals-%(brickname)s-ebv.fits'):
-            return PATTERN % dict(pre=brick.name[:3], brickname=brick.name)
-        self.images['ebv'] = imagerepo.ImageRepo(self.cache, image_filename)
-            
         try: 
             _covered_brickids = numpy.fromfile(
                 os.path.join(self.cache, 'covered_brickids.i8'), dtype='i8')
@@ -295,12 +283,13 @@ class DataRelease(object):
             _covered_brickids = numpy.array(_covered_brickids, dtype='i8')
             _covered_brickids.tofile(os.path.join(self.cache, 'covered_brickids.i8'))
             
+        # the list of covered bricks must be sorted.
+        _covered_brickids.sort()
+
         self._covered_brickids = _covered_brickids
 
-        # the list of covered bricks must be sorted.
-        self._covered_brickids.sort()
+        bricks = [self.brickindex.get_brick(bid) for bid in _covered_brickids]
 
-        bricks = [self.brickindex.get_brick(bid) for bid in self._covered_brickids]
         self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
 
         catalogue_filenames = [
@@ -313,7 +302,35 @@ class DataRelease(object):
             filenames=catalogue_filenames,
             aliases=myschema.CATALOGUE_ALIASES
             )
+        self.init_from_state()
 
+    def init_from_state(self):
+        myschema = getattr(schema, self.version)
+
+        bricks = [self.brickindex.get_brick(bid) for bid in self._covered_brickids]
+        self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
+
+        self.images = {}
+        image_filenames = myschema.format_image_filenames()
+        for image in image_filenames:
+            if isinstance(image_filenames[image], dict):
+                self.images[image] = {}
+                for band in image_filenames[image]:
+                    self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
+            else:
+                self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image])
+            
+
+    def __getstate__(self):
+        d = self.__dict__.copy()
+        del d['footprint']
+        del d['images']
+        return d
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self.init_from_state()
+ 
     def readout(self, coord, repo, default=numpy.nan, ignore_missing=False):
         """ Readout pixels from an image.
             
@@ -380,7 +397,8 @@ class DataRelease(object):
                 if not ignore_missing:
                     raise
                 else:
-                    warnings.warn(str(e), stacklevel=2)
+                    #warnings.warn(str(e), stacklevel=2)
+                    pass
         #
         images[mask] = pixels[invarg]
             
