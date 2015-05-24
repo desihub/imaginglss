@@ -52,7 +52,18 @@ class BrickIndex(object):
     
         """
         self.brickdata = numpy.array(brickdata[:], copy=True)
+        self.init_from_state()    
 
+    def __getstate__(self):
+        return dict(brickdata=self.brickdata)
+
+    def __setstate__(self, state):
+
+        self.__dict__.update(state)
+        self.init_from_state()
+
+    def init_from_state(self):
+        brickdata = self.brickdata
         self.ncols = numpy.bincount(brickdata['BRICKROW'])
 
         self.ROWMAX = brickdata['BRICKROW'].max()
