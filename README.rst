@@ -12,4 +12,4 @@ Refer to the document at http://desihub.github.io/imaginglss
 
 We provide an example using the scripts at:
 
-http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/NotebookDemo.ipynb
+http://nbviewer.ipython.org/urls/imaginglss.s3.amazonaws.com/DESI-FNAL-ImagingLSS.ipynb
