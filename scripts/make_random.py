@@ -23,6 +23,9 @@ ap = ArgumentParser("make_random.py")
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
 ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
 ap.add_argument("output")
+ap.add_argument("--sigma-z", type=float, default=3.0)
+ap.add_argument("--sigma-g", type=float, default=5.0)
+ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -126,7 +129,10 @@ def make_random(samp, Nran, configfile, comm=MPI.COMM_WORLD):
     #to know the LF for now.  Later we could keep a fraction of the randoms
     #based on the survey limit (and the LF) or we could produce randoms for
     #"100%" complete samples of different luminosity thresholds.
-    lim = cuts.findlim(dr,sfd,coord, cut.bands)
+    d = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
+    sigma = [ d[band] for band in cut.bands]
+
+    lim = cuts.findlim(dr,sfd,coord, bands=cut.bands, sigma=sigma)
 
     mask = cut(**lim)
 
@@ -167,6 +173,7 @@ if __name__ == '__main__':
 
     if MPI.COMM_WORLD.rank == 0:
         with open(ns.output,'w') as ff:
+            ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
             ff.write("# ra dec weight rmag\n")
             for j in range(0, len(rmag)):
                 ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\

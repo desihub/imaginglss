@@ -34,8 +34,8 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
         coord = (RA, DEC)
     bands : list
         ['g', 'u', 'z', ...]
-    sigma : float
-        confidence
+    sigma : float, or list
+        confidence level for each band
 
     Returns
     -------
@@ -46,7 +46,9 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
     assert isinstance(bands,(list,tuple))
     ebv  = sfd.ebv(coord[0],coord[1])
     ret = {}
-    for band in bands:
+    if N.isscalar(sigma):
+        sigma = [sigma] * len(bands)
+    for s, band in zip(sigma, bands):
         rtrn = 10.0**(-ebv*dr.extinction[band]/2.5)
 
         rdep = dr.readout(coord,dr.images['depth'][band],\
@@ -59,7 +61,7 @@ def findlim(dr,sfd,coord,bands,sigma=5.0):
         # which would become +inf
         # we will use this to detect objects on missing bricks.
 
-        rlim = sigma * rdep ** -0.5 / rtrn
+        rlim = s * rdep ** -0.5 / rtrn
         ret[band] = rlim
     return(ret)
     #

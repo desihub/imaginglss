@@ -31,6 +31,9 @@ from argparse import ArgumentParser
 ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
 ap.add_argument("output")
+ap.add_argument("--sigma-z", type=float, default=3.0)
+ap.add_argument("--sigma-g", type=float, default=5.0)
+ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -91,9 +94,11 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
     compcut = getattr(cuts.Completeness, sampl)
+    d = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
+    sigma = [ d[band] for band in compcut.bands]
     lim = cuts.findlim(dr, sfd, 
                 (RA, DEC), 
-                compcut.bands)
+                compcut.bands, sigma=sigma)
     for band in lim:
         missing_depth = sum(comm.allgather(np.isinf(lim[band]).sum()))
         if comm.rank == 0:
@@ -177,6 +182,7 @@ if __name__=="__main__":
         # Just write the sample to an ascii text file.
         ff = file(ns.output,"w")
         with ff:
+            ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
             ff.write("# %13s %15s %15s" % ("RA","DEC","PhotoZ"))
             for band in mag:
                 ff.write(" %15s" % band)
