@@ -217,7 +217,9 @@ class Expr(Node):
         """
         ops = [a.visit(array) for a in self.operands]
         if self.is_associative():
-            return self.function.reduce(ops)
+            # do not use ufunc reduction because ops can 
+            # be of different shape
+            return reduce(self.function, ops)
         else:
             return self.function(*ops)
 
