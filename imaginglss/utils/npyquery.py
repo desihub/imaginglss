@@ -1,5 +1,9 @@
 """
-npyquery, Query mini-language for numpy arrays
+npyquery, Query mini-language for numpy arrays.
+
+We reuse the python expression parser to construct the
+AST. This is inspired by TinyDB, and may have been inspired
+by other python database implementations as well.
 
 Examples
 --------
@@ -19,6 +23,7 @@ Examples
 import numpy
 
 class Node(object):
+    """ A node in the query expression """
     def __le__(self, other):
         return Expr("<=", numpy.less_equal, [self, other])
     def __lt__(self, other):
@@ -84,6 +89,11 @@ def repr_slice(s):
     return "%s:%s:%s" % (start, stop, step)
 
 class GetItem(Node):
+    """ 
+        Represents accesing an item in a vector column. 
+        
+        Astonishing that pandas can't do this.
+    """
     def __init__(self, obj, index):
         self.obj = obj
         self.index = index
@@ -98,6 +108,9 @@ class GetItem(Node):
         return self.obj.visit(array)[self.index]
 
 class Literal(Node):
+    """ 
+        Represents a literal constant.
+    """
     def __init__(self, value):
         self.value = value
     def __repr__(self):
@@ -106,6 +119,9 @@ class Literal(Node):
         return self.value
 
 class Column(Node):
+    """ 
+        Represents accessing a column from the data array 
+    """
     def __init__(self, column):
         Node.__init__(self)
         self.column = column
@@ -115,6 +131,11 @@ class Column(Node):
         return array[self.column]
 
 class Expr(Node):
+    """ 
+        Represents an expression. 
+
+        e.g. comparing a column with a number.
+    """
     def __init__(self, operator, function, operands):
         self.operator = operator
         self.function = function
@@ -128,6 +149,10 @@ class Expr(Node):
         self.flatten()
         
     def is_associative(self):
+        """ Is the operator associative?
+
+            We test this by see if the ufunc has a value identity property.
+        """
         if not isinstance(self.function, numpy.ufunc):
             return False
         if self.function.identity is not None:
@@ -138,6 +163,11 @@ class Expr(Node):
         return iter(self.operands)
 
     def flatten(self):
+        """ Flattens operands of associative operators.
+
+            e.g. (a + b) + (c + d) becomes a + b + c + d
+
+        """
         if not self.is_associative(): return
         o = []
         for a in self.operands:
@@ -161,6 +191,8 @@ class Expr(Node):
             raise ValueError
 
     def visit(self, array):
+        """ Evaluates the selection boolean masks of the array.
+        """
         ops = [a.visit(array) for a in self.operands]
         if self.is_associative():
             return self.function.reduce(ops)
