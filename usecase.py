@@ -83,10 +83,7 @@ def testebv():
 
 def testcat():
     print dr.catalogue.size
-    from imaginglss.utils.npyquery import Column
-    class C(Column):
-        def visit(self, catalogue):
-            return catalogue[self.column][:]
+    from imaginglss.model.catalogue import C
 
     query =  C('DECAM_FLUX')[:, 2] / C('DECAM_MW_TRANSMISSION')[:, 2] > 10 **(22.5 - 23.00) / 2.5
     query &=  C('DECAM_FLUX')[:, 1] / C('DECAM_MW_TRANSMISSION')[:, 1] > 10 **(22.5 - 20.56) / 2.5

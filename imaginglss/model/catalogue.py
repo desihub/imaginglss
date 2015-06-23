@@ -9,13 +9,18 @@ import numpy
 from ..utils import fits
 from ..utils import filehandler
 from ..utils.columnstore import ColumnStore
+from ..utils.npyquery import Column as ColumnBase
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-
-
+class C(ColumnBase):
+    """ `C` provides a shorthand for querying the catalogue
+        with the :py:module:`imaginglss.utils.npyquery` mini language 
+     """
+    def visit(self, catalogue):
+        return catalogue[self.name][:]
 
 def coord2xyz(coord):
     """
@@ -175,7 +180,7 @@ class Catalogue(ColumnStore):
                 data1[name][...] = table[name]
 
             data = numpy.append(data, data1)
- 
+
         return data
 
     def check_cache(self):
