@@ -147,6 +147,13 @@ class Expr(Node):
         Represents an expression. 
 
         e.g. comparing a column with a number.
+
+        An expression can have multiple operands.
+
+        >>> for o in expr.operands:
+        >>>   .....
+        >>> print expr[0], expr[1]
+
     """
     def __init__(self, operator, function, operands):
         self.operator = operator
@@ -173,6 +180,9 @@ class Expr(Node):
 
     def __iter__(self):
         return iter(self.operands)
+
+    def __getitem__(self, index):
+        return self.operands[i]
 
     def flatten(self):
         """ Flattens operands of associative operators.
