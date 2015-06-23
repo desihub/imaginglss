@@ -24,12 +24,18 @@ import numpy
 
 class Node(object):
     """ A node in the query expression """
+    def __invert__(self):
+        return Expr("~", numpy.bitwise_not, [self])
+    def __neg__(self):
+        return Expr("-", numpy.negative, [self])
     def __le__(self, other):
         return Expr("<=", numpy.less_equal, [self, other])
     def __lt__(self, other):
         return Expr("<", numpy.less, [self, other])
     def __eq__(self, other):
         return Expr("==", numpy.equal, [self, other])
+    def __ne__(self, other):
+        return Expr("!=", numpy.not_equal, [self, other])
     def __gt__(self, other):
         return Expr(">", numpy.greater, [self, other])
     def __ge__(self, other):
@@ -40,24 +46,30 @@ class Node(object):
         return Expr("|", numpy.bitwise_or, [self, other])
     def __xor__(self, other):
         return Expr("^", numpy.bitwise_xor, [self, other])
-    def __invert__(self):
-        return Expr("~", numpy.bitwise_not, [self])
     def __pow__(self, other):
         return Expr("**", numpy.power, [self, other])
     def __rpow__(self, other):
         return Expr("**", numpy.power, [other, self])
     def __mul__(self, other):
         return Expr("*", numpy.multiply, [self, other])
+    def __rmul__(self, other):
+        return Expr("*", numpy.multiply, [other, self])
     def __div__(self, other):
         return Expr("/", numpy.divide, [self, other])
+    def __rdiv__(self, other):
+        return Expr("/", numpy.multiply, [other, self])
     def __add__(self, other):
         return Expr("+", numpy.add, [self, other])
-    def __neg__(self):
-        return Expr("-", numpy.negative, [self])
+    def __radd__(self, other):
+        return Expr("+", numpy.add, [other, self])
     def __sub__(self, other):
         return Expr("-", numpy.subtract, [self, other])
+    def __rsub__(self, other):
+        return Expr("-", numpy.subtract, [other, self])
     def __mod__(self, other):
         return Expr("%", numpy.remainder, [self, other])
+    def __rmod__(self, other):
+        return Expr("%", numpy.remainder, [other, self])
     def __getitem__(self, index):
         return GetItem(self, index)
     def sin(self):
@@ -126,7 +138,7 @@ class Column(Node):
         Node.__init__(self)
         self.column = column
     def __repr__(self):
-        return "[%s]" % self.column
+        return "%s" % self.column
     def visit(self, array):
         return array[self.column]
 
