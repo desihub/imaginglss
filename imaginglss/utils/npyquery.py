@@ -5,6 +5,9 @@ We reuse the python expression parser to construct the
 AST. This is inspired by TinyDB, and may have been inspired
 by other python database implementations as well.
 
+Override Column.visit for customized access to objects (e.g.
+    Pandas dataframe or imaginglss's ColumnStore )
+
 Examples
 --------
 >>> d = dtype([
@@ -23,7 +26,15 @@ Examples
 import numpy
 
 class Node(object):
-    """ A node in the query expression """
+    """ A node in the query expression.
+
+        Parameters
+        ----------
+        array : ndarray or alike
+            applying the query node to the array and returns items
+            satisfying the array.
+
+    """
     def __invert__(self):
         return Expr("~", numpy.bitwise_not, [self])
     def __neg__(self):
@@ -85,6 +96,10 @@ class Node(object):
     def __call__(self, array):
         return array[self.visit(array)]
     def visit(self, array):
+        """ returns a selection mask.
+
+            True for items satisfying the query in array.
+        """
         raise NotImplemented 
 
 def repr_slice(s):
@@ -134,13 +149,13 @@ class Column(Node):
     """ 
         Represents accessing a column from the data array 
     """
-    def __init__(self, column):
+    def __init__(self, name):
         Node.__init__(self)
-        self.column = column
+        self.name = name
     def __repr__(self):
-        return "%s" % self.column
+        return "%s" % self.name
     def visit(self, array):
-        return array[self.column]
+        return array[self.name]
 
 class Expr(Node):
     """ 
