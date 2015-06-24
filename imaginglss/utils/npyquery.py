@@ -96,6 +96,12 @@ class Node(object):
         return Expr("log", numpy.log, [self])
     def log10(self):
         return Expr("log10", numpy.log10, [self])
+    def max(self):
+        f = lambda x: numpy.max(x, axis=tuple(range(1, len(x.shape))))
+        return Expr("max", f, [self])
+    def min(self):
+        f = lambda x: numpy.min(x, axis=tuple(range(1, len(x.shape))))
+        return Expr("min", f, [self])
 
     @property
     def T(self):
@@ -285,6 +291,20 @@ class Expr(Node):
         else:
             return self.function(*ops)
 
+class Max(Expr):
+    def __init__(self, *args):
+        f = lambda *args: numpy.max(args, axis=0)
+        Expr.__init__(self, 'max', f, args)
+    def __repr__(self):
+        return "max(%s)" % (', ').join([repr(a) for a in self.operands])
+        
+class Min(Expr):
+    def __init__(self, *args):
+        f = lambda *args: numpy.min(args, axis=0)
+        Expr.__init__(self, 'min', f, args)
+    def __repr__(self):
+        return "min(%s)" % (', ').join([repr(a) for a in self.operands])
+
 def test():    
     d = numpy.dtype([
         ('BlackholeMass', 'f4'), 
@@ -300,6 +320,7 @@ def test():
     query &= (Column('BlackholeMass') < 5.0)
     query &= (Column('Position')[:, 2] > 0.0) | (Column('Position')[:, 1] < 0.0)
     query &= (numpy.sin(Column('PhaseOfMoon') * (2 * numpy.pi)) < 0.1)
+    query &= Max(Column('BlackholeMass'), Column('PhaseOfMoon'), Column('Position').max()) > 0
     print query
     print query(data)
     for sub in query:
