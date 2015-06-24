@@ -17,6 +17,7 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 from imaginglss.model.catalogue import C
+from imaginglss.utils.npyquery import Max, Min
 
 DECAM_FLUX = C('DECAM_FLUX').T
 DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION').T
@@ -24,6 +25,9 @@ WISE_FLUX = C('WISE_FLUX').T
 WISE_MW_TRANSMISSION = C('WISE_MW_TRANSMISSION').T
 BRICK_PRIMARY = C('BRICK_PRIMARY')
 TYPE = C('TYPE')
+
+SHAPEDEV_R = C('SHAPEDEV_R')
+SHAPEEXP_R = C('SHAPEEXP_R')
 
 GFLUX = DECAM_FLUX[1] / DECAM_MW_TRANSMISSION[1]
 RFLUX = DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]
@@ -45,6 +49,7 @@ ELG &= ZFLUX > 10**(0.3/2.5) * RFLUX
 ELG &= ZFLUX < 10**(1.5/2.5) * RFLUX
 ELG &= RFLUX**2 < GFLUX * ZFLUX * 10**(-0.2/2.5)
 ELG &= ZFLUX < GFLUX * 10**(1.2/2.5) 
+ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
 
 QSO =  BRICK_PRIMARY != 0
 QSO &= RFLUX > 10**((22.5-23.0)/2.5)
