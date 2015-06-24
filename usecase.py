@@ -83,6 +83,7 @@ def testebv():
 
 def testcat():
     print dr.catalogue.size
+    """
     from imaginglss.model.catalogue import C
 
     query =  C('DECAM_FLUX')[:, 2] / C('DECAM_MW_TRANSMISSION')[:, 2] > 10 **(22.5 - 23.00) / 2.5
@@ -90,7 +91,9 @@ def testcat():
     query &=  C('DECAM_FLUX')[:, 4] / C('DECAM_MW_TRANSMISSION')[:, 4] > \
             10 **(1.6) / 2.5 * C('DECAM_FLUX')[:, 2] / C('DECAM_MW_TRANSMISSION')[:, 2]
     query &= C('BRICK_PRIMARY') != 0
-
+    """
+    from imaginglss.analysis import cuts
+    query = cuts.ObjectTypes.QSO
     with dr.catalogue:
         print query
         print query.visit(dr.catalogue)

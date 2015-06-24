@@ -56,40 +56,33 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     myend = cat.size * (comm.rank + 1) // comm.size
     #
     mine = slice(mystart, myend)
-    # Define the fluxes, corrected for MW transmission.
-    decam_flux = (cat['DECAM_FLUX'][mine]/cat['DECAM_MW_TRANSMISSION'][mine]).T
-    wise_flux  = (cat[ 'WISE_FLUX'][mine]/cat[ 'WISE_MW_TRANSMISSION'][mine]).T
-    # Now do the selection ...
-    pmask   = cat['BRICK_PRIMARY'][mine] == 1
-    fluxcut = getattr(cuts.Fluxes, sampl)
-    flux    = {}
-    for band in fluxcut.bands:
-        if band in 'ugrizY':
-            flux[band] = decam_flux[dr.bands[band]]
-        elif band in ['W1', 'W2', 'W3', 'W4']:
-            flux[band] = wise_flux[int(band[1]) - 1]
-    mask  = fluxcut(**flux)
-    mask &= pmask[None, :]
-    select_fraction = (1.0*sum(comm.allgather(mask.sum(axis=1)))) / sum(comm.allgather(pmask.sum()))
-    if comm.rank == 0:
-        print('Selected fraction by flux cuts:')
-        print('\n'.join([
-            '%-50s : %.4f' % v for v in
-            zip(fluxcut, select_fraction)]))
-    mask = mask.all(axis=0)
+
+    with dr.catalogue as cat:
+        rows = cat[mine]
+        fluxcut = getattr(cuts.ObjectTypes, sampl)
+        for expr in fluxcut:
+            mask = expr.visit(rows)
+            selected = sum(comm.allgather(mask.sum())) 
+            if comm.rank == 0:
+                print("%s : %d / %d = %g"
+                    % (
+                    str(expr), selected, cat.size, 
+                    1. * selected / cat.size))
+        mask = fluxcut.visit(rows)
+        selected = sum(comm.allgather(mask.sum())) 
+        if comm.rank == 0:
+            print("%s : %d / %d = %g"
+                % (
+                str(fluxcut), selected, cat.size, 
+                1. * selected / cat.size))
+
     total_elg = sum(comm.allgather(mask.sum()))
-    total_primary = sum(comm.allgather(pmask.sum()))
-    select_fraction = 1.0 * total_elg / total_primary
-    if comm.rank == 0:
-        print('Selected %d out of %d objects (%g)' %\
-              (total_elg, total_primary, select_fraction))
     # ... and extract only the objects which passed the cuts.
-    # At this point we convert fluxes to (extinction corrected)
-    # magnitudes, ignoring errors.
     RA   = cat[ 'RA'][mine][mask]
     DEC   = cat['DEC'][mine][mask]
-    for band in flux:
-        flux[band] = flux[band][mask]
+    FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
+    MAG = 22.5-2.5*np.log10((FLUX).clip(1e-15,1e15))
+
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
@@ -118,14 +111,10 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
         print('Total number of objects in complete area: ', total_complete)
     RA  = RA [mask]
     DEC = DEC[mask]
-    MAG = {}
-    for band in flux:
-        flux[band] = flux[band][mask]
-    for band in flux:
-        MAG[band] = 22.5-2.5*np.log10((flux[band]).clip(1e-15,1e15) )
-        MAG[band] = np.concatenate(comm.allgather(MAG[band]))
+    MAG = MAG[mask]
     RA  = np.concatenate(comm.allgather(RA ))
     DEC = np.concatenate(comm.allgather(DEC))
+    MAG = np.concatenate(comm.allgather(MAG), axis=0)
     return( (RA,DEC,MAG) )
     #
 
@@ -184,13 +173,13 @@ if __name__=="__main__":
         with ff:
             ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
             ff.write("# %13s %15s %15s" % ("RA","DEC","PhotoZ"))
-            for band in mag:
+            for band in 'ugrizY':
                 ff.write(" %15s" % band)
             ff.write("\n")
             for i in range(ra.size):
                 ff.write("%15.10f %15.10f %15.10f"
                     % (ra[i],dc[i],0.5))
-                for band in mag:
-                    ff.write(" %15.10f" % mag[band][i])
+                for band in range(6):
+                    ff.write(" %15.10f" % mag[i][band])
                 ff.write("\n")
         #
