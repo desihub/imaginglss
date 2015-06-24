@@ -23,6 +23,7 @@ import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__fi
 import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import cuts
+from imaginglss.analysis    import targetselection
 
 from mpi4py import MPI
 
@@ -59,7 +60,7 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
 
     with dr.catalogue as cat:
         rows = cat[mine]
-        fluxcut = getattr(cuts.ObjectTypes, sampl)
+        fluxcut = getattr(targetselection, sampl)
         for expr in fluxcut:
             mask = expr.visit(rows)
             selected = sum(comm.allgather(mask.sum())) 
