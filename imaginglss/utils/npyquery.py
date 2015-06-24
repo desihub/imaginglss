@@ -93,6 +93,10 @@ class Node(object):
         return Expr("log", numpy.log, [self])
     def log10(self):
         return Expr("log10", numpy.log10, [self])
+    @property
+    def T(self):
+        return Transpose(self)
+
     def __call__(self, array):
         return array[self.visit(array)]
     def visit(self, array):
@@ -156,6 +160,17 @@ class Column(Node):
         return "%s" % self.name
     def visit(self, array):
         return array[self.name]
+
+class Transpose(Node):
+    """
+        Represents a transpose. (.T attribute)
+    """
+    def __init__(self, node):
+        self.parent = node
+    def __repr__(self):
+        return "%s.T" % str(self.parent)
+    def visit(self, array):
+        return self.parent.visit(array).T
 
 class Expr(Node):
     """ 
