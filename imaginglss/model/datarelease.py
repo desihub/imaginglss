@@ -21,7 +21,7 @@ from . import brickindex
 from . import imagerepo
 from . import catalogue
 from . import schema
-
+from .sfdmap import SFDMap
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
@@ -236,13 +236,15 @@ class DataRelease(object):
 
 
     """
-    def __init__(self, root, cache, version):
+    def __init__(self, root, cache, version, dustdir):
         root = os.path.normpath(root)
 
         cache = os.path.join(cache, version)
 
         self.root = root
         self.cache = cache
+
+        self.sfdmap = SFDMap(dustdir=dustdir)
 
         if not hasattr(schema, version):
             raise KeyError("Data Release of version %s is not supported" % version)
@@ -403,3 +405,36 @@ class DataRelease(object):
         images[mask] = pixels[invarg]
             
         return images
+
+    def read_depths(self, coord, bands=[]):
+        """ Read the depth of given bands, 
+            return as an array
+
+            Returns
+            -------
+            array of dtype DECAM_INVVAR and DECAM_MW_TRANSMISSION.
+
+            Notes
+            -----
+            only columns corresponding to band in the bands parameter are
+            filled. the other columns are zeros.
+
+        """
+        dtype = numpy.dtype(
+                [('DECAM_INVVAR', ('f4', 6)),
+                 ('DECAM_MW_TRANSMISSION', ('f4', 6))]
+                )
+        output = numpy.zeros(len(coord[0]), dtype)
+
+        ebv = self.sfdmap.ebv(coord[0], coord[1])
+        for band in bands:
+            ind = self.bands[band]
+
+            output['DECAM_INVVAR'][:, ind] = 
+                    self.readout(coord, self.images['depth'][band], 
+                    default=+0.0, ignore_missing=True)
+            output['DECAM_MW_TRANSMISSION'][:, ind] = 
+                    10 ** (- ebv * self.extinction[band] / 2.5)
+
+        return output
+

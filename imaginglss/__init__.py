@@ -80,6 +80,8 @@ class DECALS(object):
         self.cache_dir = d['decals_cache']
         self.dust_dir = d['dust_dir']
 
-        self.datarelease = DataRelease(root=self.decals_root, cache=self.cache_dir, version=self.decals_release)
-        self.sfdmap = SFDMap(dustdir=self.dust_dir)
+        self.datarelease = DataRelease(root=self.decals_root, 
+                cache=self.cache_dir, version=self.decals_release,
+                dustdir=self.dust_dir)
+        self.sfdmap = self.datarelease.sfdmap
 
