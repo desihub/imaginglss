@@ -39,7 +39,7 @@ def ELG(sigma):
 ELG.bands = 'grz'
 
 def QSO(sigma):
-    QSO &= sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
+    QSO =  sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
     QSO &= sigma['g'] * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
     return QSO
 QSO.bands = 'gr'

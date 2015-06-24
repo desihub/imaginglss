@@ -31,13 +31,15 @@ ap.add_argument("--conf", default=None,
 
 ns = ap.parse_args()
 
-import numpy             as N
+import numpy             as np
 from   imaginglss             import DECALS
-from   imaginglss.analysis    import cuts
 from   imaginglss.model.datarelease import Footprint
 from mpi4py            import MPI
 
-N.seterr(divide='ignore', invalid='ignore')
+from   imaginglss.analysis    import cuts
+from imaginglss.analysis    import completeness
+
+np.seterr(divide='ignore', invalid='ignore')
 
 def fill_random(footprint, Nran, rng):
     """
@@ -49,7 +51,7 @@ def fill_random(footprint, Nran, rng):
     """
 
 
-    coord = N.empty((2, Nran))
+    coord = np.empty((2, Nran))
 
     ramin,ramax,dcmin,dcmax = footprint.range
 
@@ -60,11 +62,11 @@ def fill_random(footprint, Nran, rng):
         u1,u2= rng.uniform(size=(2, 1024 * 1024) )
 
         #
-        cmin = N.sin(dcmin*N.pi/180)
-        cmax = N.sin(dcmax*N.pi/180)
+        cmin = np.sin(dcmin*np.pi/180)
+        cmax = np.sin(dcmax*np.pi/180)
         #
         RA   = ramin + u1*(ramax-ramin)
-        DEC  = 90-N.arccos(cmin+u2*(cmax-cmin))*180./N.pi
+        DEC  = 90-np.arccos(cmin+u2*(cmax-cmin))*180./np.pi
         # Filter out those not in any bricks: only very few points remain
         coord1 = footprint.filter((RA, DEC))
 
@@ -77,15 +79,7 @@ def fill_random(footprint, Nran, rng):
     return coord
 
 
-def apply_samp_cut(coord, dr, sfd, samp):
-    """
-    apply_samp_cut(coord, dr, sfd, samp): 
-    """
-
-    return mask, rmag, cut
-
-
-def make_random(samp, Nran, configfile, comm=MPI.COMM_WORLD):
+def make_random(sampl, Nran, configfile, comm=MPI.COMM_WORLD):
     """
     Does the work of making randoms.  The sample type is passed as a string.
     """
@@ -96,9 +90,9 @@ def make_random(samp, Nran, configfile, comm=MPI.COMM_WORLD):
     dr = decals.datarelease
     sfd= decals.sfdmap
 
-    rng = N.random.RandomState(99934123)
+    rng = np.random.RandomState(99934123)
     seeds = rng.randint(99999999, size=comm.size)
-    rng = N.random.RandomState(seeds[comm.rank])
+    rng = np.random.RandomState(seeds[comm.rank])
     if comm.rank == 0:
         print('Making randoms in the survey footprint.')
 
@@ -122,60 +116,58 @@ def make_random(samp, Nran, configfile, comm=MPI.COMM_WORLD):
 
     Nran = sum(comm.allgather(len(coord[0])))
 
-    cut = getattr(cuts.Completeness, samp)
-
     #Currently this applies cuts for the "100%" complete sample, i.e. assuming
     #the LF is a delta function at the faint end cut.  This avoids needing
     #to know the LF for now.  Later we could keep a fraction of the randoms
     #based on the survey limit (and the LF) or we could produce randoms for
     #"100%" complete samples of different luminosity thresholds.
-    d = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
-    sigma = [ d[band] for band in cut.bands]
 
-    lim = cuts.findlim(dr,sfd,coord, bands=cut.bands, sigma=sigma)
+    compcut = getattr(completeness, sampl)
+    sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
+    cat_lim = dr.read_depths(coord, compcut.bands)
 
-    mask = cut(**lim)
+    mask = cuts.apply(comm, compcut(sigma), cat_lim)
 
     # It's also useful to have r magnitude later.
-    rmag = 22.5-2.5*N.log10( lim['r'].clip(1e-15,1e15) )
+    LIM = cat_lim['DECAM_INVVAR'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']
 
-    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=-1))) / Nran 
-
+    total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
-        print("Selected fraction:\n",
-              "\n".join([
-                "%s : %g" % (c, f)
-                for c, f in zip(cut, selected_fraction)
-                ])
-            )
+        print('Total number of objects in complete area: ', total_complete)
+    RA, DEC = coord
+    RA  = RA [mask]
+    DEC = DEC[mask]
+    LIM = LIM[mask]
 
-    mask = mask.all(axis=0)
-    coord = coord[:, mask]
-    rmag = rmag[mask]
-
-    coord = comm.gather(coord)
-    rmag = comm.gather(rmag)
-
+    LIM = comm.gather(LIM)
+    coord = comm.gather((RA, DEC))
     if comm.rank == 0:
-        coord = N.concatenate(coord, axis=-1)
-        rmag = N.concatenate(rmag)
+        coord = np.concatenate(coord, axis=-1)
+        LIM = np.concatenate(LIM)
         fraction = len(coord[0]) * 1.0 / Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
-    return coord, rmag
+    return coord, LIM
     #
 
 
 if __name__ == '__main__':    
 
-    coord, rmag = make_random(ns.ObjectType, configfile=ns.conf, Nran=ns.Nran)
+    coord, LIM = make_random(ns.ObjectType, configfile=ns.conf, Nran=ns.Nran)
 
     if MPI.COMM_WORLD.rank == 0:
         with open(ns.output,'w') as ff:
             ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
-            ff.write("# ra dec weight rmag\n")
-            for j in range(0, len(rmag)):
-                ff.write("%15.10f %15.10f %15.10f %15.10f\n"%\
-                  (coord[0][j],coord[1][j],0.5,rmag[j]))
+            ff.write("# ra dec weight ")
+            for band in 'ugrizY':
+                ff.write(" %15s" % band)
+            ff.write("\n")
+            
+            for j in range(0, len(LIM)):
+                ff.write("%15.10f %15.10f %15.10f "%\
+                  (coord[0][j],coord[1][j],0.5))
+                for band in range(6):
+                    ff.write(" %15.10f" % LIM[j][band])
+                ff.write("\n")
 

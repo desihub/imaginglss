@@ -24,6 +24,7 @@ import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
+from imaginglss.analysis    import cuts
 
 from mpi4py import MPI
 
@@ -39,25 +40,6 @@ ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
-
-def apply_cut(comm, query, data):
-    total = sum(comm.allgather(len(data)) )
-    for expr in query:
-        mask = expr.visit(data)
-        selected = sum(comm.allgather(mask.sum())) 
-        if comm.rank == 0:
-            print("%s : %d / %d = %g"
-                % (
-                str(expr), selected, total,
-                1. * selected / total))
-    mask = query.visit(data)
-    selected = sum(comm.allgather(mask.sum())) 
-    if comm.rank == 0:
-        print("%s : %d / %d = %g"
-            % (
-            str(query), selected, total,
-            1. * selected / total))
-    return mask
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -79,7 +61,7 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     with dr.catalogue as cat:
         rows = cat[mine]
         fluxcut = getattr(targetselection, sampl)
-        mask = apply_cut(comm, fluxcut, rows)
+        mask = cuts.apply(comm, fluxcut, rows)
 
     # ... and extract only the objects which passed the cuts.
     RA   = cat[ 'RA'][mine][mask]
@@ -102,7 +84,7 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
             print('Objects in bricks with missing depth images (',band,'): ',\
                   missing_depth)
 
-    mask = apply_cut(comm, compcut(sigma), cat_lim)
+    mask = cuts.apply(comm, compcut(sigma), cat_lim)
 
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
