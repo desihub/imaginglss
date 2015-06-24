@@ -15,6 +15,13 @@ class Column(object):
             b = a + 1
             return self.parent._wrapped_fetch(self.column, a, b)[0]
 
+class Rows(object):
+    def __init__(self, parent, rows):
+        self.parent = parent
+        self.rows = rows
+    def __getitem__(self, index):
+        return self.parent[index][self.rows]
+
 class ColumnStore(object):
     """ A ColumnStore
 
@@ -37,7 +44,6 @@ class ColumnStore(object):
     """
     def __init__(self):
         self._memorybuffer_ = None
-        pass
 
     @property
     def dtype(self):
@@ -80,6 +86,8 @@ class ColumnStore(object):
         return column in self.dtype.names
 
     def __getitem__(self, column):
+        if isinstance(column, slice):
+            return Rows(self, column)
         if column in self:
             return Column(self, column)
         else:

@@ -20,7 +20,11 @@ class C(ColumnBase):
         with the :py:module:`imaginglss.utils.npyquery` mini language 
      """
     def visit(self, catalogue):
-        return catalogue[self.name][:]
+        if isinstance(catalogue, Catalogue):
+            return catalogue[self.name][:]
+        else:
+            # Rows
+            return catalogue[self.name]
 
 def coord2xyz(coord):
     """
@@ -199,7 +203,7 @@ class Catalogue(ColumnStore):
         return Nfile == len(self.filenames)
         
     def __getitem__(self, column):
-        if column in self.aliases:
+        if isinstance(column, basestring) and column in self.aliases:
             old, transform = self.aliases[column]
             return TransformedColumn(self[old], transform)
         else:
