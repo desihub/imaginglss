@@ -14,6 +14,7 @@ The requirements on colors are tricky to implement here. We currently
 require a 100% completeness.
 
 """
+from imaginglss.model.catalogue import C
 
 DECAM_INVVAR = C('DECAM_INVVAR').T
 DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION').T
@@ -23,23 +24,27 @@ G_LIMIT = DECAM_INVVAR[1] ** -0.5 / DECAM_MW_TRANSMISSION[1]
 Z_LIMIT = DECAM_INVVAR[4] ** -0.5 / DECAM_MW_TRANSMISSION[4]
 R_LIMIT = DECAM_INVVAR[2] ** -0.5 / DECAM_MW_TRANSMISSION[2]
 
-def LRG(sigma_r, sigma_z):
-    LRG  = sigma_r * R_LIMIT < 10**((22.5-23.00    )/2.5)
-    LRG &= sigma_z * Z_LIMIT < 10**((22.5-20.56    )/2.5)
-    LRG &= sigma_z * Z_LIMIT < 10**((22.5-23.00+1.6)/2.5)
+def LRG(sigma):
+    LRG  = sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
+    LRG &= sigma['z'] * Z_LIMIT < 10**((22.5-20.56    )/2.5)
+    LRG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.00+1.6)/2.5)
     return LRG
+LRG.bands = 'rz'
 
-def ELG(sigma_g, sigma_r, sigma_z):
-    ELG =  sigma_g * G_LIMIT < 10**((22.5-23.4-1.5+0.2)/2.5)
-    ELG &= sigma_r * R_LIMIT < 10**((22.5-23.4        )/2.5)
-    ELG &= sigma_z * Z_LIMIT < 10**((22.5-23.4+0.3    )/2.5)
+def ELG(sigma):
+    ELG =  sigma['g'] * G_LIMIT < 10**((22.5-23.4-1.5+0.2)/2.5)
+    ELG &= sigma['r'] * R_LIMIT < 10**((22.5-23.4        )/2.5)
+    ELG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.4+0.3    )/2.5)
     return ELG
+ELG.bands = 'grz'
 
-def QSO(sigma_r, sigma_g):
-    QSO &= sigma_r * R_LIMIT < 10**((22.5-23.00    )/2.5)
-    QSO &= sigma_g * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
+def QSO(sigma):
+    QSO &= sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
+    QSO &= sigma['g'] * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
     return QSO
+QSO.bands = 'gr'
 
-def BGS(sigma_r):
-    BGS = sigma_r * R_LIMIT < 10**((22.5-19.5)/2.5)
+def BGS(sigma):
+    BGS = sigma['r'] * R_LIMIT < 10**((22.5-19.5)/2.5)
     return BGS
+BGS.bands = 'r'

@@ -22,8 +22,8 @@ import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__fi
 
 import numpy as np
 from imaginglss             import DECALS
-from imaginglss.analysis    import cuts
 from imaginglss.analysis    import targetselection
+from imaginglss.analysis    import completeness
 
 from mpi4py import MPI
 
@@ -40,6 +40,24 @@ ap.add_argument("--conf", default=None,
 
 ns = ap.parse_args()
 
+def apply_cut(comm, query, data):
+    total = sum(comm.allgather(len(data)) )
+    for expr in query:
+        mask = expr.visit(data)
+        selected = sum(comm.allgather(mask.sum())) 
+        if comm.rank == 0:
+            print("%s : %d / %d = %g"
+                % (
+                str(expr), selected, total,
+                1. * selected / total))
+    mask = query.visit(data)
+    selected = sum(comm.allgather(mask.sum())) 
+    if comm.rank == 0:
+        print("%s : %d / %d = %g"
+            % (
+            str(query), selected, total,
+            1. * selected / total))
+    return mask
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -61,23 +79,8 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     with dr.catalogue as cat:
         rows = cat[mine]
         fluxcut = getattr(targetselection, sampl)
-        for expr in fluxcut:
-            mask = expr.visit(rows)
-            selected = sum(comm.allgather(mask.sum())) 
-            if comm.rank == 0:
-                print("%s : %d / %d = %g"
-                    % (
-                    str(expr), selected, cat.size, 
-                    1. * selected / cat.size))
-        mask = fluxcut.visit(rows)
-        selected = sum(comm.allgather(mask.sum())) 
-        if comm.rank == 0:
-            print("%s : %d / %d = %g"
-                % (
-                str(fluxcut), selected, cat.size, 
-                1. * selected / cat.size))
+        mask = apply_cut(comm, fluxcut, rows)
 
-    total_elg = sum(comm.allgather(mask.sum()))
     # ... and extract only the objects which passed the cuts.
     RA   = cat[ 'RA'][mine][mask]
     DEC   = cat['DEC'][mine][mask]
@@ -87,26 +90,20 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete sample.
-    compcut = getattr(cuts.Completeness, sampl)
-    d = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
-    sigma = [ d[band] for band in compcut.bands]
-    lim = cuts.findlim(dr, sfd, 
-                (RA, DEC), 
-                compcut.bands, sigma=sigma)
-    for band in lim:
-        missing_depth = sum(comm.allgather(np.isinf(lim[band]).sum()))
+    compcut = getattr(completeness, sampl)
+    sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
+    cat_lim = dr.read_depths((RA, DEC), compcut.bands)
+
+    for band in compcut.bands:
+        ind = dr.bands[band]
+        missing_depth = sum(comm.allgather(
+                (cat_lim['DECAM_INVVAR'][:, ind] == 0).sum()))
         if comm.rank == 0:
             print('Objects in bricks with missing depth images (',band,'): ',\
                   missing_depth)
-    mask = compcut(**lim)
-    selected_fraction = 1.0 * sum(comm.allgather(mask.sum(axis=1)))\
-            / sum(comm.allgather(len(mask.T)))
-    if comm.rank == 0:
-        print ('Selected fraction by completeness cuts:')
-        print ('\n'.join([
-            '%-50s : %.4f' % v for v in
-            zip(compcut, selected_fraction)]))
-    mask = mask.all(axis=0)
+
+    mask = apply_cut(comm, compcut(sigma), cat_lim)
+
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
         print('Total number of objects in complete area: ', total_complete)

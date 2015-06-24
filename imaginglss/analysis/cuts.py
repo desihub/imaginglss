@@ -14,8 +14,6 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 
-
-
 def findlim(dr,sfd,coord,bands,sigma=5.0):
     """
     Get the flux depths (corrected for MW transmission) in the relevant

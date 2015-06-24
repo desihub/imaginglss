@@ -430,10 +430,10 @@ class DataRelease(object):
         for band in bands:
             ind = self.bands[band]
 
-            output['DECAM_INVVAR'][:, ind] = 
+            output['DECAM_INVVAR'][:, ind] = \
                     self.readout(coord, self.images['depth'][band], 
                     default=+0.0, ignore_missing=True)
-            output['DECAM_MW_TRANSMISSION'][:, ind] = 
+            output['DECAM_MW_TRANSMISSION'][:, ind] =  \
                     10 ** (- ebv * self.extinction[band] / 2.5)
 
         return output

@@ -19,6 +19,11 @@ class Rows(object):
     def __init__(self, parent, rows):
         self.parent = parent
         self.rows = rows
+
+    def __len__(self):
+        a, b, c = self.rows.indices(len(self.parent))
+        return (b - a) //c
+
     def __getitem__(self, index):
         return self.parent[index][self.rows]
 
@@ -54,6 +59,9 @@ class ColumnStore(object):
     def size(self):
         """Total number of items """
         raise NotImplementedError
+
+    def __len__(self):
+        return self.size
 
     def __enter__(self):
         self._memorybuffer_ = {}
