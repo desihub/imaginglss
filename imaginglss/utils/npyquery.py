@@ -35,6 +35,9 @@ class Node(object):
             satisfying the array.
 
     """
+    def __init__(self):
+        self.children = []
+
     def __invert__(self):
         return Expr("~", numpy.bitwise_not, [self])
     def __neg__(self):
@@ -93,12 +96,14 @@ class Node(object):
         return Expr("log", numpy.log, [self])
     def log10(self):
         return Expr("log10", numpy.log10, [self])
+
     @property
     def T(self):
         return Transpose(self)
 
     def __call__(self, array):
         return array[self.visit(array)]
+
     def visit(self, array):
         """ returns a selection mask.
 
@@ -106,6 +111,17 @@ class Node(object):
         """
         raise NotImplemented 
 
+    @property
+    def names(self):
+        """ returns a list of column names used in this node.
+            
+            This function is recursive
+        """
+        r = [] 
+        for c in self.children:
+            r.extend(c.names)
+        return list(set(r))
+        
 def repr_slice(s):
     if not isinstance(s, slice):
         return repr(s)
@@ -126,8 +142,10 @@ class GetItem(Node):
         Astonishing that pandas can't do this.
     """
     def __init__(self, obj, index):
-        self.obj = obj
+        self.children = [obj]
         self.index = index
+        self.obj = obj
+
     def __repr__(self):
         if isinstance(self.index, tuple):
             rslice = ','.join([repr_slice(o) for o in self.index])
@@ -144,8 +162,11 @@ class Literal(Node):
     """
     def __init__(self, value):
         self.value = value
+        self.children = []
+
     def __repr__(self):
         return repr(self.value)
+
     def visit(self, array):
         return self.value
 
@@ -154,23 +175,31 @@ class Column(Node):
         Represents accessing a column from the data array 
     """
     def __init__(self, name):
-        Node.__init__(self)
         self.name = name
+        self.children = []
+
     def __repr__(self):
         return "%s" % self.name
+
     def visit(self, array):
         return array[self.name]
+
+    @property
+    def names(self):
+        return [self.name]
+
 
 class Transpose(Node):
     """
         Represents a transpose. (.T attribute)
     """
     def __init__(self, node):
-        self.parent = node
+        self.children = [node]
+        self.obj = node
     def __repr__(self):
-        return "%s.T" % str(self.parent)
+        return "%s.T" % str(self.obj)
     def visit(self, array):
-        return self.parent.visit(array).T
+        return self.obj.visit(array).T
 
 class Expr(Node):
     """ 
@@ -194,9 +223,12 @@ class Expr(Node):
             for a in operands
         ]
 
-        self.operands = operands
-        self.flatten()
-        
+        self.children = self.flatten(operands)
+
+    @property
+    def operands(self):
+        return self.children
+
     def is_associative(self):
         """ Is the operator associative?
 
@@ -214,15 +246,15 @@ class Expr(Node):
     def __getitem__(self, index):
         return self.operands[i]
 
-    def flatten(self):
+    def flatten(self, operands):
         """ Flattens operands of associative operators.
 
             e.g. (a + b) + (c + d) becomes a + b + c + d
 
         """
-        if not self.is_associative(): return
+        if not self.is_associative(): return operands
         o = []
-        for a in self.operands:
+        for a in operands:
             if not isinstance(a, Expr):
                 o.append(a)
                 continue
@@ -231,7 +263,7 @@ class Expr(Node):
                 continue
             else:
                 o.extend(a.operands)
-        self.operands = o
+        return o
 
     def __repr__(self):
         if len(self.operands) >= 2:
@@ -272,5 +304,6 @@ def test():
     print query(data)
     for sub in query:
         print sub, sub.visit(data)
+    print query.names
 if __name__ == '__main__':
     test()
