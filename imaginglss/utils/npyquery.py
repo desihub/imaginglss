@@ -24,6 +24,7 @@ Examples
 
 """
 import numpy
+from numpy import ndarray
 
 class Node(object):
     """ A node in the query expression.
@@ -39,21 +40,21 @@ class Node(object):
         self.children = []
 
     def __invert__(self):
-        return Expr("~", numpy.bitwise_not, [self])
+        return Expr("~", ndarray.__invert__, [self])
     def __neg__(self):
-        return Expr("-", numpy.negative, [self])
+        return Expr("-", ndarray.__neg__, [self])
     def __le__(self, other):
-        return Expr("<=", numpy.less_equal, [self, other])
+        return Expr("<=", ndarray.__le__, [self, other])
     def __lt__(self, other):
-        return Expr("<", numpy.less, [self, other])
+        return Expr("<", ndarray.__lt__, [self, other])
     def __eq__(self, other):
-        return Expr("==", numpy.equal, [self, other])
+        return Expr("==", ndarray.__eq__, [self, other])
     def __ne__(self, other):
-        return Expr("!=", numpy.not_equal, [self, other])
+        return Expr("!=", ndarray.__ne__, [self, other])
     def __gt__(self, other):
-        return Expr(">", numpy.greater, [self, other])
+        return Expr(">", ndarray.__gt__, [self, other])
     def __ge__(self, other):
-        return Expr(">=", numpy.greater_equal, [self, other])
+        return Expr(">=", ndarray.__ge__, [self, other])
     def __and__(self, other):
         return Expr("&", numpy.bitwise_and, [self, other])
     def __or__(self, other):
@@ -309,6 +310,7 @@ def test():
     d = numpy.dtype([
         ('BlackholeMass', 'f4'), 
         ('PhaseOfMoon', 'f4'), 
+        ('Name', 'S4'), 
         ('Position', ('f4', 3)),
 ])
 
@@ -316,15 +318,22 @@ def test():
     data['BlackholeMass'][:] = numpy.arange(len(data))
     data['PhaseOfMoon'][:] = numpy.linspace(0, 1, len(data), endpoint=True)
     data['Position'][:] = numpy.arange(data['Position'].size).reshape(len(data), -1)
+    data['Name'][0] = 'N1'
+    data['Name'][1] = 'N2'
+    data['Name'][2] = 'N3'
+    data['Name'][3] = 'N4'
+
     query  = (Column('BlackholeMass') > 0.0)
+    query &= (Column('Name') == 'N1')
     query &= (Column('BlackholeMass') < 5.0)
     query &= (Column('Position')[:, 2] > 0.0) | (Column('Position')[:, 1] < 0.0)
     query &= (numpy.sin(Column('PhaseOfMoon') * (2 * numpy.pi)) < 0.1)
     query &= Max(Column('BlackholeMass'), Column('PhaseOfMoon'), Column('Position').max()) > 0
-    print query
-    print query(data)
     for sub in query:
         print sub, sub.visit(data)
+
+    print query
+    print query(data)
     print query.names
 if __name__ == '__main__':
     test()
