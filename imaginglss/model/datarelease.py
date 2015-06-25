@@ -101,15 +101,21 @@ class Footprint(object):
                     [b.index for b in bricks], dtype='i8')
 
         # range of ra dec of covered bricks
-        FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax'])
+        FootPrintRange = namedtuple('FootPrintRange', ['ramin', 'ramax', 'decmin', 'decmax', 'area'])
         if len(bricks) == 0:
-            self.range = FootPrintRange(ramin=0, ramax=0, decmin=0, decmax=0)
+            self.range = FootPrintRange(ramin=0, ramax=0, decmin=0, decmax=0, area=0)
         else:
+            ramin=min([brick.ra1 for brick in self.bricks])
+            ramax=max([brick.ra2 for brick in self.bricks])
+            decmin=min([brick.dec1 for brick in self.bricks])
+            decmax=max([brick.dec2 for brick in self.bricks])
+            deg = numpy.pi / 180.
             self.range = FootPrintRange(
-                ramin=min([brick.ra1 for brick in self.bricks]),
-                ramax=max([brick.ra2 for brick in self.bricks]),
-                decmin=min([brick.dec1 for brick in self.bricks]),
-                decmax=max([brick.dec2 for brick in self.bricks]),)
+                ramin=ramin, ramax=ramax,decmin=decmin,decmax=decmax,
+                area = (numpy.sin(decmax * deg) \
+                    - numpy.sin(decmin * deg )) * (ramax - ramin) * deg \
+                    * 129600 / numpy.pi / (4 * numpy.pi)
+                )
 
         self.brickindex = brickindex
 
@@ -159,11 +165,11 @@ class Footprint(object):
 
         coord = numpy.empty((2, Npoints))
 
-        ramin,ramax,dcmin,dcmax = self.range
-
+        ramin,ramax,dcmin,dcmax,area = self.range
+        Nmake = int(area / self.area * Npoints)
         start = 0
         while start != Npoints:
-            u1,u2= rng.uniform(size=(2, 1024 * 1024) )
+            u1,u2= rng.uniform(size=(2, min([Nmake, 1024 * 1024])) )
 
             #
             cmin = numpy.sin(dcmin*numpy.pi/180)
@@ -179,7 +185,8 @@ class Footprint(object):
             sl = slice(start, start + len(coord1.T))
             coord[:, sl] = coord1
             start = start + len(coord1.T)
-        
+            Nmake = int(area / self.area * (Npoints - start) + 1)
+            
         return coord
 
         
