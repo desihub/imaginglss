@@ -111,12 +111,20 @@ class Node(object):
     def __call__(self, array):
         return array[self.visit(array)]
 
-    def visit(self, array):
+    def real_visit(self, array, s):
         """ returns a selection mask.
 
             True for items satisfying the query in array.
         """
         raise NotImplemented 
+
+    def visit(self, array):
+        chunksize=1024 * 128
+        result = numpy.empty(len(array), dtype='?')
+        for i in range(0, len(array), chunksize):
+            s = slice(i, i + chunksize)
+            result[s] = self.real_visit(array, s)
+        return result
 
     @property
     def names(self):
@@ -160,8 +168,8 @@ class GetItem(Node):
             rslice = repr_slice(self.index)
         return "%s[%s]" % (repr(self.obj), rslice)
 
-    def visit(self, array):
-        return self.obj.visit(array)[self.index]
+    def real_visit(self, array, s):
+        return self.obj.real_visit(array, s)[self.index]
 
 class Literal(Node):
     """ 
@@ -174,7 +182,7 @@ class Literal(Node):
     def __repr__(self):
         return repr(self.value)
 
-    def visit(self, array):
+    def real_visit(self, array, s):
         return self.value
 
 class Column(Node):
@@ -188,8 +196,8 @@ class Column(Node):
     def __repr__(self):
         return "%s" % self.name
 
-    def visit(self, array):
-        return array[self.name]
+    def real_visit(self, array, s):
+        return array[self.name][s]
 
     @property
     def names(self):
@@ -205,8 +213,8 @@ class Transpose(Node):
         self.obj = node
     def __repr__(self):
         return "%s.T" % str(self.obj)
-    def visit(self, array):
-        return self.obj.visit(array).T
+    def real_visit(self, array, s):
+        return self.obj.real_visit(array, s).T
 
 class Expr(Node):
     """ 
@@ -281,10 +289,10 @@ class Expr(Node):
         else:
             raise ValueError
 
-    def visit(self, array):
+    def real_visit(self, array, s):
         """ Evaluates the selection boolean masks of the array.
         """
-        ops = [a.visit(array) for a in self.operands]
+        ops = [a.real_visit(array, s) for a in self.operands]
         if self.is_associative():
             # do not use ufunc reduction because ops can 
             # be of different shape
