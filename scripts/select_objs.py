@@ -99,50 +99,6 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     #
 
 
-def diagnostic_plots(ra,dec,mag):
-    """
-    Makes some "useful" diagnostic plots.
-    """
-    from matplotlib.figure import Figure
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
-    g = mag[1, :]
-    r = mag[2, :]
-    z = mag[4, :]
-    fig = Figure()
-    ax = fig.add_subplot(111)
-    ax.hist2d(ra, dec)
-    canvas = FigureCanvasAgg(fig)
-    fig.savefig('elg-ra-dec.png')
-    #
-    fig = Figure()
-    ax = fig.add_subplot(111)
-    ax.plot(r, r - z, '. ')
-    ax.axvline(23.4, label='r < 0.3')
-    ax.axhline(0.3, label='(r-z) > 0.3')
-    ax.axhline(1.5, label='(r-z) < 1.5')
-    ax.set_xlabel('Intrinsic z')
-    ax.set_ylabel('Intrinsic r-z')
-    ax.grid()
-    canvas = FigureCanvasAgg(fig)
-    fig.savefig('elg-ri-rz.png')
-    #
-    fig = Figure()
-    ax = fig.add_subplot(111)
-    x = np.linspace(
-            (g - r).min(),
-            (g - r).max(), 100)
-    ax.plot(g - r, r - z, '. ')
-    ax.plot(x, x + 0.2, label='(g-r) < (r-z) - 0.2')
-    ax.plot(x, 1.2 - x , label='(g-r) > 1.2 - (r-z)')
-    ax.set_xlabel('Intrinsic g-r')
-    ax.set_ylabel('Intrinsic r-z')
-    ax.grid()
-    canvas = FigureCanvasAgg(fig)
-    fig.savefig('elg-gr-rz.png')
-    #
-
-
-
 if __name__=="__main__":
 
     ra,dc,mag = select_objs(ns.ObjectType, ns.conf)
