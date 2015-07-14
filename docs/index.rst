@@ -23,6 +23,7 @@ Users Guide
    :maxdepth: 2
 
    install
+   scripts
    datamodel
    helpers
    examples

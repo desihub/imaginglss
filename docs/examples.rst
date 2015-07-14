@@ -15,7 +15,7 @@ This limitation is because imaginglss is intended to be used without installatio
 Also note that querying the imaging pixels (e.g. depth) typically requires a 
 high-throughput operation that cannot currently be driven in a Notebook; 
 For example, to apply ELG selection for the full DR1, we implement a MPI python scripts 
-:py:code:`script/select_elgs.py`.
+:py:code:`script/select_.py`.
 
 We provide a comprensive Notebook example at
 
@@ -32,6 +32,8 @@ http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.i
 
 Example Job script on Edison
 ----------------------------
+
+.. literalinclude:: ../scripts/edison_example.sh
 
 .. literalinclude:: ../scripts/edison_example.sh
 
