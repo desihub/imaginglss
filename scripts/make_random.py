@@ -26,6 +26,7 @@ ap.add_argument("output")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
+ap.add_argument("--with-tycho", help='path to the tycho.fit file for applying veto around bright stars')
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -38,6 +39,7 @@ from mpi4py            import MPI
 
 from   imaginglss.analysis    import cuts
 from imaginglss.analysis    import completeness
+from imaginglss.analysis    import tycho_veto
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -53,7 +55,7 @@ def fill_random(footprint, Nran, rng):
 
     coord = np.empty((2, Nran))
 
-    ramin,ramax,dcmin,dcmax = footprint.range
+    ramin,ramax,dcmin,dcmax,area = footprint.range
 
     start = 0
     while start != Nran:
@@ -79,14 +81,14 @@ def fill_random(footprint, Nran, rng):
     return coord
 
 
-def make_random(sampl, Nran, configfile, comm=MPI.COMM_WORLD):
+def make_random(ns, comm=MPI.COMM_WORLD):
     """
-    Does the work of making randoms.  The sample type is passed as a string.
+    Does the work of making randoms.  The ns.ObjectTypee type is passed as a string.
     """
 
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    decals = DECALS(configfile)
+    decals = DECALS(ns.conf)
     dr = decals.datarelease
     sfd= decals.sfdmap
 
@@ -105,24 +107,24 @@ def make_random(sampl, Nran, configfile, comm=MPI.COMM_WORLD):
 
     Nbricks = comm.allgather(len(mybricks))
 
-    # Distribute myNran, proportional to the number of bricks
+    # Distribute myns.Nran, proportional to the number of bricks
     # important if a rank has no bricks, it expects no randoms
 
-    myNran = rng.poisson(footprint.area / dr.footprint.area * Nran)
+    myNran = rng.poisson(footprint.area / dr.footprint.area * ns.Nran)
     
     print (comm.rank, 'has', len(mybricks), 'bricks', myNran, 'randoms')
     # fill it with random points 
     coord = fill_random(footprint, myNran, rng)
 
-    Nran = sum(comm.allgather(len(coord[0])))
+    ns.Nran = sum(comm.allgather(len(coord[0])))
 
-    #Currently this applies cuts for the "100%" complete sample, i.e. assuming
+    #Currently this applies cuts for the "100%" complete ns.ObjectTypee, i.e. assuming
     #the LF is a delta function at the faint end cut.  This avoids needing
     #to know the LF for now.  Later we could keep a fraction of the randoms
     #based on the survey limit (and the LF) or we could produce randoms for
-    #"100%" complete samples of different luminosity thresholds.
+    #"100%" complete ns.ObjectTypees of different luminosity thresholds.
 
-    compcut = getattr(completeness, sampl)
+    compcut = getattr(completeness, ns.ObjectType)
     sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
     cat_lim = dr.read_depths(coord, compcut.bands)
 
@@ -139,12 +141,27 @@ def make_random(sampl, Nran, configfile, comm=MPI.COMM_WORLD):
     DEC = DEC[mask]
     LIM = LIM[mask]
 
+    if ns.with_tycho is not None:
+        veto = getattr(tycho_veto, ns.with_tycho)
+        mask = veto(decals.tycho, (RA, DEC))
+
+        total_complete = sum(comm.allgather(mask.sum()))
+        if comm.rank == 0:
+            print('Total number of objects not close to stars', total_complete)
+
+        RA  = RA [mask]
+        DEC = DEC[mask]
+        LIM = LIM[mask]
+    else:
+        if comm.rank == 0:
+            print('Not applying cuts for star proximity.')
+
     LIM = comm.gather(LIM)
     coord = comm.gather((RA, DEC))
     if comm.rank == 0:
         coord = np.concatenate(coord, axis=-1)
         LIM = np.concatenate(LIM)
-        fraction = len(coord[0]) * 1.0 / Nran
+        fraction = len(coord[0]) * 1.0 / ns.Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
@@ -154,7 +171,7 @@ def make_random(sampl, Nran, configfile, comm=MPI.COMM_WORLD):
 
 if __name__ == '__main__':    
 
-    coord, LIM = make_random(ns.ObjectType, configfile=ns.conf, Nran=ns.Nran)
+    coord, LIM = make_random(ns)
 
     if MPI.COMM_WORLD.rank == 0:
         with open(ns.output,'w') as ff:

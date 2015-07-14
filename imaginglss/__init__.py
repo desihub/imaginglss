@@ -1,5 +1,6 @@
 from .model.datarelease import DataRelease
 from .model.sfdmap import SFDMap
+from .model.tycho import Tycho
 
 import os.path
 
@@ -62,6 +63,7 @@ class DECALS(object):
         d['decals_root'] = os.environ.get("DECALS_IMAGING", '.') 
         d['decals_cache'] = os.environ.get("DECALS_CACHE", '.') 
         d['dust_dir'] = os.environ.get("DUST_DIR", '.') 
+        d['tycho_dir'] = os.environ.get("TYCHO_DIR", '.') 
         d['decals_release'] = os.path.basename(d['decals_root']).upper()
 
         if filename:
@@ -79,9 +81,10 @@ class DECALS(object):
         self.decals_release = d['decals_release']
         self.cache_dir = d['decals_cache']
         self.dust_dir = d['dust_dir']
+        self.tycho_dir = d['tycho_dir']
 
         self.datarelease = DataRelease(root=self.decals_root, 
                 cache=self.cache_dir, version=self.decals_release,
                 dustdir=self.dust_dir)
         self.sfdmap = self.datarelease.sfdmap
-
+        self.tycho = Tycho(self.tycho_dir)

@@ -97,9 +97,8 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     MAG = MAG[mask]
     
     if ns.with_tycho is not None:
-        tycho = tycho_veto.Tycho(ns.with_tycho)
-        veto = getattr(tycho_veto, 'DECAM_' + ns.ObjectType)
-        mask = veto(tycho, (RA, DEC))
+        veto = getattr(tycho_veto, ns.with_tycho)
+        mask = veto(decals.tycho, (RA, DEC))
 
         total_complete = sum(comm.allgather(mask.sum()))
         if comm.rank == 0:
