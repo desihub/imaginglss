@@ -63,228 +63,25 @@
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.0&quot;</span>
 <span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
 
-
-
-
-<div class="viewcode-block" id="findlim"><a class="viewcode-back" href="../../../imaginglss.analysis.cuts.html#imaginglss.analysis.cuts.findlim">[docs]</a><span class="k">def</span> <span class="nf">findlim</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span><span class="n">sfd</span><span class="p">,</span><span class="n">coord</span><span class="p">,</span><span class="n">bands</span><span class="p">,</span><span class="n">sigma</span><span class="o">=</span><span class="mf">5.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the flux depths (corrected for MW transmission) in the relevant</span>
-<span class="sd">    filters.  </span>
-
-<span class="sd">    For out-of-bounds points, return 0.</span>
-<span class="sd">    Currently this implements a simple N-sigma cut.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dr : :py:class:`model.datarelease.DataRelease`</span>
-<span class="sd">        data release</span>
-<span class="sd">    sfd  : :py:class:`model.sfdmap.SFDMap`</span>
-<span class="sd">        dust extinction map</span>
-<span class="sd">    coord :  array_like</span>
-<span class="sd">        coord = (RA, DEC)</span>
-<span class="sd">    bands : list</span>
-<span class="sd">        [&#39;g&#39;, &#39;u&#39;, &#39;z&#39;, ...]</span>
-<span class="sd">    sigma : float</span>
-<span class="sd">        confidence</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    lims : dict </span>
-<span class="sd">        one lim per band.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bands</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span>
-    <span class="n">ebv</span>  <span class="o">=</span> <span class="n">sfd</span><span class="o">.</span><span class="n">ebv</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bands</span><span class="p">:</span>
-        <span class="n">rtrn</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">ebv</span><span class="o">*</span><span class="n">dr</span><span class="o">.</span><span class="n">extinction</span><span class="p">[</span><span class="n">band</span><span class="p">]</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-
-        <span class="n">rdep</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">],</span>\
-                          <span class="n">default</span><span class="o">=+</span><span class="mf">0.0</span><span class="p">,</span><span class="n">ignore_missing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-        <span class="c"># For now we use an N-sigma cut in extinction-correct flux as our limit.</span>
-        <span class="c"># Recall &quot;depth&quot; is stored as inverse variance.</span>
-        
-        <span class="c"># Bricks with missing depth images are simply passed as 0.0</span>
-        <span class="c"># which would become +inf</span>
-        <span class="c"># we will use this to detect objects on missing bricks.</span>
-
-        <span class="n">rlim</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">rdep</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">rtrn</span>
-        <span class="n">ret</span><span class="p">[</span><span class="n">band</span><span class="p">]</span> <span class="o">=</span> <span class="n">rlim</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
-    <span class="c">#</span>
-</div>
-<div class="viewcode-block" id="Cuts"><a class="viewcode-back" href="../../../imaginglss.analysis.cuts.html#imaginglss.analysis.cuts.Cuts">[docs]</a><span class="k">class</span> <span class="nc">Cuts</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; A convenient representation of a set of Cuts.</span>
-<span class="sd">        </span>
-<span class="sd">        For the ease of self-introspection, a :py:class:`Cuts` object </span>
-<span class="sd">        stores the cut expressions as a list of strings. </span>
-<span class="sd">        Python provides this useful function :code:`eval` that evaluates the</span>
-<span class="sd">        expression with a set of variables in a local scope. We make use</span>
-<span class="sd">        of :code:`eval` to evaluate these expressions for each cut criteria. </span>
-
-<span class="sd">        These variables used in the cuts evaluation are decleared in &#39;bands&#39; parameter.</span>
-<span class="sd">        Some times a cut criteria needs a band flux that is constructed from other</span>
-<span class="sd">        band fluxes, these can be provided in &#39;transforms&#39; parameter.</span>
-
-<span class="sd">        Attributes</span>
-<span class="sd">        ----------</span>
-<span class="sd">        cuts : list</span>
-<span class="sd">            a list of python expressions as strings. </span>
-<span class="sd">            For example,  [&quot;r &gt; 10**((22.5-23.00)/2.5)&quot;]</span>
-
-<span class="sd">        transforms : kwargs</span>
-<span class="sd">            a dict of band = &quot;expression&quot;            </span>
-<span class="sd">            where &quot;expressions&quot; is like &quot;w = 0.75*w1 + 0.25*w2&quot;,</span>
-
-<span class="sd">        bands : list</span>
-<span class="sd">            a list of bands that this Cuts object uses.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        **local : dict</span>
-<span class="sd">            the arguments to eval the cut expression. for example, rflux=[1.1, 2.3, ...]</span>
-<span class="sd">        </span>
-<span class="sd">        Examples</span>
-<span class="sd">        --------</span>
-<span class="sd">        </span>
-<span class="sd">        The following code defines a QSO color cut by r, g, and W band fluxes,</span>
-<span class="sd">        where the W band flux is obtained by interpolating W1, and W2 band fluxes.</span>
-
-<span class="sd">        &gt;&gt;&gt; QSO = Cuts([</span>
-<span class="sd">        &quot;r &gt; 10**((22.5-23.0)/2.5)&quot;,</span>
-<span class="sd">        &quot;r &lt; 10**((1.0)      /2.5)*g&quot;,</span>
-<span class="sd">        &quot;W*g**1.2 &gt; 10**(-0.4/2.5)*r**(1+1.2)&quot;, </span>
-<span class="sd">        ], bands=[&#39;r&#39;, &#39;g&#39;, &#39;W1&#39;, &#39;W2&#39;],</span>
-<span class="sd">        W=&quot;0.75*W1 + 0.25*W2&quot;,</span>
-<span class="sd">        )</span>
-
-<span class="sd">        &gt;&gt;&gt; mask = QSO(r=rflux, g=gflux, W1=W1flux, W2=W2flux)</span>
-<span class="sd">        &gt;&gt;&gt; mask.shape</span>
-<span class="sd">        (3, ....)</span>
-<span class="sd">        </span>
-<span class="sd">        &gt;&gt;&gt; for m, cut in zip(mask, QSO):</span>
-<span class="sd">        &gt;&gt;&gt;    print cut, &#39; : &#39;, m.sum()</span>
-<span class="sd">        r &gt; 10**((22.5-23.0)/2.5) :  300</span>
-<span class="sd">        r &lt; 10**((1.0)      /2.5)*g : 400</span>
-<span class="sd">        W*g**1.2 &gt; 10**(-0.4/2.5)*r**(1+1.2)  : 100</span>
-<span class="sd">          </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        mask : array_like (Ncuts, Nitem)</span>
-<span class="sd">            True if item passed the cut, False if not. </span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cuts</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="o">**</span><span class="n">transforms</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cuts</span> <span class="o">=</span> <span class="n">cuts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="n">bands</span>
-
-    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">fluxes</span><span class="p">):</span>
-
-        <span class="c"># evaluate the cuts for the input fluxes as keyword arguments</span>
-        
-        <span class="c"># first build the transformed flux variables (eg. W from W1 and W2 for </span>
-        <span class="c"># QSOs</span>
-
-        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
-            <span class="n">fluxes</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">[</span><span class="n">val</span><span class="p">],</span> <span class="n">fluxes</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">band</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fluxes</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;band &#39;</span><span class="si">%s</span><span class="s">&#39; is not specified&quot;</span> <span class="o">%</span> <span class="n">band</span><span class="p">)</span>
- 
-        <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-            <span class="nb">eval</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">fluxes</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">expr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cuts</span><span class="p">])</span>
-
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cuts</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;Cuts(</span><span class="si">%s</span><span class="s">, bands=</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">))</span>
-    </div>
-<div class="viewcode-block" id="Fluxes"><a class="viewcode-back" href="../../../imaginglss.analysis.cuts.html#imaginglss.analysis.cuts.Fluxes">[docs]</a><span class="k">class</span> <span class="nc">Fluxes</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A collection of helpful (static) methods to check whether an object&#39;s</span>
-<span class="sd">    flux passes a given selection criterion (e.g. LRG, ELG or QSO).</span>
-<span class="sd">    These cuts assume we are passed the extinction-corrected fluxes</span>
-<span class="sd">    (flux/mw_transmission) and are taken from:</span>
-<span class="sd">      https://desi.lbl.gov/trac/wiki/TargetSelection</span>
-<span class="sd">    The requirement on BRICK_PRIMARY is handled elsewhere, these methods just</span>
-<span class="sd">    look after the flux requirements.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">LRG</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r &gt; 10**((22.5-23.00)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &gt; 10**((22.5-20.56)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;W1 &gt; 10**((22.5-19.50)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &gt; 10**((1.6)       /2.5)*r&quot;</span><span class="p">,</span>
-        <span class="s">&quot;W1 *r **(1.33-1)&gt;z **1.33*10**(-0.33/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;W1&#39;</span><span class="p">])</span>
-
-    <span class="n">ELG</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r &gt; 10**((22.5-23.4)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &gt; 10**((0.3)      /2.5)*r&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &lt; 10**((1.5)      /2.5)*r&quot;</span><span class="p">,</span>
-        <span class="s">&quot;r **2 &lt; g *z *10**(-0.2/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &gt; g *10**(1.2/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">])</span>
-
-    <span class="n">QSO</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r &gt; 10**((22.5-23.0)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;r &lt; 10**((1.0)      /2.5)*g&quot;</span><span class="p">,</span>
-        <span class="s">&quot;W*g**1.2 &gt; 10**(-0.4/2.5)*r**(1+1.2)&quot;</span><span class="p">,</span> 
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;W1&#39;</span><span class="p">,</span> <span class="s">&#39;W2&#39;</span><span class="p">],</span>
-        <span class="n">W</span><span class="o">=</span><span class="s">&quot;0.75*W1 + 0.25*W2&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="n">BGS</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r &gt; 10**((22.5-19.5)/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span>
-        <span class="p">)</span>
- 
-
-</div>
-<div class="viewcode-block" id="Completeness"><a class="viewcode-back" href="../../../imaginglss.analysis.cuts.html#imaginglss.analysis.cuts.Completeness">[docs]</a><span class="k">class</span> <span class="nc">Completeness</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A collection of helpful (static) methods to check whether a given</span>
-<span class="sd">    position has imaging deep enough to be 100% complete to a certain</span>
-<span class="sd">    selection (e.g. LRG, ELG or QSO).</span>
-<span class="sd">    We should probably modify this later to easily allow querying of</span>
-<span class="sd">    brighter limits.</span>
-<span class="sd">    The methods assume they are passed N-sigma limits, corrected for</span>
-<span class="sd">    MW transmission.</span>
-<span class="sd">    Note: for a region to pass the N-sigma &quot;noise&quot; must be LESS THAN the</span>
-<span class="sd">    required depth.</span>
-<span class="sd">    The requirements on colors are tricky to implement here. We currently</span>
-<span class="sd">    require a 100% completeness.</span>
-<span class="sd">    </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">LRG</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r&lt;10**((22.5-23.00    )/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z&lt;10**((22.5-20.56    )/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z&lt;10**((22.5-23.00+1.6)/2.5)&quot;</span><span class="p">,</span>
-        <span class="c">#&quot;W&lt;10**((22.5-19.50    )/2.5)&quot;,</span>
-        <span class="c"># &quot;raise UnimplementedError&quot;,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">])</span>
-
-    <span class="n">ELG</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;g &lt; 10**((22.5-23.4-1.5+0.2)/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;r &lt; 10**((22.5-23.4        )/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;z &lt; 10**((22.5-23.4+0.3    )/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">])</span>
-
-    <span class="n">QSO</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="c">#&quot;raise UnimplementedError&quot;,</span>
-        <span class="s">&quot;r&lt;10**((22.5-23.00    )/2.5)&quot;</span><span class="p">,</span>
-        <span class="s">&quot;g&lt;10**((22.5-23.00-1.0)/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">])</span>
-    <span class="n">BGS</span> <span class="o">=</span> <span class="n">Cuts</span><span class="p">([</span>
-        <span class="s">&quot;r&lt;10**((22.5-19.5)/2.5)&quot;</span><span class="p">,</span>
-        <span class="p">],</span> <span class="n">bands</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">])</span>
-    <span class="c">#</span></div>
-</pre></div>
+<div class="viewcode-block" id="apply"><a class="viewcode-back" href="../../../imaginglss.analysis.cuts.html#imaginglss.analysis.cuts.apply">[docs]</a><span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">allgather</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="p">)</span>
+    <span class="k">for</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">query</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">allgather</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span> 
+        <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> : </span><span class="si">%d</span><span class="s"> / </span><span class="si">%d</span><span class="s"> = </span><span class="si">%g</span><span class="s">&quot;</span>
+                <span class="o">%</span> <span class="p">(</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">expr</span><span class="p">),</span> <span class="n">selected</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span>
+                <span class="mf">1.</span> <span class="o">*</span> <span class="n">selected</span> <span class="o">/</span> <span class="n">total</span><span class="p">))</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">selected</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">comm</span><span class="o">.</span><span class="n">allgather</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span> 
+    <span class="k">if</span> <span class="n">comm</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> : </span><span class="si">%d</span><span class="s"> / </span><span class="si">%d</span><span class="s"> = </span><span class="si">%g</span><span class="s">&quot;</span>
+            <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">query</span><span class="p">),</span> <span class="n">selected</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span>
+            <span class="mf">1.</span> <span class="o">*</span> <span class="n">selected</span> <span class="o">/</span> <span class="n">total</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mask</span>
+</pre></div></div>
 
           </div>
         </div>

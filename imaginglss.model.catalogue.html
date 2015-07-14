@@ -61,6 +61,19 @@
 <p>Python class for handling object catalogs associated with
 a data release.  The catalogs are obtained from FITS files.
 This class does some caching for speed.</p>
+<dl class="class">
+<dt id="imaginglss.model.catalogue.C">
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">C</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Column</span></code></p>
+<p><cite>C</cite> provides a shorthand for querying the catalogue
+with the <a href="#id1"><span class="problematic" id="id2">:py:module:`imaginglss.utils.npyquery`</span></a> mini language</p>
+<dl class="method">
+<dt id="imaginglss.model.catalogue.C.visit">
+<code class="descname">visit</code><span class="sig-paren">(</span><em>catalogue</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#C.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.C.visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="exception">
 <dt id="imaginglss.model.catalogue.CacheExpired">
 <em class="property">exception </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">CacheExpired</code><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CacheExpired"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CacheExpired" title="Permalink to this definition">¶</a></dt>
@@ -198,7 +211,7 @@ And it takes a long time.</p>
 
 <dl class="class">
 <dt id="imaginglss.model.catalogue.TransformedColumn">
-<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">TransformedColumn</code><span class="sig-paren">(</span><em>ref</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#TransformedColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.TransformedColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">TransformedColumn</code><span class="sig-paren">(</span><em>ref</em>, <em>transform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#TransformedColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.TransformedColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 </dd></dl>
 

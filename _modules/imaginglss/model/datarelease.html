@@ -71,7 +71,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">imagerepo</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">catalogue</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">schema</span>
-
+<span class="kn">from</span> <span class="nn">.sfdmap</span> <span class="kn">import</span> <span class="n">SFDMap</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.9&quot;</span>
 <span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
@@ -125,6 +125,15 @@
 <div class="viewcode-block" id="Footprint"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.Footprint">[docs]</a><span class="k">class</span> <span class="nc">Footprint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; footprint of a data release.</span>
 <span class="sd">        </span>
+<span class="sd">        Use indexing to construct sub-regions of the footprint, for example</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; print datarelease.footprint[:100]</span>
+<span class="sd">        Footprint(.....)</span>
+
+
 <span class="sd">        Attributes</span>
 <span class="sd">        ----------</span>
 <span class="sd">        bricks : list of model.brick.Brick</span>
@@ -142,17 +151,29 @@
                     <span class="p">[</span><span class="n">b</span><span class="o">.</span><span class="n">index</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;i8&#39;</span><span class="p">)</span>
 
         <span class="c"># range of ra dec of covered bricks</span>
-        <span class="n">FootPrintRange</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FootPrintRange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;ramin&#39;</span><span class="p">,</span> <span class="s">&#39;ramax&#39;</span><span class="p">,</span> <span class="s">&#39;decmin&#39;</span><span class="p">,</span> <span class="s">&#39;decmax&#39;</span><span class="p">])</span>
+        <span class="n">FootPrintRange</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s">&#39;FootPrintRange&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;ramin&#39;</span><span class="p">,</span> <span class="s">&#39;ramax&#39;</span><span class="p">,</span> <span class="s">&#39;decmin&#39;</span><span class="p">,</span> <span class="s">&#39;decmax&#39;</span><span class="p">,</span> <span class="s">&#39;area&#39;</span><span class="p">])</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bricks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">FootPrintRange</span><span class="p">(</span><span class="n">ramin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ramax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decmax</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">FootPrintRange</span><span class="p">(</span><span class="n">ramin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ramax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decmax</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">ramin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">])</span>
+            <span class="n">ramax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">])</span>
+            <span class="n">decmin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">])</span>
+            <span class="n">decmax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">])</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">FootPrintRange</span><span class="p">(</span>
-                <span class="n">ramin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-                <span class="n">ramax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">ra2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-                <span class="n">decmin</span><span class="o">=</span><span class="nb">min</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec1</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),</span>
-                <span class="n">decmax</span><span class="o">=</span><span class="nb">max</span><span class="p">([</span><span class="n">brick</span><span class="o">.</span><span class="n">dec2</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">]),)</span>
+                <span class="n">ramin</span><span class="o">=</span><span class="n">ramin</span><span class="p">,</span> <span class="n">ramax</span><span class="o">=</span><span class="n">ramax</span><span class="p">,</span><span class="n">decmin</span><span class="o">=</span><span class="n">decmin</span><span class="p">,</span><span class="n">decmax</span><span class="o">=</span><span class="n">decmax</span><span class="p">,</span>
+                <span class="n">area</span> <span class="o">=</span> <span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">decmax</span> <span class="o">*</span> <span class="n">deg</span><span class="p">)</span> \
+                    <span class="o">-</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">decmin</span> <span class="o">*</span> <span class="n">deg</span> <span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">ramax</span> <span class="o">-</span> <span class="n">ramin</span><span class="p">)</span> <span class="o">*</span> <span class="n">deg</span> \
+                    <span class="o">*</span> <span class="mi">129600</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+                <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span> <span class="o">=</span> <span class="n">brickindex</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Footprint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bricks</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;Footprint: len(bricks)=</span><span class="si">%d</span><span class="s"> , area=</span><span class="si">%g</span><span class="s"> degrees, range=</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span>
@@ -161,6 +182,64 @@
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
             <span class="p">)</span>
 
+<div class="viewcode-block" id="Footprint.random_sample"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.Footprint.random_sample">[docs]</a>    <span class="k">def</span> <span class="nf">random_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Npoints</span><span class="p">,</span> <span class="n">rng</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate uniformly distributed points within the boundary that lie in</span>
+<span class="sd">        the footprint.</span>
+<span class="sd">        </span>
+<span class="sd">        The random points are generated by first producing random points with</span>
+<span class="sd">        int the ra and dec range of the footprint, then remove</span>
+<span class="sd">        points that are not in any bricks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Npoints : int</span>
+<span class="sd">            numpy of random points to sample</span>
+
+<span class="sd">        rng : :py:class:`numpy.random.RandomState`</span>
+<span class="sd">            a random number generator</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coord : array_like (2, Npoints)</span>
+<span class="sd">            (RA, DEC) of the random points</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Internally, the random points are generated in batches of 1 million points.</span>
+
+<span class="sd">        If the footprint is sparse in the bounding ra, dec range, this algorithm</span>
+<span class="sd">        becomes extremely inefficient.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">Npoints</span><span class="p">))</span>
+
+        <span class="n">ramin</span><span class="p">,</span><span class="n">ramax</span><span class="p">,</span><span class="n">dcmin</span><span class="p">,</span><span class="n">dcmax</span><span class="p">,</span><span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">range</span>
+        <span class="n">Nmake</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">area</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">*</span> <span class="n">Npoints</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">start</span> <span class="o">!=</span> <span class="n">Npoints</span><span class="p">:</span>
+            <span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">min</span><span class="p">([</span><span class="n">Nmake</span><span class="p">,</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">]))</span> <span class="p">)</span>
+
+            <span class="c">#</span>
+            <span class="n">cmin</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dcmin</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+            <span class="n">cmax</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dcmax</span><span class="o">*</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+            <span class="c">#</span>
+            <span class="n">RA</span>   <span class="o">=</span> <span class="n">ramin</span> <span class="o">+</span> <span class="n">u1</span><span class="o">*</span><span class="p">(</span><span class="n">ramax</span><span class="o">-</span><span class="n">ramin</span><span class="p">)</span>
+            <span class="n">DEC</span>  <span class="o">=</span> <span class="mi">90</span><span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cmin</span><span class="o">+</span><span class="n">u2</span><span class="o">*</span><span class="p">(</span><span class="n">cmax</span><span class="o">-</span><span class="n">cmin</span><span class="p">))</span><span class="o">*</span><span class="mf">180.</span><span class="o">/</span><span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+            <span class="c"># Filter out those not in any bricks: only very few points remain</span>
+            <span class="n">coord1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">((</span><span class="n">RA</span><span class="p">,</span> <span class="n">DEC</span><span class="p">))</span>
+
+            <span class="c"># Are we full?</span>
+            <span class="n">coord1</span> <span class="o">=</span> <span class="n">coord1</span><span class="p">[:,</span> <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coord1</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">Npoints</span> <span class="o">-</span> <span class="n">start</span><span class="p">)]</span>
+            <span class="n">sl</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">coord1</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">coord</span><span class="p">[:,</span> <span class="n">sl</span><span class="p">]</span> <span class="o">=</span> <span class="n">coord1</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">coord1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">Nmake</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">area</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">*</span> <span class="p">(</span><span class="n">Npoints</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">coord</span>
+
+        </div>
 <div class="viewcode-block" id="Footprint.filter"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.Footprint.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Remove coordinates that are not covered by the footprint </span>
 
@@ -214,7 +293,7 @@
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">dustdir</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
 
         <span class="n">cache</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
@@ -222,40 +301,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">sfdmap</span> <span class="o">=</span> <span class="n">SFDMap</span><span class="p">(</span><span class="n">dustdir</span><span class="o">=</span><span class="n">dustdir</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;Data Release of version </span><span class="si">%s</span><span class="s"> is not supported&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
 
-        <span class="n">myschema</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">:</span>
             <span class="k">pass</span>
 
+        <span class="n">myschema</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;u&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">}</span>
+
         <span class="n">brickdata</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">myschema</span><span class="o">.</span><span class="n">BRICKS_FILENAME</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span> <span class="o">=</span> <span class="n">brickindex</span><span class="o">.</span><span class="n">BrickIndex</span><span class="p">(</span><span class="n">brickdata</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;u&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">}</span>
 
         <span class="c"># E(B-V) to ugrizY bands, SFD98; used in tractor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">extinction</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.995</span><span class="p">,</span> <span class="mf">3.214</span><span class="p">,</span> <span class="mf">2.165</span><span class="p">,</span> <span class="mf">1.592</span><span class="p">,</span> <span class="mf">1.211</span><span class="p">,</span> <span class="mf">1.064</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span>\
             <span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="p">[(</span><span class="n">band</span><span class="p">,</span> <span class="s">&#39;f8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="s">&#39;ugrizY&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">image_filenames</span> <span class="o">=</span> <span class="n">myschema</span><span class="o">.</span><span class="n">format_image_filenames</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_filenames</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">]</span> <span class="o">=</span> <span class="n">imagerepo</span><span class="o">.</span><span class="n">ImageRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">imagerepo</span><span class="o">.</span><span class="n">ImageRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
-        <span class="k">def</span> <span class="nf">image_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> 
-            <span class="n">PATTERN</span><span class="o">=</span><span class="s">&#39;aux/</span><span class="si">%(pre)s</span><span class="s">/</span><span class="si">%(brickname)s</span><span class="s">/decals-</span><span class="si">%(brickname)s</span><span class="s">-ebv.fits&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">PATTERN</span> <span class="o">%</span> <span class="nb">dict</span><span class="p">(</span><span class="n">pre</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">brickname</span><span class="o">=</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;ebv&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imagerepo</span><span class="o">.</span><span class="n">ImageRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">image_filename</span><span class="p">)</span>
-            
         <span class="k">try</span><span class="p">:</span> 
             <span class="n">_covered_brickids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="s">&#39;covered_brickids.i8&#39;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;i8&#39;</span><span class="p">)</span>
@@ -273,12 +342,13 @@
             <span class="n">_covered_brickids</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_covered_brickids</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;i8&#39;</span><span class="p">)</span>
             <span class="n">_covered_brickids</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="s">&#39;covered_brickids.i8&#39;</span><span class="p">))</span>
             
+        <span class="c"># the list of covered bricks must be sorted.</span>
+        <span class="n">_covered_brickids</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span> <span class="o">=</span> <span class="n">_covered_brickids</span>
 
-        <span class="c"># the list of covered bricks must be sorted.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="n">_covered_brickids</span><span class="p">]</span>
 
-        <span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">footprint</span> <span class="o">=</span> <span class="n">Footprint</span><span class="p">(</span><span class="n">bricks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">)</span> <span class="c"># build the footprint property</span>
 
         <span class="n">catalogue_filenames</span> <span class="o">=</span> <span class="p">[</span>
@@ -291,7 +361,35 @@
             <span class="n">filenames</span><span class="o">=</span><span class="n">catalogue_filenames</span><span class="p">,</span>
             <span class="n">aliases</span><span class="o">=</span><span class="n">myschema</span><span class="o">.</span><span class="n">CATALOGUE_ALIASES</span>
             <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_from_state</span><span class="p">()</span>
 
+<div class="viewcode-block" id="DataRelease.init_from_state"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.init_from_state">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">myschema</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+
+        <span class="n">bricks</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">bid</span><span class="p">)</span> <span class="k">for</span> <span class="n">bid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_covered_brickids</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">footprint</span> <span class="o">=</span> <span class="n">Footprint</span><span class="p">(</span><span class="n">bricks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickindex</span><span class="p">)</span> <span class="c"># build the footprint property</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">image_filenames</span> <span class="o">=</span> <span class="n">myschema</span><span class="o">.</span><span class="n">format_image_filenames</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">image_filenames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">]</span> <span class="o">=</span> <span class="n">imagerepo</span><span class="o">.</span><span class="n">ImageRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">][</span><span class="n">band</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">image</span><span class="p">]</span> <span class="o">=</span> <span class="n">imagerepo</span><span class="o">.</span><span class="n">ImageRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">image_filenames</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
+            
+</div>
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;footprint&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;images&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">d</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_from_state</span><span class="p">()</span>
+ 
 <div class="viewcode-block" id="DataRelease.readout"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.readout">[docs]</a>    <span class="k">def</span> <span class="nf">readout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Readout pixels from an image.</span>
 <span class="sd">            </span>
@@ -358,12 +456,45 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_missing</span><span class="p">:</span>
                     <span class="k">raise</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="c">#warnings.warn(str(e), stacklevel=2)</span>
+                    <span class="k">pass</span>
         <span class="c">#</span>
         <span class="n">images</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">pixels</span><span class="p">[</span><span class="n">invarg</span><span class="p">]</span>
             
-        <span class="k">return</span> <span class="n">images</span></div></div>
-</pre></div>
+        <span class="k">return</span> <span class="n">images</span>
+</div>
+<div class="viewcode-block" id="DataRelease.read_depths"><a class="viewcode-back" href="../../../imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.read_depths">[docs]</a>    <span class="k">def</span> <span class="nf">read_depths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">bands</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot; Read the depth of given bands, </span>
+<span class="sd">            return as an array</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            array of dtype DECAM_INVVAR and DECAM_MW_TRANSMISSION.</span>
+
+<span class="sd">            Notes</span>
+<span class="sd">            -----</span>
+<span class="sd">            only columns corresponding to band in the bands parameter are</span>
+<span class="sd">            filled. the other columns are zeros.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span>
+                <span class="p">[(</span><span class="s">&#39;DECAM_INVVAR&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;f4&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)),</span>
+                 <span class="p">(</span><span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;f4&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">))]</span>
+                <span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">dtype</span><span class="p">)</span>
+
+        <span class="n">ebv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sfdmap</span><span class="o">.</span><span class="n">ebv</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bands</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bands</span><span class="p">[</span><span class="n">band</span><span class="p">]</span>
+
+            <span class="n">output</span><span class="p">[</span><span class="s">&#39;DECAM_INVVAR&#39;</span><span class="p">][:,</span> <span class="n">ind</span><span class="p">]</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">readout</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s">&#39;depth&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">],</span> 
+                    <span class="n">default</span><span class="o">=+</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ignore_missing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">[</span><span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">][:,</span> <span class="n">ind</span><span class="p">]</span> <span class="o">=</span>  \
+                    <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span> <span class="n">ebv</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">extinction</span><span class="p">[</span><span class="n">band</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.5</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+</pre></div></div></div>
 
           </div>
         </div>

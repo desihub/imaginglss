@@ -59,14 +59,23 @@
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">fits</span>
 <span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">filehandler</span>
 <span class="kn">from</span> <span class="nn">..utils.columnstore</span> <span class="kn">import</span> <span class="n">ColumnStore</span>
+<span class="kn">from</span> <span class="nn">..utils.npyquery</span> <span class="kn">import</span> <span class="n">Column</span> <span class="k">as</span> <span class="n">ColumnBase</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.0&quot;</span>
 <span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
 
-
-
-
+<div class="viewcode-block" id="C"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.C">[docs]</a><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ColumnBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; `C` provides a shorthand for querying the catalogue</span>
+<span class="sd">        with the :py:module:`imaginglss.utils.npyquery` mini language </span>
+<span class="sd">     &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="C.visit"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.C.visit">[docs]</a>    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalogue</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">catalogue</span><span class="p">,</span> <span class="n">Catalogue</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">catalogue</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">][:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># Rows</span>
+            <span class="k">return</span> <span class="n">catalogue</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+</div></div>
 <div class="viewcode-block" id="coord2xyz"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.coord2xyz">[docs]</a><span class="k">def</span> <span class="nf">coord2xyz</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given coord=(RA,DEC) returns unit vectors, nhat.  A helper function.</span>
@@ -110,9 +119,9 @@
     <span class="k">pass</span>
 </div>
 <div class="viewcode-block" id="TransformedColumn"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.TransformedColumn">[docs]</a><span class="k">class</span> <span class="nc">TransformedColumn</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transfrom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
 </div>
@@ -225,7 +234,7 @@
                 <span class="n">data1</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 
             <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data1</span><span class="p">)</span>
- 
+
         <span class="k">return</span> <span class="n">data</span>
 </div>
 <div class="viewcode-block" id="Catalogue.check_cache"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.Catalogue.check_cache">[docs]</a>    <span class="k">def</span> <span class="nf">check_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -244,7 +253,7 @@
         <span class="k">return</span> <span class="n">Nfile</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span>
         </div>
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
             <span class="n">old</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">old</span><span class="p">],</span> <span class="n">transform</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

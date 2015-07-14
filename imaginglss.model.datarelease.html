@@ -65,7 +65,7 @@ imaging data and makes use of several lower
 level objects.</p>
 <dl class="class">
 <dt id="imaginglss.model.datarelease.DataRelease">
-<em class="property">class </em><code class="descclassname">imaginglss.model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root</em>, <em>cache</em>, <em>version</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root</em>, <em>cache</em>, <em>version</em>, <em>dustdir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The highest level interface into the data for a given imaging
 data release.  Uses several &#8220;helper&#8221; classes and has methods for
@@ -104,6 +104,29 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="imaginglss.model.datarelease.DataRelease.init_from_state">
+<code class="descname">init_from_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease.init_from_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease.init_from_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.datarelease.DataRelease.read_depths">
+<code class="descname">read_depths</code><span class="sig-paren">(</span><em>coord</em>, <em>bands=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease.read_depths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease.read_depths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the depth of given bands, 
+return as an array</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">array of dtype DECAM_INVVAR and DECAM_MW_TRANSMISSION.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>only columns corresponding to band in the bands parameter are
+filled. the other columns are zeros.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="imaginglss.model.datarelease.DataRelease.readout">
 <code class="descname">readout</code><span class="sig-paren">(</span><em>coord</em>, <em>repo</em>, <em>default=nan</em>, <em>ignore_missing=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease.readout" title="Permalink to this definition">¶</a></dt>
@@ -149,6 +172,12 @@ have readout in ImageRepo.</p>
 <em class="property">class </em><code class="descclassname">imaginglss.model.datarelease.</code><code class="descname">Footprint</code><span class="sig-paren">(</span><em>bricks</em>, <em>brickindex</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#Footprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.Footprint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>footprint of a data release.</p>
+<p>Use indexing to construct sub-regions of the footprint, for example</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">datarelease</span><span class="o">.</span><span class="n">footprint</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+<span class="go">Footprint(.....)</span>
+</pre></div>
+</div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -189,6 +218,42 @@ have readout in ImageRepo.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.datarelease.Footprint.random_sample">
+<code class="descname">random_sample</code><span class="sig-paren">(</span><em>Npoints</em>, <em>rng</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#Footprint.random_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.Footprint.random_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate uniformly distributed points within the boundary that lie in
+the footprint.</p>
+<p>The random points are generated by first producing random points with
+int the ra and dec range of the footprint, then remove
+points that are not in any bricks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Npoints</strong> : int</p>
+<blockquote>
+<div><p>numpy of random points to sample</p>
+</div></blockquote>
+<p><strong>rng</strong> : <code class="xref py py-class docutils literal"><span class="pre">numpy.random.RandomState</span></code></p>
+<blockquote>
+<div><p>a random number generator</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like (2, Npoints)</p>
+<blockquote class="last">
+<div><p>(RA, DEC) of the random points</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Internally, the random points are generated in batches of 1 million points.</p>
+<p>If the footprint is sparse in the bounding ra, dec range, this algorithm
+becomes extremely inefficient.</p>
 </dd></dl>
 
 </dd></dl>

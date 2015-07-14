@@ -71,9 +71,17 @@
 <p>A ColumnStore</p>
 <p>Columns are accessed via <a href="#id1"><span class="problematic" id="id2">:py:code:`[columnname]`</span></a>.</p>
 <p>Subclass shall implement <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.fetch" title="imaginglss.utils.columnstore.ColumnStore.fetch"><code class="xref py py-meth docutils literal"><span class="pre">fetch()</span></code></a>, <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.dtype" title="imaginglss.utils.columnstore.ColumnStore.dtype"><code class="xref py py-attr docutils literal"><span class="pre">dtype</span></code></a>, <a class="reference internal" href="#imaginglss.utils.columnstore.ColumnStore.size" title="imaginglss.utils.columnstore.ColumnStore.size"><code class="xref py py-attr docutils literal"><span class="pre">size</span></code></a>.</p>
+<p>A ColumnStore acts as a context manager. During when the context is held,
+all fetch operations are buffered. The buffers are release after the context
+is released.</p>
 <p class="rubric">Notes</p>
 <p>To retrive the contents of a columns use <a href="#id3"><span class="problematic" id="id4">:py:code:`[columnname][:]`</span></a>, or
 other slicing syntax with a step size of 1.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">mycolumnstore</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="k">print</span> <span class="n">mycolumnstore</span><span class="p">[</span><span class="s">&#39;Column1&#39;</span><span class="p">][:]</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="k">print</span> <span class="n">mycolumnstore</span><span class="p">[</span><span class="s">&#39;Column1&#39;</span><span class="p">][:]</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="imaginglss.utils.columnstore.ColumnStore.dtype">
 <code class="descname">dtype</code><a class="headerlink" href="#imaginglss.utils.columnstore.ColumnStore.dtype" title="Permalink to this definition">¶</a></dt>
@@ -92,6 +100,12 @@ other slicing syntax with a step size of 1.</p>
 <dd><p>Total number of items</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.columnstore.Rows">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.columnstore.</code><code class="descname">Rows</code><span class="sig-paren">(</span><em>parent</em>, <em>rows</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/columnstore.html#Rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.columnstore.Rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 </dd></dl>
 
 </div>

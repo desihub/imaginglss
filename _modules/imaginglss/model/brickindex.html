@@ -102,7 +102,18 @@
 <span class="sd">    </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">brickdata</span><span class="p">[:],</span> <span class="n">copy</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_from_state</span><span class="p">()</span>    
 
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">brickdata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_from_state</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BrickIndex.init_from_state"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.init_from_state">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">brickdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKROW&#39;</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ROWMAX</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKROW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -125,7 +136,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">]</span>
 
         <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-
+</div>
 <div class="viewcode-block" id="BrickIndex.build"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NROWS</span><span class="p">,</span> <span class="n">NCOLS</span><span class="p">):</span>
         <span class="n">height</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">NROWS</span>
 
