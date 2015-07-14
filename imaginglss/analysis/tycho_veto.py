@@ -32,16 +32,16 @@ def radec2pos(ra, dec):
     pos[:, 1] = numpy.cos(dec) * numpy.cos(ra)
     return pos
 
-class TychoCatalogue(object):
+class Tycho(object):
     def __init__(self, path):
-        data = fits.readtable(path)
+        data = fits.read_table(path)
         self.bmag = data['BMAG'].copy()
         self.vmag = data['VMAG'].copy()
         self.varflag = data['VARFLAG'].copy()
         pos = radec2pos(data['RA'], data['DEC'])
         self.tree = cKDTree(pos)
 
-    def nearest_objects(self, coord)
+    def nearest(self, coord):
         """
         Query Tycho catalogue, returns information about
         the nearest object. The distance is in degrees.
@@ -59,21 +59,20 @@ class TychoCatalogue(object):
         """
         pos = radec2pos(coord[0], coord[1])
         d, i = self.tree.query(pos, k=1)
-        d = 2 * numpy.arcsin(d * 0.5) * 180 / numpy.pi.
+        d = 2 * numpy.arcsin(d * 0.5) * 180 / numpy.pi
         return d, self.bmag[i], self.vmag[i]
     
 def BOSS_DR9(tycho, coord):
     """ Returns True for 'keep' """
     # BOSS DR9-11
-    ra, dec = coord
-    d, bmag, vmag = tycho.nearest(ra, dec)
+    d, bmag, vmag = tycho.nearest(coord)
     b = bmag.clip(6, 11.5)
     R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
     return d > R
 
 def DECAM_LRG(tycho, coord):
     ra, dec = coord
-    d, bmag, vmag = tycho.nearest(ra, dec)
+    d, bmag, vmag = tycho.nearest(coord)
     R = 10 ** (3.5 - 0.15 * vmag) / 3600. 
     return d > R
 
@@ -86,6 +85,6 @@ def DECAM_QSO(tycho, coord):
 
 def DECAM_BGS(tycho, coord):
     ra, dec = coord
-    d, bmag, vmag = tycho.nearest(ra, dec)
+    d, bmag, vmag = tycho.nearest(coord)
     R = 10 ** (2.2 - 0.15 * vmag) / 3600. 
     return d > R

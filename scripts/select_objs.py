@@ -24,6 +24,7 @@ import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
+from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import cuts
 
 from mpi4py import MPI
@@ -36,6 +37,7 @@ ap.add_argument("output")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
+ap.add_argument("--with-tycho", help='path to the tycho.fit file for applying veto around bright stars')
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -43,12 +45,12 @@ ns = ap.parse_args()
 
 np.seterr(divide='ignore', invalid='ignore')
 
-def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
+def select_objs(ns, comm=MPI.COMM_WORLD):
     """
     Does the actual selection, imposing cuts on the fluxes
     """
     # Get instances of a data release and SFD dust map.
-    decals = DECALS(conffile)
+    decals = DECALS(ns.conf)
     dr     = decals.datarelease
     sfd    = decals.sfdmap
     cat    = dr.catalogue
@@ -60,7 +62,7 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
 
     with dr.catalogue as cat:
         rows = cat[mine]
-        fluxcut = getattr(targetselection, sampl)
+        fluxcut = getattr(targetselection, ns.ObjectType)
         mask = cuts.apply(comm, fluxcut, rows)
 
     # ... and extract only the objects which passed the cuts.
@@ -71,8 +73,8 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
-    # for a complete sample.
-    compcut = getattr(completeness, sampl)
+    # for a complete ns.ObjectTypee.
+    compcut = getattr(completeness, ns.ObjectType)
     sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
     cat_lim = dr.read_depths((RA, DEC), compcut.bands)
 
@@ -89,22 +91,41 @@ def select_objs(sampl, conffile, comm=MPI.COMM_WORLD):
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
         print('Total number of objects in complete area: ', total_complete)
+
     RA  = RA [mask]
     DEC = DEC[mask]
     MAG = MAG[mask]
+    
+    if ns.with_tycho is not None:
+        tycho = tycho_veto.Tycho(ns.with_tycho)
+        veto = getattr(tycho_veto, 'DECAM_' + ns.ObjectType)
+        mask = veto(tycho, (RA, DEC))
+
+        total_complete = sum(comm.allgather(mask.sum()))
+        if comm.rank == 0:
+            print('Total number of objects not close to stars', total_complete)
+
+        RA  = RA [mask]
+        DEC = DEC[mask]
+        MAG = MAG[mask]
+    else:
+        if comm.rank == 0:
+            print('Not applying cuts for star proximity.')
+        
+
     RA  = np.concatenate(comm.allgather(RA ))
     DEC = np.concatenate(comm.allgather(DEC))
     MAG = np.concatenate(comm.allgather(MAG), axis=0)
+
     return( (RA,DEC,MAG) )
     #
 
-
 if __name__=="__main__":
 
-    ra,dc,mag = select_objs(ns.ObjectType, ns.conf)
+    ra,dc,mag = select_objs(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        # Just write the sample to an ascii text file.
+        # Just write the ns.ObjectTypee to an ascii text file.
         ff = file(ns.output,"w")
         with ff:
             ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
