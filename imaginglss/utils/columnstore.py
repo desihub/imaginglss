@@ -44,8 +44,8 @@ class ColumnStore(object):
         other slicing syntax with a step size of 1.
 
         >>> with mycolumnstore:
-        >>>    print mycolumnstore['Column1'][:]
-        >>>    print mycolumnstore['Column1'][:]
+        >>>    print(mycolumnstore['Column1'][:])
+        >>>    print(mycolumnstore['Column1'][:])
     """
     def __init__(self):
         self._memorybuffer_ = None
