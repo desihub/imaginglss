@@ -20,11 +20,15 @@ Examples
 >>> query  = (Column('BlackholeMass') > 2.0)
 >>> query &= (Column('BlackholeMass') > 4.0)
 >>> query &= (Column('Position')[:, 2] > 1.0)
->>> print query.visit(data)
+>>> print(query.visit(data))
 
 """
 import numpy
 from numpy import ndarray
+try:
+    basestring
+except NameError:
+    basestring = str
 
 class Node(object):
     """ A node in the query expression.
@@ -183,7 +187,11 @@ class Literal(Node):
         return repr(self.value)
 
     def real_visit(self, array, s):
-        return self.value
+        if isinstance(self.value, basestring):
+            v = numpy.array(self.value, 'S')
+        else:
+            v = self.value
+        return v
 
 class Column(Node):
     """ 
@@ -296,10 +304,12 @@ class Expr(Node):
         if self.is_associative():
             # do not use ufunc reduction because ops can 
             # be of different shape
-            return reduce(self.function, ops)
+            r = ops[0]
+            for a, s in zip(ops[1:], self.operands[1:]):
+                r = self.function(r, a)
         else:
-            return self.function(*ops)
-
+            r = self.function(*ops)
+        return r
 class Max(Expr):
     def __init__(self, *args):
         f = lambda *args: numpy.max(args, axis=0)
@@ -331,17 +341,18 @@ def test():
     data['Name'][2] = 'N3'
     data['Name'][3] = 'N4'
 
-    query  = (Column('BlackholeMass') > 0.0)
-    query &= (Column('Name') == 'N1')
-    query &= (Column('BlackholeMass') < 5.0)
-    query &= (Column('Position')[:, 2] > 0.0) | (Column('Position')[:, 1] < 0.0)
-    query &= (numpy.sin(Column('PhaseOfMoon') * (2 * numpy.pi)) < 0.1)
-    query &= Max(Column('BlackholeMass'), Column('PhaseOfMoon'), Column('Position').max()) > 0
-    for sub in query:
-        print sub, sub.visit(data)
+    query1 = (Column('BlackholeMass') > 0.0)
+    assert query1.visit(data).sum() == 4
+    query2 = (Column('Name') == 'N1')
+    assert query2.visit(data).sum() == 1
+    query3 = (Column('BlackholeMass') < 5.0)
+    assert query3.visit(data).sum() == 5
+    query4 = (Column('Position')[:, 2] > 0.0) | (Column('Position')[:, 1] < 0.0)
+    assert query4.visit(data).sum() == 5
+    query5 = (numpy.sin(Column('PhaseOfMoon') * (2 * numpy.pi)) < 0.1)
+    assert query5.visit(data).sum() == 4
+    query6 = Max(Column('BlackholeMass'), Column('PhaseOfMoon'), Column('Position').max()) > 0
+    assert query6.visit(data).sum() == 5
 
-    print query
-    print query(data)
-    print query.names
 if __name__ == '__main__':
     test()
