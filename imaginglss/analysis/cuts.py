@@ -1,11 +1,5 @@
 # "Helper" routines to centralize the flux and color cuts
 # in one place where they can be called from other routines.
-# Contains two useful classes:
-#	Fluxes --	contains methods which return True when
-#			an object's fluxes pass a certain cut.
-#	Completeness --	contains methods which return True when	a given
-#			depth puts it in the 100% complete sample.
-# as well as a routine to compute N-sigma flux limits (findlim).
 
 import numpy as N
 
@@ -14,6 +8,10 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 def apply(comm, query, data):
+    """ Apply a query, or 'cut' to data. 
+
+        The Queres
+    """
     total = sum(comm.allgather(len(data)) )
     for expr in query:
         mask = expr.visit(data)

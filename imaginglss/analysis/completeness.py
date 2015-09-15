@@ -25,6 +25,15 @@ Z_LIMIT = DECAM_INVVAR[4] ** -0.5 / DECAM_MW_TRANSMISSION[4]
 R_LIMIT = DECAM_INVVAR[2] ** -0.5 / DECAM_MW_TRANSMISSION[2]
 
 def LRG(sigma):
+    """ Create the completeness cut for LRG.
+
+        Parameters
+        ----------
+        sigma : dict 
+            'r', 'z', 'g' members specifies the confidents in that
+            band. ( :math:`n \\sigma`)
+
+    """
     LRG  = sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
     LRG &= sigma['z'] * Z_LIMIT < 10**((22.5-20.56    )/2.5)
     LRG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.00+1.6)/2.5)
@@ -32,6 +41,15 @@ def LRG(sigma):
 LRG.bands = 'rz'
 
 def ELG(sigma):
+    """ Create the completeness cut for ELG.
+
+        Parameters
+        ----------
+        sigma : dict 
+            'r', 'z', 'g' members specifies the confidents in that
+            band. ( :math:`n \\sigma`)
+
+    """
     ELG =  sigma['g'] * G_LIMIT < 10**((22.5-23.4-1.5+0.2)/2.5)
     ELG &= sigma['r'] * R_LIMIT < 10**((22.5-23.4        )/2.5)
     ELG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.4+0.3    )/2.5)
@@ -39,12 +57,30 @@ def ELG(sigma):
 ELG.bands = 'grz'
 
 def QSO(sigma):
+    """ Create the completeness cut for QSO.
+
+        Parameters
+        ----------
+        sigma : dict 
+            'r', 'z', 'g' members specifies the confidents in that
+            band. ( :math:`n \\sigma`)
+
+    """
     QSO =  sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
     QSO &= sigma['g'] * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
     return QSO
 QSO.bands = 'gr'
 
 def BGS(sigma):
+    """ Create the completeness cut for BGS.
+
+        Parameters
+        ----------
+        sigma : dict 
+            'r', 'z', 'g' members specifies the confidents in that
+            band. ( :math:`n \\sigma`)
+
+    """
     BGS = sigma['r'] * R_LIMIT < 10**((22.5-19.5)/2.5)
     return BGS
 BGS.bands = 'r'

@@ -5,11 +5,12 @@
 
     A collection of helpful (static) methods to check whether an object's
     flux passes a given selection criterion (e.g. LRG, ELG or QSO).
+
     These cuts assume we are passed the extinction-corrected fluxes
     (flux/mw_transmission) and are taken from:
+
       https://desi.lbl.gov/trac/wiki/TargetSelection
-    The requirement on BRICK_PRIMARY is handled elsewhere, these methods just
-    look after the flux requirements.
+
 """
 
 __author__ = "Yu Feng and Martin White"
@@ -37,6 +38,8 @@ WFLUX = 0.75 * WISE_FLUX[0] / WISE_MW_TRANSMISSION[0] \
       + 0.25 * WISE_FLUX[1] / WISE_MW_TRANSMISSION[1] 
 
 LRG =  BRICK_PRIMARY != 0
+""" LRG Cut """
+
 LRG &= RFLUX > 10**((22.5-23.0)/2.5)
 LRG &= ZFLUX > 10**((22.5-20.56)/2.5)
 LRG &= W1FLUX > 10**((22.5-19.35)/2.5)
@@ -44,6 +47,8 @@ LRG &= ZFLUX > RFLUX * 10**(1.6/2.5)
 LRG &= W1FLUX * RFLUX ** (1.33-1) > ZFLUX**1.33 * 10**(-0.33/2.5)
 
 ELG =  BRICK_PRIMARY != 0
+""" ELG Cut """
+
 ELG &= RFLUX > 10**((22.5-23.4)/2.5)
 ELG &= ZFLUX > 10**(0.3/2.5) * RFLUX
 ELG &= ZFLUX < 10**(1.5/2.5) * RFLUX
@@ -52,6 +57,8 @@ ELG &= ZFLUX < GFLUX * 10**(1.2/2.5)
 ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
 
 QSO =  BRICK_PRIMARY != 0
+""" QSO Cut """
+
 QSO &= RFLUX > 10**((22.5-23.0)/2.5)
 QSO &= RFLUX < 10**(1.0/2.5) * GFLUX
 QSO &= ZFLUX > 10**(-0.3/2.5) * RFLUX
@@ -59,5 +66,9 @@ QSO &= ZFLUX < 10**(1.1/2.5) * RFLUX
 QSO &= WFLUX * GFLUX**1.2 > 10**(2/2.5) * RFLUX**(1+1.2)
 
 BGS =  BRICK_PRIMARY != 0
+""" BGS Cut """
+
 BGS &= TYPE != 'PSF'
 BGS &=  RFLUX > 10**((22.5-19.35)/2.5)
+
+__all__ = ['LRG', 'ELG', 'QSO', 'BGS']
