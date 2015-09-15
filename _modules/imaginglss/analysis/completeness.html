@@ -73,28 +73,64 @@
 <span class="n">R_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_INVVAR</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">LRG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create the completeness cut for LRG.</span>
+<div class="viewcode-block" id="LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.LRG">[docs]</a>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma : dict </span>
+<span class="sd">            &#39;r&#39;, &#39;z&#39;, &#39;g&#39; members specifies the confidents in that</span>
+<span class="sd">            band. ( :math:`n \\sigma`)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">LRG</span>  <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-<div class="viewcode-block" id="LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.LRG">[docs]</a>    <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">20.56</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">20.56</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">+</span><span class="mf">1.6</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">LRG</span>
 <span class="n">LRG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;rz&#39;</span>
 </div>
 <span class="k">def</span> <span class="nf">ELG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create the completeness cut for ELG.</span>
+<div class="viewcode-block" id="ELG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.ELG">[docs]</a>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma : dict </span>
+<span class="sd">            &#39;r&#39;, &#39;z&#39;, &#39;g&#39; members specifies the confidents in that</span>
+<span class="sd">            band. ( :math:`n \\sigma`)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ELG</span> <span class="o">=</span>  <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span><span class="o">-</span><span class="mf">1.5</span><span class="o">+</span><span class="mf">0.2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-<div class="viewcode-block" id="ELG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.ELG">[docs]</a>    <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span>        <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span>        <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span><span class="o">+</span><span class="mf">0.3</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ELG</span>
 <span class="n">ELG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;grz&#39;</span>
 </div>
 <span class="k">def</span> <span class="nf">QSO</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create the completeness cut for QSO.</span>
+<div class="viewcode-block" id="QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.QSO">[docs]</a>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma : dict </span>
+<span class="sd">            &#39;r&#39;, &#39;z&#39;, &#39;g&#39; members specifies the confidents in that</span>
+<span class="sd">            band. ( :math:`n \\sigma`)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">QSO</span> <span class="o">=</span>  <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-<div class="viewcode-block" id="QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.QSO">[docs]</a>    <span class="n">QSO</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">QSO</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">QSO</span>
 <span class="n">QSO</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;gr&#39;</span>
 </div>
 <span class="k">def</span> <span class="nf">BGS</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create the completeness cut for BGS.</span>
+<div class="viewcode-block" id="BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.BGS">[docs]</a>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigma : dict </span>
+<span class="sd">            &#39;r&#39;, &#39;z&#39;, &#39;g&#39; members specifies the confidents in that</span>
+<span class="sd">            band. ( :math:`n \\sigma`)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">BGS</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">19.5</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-<div class="viewcode-block" id="BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.BGS">[docs]</a>    <span class="k">return</span> <span class="n">BGS</span>
+    <span class="k">return</span> <span class="n">BGS</span>
 <span class="n">BGS</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span>
 </pre></div></div>
 
