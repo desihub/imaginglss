@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.utils.npyquery module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="imaginglss.utils package" href="imaginglss.utils.html" />
+    <link rel="next" title="imaginglss.utils.sharedmem module" href="imaginglss.utils.sharedmem.html" />
+    <link rel="prev" title="imaginglss.utils.kdtree module" href="imaginglss.utils.kdtree.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.sharedmem.html" title="imaginglss.utils.sharedmem module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.kdtree.html" title="imaginglss.utils.kdtree module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" accesskey="U">imaginglss.utils package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-imaginglss.utils.npyquery">
+<span id="imaginglss-utils-npyquery-module"></span><h1>imaginglss.utils.npyquery module<a class="headerlink" href="#module-imaginglss.utils.npyquery" title="Permalink to this headline">¶</a></h1>
+<p>npyquery, Query mini-language for numpy arrays.</p>
+<p>We reuse the python expression parser to construct the
+AST. This is inspired by TinyDB, and may have been inspired
+by other python database implementations as well.</p>
+<dl class="docutils">
+<dt>Override Column.visit for customized access to objects (e.g.</dt>
+<dd>Pandas dataframe or imaginglss&#8217;s ColumnStore )</dd>
+</dl>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">dtype</span><span class="p">([</span>
+<span class="go">        (&#39;BlackholeMass&#39;, &#39;f4&#39;), </span>
+<span class="go">        (&#39;Position&#39;, (&#39;f4&#39;, 3))])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s">&#39;BlackholeMass&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s">&#39;Position&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span>  <span class="o">=</span> <span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="s">&#39;BlackholeMass&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="s">&#39;BlackholeMass&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">4.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="s">&#39;Position&#39;</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Column">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Column</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Node" title="imaginglss.utils.npyquery.Node"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Node</span></code></a></p>
+<p>Represents accessing a column from the data array</p>
+<dl class="attribute">
+<dt id="imaginglss.utils.npyquery.Column.names">
+<code class="descname">names</code><a class="headerlink" href="#imaginglss.utils.npyquery.Column.names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Column.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Column.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Column.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Expr">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Expr</code><span class="sig-paren">(</span><em>operator</em>, <em>function</em>, <em>operands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Expr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Node" title="imaginglss.utils.npyquery.Node"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Node</span></code></a></p>
+<p>Represents an expression.</p>
+<p>e.g. comparing a column with a number.</p>
+<p>An expression can have multiple operands.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">operands</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>  <span class="o">.....</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">expr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">expr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Expr.flatten">
+<code class="descname">flatten</code><span class="sig-paren">(</span><em>operands</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Expr.flatten"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Expr.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flattens operands of associative operators.</p>
+<p>e.g. (a + b) + (c + d) becomes a + b + c + d</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Expr.is_associative">
+<code class="descname">is_associative</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Expr.is_associative"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Expr.is_associative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the operator associative?</p>
+<p>We test this by see if the ufunc has a value identity property.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.utils.npyquery.Expr.operands">
+<code class="descname">operands</code><a class="headerlink" href="#imaginglss.utils.npyquery.Expr.operands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Expr.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Expr.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Expr.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the selection boolean masks of the array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.GetItem">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">GetItem</code><span class="sig-paren">(</span><em>obj</em>, <em>index</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#GetItem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.GetItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Node" title="imaginglss.utils.npyquery.Node"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Node</span></code></a></p>
+<p>Represents accesing an item in a vector column.</p>
+<p>Astonishing that pandas can&#8217;t do this.</p>
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.GetItem.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#GetItem.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.GetItem.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Literal">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Literal</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Literal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Literal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Node" title="imaginglss.utils.npyquery.Node"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Node</span></code></a></p>
+<p>Represents a literal constant.</p>
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Literal.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Literal.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Literal.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Max">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Max</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Expr" title="imaginglss.utils.npyquery.Expr"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Expr</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Min">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Min</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Expr" title="imaginglss.utils.npyquery.Expr"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Expr</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Node">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Node</code><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A node in the query expression.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : ndarray or alike</p>
+<blockquote class="last">
+<div><p>applying the query node to the array and returns items
+satisfying the array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="imaginglss.utils.npyquery.Node.T">
+<code class="descname">T</code><a class="headerlink" href="#imaginglss.utils.npyquery.Node.T" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.cos">
+<code class="descname">cos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.cos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.cos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.log">
+<code class="descname">log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.log10">
+<code class="descname">log10</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.log10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.log10" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.max">
+<code class="descname">max</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.min">
+<code class="descname">min</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.utils.npyquery.Node.names">
+<code class="descname">names</code><a class="headerlink" href="#imaginglss.utils.npyquery.Node.names" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of column names used in this node.</p>
+<p>This function is recursive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a selection mask.</p>
+<p>True for items satisfying the query in array.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.sin">
+<code class="descname">sin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.sin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.sin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.tan">
+<code class="descname">tan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.tan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.tan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Node.visit">
+<code class="descname">visit</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Node.visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Node.visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.utils.npyquery.Transpose">
+<em class="property">class </em><code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">Transpose</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.utils.npyquery.Node" title="imaginglss.utils.npyquery.Node"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Node</span></code></a></p>
+<p>Represents a transpose. (.T attribute)</p>
+<dl class="method">
+<dt id="imaginglss.utils.npyquery.Transpose.real_visit">
+<code class="descname">real_visit</code><span class="sig-paren">(</span><em>array</em>, <em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#Transpose.real_visit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.Transpose.real_visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.utils.npyquery.repr_slice">
+<code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">repr_slice</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#repr_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.repr_slice" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.utils.npyquery.test">
+<code class="descclassname">imaginglss.utils.npyquery.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/utils/npyquery.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.utils.npyquery.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">imaginglss.utils.npyquery module</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imaginglss.utils.kdtree.html"
+                        title="previous chapter">imaginglss.utils.kdtree module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="imaginglss.utils.sharedmem.html"
+                        title="next chapter">imaginglss.utils.sharedmem module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imaginglss.utils.npyquery.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.sharedmem.html" title="imaginglss.utils.sharedmem module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.kdtree.html" title="imaginglss.utils.kdtree module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" >imaginglss.utils package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

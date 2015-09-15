@@ -1,20 +1,7 @@
-imaginglss.utils.sharedmem package
-==================================
+imaginglss.utils.sharedmem module
+=================================
 
 .. automodule:: imaginglss.utils.sharedmem
     :members:
     :undoc-members:
     :show-inheritance:
-
-Submodules
-----------
-
-.. toctree::
-
-   imaginglss.utils.sharedmem.backends
-   imaginglss.utils.sharedmem.background
-   imaginglss.utils.sharedmem.mapreduce
-   imaginglss.utils.sharedmem.memory
-   imaginglss.utils.sharedmem.parallel
-   imaginglss.utils.sharedmem.pool
-

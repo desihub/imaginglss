@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>imaginglss.utils.fits module &mdash; ImagingLSS 0.9 documentation</title>
+    <title>imaginglss.analysis.targetselection module &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.utils package" href="imaginglss.utils.html" />
-    <link rel="next" title="imaginglss.utils.fsarray module" href="imaginglss.utils.fsarray.html" />
-    <link rel="prev" title="imaginglss.utils.filehandler module" href="imaginglss.utils.filehandler.html" /> 
+    <link rel="up" title="imaginglss.analysis package" href="imaginglss.analysis.html" />
+    <link rel="next" title="imaginglss.analysis.tycho_veto module" href="imaginglss.analysis.tycho_veto.html" />
+    <link rel="prev" title="imaginglss.analysis.gen_random module" href="imaginglss.analysis.gen_random.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,15 +39,15 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.fsarray.html" title="imaginglss.utils.fsarray module"
+          <a href="imaginglss.analysis.tycho_veto.html" title="imaginglss.analysis.tycho_veto module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.filehandler.html" title="imaginglss.utils.filehandler module"
+          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" accesskey="U">imaginglss.utils package</a> &raquo;</li> 
+          <li class="nav-item nav-item-3"><a href="imaginglss.analysis.html" accesskey="U">imaginglss.analysis package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,26 +56,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-imaginglss.utils.fits">
-<span id="imaginglss-utils-fits-module"></span><h1>imaginglss.utils.fits module<a class="headerlink" href="#module-imaginglss.utils.fits" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="imaginglss.utils.fits.read_image">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_image</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the zeroth image HDU from a fits file</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.utils.fits.read_table">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_table</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=1</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the first HDU table from a fits file</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.utils.fits.read_metadata">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_metadata</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the metadata of a HDU table</p>
-</dd></dl>
-
+  <div class="section" id="module-imaginglss.analysis.targetselection">
+<span id="imaginglss-analysis-targetselection-module"></span><h1>imaginglss.analysis.targetselection module<a class="headerlink" href="#module-imaginglss.analysis.targetselection" title="Permalink to this headline">¶</a></h1>
+<p>Target Selection</p>
+<p><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></p>
+<p>A collection of helpful (static) methods to check whether an object&#8217;s
+flux passes a given selection criterion (e.g. LRG, ELG or QSO).
+These cuts assume we are passed the extinction-corrected fluxes
+(flux/mw_transmission) and are taken from:</p>
+<blockquote>
+<div><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></div></blockquote>
+<p>The requirement on BRICK_PRIMARY is handled elsewhere, these methods just
+look after the flux requirements.</p>
 </div>
 
 
@@ -85,15 +77,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="imaginglss.utils.filehandler.html"
-                        title="previous chapter">imaginglss.utils.filehandler module</a></p>
+  <p class="topless"><a href="imaginglss.analysis.gen_random.html"
+                        title="previous chapter">imaginglss.analysis.gen_random module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="imaginglss.utils.fsarray.html"
-                        title="next chapter">imaginglss.utils.fsarray module</a></p>
+  <p class="topless"><a href="imaginglss.analysis.tycho_veto.html"
+                        title="next chapter">imaginglss.analysis.tycho_veto module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.utils.fits.txt"
+      <li><a href="_sources/imaginglss.analysis.targetselection.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -124,15 +116,15 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.fsarray.html" title="imaginglss.utils.fsarray module"
+          <a href="imaginglss.analysis.tycho_veto.html" title="imaginglss.analysis.tycho_veto module"
              >next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.filehandler.html" title="imaginglss.utils.filehandler module"
+          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" >imaginglss.utils package</a> &raquo;</li> 
+          <li class="nav-item nav-item-3"><a href="imaginglss.analysis.html" >imaginglss.analysis package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -18,4 +18,5 @@ Submodules
    imaginglss.model.imagerepo
    imaginglss.model.schema
    imaginglss.model.sfdmap
+   imaginglss.model.tycho
 

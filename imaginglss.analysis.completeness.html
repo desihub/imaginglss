@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>imaginglss.analysis.cuts module &mdash; ImagingLSS 0.9 documentation</title>
+    <title>imaginglss.analysis.completeness module &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
     <link rel="up" title="imaginglss.analysis package" href="imaginglss.analysis.html" />
-    <link rel="next" title="imaginglss.analysis.gen_random module" href="imaginglss.analysis.gen_random.html" />
-    <link rel="prev" title="imaginglss.analysis.completeness module" href="imaginglss.analysis.completeness.html" /> 
+    <link rel="next" title="imaginglss.analysis.cuts module" href="imaginglss.analysis.cuts.html" />
+    <link rel="prev" title="imaginglss.analysis package" href="imaginglss.analysis.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,10 +39,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
+          <a href="imaginglss.analysis.cuts.html" title="imaginglss.analysis.cuts module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.completeness.html" title="imaginglss.analysis.completeness module"
+          <a href="imaginglss.analysis.html" title="imaginglss.analysis package"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
@@ -56,14 +56,38 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-imaginglss.analysis.cuts">
-<span id="imaginglss-analysis-cuts-module"></span><h1>imaginglss.analysis.cuts module<a class="headerlink" href="#module-imaginglss.analysis.cuts" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-imaginglss.analysis.completeness">
+<span id="imaginglss-analysis-completeness-module"></span><h1>imaginglss.analysis.completeness module<a class="headerlink" href="#module-imaginglss.analysis.completeness" title="Permalink to this headline">¶</a></h1>
+<p>A collection of helpful (static) methods to check whether a given
+position has imaging deep enough to be 100% complete to a certain
+selection (e.g. LRG, ELG or QSO).
+We should probably modify this later to easily allow querying of
+brighter limits.
+The methods assume they are passed N-sigma limits, corrected for
+MW transmission.
+Note: for a region to pass the N-sigma &#8220;noise&#8221; must be LESS THAN the
+required depth.
+The requirements on colors are tricky to implement here. We currently
+require a 100% completeness.</p>
 <dl class="function">
-<dt id="imaginglss.analysis.cuts.apply">
-<code class="descclassname">imaginglss.analysis.cuts.</code><code class="descname">apply</code><span class="sig-paren">(</span><em>comm</em>, <em>query</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/cuts.html#apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.cuts.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a query, or &#8216;cut&#8217; to data.</p>
-<p>The Queres</p>
-</dd></dl>
+<dt id="imaginglss.analysis.completeness.BGS">
+<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">BGS</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.BGS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.analysis.completeness.ELG">
+<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">ELG</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#ELG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.ELG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.analysis.completeness.LRG">
+<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">LRG</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.LRG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.analysis.completeness.QSO">
+<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">QSO</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 
@@ -74,15 +98,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="imaginglss.analysis.completeness.html"
-                        title="previous chapter">imaginglss.analysis.completeness module</a></p>
+  <p class="topless"><a href="imaginglss.analysis.html"
+                        title="previous chapter">imaginglss.analysis package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="imaginglss.analysis.gen_random.html"
-                        title="next chapter">imaginglss.analysis.gen_random module</a></p>
+  <p class="topless"><a href="imaginglss.analysis.cuts.html"
+                        title="next chapter">imaginglss.analysis.cuts module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.analysis.cuts.txt"
+      <li><a href="_sources/imaginglss.analysis.completeness.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -113,10 +137,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
+          <a href="imaginglss.analysis.cuts.html" title="imaginglss.analysis.cuts module"
              >next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.completeness.html" title="imaginglss.analysis.completeness module"
+          <a href="imaginglss.analysis.html" title="imaginglss.analysis package"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>

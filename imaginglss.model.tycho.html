@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>imaginglss.utils.fits module &mdash; ImagingLSS 0.9 documentation</title>
+    <title>imaginglss.model.tycho module &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.utils package" href="imaginglss.utils.html" />
-    <link rel="next" title="imaginglss.utils.fsarray module" href="imaginglss.utils.fsarray.html" />
-    <link rel="prev" title="imaginglss.utils.filehandler module" href="imaginglss.utils.filehandler.html" /> 
+    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="next" title="imaginglss.utils package" href="imaginglss.utils.html" />
+    <link rel="prev" title="imaginglss.model.sfdmap module" href="imaginglss.model.sfdmap.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,15 +39,15 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.fsarray.html" title="imaginglss.utils.fsarray module"
+          <a href="imaginglss.utils.html" title="imaginglss.utils package"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.filehandler.html" title="imaginglss.utils.filehandler module"
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" accesskey="U">imaginglss.utils package</a> &raquo;</li> 
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -56,24 +56,47 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-imaginglss.utils.fits">
-<span id="imaginglss-utils-fits-module"></span><h1>imaginglss.utils.fits module<a class="headerlink" href="#module-imaginglss.utils.fits" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="imaginglss.utils.fits.read_image">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_image</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the zeroth image HDU from a fits file</p>
+  <div class="section" id="module-imaginglss.model.tycho">
+<span id="imaginglss-model-tycho-module"></span><h1>imaginglss.model.tycho module<a class="headerlink" href="#module-imaginglss.model.tycho" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="imaginglss.model.tycho.Tycho">
+<em class="property">class </em><code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Representing a Tycho catalogue that
+is used to veto objects near stars</p>
+<dl class="method">
+<dt id="imaginglss.model.tycho.Tycho.nearest">
+<code class="descname">nearest</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho.nearest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho.nearest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query Tycho catalogue, returns information about
+the nearest object. The distance is in degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote>
+<div><p>(ra, dec) in degrees</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">d, bmag, vmag:</p>
+<blockquote class="last">
+<div><p>the distance to each object in coord, and the
+mag in b and v.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
-<dt id="imaginglss.utils.fits.read_table">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_table</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=1</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the first HDU table from a fits file</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.utils.fits.read_metadata">
-<code class="descclassname">imaginglss.utils.fits.</code><code class="descname">read_metadata</code><span class="sig-paren">(</span><em>filename</em>, <em>hdu=0</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.utils.fits.read_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read the metadata of a HDU table</p>
+<dt id="imaginglss.model.tycho.radec2pos">
+<code class="descclassname">imaginglss.model.tycho.</code><code class="descname">radec2pos</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#radec2pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.radec2pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>converting ra dec to position on a unit sphere.
+ra, dec are in degrees.</p>
 </dd></dl>
 
 </div>
@@ -85,15 +108,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="imaginglss.utils.filehandler.html"
-                        title="previous chapter">imaginglss.utils.filehandler module</a></p>
+  <p class="topless"><a href="imaginglss.model.sfdmap.html"
+                        title="previous chapter">imaginglss.model.sfdmap module</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="imaginglss.utils.fsarray.html"
-                        title="next chapter">imaginglss.utils.fsarray module</a></p>
+  <p class="topless"><a href="imaginglss.utils.html"
+                        title="next chapter">imaginglss.utils package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.utils.fits.txt"
+      <li><a href="_sources/imaginglss.model.tycho.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -124,15 +147,15 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.fsarray.html" title="imaginglss.utils.fsarray module"
+          <a href="imaginglss.utils.html" title="imaginglss.utils package"
              >next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.utils.filehandler.html" title="imaginglss.utils.filehandler module"
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
           <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.utils.html" >imaginglss.utils package</a> &raquo;</li> 
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -1,0 +1,7 @@
+imaginglss.utils.npyquery module
+================================
+
+.. automodule:: imaginglss.utils.npyquery
+    :members:
+    :undoc-members:
+    :show-inheritance:
