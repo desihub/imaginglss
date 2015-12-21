@@ -58,6 +58,13 @@ def uppercase_dtype(dtype):
     dtype = numpy.dtype(pairs)
     return dtype
 
+def subdtype(dtype, columns):
+    try:
+        return numpy.dtype([(key, dtype[key]) for key in columns])
+    except KeyError as e:
+        raise KeyError("%s : candidates are %s." %
+                (str(e), str(sorted(dtype.names))))
+        
 def native_dtype(dtype):
     """ Convert a dtype to native dtype. A helper function.
         
@@ -122,6 +129,20 @@ class Catalogue(ColumnStore):
 
     
     """
+    COLUMNS = [
+        'BRICK_PRIMARY',
+        'RA',
+        'DEC',
+        'DECAM_FLUX_IVAR',
+        'DECAM_MW_TRANSMISSION',
+        'DECAM_FLUX',
+        'WISE_FLUX',
+        'WISE_MW_TRANSMISSION',
+        'TYPE',
+        'SHAPEDEV_R',
+        'SHAPEEXP_R',
+    ]
+
     def __init__(self, cachedir, filenames, aliases):
         self.filenames = filenames
         self.aliases = dict([(new, (old, transform)) 
@@ -167,7 +188,7 @@ class Catalogue(ColumnStore):
 
         fn = self.filenames[0]
         first = fits.read_table(fn)
-        dtype = uppercase_dtype(first.dtype)
+        dtype = subdtype(uppercase_dtype(first.dtype), self.COLUMNS)
 
         total = len(filenames)
 
