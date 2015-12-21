@@ -14,7 +14,7 @@ The requirements on colors are tricky to implement here. We currently
 require a 100% completeness.
 
 """
-from imaginglss.model.catalogue import C
+from imaginglss.utils.npyquery import Column as C
 
 DECAM_INVVAR = C('DECAM_INVVAR').T
 DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION').T
