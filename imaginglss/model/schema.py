@@ -104,3 +104,29 @@ class DR1J(EDR4):
 
     """
     pass
+
+class DR2P(EDR4):
+    """ Schema for DR2P. Added new images.
+
+    """
+    @staticmethod
+    def format_image_filenames():
+        images = {
+        'depth': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-depth-%(band)s.fits',
+        'galdepth': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-galdepth-%(band)s.fits',
+        'nexp': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-nexp-%(band)s.fits',
+        'model': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-model-%(band)s.fits',
+        'image': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-image-%(band)s.fits',
+        }
+        imagerepos= {}
+        for image in images:
+            imagerepos[image] = {}
+            for band in 'rgz':
+                PATTERN = images[image]
+                def getfilename(brick, PATTERN=PATTERN, band=band):
+                    return PATTERN % dict(pre=brick.name[:3], brickname=brick.name, band=band)
+                imagerepos[image][band] = getfilename
+
+        return imagerepos
+
+    pass
