@@ -1,16 +1,17 @@
-#PBS -j eo
-#PBS -l mppwidth=256
-#PBS -q debug
+#!/bin/bash
 
-cd $PBS_O_WORKDIR
+#SBATCH -J build_cache
+#SBATCH -n 512
+#SBATCH -o build_cache.%j
+#SBATCH -p debug
+#SBATCH -t 00:30:00
 
 export OMP_NUM_THREADS=1
-export DECALS_PY_CONFIG=/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
 
-export PYTHON_MPI_CHROOT=/dev/shm
-export PYTHON_MPI_PKGROOT=/project/projectdirs/m779/python-mpi/usg
-export PYTHON_MPI_PACKAGES=matplotlib-1.4.3.tar.gz:mpi4py-1.3.1.tar.gz:numpy-1.9.2.tar.gz:python-2.7.9.tar.gz:scipy-0.15.1.tar.gz:yfeng1-local-05132015.tar.gz:fitsio-0.9.7a.tar.gz
+source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+mirror ../ imaginglss scripts
 
-aprun -n 256 -d 1 /project/projectdirs/m779/python-mpi/python-mpi \
-    ./build_cache.py
+srun -n 256 python-mpi /dev/shm/local/scripts/build_cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+
+
 
