@@ -59,11 +59,12 @@ ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
 QSO =  BRICK_PRIMARY != 0
 """ QSO Cut """
 
+QSO &= TYPE = 'PSF'
 QSO &= RFLUX > 10**((22.5-23.0)/2.5)
 QSO &= RFLUX < 10**(1.0/2.5) * GFLUX
 QSO &= ZFLUX > 10**(-0.3/2.5) * RFLUX
 QSO &= ZFLUX < 10**(1.1/2.5) * RFLUX
-QSO &= WFLUX * GFLUX**1.2 > 10**(2/2.5) * RFLUX**(1+1.2)
+QSO &= WFLUX * GFLUX**1.2 > 10**(-0.4/2.5) * RFLUX**(1+1.2)
 
 BGS =  BRICK_PRIMARY != 0
 """ BGS Cut """
