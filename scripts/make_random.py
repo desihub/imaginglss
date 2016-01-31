@@ -17,6 +17,8 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+from imaginglss.analysis    import tycho_veto
+
 from argparse import ArgumentParser
 
 ap = ArgumentParser("make_random.py")
@@ -26,7 +28,7 @@ ap.add_argument("output")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
-ap.add_argument("--with-tycho", help='path to the tycho.fit file for applying veto around bright stars')
+ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
