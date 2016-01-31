@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH -J select_objs
+#SBATCH -n 512
+#SBATCH -o select_objs.%j
+#SBATCH -p debug
+#SBATCH -t 00:30:00
+
+export OMP_NUM_THREADS=1
+
+source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+
+mirror ../ imaginglss scripts
+
+srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py LRG LRG.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+
+#srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py ELG ELG.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+
+#srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py QSO QSO.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py

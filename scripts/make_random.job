@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH -J make_random
+#SBATCH -n 512
+#SBATCH -o make_random.%j
+#SBATCH -p debug
+#SBATCH -t 00:30:00
+
+export OMP_NUM_THREADS=1
+
+source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+
+mirror ../ imaginglss scripts
+
+#srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 5000000 LRG LRG_rand.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+
+#srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 400000 ELG ELG_rand.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+
+srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
