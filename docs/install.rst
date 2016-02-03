@@ -1,15 +1,25 @@
 Installation
 ============
 
-ImagingLSS can be installed as a regular Python package. 
+ImagingLSS can be installed as a regular Python package, but can also be
+used without installation (since the code evolves rapidly with time).
 
-Since the code still evolves, the way to install ImagingLSS is
+To install (this is how we test imaginglss at home)
 
 .. code-block:: bash
 
     git clone https://github.com/desihub/imaginglss/
     cd imaginglss
     pip install --user -e .
+
+To not install (this is how we use imaginglss at NERSC)
+
+.. code-block:: bash
+
+    git clone https://github.com/desihub/imaginglss/
+    cd imaginglss
+    export PYTHONPATH=$PWD:$PYTHONPATH
+    # remember to set PYTHONPATH in new shells.
 
 The package only declares the dependency for the data model.
 
@@ -92,9 +102,13 @@ DR2 at NERSC
 
 ImagingLSS has been prepackaged for DR2 at Edison in the following locations:
 
-.. code-block:: bash
+.. code-block:: python
 
-    /global/project/projectdirs/m779/imaginglss/dr2.conf.py
+    from imaginglss import DECALS
+    decals = DECALS('/global/project/projectdirs/m779/imaginglss/dr2.conf.py')
+
+    dr = decals.datarelease
+    cat = decals.datarelease.catalogue
 
 
 Example Dataset
