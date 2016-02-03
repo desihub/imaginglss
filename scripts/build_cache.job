@@ -11,6 +11,9 @@ export OMP_NUM_THREADS=1
 source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 mirror ../ imaginglss scripts
 
+# use without installing
+export PYTHONPATH=/dev/shm/local:$PYTHONPATH
+
 srun -n 256 python-mpi /dev/shm/local/scripts/build_cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 

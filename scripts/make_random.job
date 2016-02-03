@@ -12,6 +12,9 @@ source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
 mirror ../ imaginglss scripts
 
+# use without installing
+export PYTHONPATH=/dev/shm/local:$PYTHONPATH
+
 #srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 5000000 LRG LRG_rand.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 #srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 400000 ELG ELG_rand.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
