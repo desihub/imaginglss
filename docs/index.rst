@@ -10,7 +10,7 @@ ImagingLSS implements a data model of the DECALS imaging survey data.
 The intended use of ImagingLSS is to generate large scale structure 
 catalogues and masks from the DECALS imaging survey data.
 
-Conceptually, ImagingLSS is a consumer of the products of `Legacy Pipe <https://github.com/legacysurvey/legacypipe>`, 
+Conceptually, ImagingLSS is a consumer of the products of `Legacy Pipe <https://github.com/legacysurvey/legacypipe>`_, 
 the data pipe line of the DECam Legacy Survey.
 
 Currently, `DR2 <https://desi.lbl.gov/trac/wiki/DecamLegacy/DR2>`_ is supported.
