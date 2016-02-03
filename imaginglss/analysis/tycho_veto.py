@@ -18,11 +18,6 @@
     False for 'reject'
 """
 
-from scipy.spatial import cKDTree
-from imaginglss.utils import fits
-
-import numpy
-
 def BOSS_DR9(tycho, coord):
     """ Returns True for 'keep' """
     # BOSS DR9-11
