@@ -131,9 +131,9 @@
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea projection.&quot;</span>
     <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span></div>
     <span class="c">#</span>
-</div>
+
 <div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply backward (x,y)-&gt;(ra,dec) simple ZEA transformation</span>
@@ -144,9 +144,9 @@
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;ZEA&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a zea plane projection.&quot;</span>
     <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span></div>
     <span class="c">#</span>
-</div>
+
 <span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a WCS header to arguments of pix2ang and ang2pix.</span>
@@ -243,10 +243,10 @@
 
     <span class="n">xy</span> <span class="o">*=</span> <span class="n">SCALE</span>
     <span class="n">xy</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CRPIX</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span></div>
     <span class="c">#</span>
 
-</div>
+
 <div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_simplezea.html#imaginglss.utils.wcs_simplezea.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">SCALE</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">NSGP</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert x, y to RA, DEC with simple ZEA transformation.</span>
@@ -267,8 +267,8 @@
     <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
     <span class="n">coord</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
     <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%=</span> <span class="mf">360.</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-</div>
+    <span class="k">return</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span></div>
+
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c"># perform some tests</span>
     <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">NSGP</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
@@ -356,7 +356,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

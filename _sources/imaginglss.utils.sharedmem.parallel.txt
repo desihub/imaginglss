@@ -1,7 +1,0 @@
-imaginglss.utils.sharedmem.parallel module
-==========================================
-
-.. automodule:: imaginglss.utils.sharedmem.parallel
-    :members:
-    :undoc-members:
-    :show-inheritance:

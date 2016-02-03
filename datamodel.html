@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
     <link rel="next" title="Helper routines" href="helpers.html" />
-    <link rel="prev" title="Scripts" href="scripts.html" /> 
+    <link rel="prev" title="Usage: Data Pipeline" href="datapipeline.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,7 +41,7 @@
           <a href="helpers.html" title="Helper routines"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="scripts.html" title="Scripts"
+          <a href="datapipeline.html" title="Usage: Data Pipeline"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
@@ -62,6 +62,14 @@ FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.</p>
 <p>The main way to access the DECALS imaging data is via DECALS
 objects defined in <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a>.</p>
+<p>This is an example using the data model in an interactive Python shell.</p>
+<div class="highlight-bash"><div class="highlight"><pre>from imaginglss import DECALS
+<span class="nv">decals</span> <span class="o">=</span> DECALS<span class="o">(</span><span class="s1">&#39;/global/project/projectdirs/m779/imaginglss/dr2.conf.py&#39;</span><span class="o">)</span>
+
+<span class="nv">dr</span> <span class="o">=</span> decals.datarelease
+<span class="nv">cat</span> <span class="o">=</span> decals.datarelease.catalogue
+</pre></div>
+</div>
 <p>The DECALS object constructs the DECALS data release and dust extinction
 map objects from environment variables or a configuration file. Please refer
 to the documentation of <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a> for details.</p>
@@ -128,8 +136,8 @@ sky coordinates to bricks, and acts as a factory that creates
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="scripts.html"
-                        title="previous chapter">Scripts</a></p>
+  <p class="topless"><a href="datapipeline.html"
+                        title="previous chapter">Usage: Data Pipeline</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="helpers.html"
                         title="next chapter">Helper routines</a></p>
@@ -170,14 +178,14 @@ sky coordinates to bricks, and acts as a factory that creates
           <a href="helpers.html" title="Helper routines"
              >next</a> |</li>
         <li class="right" >
-          <a href="scripts.html" title="Scripts"
+          <a href="datapipeline.html" title="Usage: Data Pipeline"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

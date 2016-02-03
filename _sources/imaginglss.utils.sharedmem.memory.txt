@@ -1,7 +1,0 @@
-imaginglss.utils.sharedmem.memory module
-========================================
-
-.. automodule:: imaginglss.utils.sharedmem.memory
-    :members:
-    :undoc-members:
-    :show-inheritance:

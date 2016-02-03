@@ -135,8 +135,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">]</span>
 
-        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-</div>
+        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="BrickIndex.build"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NROWS</span><span class="p">,</span> <span class="n">NCOLS</span><span class="p">):</span>
         <span class="n">height</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">NROWS</span>
 
@@ -153,8 +153,8 @@
         <span class="n">ncols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
         <span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">RA</span> <span class="o">*</span> <span class="n">ncols</span> <span class="o">/</span> <span class="mf">360.</span> <span class="p">))</span>
         <span class="nb">hash</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">col</span>
-        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
-         </div>
+        <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span></div>
+         
     <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">)</span>
 
@@ -196,8 +196,8 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC1&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
                     <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC2&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="BrickIndex.get_bricks"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.get_bricks">[docs]</a>    <span class="k">def</span> <span class="nf">get_bricks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Obtain a list of bricks.</span>
@@ -213,8 +213,8 @@
 <span class="sd">            A list of bricks.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span> 
-        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="BrickIndex.search_by_name"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.search_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Search the brickindex for bricks with a given name.</span>
@@ -236,8 +236,8 @@
         <span class="n">foo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">brickname</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-        <span class="k">return</span> <span class="n">bid</span>
- </div>
+        <span class="k">return</span> <span class="n">bid</span></div>
+ 
 <div class="viewcode-block" id="BrickIndex.search_by_id"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.search_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">search_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brickid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Search the brickindex for bricks with a given brickid.</span>
@@ -263,8 +263,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&quot;Some brickid </span><span class="si">%s</span><span class="s"> are not found&quot;</span><span class="o">%</span>\
               <span class="nb">str</span><span class="p">(</span><span class="n">brickid</span><span class="p">[</span><span class="o">~</span><span class="n">found</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="n">rt</span>
-</div>
+        <span class="k">return</span> <span class="n">rt</span></div>
+
 <div class="viewcode-block" id="BrickIndex.query"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Returns the internal index of a brick at coord=(RA,DEC) in</span>
@@ -289,8 +289,8 @@
         <span class="n">col</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">RA</span> <span class="o">*</span> <span class="n">ncols</span> <span class="o">/</span> <span class="mf">360.</span> <span class="p">))</span>
         <span class="nb">hash</span> <span class="o">=</span> <span class="n">row</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">col</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="nb">hash</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ind</span>
-</div>
+        <span class="k">return</span> <span class="n">ind</span></div>
+
 <div class="viewcode-block" id="BrickIndex.optimize"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.optimize">[docs]</a>    <span class="k">def</span> <span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Optimize the ordering of coord=(RA,DEC) to make later queries faster.</span>
@@ -337,9 +337,9 @@
             <span class="k">if</span> <span class="n">return_index</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">arg</span><span class="p">]),</span> <span class="n">arg</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">arg</span><span class="p">])</span>
+                <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">arg</span><span class="p">])</span></div></div>
 
-</div></div>
+
 </pre></div>
 
           </div>
@@ -380,7 +380,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

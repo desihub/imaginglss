@@ -1,7 +1,0 @@
-imaginglss.utils.sharedmem.mapreduce module
-===========================================
-
-.. automodule:: imaginglss.utils.sharedmem.mapreduce
-    :members:
-    :undoc-members:
-    :show-inheritance:
