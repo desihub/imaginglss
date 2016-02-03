@@ -1,11 +1,5 @@
-Examples
-========
-
-.. contents:: 
-    :depth: 2
-
-Notebooks
----------
+Working with Jupyter Notebook 
+=============================
 
 .. attention::
 
@@ -31,5 +25,8 @@ http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.i
     Note that the LSS generation pipe line (select_objs.py, make_randoms.py) 
     typically requires a high-throughput operation querying a large amount of data, 
     these cannot be done with notebook. The notebooks are most useful for inspecting
-    smaller chunks of data, individual bricks, etc.
+    smaller chunks of data, individual bricks, etc. Refer to :doc:`datapipeline`.
 
+At NERSC, the jupyterhub service ImagingLSS can be used with https://jupyter.nersc.gov .
+Of course, one need to install imaginglss in from a Jupyter Terminal session first via pip.
+Refer to :doc:`install`.
