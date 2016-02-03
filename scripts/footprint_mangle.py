@@ -13,12 +13,8 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu and mjwhite@lbl.gov"
 
-import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 import math as M
 from imaginglss import DECALS
-
-
 
 def write_poly(capslist,arealist,fname):
     """

@@ -11,11 +11,8 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
-from imaginglss             import DECALS
+from imaginglss import DECALS
 from imaginglss.utils import filehandler
-from mpi4py import MPI
 import numpy
 
 from argparse import ArgumentParser
@@ -25,6 +22,8 @@ ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
+
+from mpi4py import MPI
 comm = MPI.COMM_WORLD
 
 decals = DECALS(ns.conf)

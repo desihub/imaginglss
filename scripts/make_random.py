@@ -15,8 +15,6 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-import os.path; import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 from imaginglss.analysis    import tycho_veto
 
 from argparse import ArgumentParser
