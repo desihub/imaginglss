@@ -7,15 +7,11 @@ Examples
 Notebooks
 ---------
 
-ImagingLSS is compatible with IPython Notebook. 
+.. attention::
 
-However, the notebook must manipulate the python import path at the begining.
-This limitation is because imaginglss is intended to be used without installation. 
+   FIXME: We need to update these notebooks.
 
-Also note that querying the imaging pixels (e.g. depth) typically requires a 
-high-throughput operation that cannot currently be driven in a Notebook; 
-For example, to apply ELG selection for the full DR1, we implement a MPI python scripts 
-:code:`script/select_.py`.
+ImagingLSS is compatible with IPython Notebook (after ImagingLSS is installed).
 
 We provide a comprensive Notebook example at
 
@@ -30,10 +26,10 @@ Here is an example notebook investigating the complete area mask for ELGs.
 
 http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.ipynb
 
-Example Job script on Edison
-----------------------------
+.. attention:: 
 
-.. literalinclude:: ../scripts/edison_example.sh
-
-.. literalinclude:: ../scripts/edison_example.sh
+    Note that the LSS generation pipe line (select_objs.py, make_randoms.py) 
+    typically requires a high-throughput operation querying a large amount of data, 
+    these cannot be done with notebook. The notebooks are most useful for inspecting
+    smaller chunks of data, individual bricks, etc.
 
