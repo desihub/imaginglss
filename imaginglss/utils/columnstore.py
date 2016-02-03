@@ -30,7 +30,7 @@ class Rows(object):
 class ColumnStore(object):
     """ A ColumnStore
 
-        Columns are accessed via :py:code:`[columnname]`. 
+        Columns are accessed via :code:`[columnname]`. 
         
         Subclass shall implement :py:meth:`fetch`, :py:attr:`dtype`, :py:attr:`size`.
 
@@ -40,7 +40,7 @@ class ColumnStore(object):
 
         Notes
         -----
-        To retrive the contents of a columns use :py:code:`[columnname][:]`, or
+        To retrive the contents of a columns use :code:`[columnname][:]`, or
         other slicing syntax with a step size of 1.
 
         >>> with mycolumnstore:
