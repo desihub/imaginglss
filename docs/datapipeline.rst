@@ -19,7 +19,8 @@ Before we start using ImagingLSS, it is crucial to build the catalogue cache.
     On Edison for DR2, this step can be omitted 
     if the following configuration file is used:
 
-    !!!!!! @Ellie: FIXME: !!!!!! write down the path.
+    .. code-block:: bash
+       	/project/projectdirs/m779/imaginglss/dr2.conf.py
 
 The application to build the cache is :code:`scripts/build_cache.py`. The application
 scans the files in the data release described by a configuration file (provided in
