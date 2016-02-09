@@ -1,10 +1,10 @@
 Installation
 ============
 
-ImagingLSS can be installed as a regular Python package, but can also be
+ImagingLSS can be installed as a regular Python package, but it can also be
 used without installation (since the code evolves rapidly with time).
 
-To install (this is how we test imaginglss at home)
+To install (this is how we test ImagingLSS at home)
 
 .. code-block:: bash
 
@@ -12,7 +12,7 @@ To install (this is how we test imaginglss at home)
     cd imaginglss
     pip install --user -e .
 
-To not install (this is how we use imaginglss at NERSC)
+To use without installation (this is how we test ImagingLSS at NERSC)
 
 .. code-block:: bash
 
@@ -24,8 +24,8 @@ To not install (this is how we use imaginglss at NERSC)
 The package only declares the dependency for the data model.
 
 However, some basic packages need to be set up before using the data pipeline.
-We also need to notify imaginglss the location of files. These post installation
-steps are documented in this section.
+We also need to tell ImagingLSS the location of files. These post-installation
+steps are documented in the following section.
 
 Depencency
 ----------
@@ -33,7 +33,7 @@ Depencency
 ImagingLSS is light on dependency.
 
  - numpy 1.8+. 
-   Do not use 1.7.x for this bug: https://github.com/numpy/numpy/issues/3469
+   Do not use 1.7.x due to this bug: https://github.com/numpy/numpy/issues/3469
 
    To check the version of numpy, use
 
@@ -44,9 +44,9 @@ ImagingLSS is light on dependency.
  - mpi4py, for the parallel infrastructure. 
 
  - fitsio 0.9.8 + for accessing FITS files.
-   Do not use 0.9.7 for this bug: https://github.com/esheldon/fitsio/issues/39
+   Do not use 0.9.7 due this bug: https://github.com/esheldon/fitsio/issues/39
    which affects building catalogue cache. 
-   For now, we can install rc2 prerelease of fitsio.
+   For now, you can install the rc2 prerelease of fitsio.
 
    .. code-block:: bash
 
@@ -58,8 +58,8 @@ ImagingLSS is light on dependency.
 
 On parallel HPC systems where files are hosted in a shared file system, 
 the time it takes to launch a Python application may fluctuate badly. 
-This applied to ImagingLSS, too. 
-At NERSC, we setup python-mpi-bcast to eliminate this issue https://github.com/rainwoodman/python-mpi-bcast .
+This applies to ImagingLSS, too. 
+At NERSC, we set up python-mpi-bcast to eliminate this issue https://github.com/rainwoodman/python-mpi-bcast .
 This will be noted in the full examples.
 
 Data Dependency
@@ -79,7 +79,7 @@ Location of Data Release
 ------------------------
  
 ImagingLSS tries to initialize the DECALS data release from a configuration file, by
-either passing in the file name as an argument to :py:class:`imaginglss.DECALS` 
+either passing in the file name as an argument to :py:class:`imaginglss.DECALS`, 
 or by setting the environment variable :code:`DECALS_PY_CONFIG`.
 
 Here is an example configuration file (that works on Edison):
