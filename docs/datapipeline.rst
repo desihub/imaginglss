@@ -157,9 +157,27 @@ The inline help of the script describes the usage:
                             DECALS_PY_CONFIG
 
 
-Here is an example job script we use on Edison, (for LRG, QSO, **fixme**) 
+Here is an example job script we use on Edison to generate a QSO random catalogue.
 
 .. code:: 
 
-    Paste in the jobs script on Edison
+    #!/bin/bash
 
+    #SBATCH -J make_random
+    #SBATCH -n 512
+    #SBATCH -o make_random.%j
+    #SBATCH -p debug
+    #SBATCH -t 00:30:00
+
+    export OMP_NUM_THREADS=1
+
+    source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+
+    # change the following line to where your imaginglss is installed
+    mirror ../ imaginglss scripts
+
+    # use without installing
+    export PYTHONPATH=/dev/shm/local:$PYTHONPATH
+
+    # change conf to your imaginglss configuration file
+    srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
