@@ -1,18 +1,18 @@
 Usage: Data Pipeline
 ====================
 
-The primary usage of ImagingLSS is to produce Large scale structure catalogue.
-In this section we document the data pipeline. Three steps:
+The primary usage of ImagingLSS is to produce large scale structure catalogues.
+In this section, we document the data pipeline. There are three steps:
 
 - Building the cache
 - Generating the object catalogue
 - Generating the random sampling of the mask
 
-We will cover them in the next sections.
+We will cover them in the following sections.
 
 Building the Cache
 ------------------
-Before start using imaginglss, it is crucial to build the catalogue cache. 
+Before we start using ImagingLSS, it is crucial to build the catalogue cache. 
 
 .. attention:: 
 
@@ -53,7 +53,7 @@ Here is an example job script that works on Edison (Note that python-mpi-bcast i
 
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
-    # change the following line to where your imaginglss is installed
+    # change the following line to where your ImagingLSS is installed
     mirror ~/source/imaginglss scripts
 
     # change conf to your imaginglss configuration file
@@ -105,7 +105,7 @@ Here is an example job script we use on Edison, (for LRG, QSO, **fixme**)
 Generating Complete Random Sky Mask
 -----------------------------------
 
-make_random.py generates the randoms for the sky mask of an target type.
+make_random.py generates the randoms for the sky mask of a target type.
 
 The output is the RA DEC and magnitudes limit at that location on the sky. 
 There is an option to use the Tycho star catalogue to veto regions near a known star.
