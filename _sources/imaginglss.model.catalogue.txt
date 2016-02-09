@@ -1,7 +1,0 @@
-imaginglss.model.catalogue module
-=================================
-
-.. automodule:: imaginglss.model.catalogue
-    :members:
-    :undoc-members:
-    :show-inheritance:

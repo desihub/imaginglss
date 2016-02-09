@@ -11,16 +11,6 @@ Tractor, which are associated with each brick.
 The main way to access the DECALS imaging data is via DECALS
 objects defined in :py:class:`imaginglss.DECALS`. 
 
-This is an example using the data model in an interactive Python shell.
-
-.. code-block:: bash
-
-    from imaginglss import DECALS
-    decals = DECALS('/global/project/projectdirs/m779/imaginglss/dr2.conf.py')
-
-    dr = decals.datarelease
-    cat = decals.datarelease.catalogue
-
 The DECALS object constructs the DECALS data release and dust extinction
 map objects from environment variables or a configuration file. Please refer
 to the documentation of :py:class:`imaginglss.DECALS` for details.
@@ -78,4 +68,3 @@ The :py:attr:`imaginglss.DECALS.sfdmap` attribute is represents the dust extinct
 . It is an instance of :py:class:`imaginglss.model.sfdmap.SFDMap`.
 
 For additional information please refer to :doc:`modules`.
-

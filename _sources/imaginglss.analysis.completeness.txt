@@ -1,7 +1,0 @@
-imaginglss.analysis.completeness module
-=======================================
-
-.. automodule:: imaginglss.analysis.completeness
-    :members:
-    :undoc-members:
-    :show-inheritance:

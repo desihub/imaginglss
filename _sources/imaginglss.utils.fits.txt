@@ -1,7 +1,0 @@
-imaginglss.utils.fits module
-============================
-
-.. automodule:: imaginglss.utils.fits
-    :members:
-    :undoc-members:
-    :show-inheritance:

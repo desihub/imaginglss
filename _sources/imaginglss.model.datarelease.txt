@@ -1,7 +1,0 @@
-imaginglss.model.datarelease module
-===================================
-
-.. automodule:: imaginglss.model.datarelease
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,0 @@
-imaginglss.utils.euler module
-=============================
-
-.. automodule:: imaginglss.utils.euler
-    :members:
-    :undoc-members:
-    :show-inheritance:

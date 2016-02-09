@@ -1,7 +1,0 @@
-imaginglss.model.brick module
-=============================
-
-.. automodule:: imaginglss.model.brick
-    :members:
-    :undoc-members:
-    :show-inheritance:

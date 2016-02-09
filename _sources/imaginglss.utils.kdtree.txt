@@ -1,7 +1,0 @@
-imaginglss.utils.kdtree module
-==============================
-
-.. automodule:: imaginglss.utils.kdtree
-    :members:
-    :undoc-members:
-    :show-inheritance:

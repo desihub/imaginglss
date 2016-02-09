@@ -1,7 +1,0 @@
-imaginglss.utils.wcs_tangent module
-===================================
-
-.. automodule:: imaginglss.utils.wcs_tangent
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,7 +1,0 @@
-imaginglss.analysis.targetselection module
-==========================================
-
-.. automodule:: imaginglss.analysis.targetselection
-    :members:
-    :undoc-members:
-    :show-inheritance:

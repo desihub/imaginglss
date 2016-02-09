@@ -1,7 +1,0 @@
-imaginglss.utils.filehandler module
-===================================
-
-.. automodule:: imaginglss.utils.filehandler
-    :members:
-    :undoc-members:
-    :show-inheritance:

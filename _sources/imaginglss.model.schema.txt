@@ -1,7 +1,0 @@
-imaginglss.model.schema module
-==============================
-
-.. automodule:: imaginglss.model.schema
-    :members:
-    :undoc-members:
-    :show-inheritance:

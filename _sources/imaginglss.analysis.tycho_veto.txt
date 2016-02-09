@@ -1,7 +1,0 @@
-imaginglss.analysis.tycho_veto module
-=====================================
-
-.. automodule:: imaginglss.analysis.tycho_veto
-    :members:
-    :undoc-members:
-    :show-inheritance:
