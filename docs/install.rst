@@ -96,10 +96,6 @@ Here is an example configuration file (that works on Edison):
 DR2 at NERSC
 ------------
 
-.. attention::
-
-   FIXME: Ellie please check the path is correct.
-
 ImagingLSS has been prepackaged for DR2 at Edison in the following locations:
 
 .. code-block:: python
