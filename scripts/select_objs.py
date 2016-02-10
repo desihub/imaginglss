@@ -72,6 +72,10 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete ns.ObjectTypee.
+
+    # note that although DR2 has these numbers, we query the raw images
+    # to keep it consistent with make_randoms.py
+
     compcut = getattr(completeness, ns.ObjectType)
     sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
     cat_lim = dr.read_depths((RA, DEC), compcut.bands)
@@ -79,7 +83,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     for band in compcut.bands:
         ind = dr.bands[band]
         missing_depth = sum(comm.allgather(
-                (cat_lim['DECAM_INVVAR'][:, ind] == 0).sum()))
+                (cat_lim['DECAM_FLUX_INVVAR'][:, ind] == 0).sum()))
         if comm.rank == 0:
             print('Objects in bricks with missing depth images (',band,'): ',\
                   missing_depth)
