@@ -52,7 +52,7 @@ def ang2pix_hdr(coord,hdr,zero_offset=True):
     
     """
     if ('TAN' not in hdr['CTYPE1'])|('TAN' not in hdr['CTYPE2']):
-        raise RuntimeError,"Not a tangent plane projection."
+        raise RuntimeError("Not a tangent plane projection.")
     cd, crpix, crval = parse_header(hdr, zero_offset)
     return(ang2pix(coord,cd,crpix,crval))
     #
@@ -64,7 +64,7 @@ def pix2ang_hdr(xy,hdr,zero_offset=True):
     See :py:meth:`ang2pix_hdr`
     """
     if ('TAN' not in hdr['CTYPE1'])|('TAN' not in hdr['CTYPE2']):
-        raise RuntimeError,"Not a tangent plane projection."
+        raise RuntimeError("Not a tangent plane projection.")
     cd, crpix, crval = parse_header(hdr, zero_offset)
     return(pix2ang(xy,cd,crpix,crval))
     #
@@ -104,7 +104,7 @@ def parse_header(hdr, zero_offset):
        ('CRPIX1' not in hdr)|('CRPIX2' not in hdr)|\
        ('CD1_1'  not in hdr)|('CD1_2'  not in hdr)|\
        ('CD2_1'  not in hdr)|('CD2_2'  not in hdr):
-        raise RuntimeError,"Unable to parse header."
+        raise RuntimeError("Unable to parse header.")
     cd    = numpy.array([hdr['CD1_1'],hdr['CD1_2'],hdr['CD2_1'],hdr['CD2_2']])
     crpix = numpy.array([hdr['CRPIX1'],hdr['CRPIX2']])
     crval = numpy.array([hdr['CRVAL1'],hdr['CRVAL2']])

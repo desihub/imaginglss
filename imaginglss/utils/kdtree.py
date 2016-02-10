@@ -45,7 +45,7 @@ class KDtree:
         Returns a list of all points in the tree (or subtree).
         """
         if node == None:
-            raise ValueError,"node is None in treelist"
+            raise ValueError("node is None in treelist")
         pl = [ node.location ]
         if node.left_child != None:
             pl +=  self.treelist(node.left_child)
