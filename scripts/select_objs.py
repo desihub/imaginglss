@@ -83,7 +83,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     for band in compcut.bands:
         ind = dr.bands[band]
         missing_depth = sum(comm.allgather(
-                (cat_lim['DECAM_FLUX_INVVAR'][:, ind] == 0).sum()))
+                (cat_lim['DECAM_FLUX_IVAR'][:, ind] == 0).sum()))
         if comm.rank == 0:
             print('Objects in bricks with missing depth images (',band,'): ',\
                   missing_depth)
