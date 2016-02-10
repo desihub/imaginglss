@@ -29,12 +29,12 @@ install:
 
 before_script:
     - if [ -d testdata/dr2-mini ]; then
-      mkdir testdata
-      pushd testdata
-      curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz
-      curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho.tar.gz | tar -xz
-      curl https://s3-us-west-1.amazonaws.com/imaginglss/dr2-mini.tar.gz | tar -xz
-      popd 
+      mkdir testdata;
+      pushd testdata;
+      curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz;
+      curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho.tar.gz | tar -xz;
+      curl https://s3-us-west-1.amazonaws.com/imaginglss/dr2-mini.tar.gz | tar -xz;
+      popd ;
       fi
 
 script: 
