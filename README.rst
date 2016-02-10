@@ -5,11 +5,10 @@ for Large scale structure analysis.
 The modelled data is a product from the Tractor, the source identification
 software used in by DESI.
 
-We have support on the `Early Data Release (EDR) data <https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles>`_
-and `DR1 <https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1>`_ .
+Refer to http://legacysurvey.org/dr2/ for the data model.
 
 Refer to the document at http://desihub.github.io/imaginglss
 
 We provide an example using the scripts at:
 
-http://nbviewer.ipython.org/urls/imaginglss.s3.amazonaws.com/DESI-FNAL-ImagingLSS.ipynb
+https://github.com/bccp/imaginglss-notebooks
