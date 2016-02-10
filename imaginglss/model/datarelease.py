@@ -301,14 +301,10 @@ class DataRelease(object):
 
         self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
 
-        catalogue_filenames = [
-                os.path.join(self.root, 
-                myschema.format_catalogue_filename(brick))
-                for brick in self.footprint.bricks]
-
         self.catalogue = catalogue.Catalogue(
             cachedir=os.path.join(self.cache, 'catalogue'),
-            filenames=catalogue_filenames,
+            bricks=self.footprint.bricks,
+            format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
             aliases=myschema.CATALOGUE_ALIASES
             )
         self.init_from_state()

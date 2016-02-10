@@ -114,8 +114,11 @@ class Catalogue(ColumnStore):
     ----------
     cachedir  : string
         the location for caching.
-    filenames : list
-        a list of fits file names that the catalogue is stored.
+    bricks: list
+        a list of bricks names that the catalogue covers.
+    format_filename : function
+        a function converts a brick object to a filename of the tractor
+        catalogue
     aliases   : list
         a list of fields to transform; this is to support migration
         of schema from older data release to newer ones. The list
@@ -126,7 +129,8 @@ class Catalogue(ColumnStore):
     dtype : dtype
         A container of the data type of columns
         in :py:class:`numpy.dtype`
-
+    filenames : dict
+        A mapping between the brickname and the filenames.
     
     """
     COLUMNS = [
@@ -143,8 +147,13 @@ class Catalogue(ColumnStore):
         'SHAPEEXP_R',
     ]
 
-    def __init__(self, cachedir, filenames, aliases):
-        self.filenames = filenames
+    def __init__(self, cachedir, bricks, format_filename, aliases):
+
+        filenames = [ format_filename(brick) for brick in bricks]
+        bricknames = [ brick.name for brick in bricks]
+
+        self.filenames = dict(zip(bricknames, filenames))
+
         self.aliases = dict([(new, (old, transform)) 
                 for old, new, transform in aliases])
         self.cachedir = cachedir
@@ -158,6 +167,9 @@ class Catalogue(ColumnStore):
     def dtype(self):
         columns = filehandler.list(self.cachedir)
         return numpy.dtype([(key, columns[key]) for key in columns])
+
+    def open(self, brick):
+        return fits.read_table(self.filenames[brick.name])
 
     def build_cache(self, filenames):
         """
@@ -186,7 +198,10 @@ class Catalogue(ColumnStore):
         
         cachedir = self.cachedir
 
-        fn = self.filenames[0]
+        # get the first filename
+        for fn in self.filenames.values():
+            break
+
         first = fits.read_table(fn)
         dtype = subdtype(uppercase_dtype(first.dtype), self.COLUMNS)
 
