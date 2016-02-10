@@ -11,6 +11,11 @@ from ..utils import filehandler
 from ..utils.columnstore import ColumnStore
 from ..utils.npyquery import Column as ColumnBase
 
+try:
+  basestring
+except NameError:
+  basestring = str
+
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"

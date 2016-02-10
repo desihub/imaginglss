@@ -52,7 +52,7 @@ class Brick(object):
         Initialize a brick object.  Brick is immutable.
         """
         self.index   = index
-        self.id   = id
+        self.id   = int(id)
         self.name = name
         self.ra   = ra
         self.dec  = dec

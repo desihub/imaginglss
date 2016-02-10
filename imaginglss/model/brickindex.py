@@ -138,7 +138,7 @@ class BrickIndex(object):
             brick = Brick(
                     index,
                     self.brickdata['BRICKID'][index], 
-                    self.brickdata['BRICKNAME'][index], 
+                    self.brickdata['BRICKNAME'][index].decode(), 
                     self.brickdata['RA'][index], 
                     self.brickdata['DEC'][index], 
                     self.brickdata['RA1'][index], 

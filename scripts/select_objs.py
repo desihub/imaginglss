@@ -128,7 +128,7 @@ if __name__=="__main__":
 
     if MPI.COMM_WORLD.rank == 0:
         # Just write the ns.ObjectTypee to an ascii text file.
-        ff = file(ns.output,"w")
+        ff = open(ns.output,"w")
         with ff:
             ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
             ff.write("# %13s %15s %15s" % ("RA","DEC","PhotoZ"))
