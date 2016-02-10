@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Scripts &mdash; ImagingLSS 0.9 documentation</title>
+    <title>API Reference &mdash; ImagingLSS 0.9 documentation</title>
     
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="next" title="Data Model" href="datamodel.html" />
-    <link rel="prev" title="Installation" href="install.html" /> 
+    <link rel="next" title="imaginglss package" href="imaginglss.html" />
+    <link rel="prev" title="Working with Jupyter Notebook" href="examples.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,10 +35,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="datamodel.html" title="Data Model"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.html" title="imaginglss package"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="install.html" title="Installation"
+          <a href="examples.html" title="Working with Jupyter Notebook"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
@@ -49,29 +52,29 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="scripts">
-<h1>Scripts<a class="headerlink" href="#scripts" title="Permalink to this headline">¶</a></h1>
-<p>ImagingLSS provides several scripts that producing complete targeting catalogues and
-the corresponding sky masks. In this section we will look at the usage of these files.</p>
-<div class="section" id="building-catalogue-cache">
-<h2>Building Catalogue Cache<a class="headerlink" href="#building-catalogue-cache" title="Permalink to this headline">¶</a></h2>
-<p>build_cache.py</p>
-<p>Caching makes interactive analysis faster.
-We convert the small catalogue (tractor) files into several large files, one for each
-column in the table.</p>
-<p>build_cache.py must be run with MPI. Here is an example script that works on Edison.</p>
-</div>
-<div class="section" id="complete-target-selection">
-<h2>Complete Target Selection<a class="headerlink" href="#complete-target-selection" title="Permalink to this headline">¶</a></h2>
-<p>select_objs.py selects objects of a type. The target types are defined at <a class="reference external" href="http://desi.lbl.gov/trac/wiki/TargetSelection">http://desi.lbl.gov/trac/wiki/TargetSelection</a></p>
-<p>The output is the RA DEC and magnitudes of objects. There is an option to use the Tycho star catalogue to veto objects
-near a known star.</p>
-</div>
-<div class="section" id="complete-random-sky-mask">
-<h2>Complete Random Sky Mask<a class="headerlink" href="#complete-random-sky-mask" title="Permalink to this headline">¶</a></h2>
-<p>make_random.py generates the randoms for the sky mask of an target type.</p>
-<p>The output is the RA DEC and magnitudes limit at that location on the sky.
-There is an option to use the Tycho star catalogue to veto regions near a known star.</p>
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="imaginglss.html">imaginglss package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imaginglss.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="imaginglss.analysis.html">imaginglss.analysis package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="imaginglss.analysis.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="imaginglss.model.html">imaginglss.model package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="imaginglss.model.html#submodules">Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="imaginglss.utils.html">imaginglss.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="imaginglss.utils.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -81,26 +84,16 @@ There is an option to use the Tycho star catalogue to veto regions near a known 
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Scripts</a><ul>
-<li><a class="reference internal" href="#building-catalogue-cache">Building Catalogue Cache</a></li>
-<li><a class="reference internal" href="#complete-target-selection">Complete Target Selection</a></li>
-<li><a class="reference internal" href="#complete-random-sky-mask">Complete Random Sky Mask</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="install.html"
-                        title="previous chapter">Installation</a></p>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Working with Jupyter Notebook</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="datamodel.html"
-                        title="next chapter">Data Model</a></p>
+  <p class="topless"><a href="imaginglss.html"
+                        title="next chapter">imaginglss package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/scripts.txt"
+      <li><a href="_sources/modules.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -128,10 +121,13 @@ There is an option to use the Tycho star catalogue to veto regions near a known 
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="datamodel.html" title="Data Model"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.html" title="imaginglss package"
              >next</a> |</li>
         <li class="right" >
-          <a href="install.html" title="Installation"
+          <a href="examples.html" title="Working with Jupyter Notebook"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>

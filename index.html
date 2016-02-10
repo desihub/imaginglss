@@ -34,6 +34,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">ImagingLSS 0.9 documentation</a> &raquo;</li> 
@@ -47,14 +50,14 @@
             
   <div class="section" id="welcome-to-imaginglss-s-documentation">
 <h1>Welcome to ImagingLSS&#8217;s documentation!<a class="headerlink" href="#welcome-to-imaginglss-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This is a data model of the DECAM imaging survey data
-and potentially also for other desi targeting imaging survey,
-for Large scale structure analysis.</p>
-<p>The modelled data is a product from the Tractor, the source identification
-software used in by DESI.</p>
-<p>We have support on
-<a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles">Early Data Release (EDR) data</a>
-and <a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1">DR1</a> .</p>
+<p>ImagingLSS implements a data model of the DECALS imaging survey data.
+The intended use of ImagingLSS is to generate large scale structure
+catalogues and masks from the DECALS imaging survey data.</p>
+<p>Conceptually, ImagingLSS is a consumer of the products of <a class="reference external" href="https://github.com/legacysurvey/legacypipe">Legacy Pipe</a>,
+the data pipe line of the DECam Legacy Survey.</p>
+<p>Currently, <a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLegacy/DR2">DR2</a> is supported.
+Previous Data Releases are also supported (since Early Data Release, or EDR),
+though in the future we may drop the support in order to simplify the code base.</p>
 </div>
 <div class="section" id="users-guide">
 <h1>Users Guide<a class="headerlink" href="#users-guide" title="Permalink to this headline">¶</a></h1>
@@ -64,35 +67,33 @@ and <a class="reference external" href="https://desi.lbl.gov/trac/wiki/DecamLega
 <li class="toctree-l2"><a class="reference internal" href="install.html#depencency">Depencency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#data-dependency">Data Dependency</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#location-of-data-release">Location of Data Release</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#dr2-at-nersc">DR2 at NERSC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install.html#example-dataset">Example Dataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#dr1-on-edison">DR1 on Edison</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="scripts.html">Scripts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="scripts.html#building-catalogue-cache">Building Catalogue Cache</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.html#complete-target-selection">Complete Target Selection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scripts.html#complete-random-sky-mask">Complete Random Sky Mask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datapipeline.html">Usage: Data Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datapipeline.html#building-the-cache">Building the Cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datapipeline.html#generating-object-catalogue">Generating Object Catalogue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datapipeline.html#generating-complete-random-sky-mask">Generating Complete Random Sky Mask</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="datamodel.html">Data Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="helpers.html">Helper routines</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="helpers.html#wcs">WCS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="helpers.html#sharedmem">Sharedmem</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#notebooks">Notebooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples.html#example-job-script-on-edison">Example Job script on Edison</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Working with Jupyter Notebook</a></li>
 </ul>
 </div>
 </div>
 <div class="section" id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imaginglss.html">imaginglss package</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -162,6 +163,9 @@ Run forget_cache.py to clear the cache.</li>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="install.html" title="Installation"
              >next</a> |</li>

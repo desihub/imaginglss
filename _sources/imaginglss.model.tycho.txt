@@ -1,0 +1,7 @@
+imaginglss.model.tycho module
+=============================
+
+.. automodule:: imaginglss.model.tycho
+    :members:
+    :undoc-members:
+    :show-inheritance:

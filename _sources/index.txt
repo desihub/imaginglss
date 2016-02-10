@@ -6,16 +6,16 @@
 Welcome to ImagingLSS's documentation!
 ======================================
 
-This is a data model of the DECAM imaging survey data 
-and potentially also for other desi targeting imaging survey, 
-for Large scale structure analysis.
+ImagingLSS implements a data model of the DECALS imaging survey data.
+The intended use of ImagingLSS is to generate large scale structure 
+catalogues and masks from the DECALS imaging survey data.
 
-The modelled data is a product from the Tractor, the source identification
-software used in by DESI.
+Conceptually, ImagingLSS is a consumer of the products of `Legacy Pipe <https://github.com/legacysurvey/legacypipe>`_, 
+the data pipe line of the DECam Legacy Survey.
 
-We have support on 
-`Early Data Release (EDR) data <https://desi.lbl.gov/trac/wiki/DecamLegacy/EDRfiles>`_
-and `DR1 <https://desi.lbl.gov/trac/wiki/DecamLegacy/DR1>`_ .
+Currently, `DR2 <https://desi.lbl.gov/trac/wiki/DecamLegacy/DR2>`_ is supported.
+Previous Data Releases are also supported (since Early Data Release, or EDR), 
+though in the future we may drop the support in order to simplify the code base.
 
 Users Guide
 ===========
@@ -23,7 +23,7 @@ Users Guide
    :maxdepth: 2
 
    install
-   scripts
+   datapipeline
    datamodel
    helpers
    examples

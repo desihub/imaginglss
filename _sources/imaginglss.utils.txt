@@ -1,0 +1,24 @@
+imaginglss.utils package
+========================
+
+.. automodule:: imaginglss.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   imaginglss.utils.columnstore
+   imaginglss.utils.euler
+   imaginglss.utils.filehandler
+   imaginglss.utils.fits
+   imaginglss.utils.fsarray
+   imaginglss.utils.kdtree
+   imaginglss.utils.npyquery
+   imaginglss.utils.sharedmem
+   imaginglss.utils.wcs_simplezea
+   imaginglss.utils.wcs_tangent
+

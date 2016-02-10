@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
     <link rel="next" title="Helper routines" href="helpers.html" />
-    <link rel="prev" title="Scripts" href="scripts.html" /> 
+    <link rel="prev" title="Usage: Data Pipeline" href="datapipeline.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,10 +35,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="helpers.html" title="Helper routines"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="scripts.html" title="Scripts"
+          <a href="datapipeline.html" title="Usage: Data Pipeline"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>
@@ -58,13 +61,21 @@ extinction, etc. are stored in pixelized images within the
 FITS files.  There are also catalogs of objects, produced by
 Tractor, which are associated with each brick.</p>
 <p>The main way to access the DECALS imaging data is via DECALS
-objects defined in <code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code>.</p>
+objects defined in <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a>.</p>
+<p>This is an example using the data model in an interactive Python shell.</p>
+<div class="highlight-bash"><div class="highlight"><pre>from imaginglss import DECALS
+<span class="nv">decals</span> <span class="o">=</span> DECALS<span class="o">(</span><span class="s1">&#39;/global/project/projectdirs/m779/imaginglss/dr2.conf.py&#39;</span><span class="o">)</span>
+
+<span class="nv">dr</span> <span class="o">=</span> decals.datarelease
+<span class="nv">cat</span> <span class="o">=</span> decals.datarelease.catalogue
+</pre></div>
+</div>
 <p>The DECALS object constructs the DECALS data release and dust extinction
 map objects from environment variables or a configuration file. Please refer
-to the documentation of <code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code> for details.</p>
+to the documentation of <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a> for details.</p>
 <p>The <code class="xref py py-attr docutils literal"><span class="pre">imaginglss.DECALS.datarelease</span></code> attribute is represents the data
 release. It is an instance of
-<code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.datarelease.DataRelease</span></code>.
+<a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease" title="imaginglss.model.datarelease.DataRelease"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.datarelease.DataRelease</span></code></a>.
 Important attributes are</p>
 <blockquote>
 <div><ul class="simple">
@@ -77,17 +88,17 @@ Important attributes are</p>
 <p>The member methods are</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="xref py py-meth docutils literal"><span class="pre">readout()</span></code>   : reading out pixel value of an image
+<li><a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.readout" title="imaginglss.model.datarelease.DataRelease.readout"><code class="xref py py-meth docutils literal"><span class="pre">readout()</span></code></a>   : reading out pixel value of an image
 for coordinates on the sky.</li>
 </ul>
 </div></blockquote>
-<p>Catalog information is handled by <code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.catalogue.Catalogue</span></code>, which stores the
+<p>Catalog information is handled by <a class="reference internal" href="imaginglss.model.catalogue.html#imaginglss.model.catalogue.Catalogue" title="imaginglss.model.catalogue.Catalogue"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.catalogue.Catalogue</span></code></a>, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files,
 but this class caches the
 information for speed and only columns that are accessed are loaded
 into memory. Use &#8216;forget_cache.py&#8217; to clear this cache.</p>
-<p>The images are represented by <code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.imagerepo.ImageRepo</span></code> objects.
+<p>The images are represented by <a class="reference internal" href="imaginglss.model.imagerepo.html#imaginglss.model.imagerepo.ImageRepo" title="imaginglss.model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.imagerepo.ImageRepo</span></code></a> objects.
 An ImageRepo object takes care of reading the image tile of a Brick.
 An image tile contains a padded region around the Brick,
 which is sometimes mentioned as a margin, a padding, or a bleeding region.</p>
@@ -99,7 +110,7 @@ which is sometimes mentioned as a margin, a padding, or a bleeding region.</p>
 <li>DataRelease.images[&#8216;model&#8217;][&#8216;u&#8217;] : the model &#8216;u&#8217; band image in nanomaggies;</li>
 </ul>
 </div></blockquote>
-<p><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.brick.Brick</span></code> holds metadata for each Brick, including the central
+<p><a class="reference internal" href="imaginglss.model.brick.html#imaginglss.model.brick.Brick" title="imaginglss.model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.brick.Brick</span></code></a> holds metadata for each Brick, including the central
 <code class="xref py py-attr docutils literal"><span class="pre">ra</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec</span></code>,
 and the primary area(
 <code class="xref py py-attr docutils literal"><span class="pre">ra1</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">dec1</span></code>,
@@ -108,14 +119,14 @@ and the primary area(
 There are routines for converting from sky coordinates to image
 pixels within each brick, and routines for querying the images
 handled by imagerepo.</p>
-<p><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.brickindex.BrickIndex</span></code> holds the metadata
+<p><a class="reference internal" href="imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex" title="imaginglss.model.brickindex.BrickIndex"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.brickindex.BrickIndex</span></code></a> holds the metadata
 of of the brick decomposition scheme.
 There are routines for converting from
 sky coordinates to bricks, and acts as a factory that creates
-<code class="xref py py-class docutils literal"><span class="pre">Brick</span></code> objects.</p>
+<a class="reference internal" href="imaginglss.model.brick.html#imaginglss.model.brick.Brick" title="imaginglss.model.brick.Brick"><code class="xref py py-class docutils literal"><span class="pre">Brick</span></code></a> objects.</p>
 <p>The <code class="xref py py-attr docutils literal"><span class="pre">imaginglss.DECALS.sfdmap</span></code> attribute is represents the dust extinction map
-. It is an instance of <code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.sfdmap.SFDMap</span></code>.</p>
-<p>For additional information please refer to <code class="xref doc docutils literal"><span class="pre">modules</span></code>.</p>
+. It is an instance of <a class="reference internal" href="imaginglss.model.sfdmap.html#imaginglss.model.sfdmap.SFDMap" title="imaginglss.model.sfdmap.SFDMap"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.sfdmap.SFDMap</span></code></a>.</p>
+<p>For additional information please refer to <a class="reference internal" href="modules.html"><em>API Reference</em></a>.</p>
 </div>
 
 
@@ -125,8 +136,8 @@ sky coordinates to bricks, and acts as a factory that creates
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="scripts.html"
-                        title="previous chapter">Scripts</a></p>
+  <p class="topless"><a href="datapipeline.html"
+                        title="previous chapter">Usage: Data Pipeline</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="helpers.html"
                         title="next chapter">Helper routines</a></p>
@@ -161,10 +172,13 @@ sky coordinates to bricks, and acts as a factory that creates
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="helpers.html" title="Helper routines"
              >next</a> |</li>
         <li class="right" >
-          <a href="scripts.html" title="Scripts"
+          <a href="datapipeline.html" title="Usage: Data Pipeline"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
       </ul>

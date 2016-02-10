@@ -1,21 +1,11 @@
-Examples
-========
+Working with Jupyter Notebook 
+=============================
 
-.. contents:: 
-    :depth: 2
+.. attention::
 
-Notebooks
----------
+   FIXME: We need to update these notebooks.
 
-ImagingLSS is compatible with IPython Notebook. 
-
-However, the notebook must manipulate the python import path at the begining.
-This limitation is because imaginglss is intended to be used without installation. 
-
-Also note that querying the imaging pixels (e.g. depth) typically requires a 
-high-throughput operation that cannot currently be driven in a Notebook; 
-For example, to apply ELG selection for the full DR1, we implement a MPI python scripts 
-:py:code:`script/select_.py`.
+ImagingLSS is compatible with IPython Notebook (after ImagingLSS is installed).
 
 We provide a comprensive Notebook example at
 
@@ -30,10 +20,13 @@ Here is an example notebook investigating the complete area mask for ELGs.
 
 http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.ipynb
 
-Example Job script on Edison
-----------------------------
+.. attention:: 
 
-.. literalinclude:: ../scripts/edison_example.sh
+    Note that the LSS generation pipe line (select_objs.py, make_randoms.py) 
+    typically requires a high-throughput operation querying a large amount of data, 
+    these cannot be done with notebook. The notebooks are most useful for inspecting
+    smaller chunks of data, individual bricks, etc. Refer to :doc:`datapipeline`.
 
-.. literalinclude:: ../scripts/edison_example.sh
-
+At NERSC, the jupyterhub service ImagingLSS can be used with https://jupyter.nersc.gov .
+Of course, one need to install imaginglss in from a Jupyter Terminal session first via pip.
+Refer to :doc:`install`.

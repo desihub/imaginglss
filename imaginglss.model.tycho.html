@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>imaginglss.model.tycho module &mdash; ImagingLSS 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="next" title="imaginglss.utils package" href="imaginglss.utils.html" />
+    <link rel="prev" title="imaginglss.model.sfdmap module" href="imaginglss.model.sfdmap.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.html" title="imaginglss.utils package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-imaginglss.model.tycho">
+<span id="imaginglss-model-tycho-module"></span><h1>imaginglss.model.tycho module<a class="headerlink" href="#module-imaginglss.model.tycho" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="imaginglss.model.tycho.Tycho">
+<em class="property">class </em><code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Representing a Tycho catalogue that
+is used to veto objects near stars</p>
+<dl class="method">
+<dt id="imaginglss.model.tycho.Tycho.nearest">
+<code class="descname">nearest</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho.nearest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho.nearest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query Tycho catalogue, returns information about
+the nearest object. The distance is in degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote>
+<div><p>(ra, dec) in degrees</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">d, bmag, vmag:</p>
+<blockquote class="last">
+<div><p>the distance to each object in coord, and the
+mag in b and v.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.model.tycho.radec2pos">
+<code class="descclassname">imaginglss.model.tycho.</code><code class="descname">radec2pos</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#radec2pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.radec2pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>converting ra dec to position on a unit sphere.
+ra, dec are in degrees.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imaginglss.model.sfdmap.html"
+                        title="previous chapter">imaginglss.model.sfdmap module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="imaginglss.utils.html"
+                        title="next chapter">imaginglss.utils package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/imaginglss.model.tycho.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.utils.html" title="imaginglss.utils package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imaginglss.model.sfdmap.html" title="imaginglss.model.sfdmap module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

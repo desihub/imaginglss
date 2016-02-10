@@ -1,9 +1,31 @@
 Installation
 ============
 
-ImagingLSS is supposed to be used without installation.
+ImagingLSS can be installed as a regular Python package, but it can also be
+used without installation (since the code evolves rapidly with time).
 
-However, some basic packages need to be set up before using the scripts
+To install (this is how we test ImagingLSS at home)
+
+.. code-block:: bash
+
+    git clone https://github.com/desihub/imaginglss/
+    cd imaginglss
+    pip install --user -e .
+
+To use without installation (this is how we test ImagingLSS at NERSC)
+
+.. code-block:: bash
+
+    git clone https://github.com/desihub/imaginglss/
+    cd imaginglss
+    export PYTHONPATH=$PWD:$PYTHONPATH
+    # remember to set PYTHONPATH in new shells.
+
+The package only declares the dependency for the data model.
+
+However, some basic packages need to be set up before using the data pipeline.
+We also need to tell ImagingLSS the location of files. These post-installation
+steps are documented in the following section.
 
 Depencency
 ----------
@@ -11,7 +33,9 @@ Depencency
 ImagingLSS is light on dependency.
 
  - numpy 1.8+. 
-   Do not use 1.7.x for this bug: https://github.com/numpy/numpy/issues/3469
+   Do not use 1.7.x due to this bug: https://github.com/numpy/numpy/issues/3469
+
+   To check the version of numpy, use
 
    .. code-block:: bash
     
@@ -19,29 +43,29 @@ ImagingLSS is light on dependency.
 
  - mpi4py, for the parallel infrastructure. 
 
- - fitsio 0.9.8 + (astropy is supported too) for accessing FITS files.
-   Do not use 0.9.7 for this bug: https://github.com/esheldon/fitsio/issues/39
+ - fitsio 0.9.8 + for accessing FITS files.
+   Do not use 0.9.7 due this bug: https://github.com/esheldon/fitsio/issues/39
    which affects building catalogue cache. 
-   Since 0.9.8 has not yet been released, you may need to install this
-   this version of fitsio which contains this crucial fix: 
-   https://github.com/esheldon/fitsio/tree/150cd
+   For now, you can install the rc2 prerelease of fitsio.
+
+   .. code-block:: bash
+
+       pip install -U --no-deps --user https://github.com/esheldon/fitsio/archive/v0.9.8rc2.tar.gz
    
-We do recomment pointing the variable PYTHONUSERBASE to a fast filesystem before installing
-the dependencies of ImagingLSS. This shall help the speed and consistency of the python startup time.
-A more comprehensive solution to faster PYTHON can be found at https://github.com/rainwoodman/python-mpi-bcast.
+   We still do support astropy.io.fits, but the use of astropy.io.fits is not
+   recommended.
+ 
 
-For example, on Edison.
-
-.. code-block:: bash
-
-    export PYTHONUSERBASE=$SCRATCH
-
-    easy_install --user fitsio
+On parallel HPC systems where files are hosted in a shared file system, 
+the time it takes to launch a Python application may fluctuate badly. 
+This applies to ImagingLSS, too. 
+At NERSC, we set up python-mpi-bcast to eliminate this issue https://github.com/rainwoodman/python-mpi-bcast .
+This will be noted in the full examples.
 
 Data Dependency
 ---------------
 
-Besides the DECAM catalogue and coadd image data, ImagingLSS also needs 
+Besides the DECALS catalogue and coadd image data, ImagingLSS also needs 
 
  - SFD98 dust map [todo give a reference]
  - Tycho star catalogue [http://slac.stanford.edu/~erykoff/catalogs/tycho.fit]
@@ -55,76 +79,39 @@ Location of Data Release
 ------------------------
  
 ImagingLSS tries to initialize the DECALS data release from a configuration file, by
-either passing in the file name as an argument to :py:class:`imaginglss.DECALS` 
+either passing in the file name as an argument to :py:class:`imaginglss.DECALS`, 
 or by setting the environment variable :code:`DECALS_PY_CONFIG`.
 
 Here is an example configuration file (that works on Edison):
 
 .. code-block:: python
 
-    # dr1.conf.py
-    decals_root = "/global/project/projectdirs/cosmo/data/legacysurvey/dr1"
-    decals_cache = "/project/projectdirs/m779/imaginglss/dr1/cache"
-    decals_release = "DR1"
+    # dr2.conf.py
+    decals_root = "/global/project/projectdirs/cosmo/data/legacysurvey/dr2"
+    decals_cache = "/project/projectdirs/m779/imaginglss/dr2/cache"
+    decals_release = "DR2"
     dust_dir = "/project/projectdirs/desi/software/edison/dust/v0_0/"
     tycho_dir = "/project/projectdirs/m779/imaginglss/tycho.fit"
+    
+DR2 at NERSC
+------------
 
-.. code-block:: bash
+ImagingLSS has been prepackaged for DR2 at Edison in the following locations:
 
-    export DECALS_PY_CONFIG=/path/to/dr1j.conf.py
-
-Getting Started
----------------
-
-Before start using imaginglss, it is crucial to build the catalogue cache. 
-
-Building the cache takes a long time, and we provide a MPI script for this
-:code:`scripts/build_cache.py`. On Edison for DR1, this step can be omitted
-if the above example configuration file is used.
-
-build_cache.py is an MPI capable script with good weak scaling. 
-It is bound by the file system bandwidth; 
-
-We recommend running it with a modest number of cores, 128 or 256. Here is
-an example job script that works on Edison (Note that python-mpi-bcast is used):
-
-.. code-block:: bash
-
-    #PBS -j eo
-    #PBS -l mppwidth=256
-    #PBS -q debug
-
-    cd $PBS_O_WORKDIR
-
-    export OMP_NUM_THREADS=1
-    export DECALS_PY_CONFIG=/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
-
-    export PYTHON_MPI_CHROOT=/dev/shm
-    export PYTHON_MPI_PKGROOT=/project/projectdirs/m779/python-mpi/usg
-    export PYTHON_MPI_PACKAGES=matplotlib-1.4.3.tar.gz:mpi4py-1.3.1.tar.gz:numpy-1.9.2.tar.gz:python-2.7.9.tar.gz:scipy-0.15.1.tar.gz:yfeng1-local-05132015.tar.gz:fitsio-0.9.7a.tar.gz
-
-    aprun -n 256 -d 1 /project/projectdirs/m779/python-mpi/python-mpi \
-        ./build_cache.py
-
-For DR1 this takes about 10 mins and produces 300 to 400 GB of data in the
-cache directory.  Be ready for it. 
-
-Now we are ready for some interactive fun
-
-.. code-block:: bash
+.. code-block:: python
 
     from imaginglss import DECALS
-    decals = DECALS() # or DECALS('/path/to/dr1.conf.py')
+    decals = DECALS('/global/project/projectdirs/m779/imaginglss/dr2.conf.py')
 
     dr = decals.datarelease
     cat = decals.datarelease.catalogue
-    print cat['RA'][:100]
-    print cat['DEC'][:100]
+
 
 Example Dataset
 ---------------
 
-We provide a small sampling data set that is covers the EDR3 foot-print.
+For those who do not work on NERSC, 
+we provide a small sampling data set that covers the EDR3 foot-print.
 
 http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-edr3.tar.gz 
 
@@ -156,22 +143,5 @@ see the following steps.
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz
     tar -xzvf tycho.tar.gz
 
-    export DECALS_PY_CONFIG=$PWD/dr1j-edr3/dr1j.conf.py
-
     cd -
-    
-DR1 on Edison
--------------
-
-ImagingLSS has been prepackaged for DR1 at Edison in the following locations:
-
-.. code-block:: bash
-
-    export DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/dr1/dr1.conf.py
-
-The working copy of the source code can be accessed at that location as well.
-
-.. code-block:: bash
-
-    tree DECALS_PY_CONFIG=/global/project/projectdirs/m779/imaginglss/source
 

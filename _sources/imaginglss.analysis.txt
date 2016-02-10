@@ -1,0 +1,19 @@
+imaginglss.analysis package
+===========================
+
+.. automodule:: imaginglss.analysis
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   imaginglss.analysis.completeness
+   imaginglss.analysis.cuts
+   imaginglss.analysis.gen_random
+   imaginglss.analysis.targetselection
+   imaginglss.analysis.tycho_veto
+
