@@ -84,7 +84,7 @@ class SFDMap(object):
             dustdir = os.path.join(dustdir, 'maps')
         else:
             dustdir = '.'
-            print 'Warning: $DUST_DIR not set; looking for SFD maps in current directory.'
+            print('Warning: $DUST_DIR not set; looking for SFD maps in current directory.')
         if ngp_filename is None:
             ngp_filename = os.path.join(dustdir, 'SFD_dust_4096_ngp.fits')
         if sgp_filename is None:
@@ -184,4 +184,4 @@ if __name__ == '__main__':
     m = SFDMap()
     EXT2 = m.extinction(['DES %s' % i for i in 'ugrizY'],
             RA, DEC)
-    print EXT - EXT2
+    print(EXT - EXT2)
