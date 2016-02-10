@@ -1,0 +1,35 @@
+language: python
+
+python:
+    - 2.7
+    - 3.4
+
+env:
+    - NUMPY_VERSION=1.10.2 OMP_NUM_THREADS=1
+
+before_install:
+    - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    - chmod +x miniconda.sh
+    - ./miniconda.sh -b -p $HOME/miniconda
+    - export PATH=$HOME/miniconda/bin:$PATH
+    - conda update --yes conda
+
+install:
+    - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
+    - source activate test
+    - conda install --yes numpy=$NUMPY_VERSION nose mpi4py
+    - pip install https://github.com/esheldon/fitsio/archive/v0.9.8rc1.tar.gz
+    - python setup.py install
+
+before_script:
+    - mkdir testdata
+    - pushd testdata
+    - curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz
+    - curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho.tar.gz | tar -xz
+    - curl https://s3-us-west-1.amazonaws.com/imaginglss/dr2-mini.tar.gz | tar -xz
+    - popd 
+
+script: 
+    - python scripts/build_cache.py --conf=testdata/dr2-mini/dr2.conf.py
+    - python scripts/select_objs.py --conf=testdata/dr2-mini/dr2.conf.py -o QSO.txt QSO
+    - python scripts/make_random.py --conf=testdata/dr2-mini/dr2.conf.py -o QSO.txt 1000 QSO
