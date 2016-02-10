@@ -29,7 +29,7 @@ comm = MPI.COMM_WORLD
 decals = DECALS(ns.conf)
 cat = decals.datarelease.catalogue
 
-filenames = cat.filenames
+filenames = list(cat.filenames.values())
 
 mystart = len(filenames) * comm.rank // comm.size
 myend = len(filenames) * (comm.rank + 1)// comm.size
