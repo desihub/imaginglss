@@ -85,6 +85,8 @@ class Node(object):
         return Expr("*", numpy.multiply, [other, self])
     def __div__(self, other):
         return Expr("/", numpy.divide, [self, other])
+    def __truediv__(self, other):
+        return Expr("/", numpy.divide, [self, other])
     def __rdiv__(self, other):
         return Expr("/", numpy.multiply, [other, self])
     def __add__(self, other):
