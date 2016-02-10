@@ -1,5 +1,11 @@
 language: python
 
+cache:
+    directories:
+        - $HOME/.cache/pip
+        - $HOME/.conda
+        - $TRAVIS_BUILD_DIR/testdata
+
 python:
     - 2.7
     - 3.4
@@ -17,17 +23,19 @@ before_install:
 install:
     - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
     - source activate test
-    - conda install --yes numpy=$NUMPY_VERSION nose mpi4py
+    - conda install --yes numpy=$NUMPY_VERSION nose mpi4py scipy
     - pip install https://github.com/esheldon/fitsio/archive/v0.9.8rc1.tar.gz
     - python setup.py install
 
 before_script:
+    - if [ -d testdata/dr2-mini ]; then
     - mkdir testdata
     - pushd testdata
     - curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz
     - curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho.tar.gz | tar -xz
     - curl https://s3-us-west-1.amazonaws.com/imaginglss/dr2-mini.tar.gz | tar -xz
     - popd 
+    - fi
 
 script: 
     - bash runtests.sh
