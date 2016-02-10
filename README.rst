@@ -1,3 +1,8 @@
+Status: 
+
+.. image:: https://travis-ci.org/desihub/imaginglss.svg?branch=master
+       :target: https://travis-ci.org/desihub/imaginglss
+
 This is a data model of the DECAM imaging survey data 
 and potentially also for other desi targeting imaging survey, 
 for Large scale structure analysis.
