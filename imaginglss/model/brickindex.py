@@ -7,7 +7,7 @@ returning brick objects.
 
 import numpy
 
-from brick import Brick
+from .brick import Brick
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
