@@ -205,7 +205,7 @@ class Footprint(object):
         
         """
         coord = numpy.array(coord)
-        bid = self.brickindex.query(coord)
+        bid = self.brickindex.query_internal(coord)
         mask = contains(self._covered_brickids, bid)
         return coord[:, mask]
 
@@ -365,7 +365,7 @@ class DataRelease(object):
         images = numpy.empty(len(RA), dtype='f4')
         images[...] = default
 
-        bid = self.brickindex.query((RA, DEC))
+        bid = self.brickindex.query_internal((RA, DEC))
 
         mask = contains(self._covered_brickids, bid)
 
@@ -377,7 +377,7 @@ class DataRelease(object):
             return images
 
         coord, invarg = self.brickindex.optimize((ra, dec), return_inverse=True)
-        bid = self.brickindex.query(coord)
+        bid = self.brickindex.query_internal(coord)
 
         pixels = numpy.empty(len(bid), 'f8')
         pixels[:] = default

@@ -215,7 +215,7 @@ class BrickIndex(object):
               str(brickid[~found]))
         return rt
 
-    def query(self, coord):
+    def query_internal(self, coord):
         """ 
         Returns the internal index of a brick at coord=(RA,DEC) in
         decimal degrees.  
@@ -273,7 +273,7 @@ class BrickIndex(object):
 
         """
         coord = numpy.array(coord)
-        bid = self.query(coord)
+        bid = self.query_internal(coord)
         arg = bid.argsort()
         #
         if return_inverse:
