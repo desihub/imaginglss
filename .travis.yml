@@ -30,6 +30,4 @@ before_script:
     - popd 
 
 script: 
-    - python scripts/build_cache.py --conf=testdata/dr2-mini/dr2.conf.py
-    - python scripts/select_objs.py --conf=testdata/dr2-mini/dr2.conf.py -o QSO.txt QSO
-    - python scripts/make_random.py --conf=testdata/dr2-mini/dr2.conf.py -o QSO.txt 1000 QSO
+    - bash runtests.sh
