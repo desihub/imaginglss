@@ -28,7 +28,7 @@ install:
     - python setup.py install
 
 before_script:
-    - if [ -d testdata/dr2-mini ]; then
+    - if ! [ -d testdata/dr2-mini ]; then
       mkdir -p testdata;
       pushd testdata;
       curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz;
