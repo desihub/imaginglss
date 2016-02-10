@@ -14,14 +14,14 @@ def apply(comm, query, data):
     """
     total = sum(comm.allgather(len(data)) )
     for expr in query:
-        mask = expr.visit(data)
+        mask = expr.apply(data)
         selected = sum(comm.allgather(mask.sum())) 
         if comm.rank == 0:
             print("%s : %d / %d = %g"
                 % (
                 str(expr), selected, total,
                 1. * selected / total))
-    mask = query.visit(data)
+    mask = query.apply(data)
     selected = sum(comm.allgather(mask.sum())) 
     if comm.rank == 0:
         print("%s : %d / %d = %g"

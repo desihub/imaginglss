@@ -16,8 +16,8 @@ require a 100% completeness.
 """
 from imaginglss.utils.npyquery import Column as C
 
-DECAM_FLUX_IVAR = C('DECAM_FLUX_IVAR').T
-DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION').T
+DECAM_FLUX_IVAR = C('DECAM_FLUX_IVAR')
+DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION')
 
 # 1-sigma limits
 G_LIMIT = DECAM_FLUX_IVAR[1] ** -0.5 / DECAM_MW_TRANSMISSION[1]
