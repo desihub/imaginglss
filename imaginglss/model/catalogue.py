@@ -118,7 +118,7 @@ class Catalogue(object):
                 for old, new, transform in aliases])
 
         data = []
-        for f in bricks:
+        for brick in bricks:
             data.append(self.open(brick))
 
         self.data = numpy.concatenate(data)
