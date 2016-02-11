@@ -127,6 +127,9 @@ class Catalogue(object):
     def size(self):
         return len(self.data)
 
+    def __len__(self):
+        return len(self.data)
+
     @property
     def dtype(self):
         return self.data.dtype
