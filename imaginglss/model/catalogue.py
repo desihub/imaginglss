@@ -25,7 +25,7 @@ class C(ColumnBase):
         with the :py:mod:`imaginglss.utils.npyquery` mini language 
      """
     def visit(self, catalogue):
-        if isinstance(catalogue, Catalogue):
+        if isinstance(catalogue, CachedCatalogue):
             return catalogue[self.name][:]
         else:
             # Rows
@@ -87,7 +87,65 @@ class TransformedColumn(object):
     def __getitem__(self, index):
         return self.transform(self.ref[index])
 
-class Catalogue(ColumnStore):
+class Catalogue(object):
+    """
+    Parameters
+    ----------
+    bricks: list
+        a list of bricks names that the catalogue covers.
+    format_filename : function
+        a function converts a brick object to a filename of the tractor
+        catalogue
+    aliases   : list
+        a list of fields to transform; this is to support migration
+        of schema from older data release to newer ones. The list
+        is of from (oldname, newname, transformfunction)
+
+    Attributes
+    ----------
+    dtype : dtype
+        A container of the data type of columns
+        in :py:class:`numpy.dtype`
+    """
+    def __init__(self, bricks, format_filename, aliases):
+
+        filenames = [ format_filename(brick) for brick in bricks]
+        bricknames = [ brick.name for brick in bricks]
+
+        self.filenames = dict(zip(bricknames, filenames))
+
+        self.aliases = dict([(new, (old, transform)) 
+                for old, new, transform in aliases])
+
+        data = []
+        for f in bricks:
+            data.append(self.open(brick))
+
+        self.data = numpy.concatenate(data)
+
+    @property
+    def size(self):
+        return len(self.data)
+
+    @property
+    def dtype(self):
+        return self.data.dtype
+
+    def open(self, brick):
+        return fits.read_table(self.filenames[brick.name])
+
+    def __getitem__(self, column):
+        if isinstance(column, basestring) and column in self.aliases:
+            old, transform = self.aliases[column]
+            return TransformedColumn(self[old], transform)
+        else:
+            return self.data[column]
+
+    def __repr__(self):
+        return 'Catalogue: %s' % str(self.dtype)
+
+
+class CachedCatalogue(ColumnStore):
     """
     Class for handling object catalogs associated with a data release.
 
@@ -217,7 +275,6 @@ class Catalogue(ColumnStore):
         for filename in filenames:
             table = fits.read_table(filename)
             table = table.view(uppercase_dtype(table.dtype))
-
             data1 = numpy.zeros(len(table), dtype)
             for name in table.dtype.names:
                 # only preserve those in both 'first' and all
@@ -257,7 +314,7 @@ class Catalogue(ColumnStore):
         return filehandler.read(self.cachedir, [column], offset=start, count=end-start)[column]
 
     def __repr__(self):
-        return 'Catalogue: %s' % str(self.dtype)
+        return 'CachedCatalogue: %s' % str(self.dtype)
 
     def neighbours(self, coord, sep):
         pass

@@ -232,7 +232,7 @@ class DataRelease(object):
         an index object of all of the bricks (covering the entire sky)
     bands      : dict
         a dictionary translating from band name to integer used in Tractor catalogue
-    catalogue  : :py:class:`~model.catalogue.Catalogue`
+    catalogue  : :py:class:`~model.catalogue.CachedCatalogue`
         the concatenated tractor catalogue, accessed by attributes.
     extinction : array_like
         an array storing the extinction coeffcients. 
@@ -311,13 +311,37 @@ class DataRelease(object):
 
         self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
 
-        self.catalogue = catalogue.Catalogue(
+        self.catalogue = catalogue.CachedCatalogue(
             cachedir=os.path.join(self.cache, 'catalogue'),
             bricks=self.footprint.bricks,
             format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
             aliases=myschema.CATALOGUE_ALIASES
             )
         self.init_from_state()
+
+    def create_footprint(self, extent):
+        """ Create a footprint based on the extent.
+
+            Parameters
+            ----------
+            extent : tuple, or None
+                RA1, RA2, DEC1, DEC2. If None the full catalogue is returned
+        """
+        bricks = self.brickindex.query_region(extent)
+        return Footprint(bricks, self.brickindex)
+
+    def create_catalogue(self, footprint):
+        """ Create a catalogue based on the footprint.
+
+            Parameters
+            ----------
+            footprint : Footprint
+                created with :py:meth`DataRelease.create_footprint`
+        """
+        myschema = getattr(schema, self.version)
+        return catalogue.Catalogue(bricks=footprint.bricks,
+            format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
+            aliases=myschema.CATALOGUE_ALIASES)
 
     def init_from_state(self):
         myschema = getattr(schema, self.version)

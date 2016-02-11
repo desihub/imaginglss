@@ -241,6 +241,44 @@ class BrickIndex(object):
         ind = self.hash.searchsorted(hash)
         return ind
 
+    def query(self, coord):
+        """ 
+        Returns a brick at coord=(RA,DEC) in decimal degrees.  
+
+        Parameters
+        ----------
+        coord  : array_like
+            coord = (RA, DEC) in degrees, vectorized.
+
+        """
+        return self.get_brick(self.query_internal(coord))
+
+    def query_region(self, extent):
+        """ 
+        Returns a list of bricks covering the extent in decimal degrees.  
+
+        Parameters
+        ----------
+        extent : tuple, list
+            extent = (RA1, RA2, DEC1, DEC2) in degrees. 
+
+        Notes 
+        -----
+        RA1 is the left side and RA2 is the right side. 
+
+        """
+        RA1, RA2, DEC1, DEC2 = extent
+
+        RA2 = (RA2 - RA1) % 360.
+        RA1B = (self.brickdata['RA1'] - RA1) % 360.
+        RA2B = (self.brickdata['RA2'] - RA1) % 360.
+        mask  = self.brickdata['DEC1'] <= DEC2
+        mask &= self.brickdata['DEC2'] >= DEC1
+        mask &= RA1B <= RA2
+        mask &= RA2B >= 0
+        ind = mask.nonzero()[0]
+        return [self.get_brick(i) for i in ind]
+
     def optimize(self, coord, return_index=False, return_inverse=False):
         """
         Optimize the ordering of coord=(RA,DEC) to make later queries faster.
