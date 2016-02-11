@@ -132,6 +132,16 @@ class Footprint(object):
                 str(self.range)
             )
 
+    def intersect(self, other):
+        """ Returns the intersection with another footprint. """
+        bricks = list(set(self.bricks).intersection(set(other.bricks)))
+        return Footprint(bricks, self.brickindex)
+
+    def union(self, other):
+        """ Returns the union with another footprint. """
+        bricks = list(set(self.bricks + other.bricks))
+        return Footprint(bricks, self.brickindex)
+
     def random_sample(self, Npoints, rng):
         """
         Generate uniformly distributed points within the boundary that lie in
