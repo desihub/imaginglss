@@ -30,6 +30,7 @@ from argparse import ArgumentParser
 ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
 ap.add_argument("output")
+ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
@@ -63,6 +64,9 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         fluxcut = getattr(targetselection, ns.ObjectType)
         mask = cuts.apply(comm, fluxcut, rows)
 
+    if comm.rank == 0:
+        print('Rank 0 with', myend - mystart, 'items')
+
     # ... and extract only the objects which passed the cuts.
     RA   = cat[ 'RA'][mine][mask]
     DEC   = cat['DEC'][mine][mask]
@@ -78,7 +82,16 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     compcut = getattr(completeness, ns.ObjectType)
     sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
-    cat_lim = dr.read_depths((RA, DEC), compcut.bands)
+
+    if ns.use_tractor_depth:
+        cat_lim = np.empty(len(RA), dtype=[
+            ('DECAM_FLUX_IVAR', cat.dtype['DECAM_FLUX_IVAR']),
+            ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
+            ])
+        cat_lim['DECAM_FLUX_IVAR'][:] = cat['DECAM_FLUX_IVAR'][mine][mask]
+        cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
+    else:
+        cat_lim = dr.read_depths((RA, DEC), compcut.bands)
 
     for band in compcut.bands:
         ind = dr.bands[band]
