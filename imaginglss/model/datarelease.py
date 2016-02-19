@@ -449,7 +449,7 @@ class DataRelease(object):
 
             Returns
             -------
-            array of dtype DECAM_FLUX_IVAR and DECAM_MW_TRANSMISSION.
+            array of dtype DECAM_DEPTH and DECAM_MW_TRANSMISSION.
 
             Notes
             -----
@@ -458,7 +458,7 @@ class DataRelease(object):
 
         """
         dtype = numpy.dtype(
-                [('DECAM_FLUX_IVAR', ('f4', 6)),
+                [('DECAM_DEPTH', ('f4', 6)),
                  ('DECAM_MW_TRANSMISSION', ('f4', 6))]
                 )
         output = numpy.zeros(len(coord[0]), dtype)
@@ -467,7 +467,7 @@ class DataRelease(object):
         for band in bands:
             ind = self.bands[band]
 
-            output['DECAM_FLUX_IVAR'][:, ind] = \
+            output['DECAM_DEPTH'][:, ind] = \
                     self.readout(coord, self.images['depth'][band], 
                     default=+0.0, ignore_missing=True)
             output['DECAM_MW_TRANSMISSION'][:, ind] =  \

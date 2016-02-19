@@ -205,6 +205,7 @@ class CachedCatalogue(ColumnStore):
         'DEC',
         'DECAM_FLUX_IVAR',
         'DECAM_MW_TRANSMISSION',
+        'DECAM_DEPTH',
         'DECAM_FLUX',
         'WISE_FLUX',
         'WISE_MW_TRANSMISSION',

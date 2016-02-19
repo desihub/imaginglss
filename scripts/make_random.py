@@ -131,7 +131,7 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     mask = cuts.apply(comm, compcut(sigma), cat_lim)
 
     # It's also useful to have r magnitude later.
-    LIM = cat_lim['DECAM_FLUX_IVAR'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']
+    LIM = cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']
 
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:

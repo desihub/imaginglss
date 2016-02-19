@@ -85,10 +85,10 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     if ns.use_tractor_depth:
         cat_lim = np.empty(len(RA), dtype=[
-            ('DECAM_FLUX_IVAR', cat.dtype['DECAM_FLUX_IVAR']),
+            ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
             ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
             ])
-        cat_lim['DECAM_FLUX_IVAR'][:] = cat['DECAM_FLUX_IVAR'][mine][mask]
+        cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
         cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
     else:
         cat_lim = dr.read_depths((RA, DEC), compcut.bands)
@@ -96,7 +96,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     for band in compcut.bands:
         ind = dr.bands[band]
         missing_depth = sum(comm.allgather(
-                (cat_lim['DECAM_FLUX_IVAR'][:, ind] == 0).sum()))
+                (cat_lim['DECAM_DEPTH'][:, ind] == 0).sum()))
         if comm.rank == 0:
             print('Objects in bricks with missing depth images (',band,'): ',\
                   missing_depth)
