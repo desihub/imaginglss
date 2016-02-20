@@ -18,17 +18,18 @@ def radec2pos(ra, dec):
     pos[:, 1] = numpy.cos(dec) * numpy.cos(ra)
     return pos
 
-class Tycho(object):
+class Tycho(numpy.ndarray):
     """ Representing a Tycho catalogue that
         is used to veto objects near stars 
     """
-    def __init__(self, path):
-        data = fits.read_table(path)
-        self.bmag = data['BMAG'].copy()
-        self.vmag = data['VMAG'].copy()
-        self.varflag = data['VARFLAG'].copy()
-        pos = radec2pos(data['RA'], data['DEC'])
+    def __new__(kls, path):
+        self = fits.read_table(path).view(type=kls)
+        self.bmag = self['BMAG']
+        self.vmag = self['VMAG']
+        self.varflag = self['VARFLAG']
+        pos = radec2pos(self['RA'], self['DEC'])
         self.tree = cKDTree(pos)
+        return self
 
     def nearest(self, coord):
         """
