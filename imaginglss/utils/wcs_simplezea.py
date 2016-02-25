@@ -179,10 +179,13 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
     The transformation is used by SFD98 dust maps.
     """
     coord = numpy.array(coord, dtype='f8').copy()
-    xy    = numpy.empty_like(coord)
+    view = coord
+    if coord.ndim == 1:
+        view = view.reshape(2, 1)
+    xy    = numpy.empty_like(view)
     # watch out, this may be wrong if the matrix is not diagonal
 
-    l, b = coord * (numpy.pi / 180.)
+    l, b = view * (numpy.pi / 180.)
        
     #project from galactic longitude/latitude to lambert pixels (see SFD98)
     x = numpy.cos(l) * (1 - NSGP * numpy.sin(b))**0.5
@@ -193,7 +196,7 @@ def ang2pix(coord,SCALE,CRPIX,NSGP):
 
     xy *= SCALE
     xy += numpy.array(CRPIX).reshape(2, 1)
-    return(xy)
+    return xy.reshape(view.shape)
     #
 
 
@@ -206,6 +209,11 @@ def pix2ang(xy,SCALE,CRPIX,NSGP):
     """
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
+    view = coord
+    if coord.ndim == 1:
+        view = view.reshape(2, 1)
+        xy = xy.reshape(2, 1)
+
     xy -= numpy.array(CRPIX).reshape(2, 1)
     xy /= SCALE
 
@@ -213,15 +221,16 @@ def pix2ang(xy,SCALE,CRPIX,NSGP):
     b = numpy.arcsin((1 - x ** 2 - y ** 2) * NSGP)
     l = numpy.arctan2(-NSGP * y, x)
 
-    coord[0] = l
-    coord[1] = b
-    coord *= 180. / numpy.pi
-    coord[0] %= 360.
+    view[0] = l
+    view[1] = b
+    view *= 180. / numpy.pi
+    view[0] %= 360.
     return(coord)
 
 if __name__ == '__main__':
     # perform some tests
     def compare(NSGP, ra, dec):
+        from numpy.testing import assert_allclose
         from astropy import wcs
         header = dict(
             CTYPE1  = 'GLON-ZEA',#           / ZEA 
@@ -254,7 +263,7 @@ if __name__ == '__main__':
         print('roundtrip', back.T)
         print('astropy has', astropy)
         print('we have    ', ours.T)
-        return ours - astropy
+        assert_allclose(ours.T, astropy, rtol=1e-9)
 
     def test():
         compare(1, 31., 30)

@@ -142,12 +142,16 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
     https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py
     """
     coord = numpy.array(coord, dtype='f8').copy()
-    xy    = numpy.empty_like(coord)
+    view = coord
+    if coord.ndim == 1:
+        view = view.reshape(2, 1)
+
+    xy    = numpy.empty_like(view)
     # watch out, this may be wrong if the matrix is not diagonal
     matrix = numpy.linalg.inv(numpy.array(CD).reshape(2, 2))
 
     r = CreateRotationMatrix_spam(CRVAL[0],CRVAL[1])
-    ra, dec = Rotate_spam(r, coord[0], coord[1]) 
+    ra, dec = Rotate_spam(r, view[0], view[1]) 
     ra *= numpy.pi / 180.
     dec *= numpy.pi / 180.
 
@@ -157,7 +161,7 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
 
     xy = matrix.dot(xy)
     xy += numpy.array(CRPIX).reshape(2, 1)
-    return(xy)
+    return xy.reshape(coord.shape)
     #
 
 
@@ -171,6 +175,11 @@ def pix2ang(xy,CD,CRPIX,CRVAL):
     """
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
+    view = coord
+    if coord.ndim == 1:
+        view = view.reshape(2, 1)
+        xy = xy.reshape(2, 1)
+
     # watch out, this may be wrong if the matrix is not diagonal
     matrix = numpy.array(CD).reshape(2, 2)
 
@@ -182,13 +191,13 @@ def pix2ang(xy,CD,CRPIX,CRVAL):
     rinv **= -0.5
     rinv  *= 180.0 / numpy.pi
 
-    coord[1] = numpy.arctan(rinv)
-    coord[0] = numpy.arctan2(xy[0],-xy[1])
-    coord   *= 180 / numpy.pi
+    view[1] = numpy.arctan(rinv)
+    view[0] = numpy.arctan2(xy[0],-xy[1])
+    view   *= 180 / numpy.pi
     r        = CreateRotationMatrix_spam(CRVAL[0], CRVAL[1])
-    coord[:] = Rotate_spam(r.T, coord[0], coord[1]) 
-    coord[0]%= 360.
-    return(coord)
+    view[:] = Rotate_spam(r.T, view[0], view[1]) 
+    view[0]%= 360.
+    return coord
 
 
 ##############################
@@ -245,7 +254,7 @@ def Rotate_spam(r, longitude, latitude):
     b0, b1, b2 = lmn2
 
     # Account for possible roundoff
-    numpy.clip(b2, -1, 1, b2)
+    b2 = numpy.clip(b2, -1, 1)
 
     lat_new = numpy.arcsin(b2)* (180. / numpy.pi)
     lon_new = numpy.arctan2(b1, b0) * (180. / numpy.pi)
@@ -256,6 +265,7 @@ def Rotate_spam(r, longitude, latitude):
 if __name__ == '__main__':
     # perform some tests
     def compare(ra0, dec0, ra, dec):
+        from numpy.testing import assert_allclose
         from astropy import wcs
         header = dict(
             CTYPE1  = 'RA---TAN',#           / TANgent plane
@@ -287,7 +297,7 @@ if __name__ == '__main__':
         print('roundtrip', back.T)
         print('astropy has', astropy)
         print('we have    ', ours.T)
-        return ours - astropy
+        assert_allclose(ours.T, astropy, rtol=1e-9)
 
     def test():
         compare(30, 30, 31., 30)
