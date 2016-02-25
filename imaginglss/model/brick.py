@@ -100,7 +100,7 @@ class Brick(object):
 
         img   = repo.open(self)
 
-        xy = numpy.int32(self.query(repo, coord))
+        xy = numpy.round(self.query(repo, coord)).astype('int32')
         mask = (xy < numpy.array(img.shape) \
             .reshape(2, 1)).all(axis=0)
         mask &= (xy >= 0).all(axis=0)
