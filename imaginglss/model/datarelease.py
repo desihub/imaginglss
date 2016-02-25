@@ -395,11 +395,17 @@ class DataRelease(object):
             Otherwise it makes more sense to
             have readout in ImageRepo.
         """
-        RA, DEC = coord
-        images = numpy.empty(len(RA), dtype='f4')
+        coord = numpy.array(coord)
+        if coord.ndim == 1:
+            view = coord.reshape(2, 1)
+        else:
+            view = coord
+
+        RA, DEC = view
+        images = numpy.empty(RA.shape, dtype='f4')
         images[...] = default
 
-        bid = self.brickindex.query_internal((RA, DEC))
+        bid = self.brickindex.query_internal(view)
 
         mask = contains(self._covered_brickids, bid)
 
@@ -410,8 +416,8 @@ class DataRelease(object):
             # survey 
             return images
 
-        coord, invarg = self.brickindex.optimize((ra, dec), return_inverse=True)
-        bid = self.brickindex.query_internal(coord)
+        view, invarg = self.brickindex.optimize((ra, dec), return_inverse=True)
+        bid = self.brickindex.query_internal(view)
 
         pixels = numpy.empty(len(bid), 'f8')
         pixels[:] = default
@@ -428,11 +434,11 @@ class DataRelease(object):
             sl = slice(first, last)
 
             try:
-                img = brick.readout(coord[:, sl], repo, default=default)
+                img = brick.readout(view[:, sl], repo, default=default)
                 #print( 'readout', b, img)
                 pixels[sl] = img
             except IOError as e:
-                #print( 'readout', b, self.brickindex.get_brick(b), 'error', e, coord)
+                #print( 'readout', b, self.brickindex.get_brick(b), 'error', e, view)
                 if not ignore_missing:
                     raise
                 else:
@@ -441,7 +447,7 @@ class DataRelease(object):
         #
         images[mask] = pixels[invarg]
             
-        return images
+        return images.reshape(coord[0].shape)
 
     def read_depths(self, coord, bands=[]):
         """ Read the depth of given bands, 
@@ -461,16 +467,17 @@ class DataRelease(object):
                 [('DECAM_DEPTH', ('f4', 6)),
                  ('DECAM_MW_TRANSMISSION', ('f4', 6))]
                 )
-        output = numpy.zeros(len(coord[0]), dtype)
+        coord = numpy.array(coord)
+        output = numpy.zeros(coord[0].shape, dtype)
 
         ebv = self.sfdmap.ebv(coord[0], coord[1])
         for band in bands:
             ind = self.bands[band]
 
-            output['DECAM_DEPTH'][:, ind] = \
+            output['DECAM_DEPTH'][..., ind] = \
                     self.readout(coord, self.images['depth'][band], 
                     default=+0.0, ignore_missing=True)
-            output['DECAM_MW_TRANSMISSION'][:, ind] =  \
+            output['DECAM_MW_TRANSMISSION'][..., ind] =  \
                     10 ** (- ebv * self.extinction[band] / 2.5)
 
         return output
