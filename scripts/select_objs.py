@@ -48,6 +48,15 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     """
     Does the actual selection, imposing cuts on the fluxes
     """
+
+    dtype = np.dtype([
+        ('RA', 'f8'),
+        ('DEC', 'f8'),
+        ('PHOTO_Z', 'f8'),
+        ('DECAM_MAG', ('f4', 6)),
+        ('DECAM_NOISE_LEVEL', ('f4', 6)),
+        ])
+
     # Get instances of a data release and SFD dust map.
     decals = DECALS(ns.conf)
     dr     = decals.datarelease
@@ -67,31 +76,38 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print('Rank 0 with', myend - mystart, 'items')
 
-    # ... and extract only the objects which passed the cuts.
-    RA   = cat[ 'RA'][mine][mask]
-    DEC   = cat['DEC'][mine][mask]
+    CANDIDATES = np.empty(mask.sum(), dtype=dtype)
+    CANDIDATES['PHOTO_Z']   = -1.0
+    CANDIDATES['RA']   = cat[ 'RA'][mine][mask]
+    CANDIDATES['DEC']   = cat['DEC'][mine][mask]
+ 
     FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
-    MAG = 22.5-2.5*np.log10((FLUX).clip(1e-15,1e15))
+    CANDIDATES['DECAM_MAG'] = 22.5-2.5*np.log10((FLUX).clip(1e-15,1e15))
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
     # for a complete ns.ObjectTypee.
 
     # note that although DR2 has these numbers, we query the raw images
-    # to keep it consistent with make_randoms.py
+    # to keep it consistent with make_randoms.py.  This shall agree with
+    # the DR2 tractor file numbers.
+
+    # ... and extract only the objects which passed the cuts.
 
     compcut = getattr(completeness, ns.ObjectType)
     sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
-
     if ns.use_tractor_depth:
-        cat_lim = np.empty(len(RA), dtype=[
+        cat_lim = np.empty(len(CANDIDATES), dtype=[
             ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
             ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
             ])
         cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
         cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
     else:
-        cat_lim = dr.read_depths((RA, DEC), compcut.bands)
+        cat_lim = dr.read_depths((CANDIDATES['RA'], CANDIDATES['DEC']), compcut.bands)
+
+    # It's also useful to store the 1 sigma limits for later
+    CANDIDATES['DECAM_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
 
     for band in compcut.bands:
         ind = dr.bands[band]
@@ -107,51 +123,55 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print('Total number of objects in complete area: ', total_complete)
 
-    RA  = RA [mask]
-    DEC = DEC[mask]
-    MAG = MAG[mask]
+    CANDIDATES = CANDIDATES[mask]
     
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (RA, DEC))
+        mask = veto(decals.tycho, (CANDIDATES['RA'], CANDIDATES['DEC']))
 
         total_complete = sum(comm.allgather(mask.sum()))
         if comm.rank == 0:
             print('Using tycho veto', ns.with_tycho,'...')
             print('Total number of objects not close to stars', total_complete)
 
-        RA  = RA [mask]
-        DEC = DEC[mask]
-        MAG = MAG[mask]
+        CANDIDATES = CANDIDATES[mask]
     else:
         if comm.rank == 0:
             print('Not applying cuts for star proximity.')
         
 
-    RA  = np.concatenate(comm.allgather(RA ))
-    DEC = np.concatenate(comm.allgather(DEC))
-    MAG = np.concatenate(comm.allgather(MAG), axis=0)
+    CANDIDATES  = np.concatenate(comm.allgather(CANDIDATES))
 
-    return( (RA,DEC,MAG) )
-    #
+    return CANDIDATES
+
+def write_text_output(CANDIDATES):
+    ff = open(ns.output,"w")
+    names = CANDIDATES.dtype.names
+    def format_name(name, dtype):
+        subdtype = dtype[name]
+        if subdtype.shape is not None and len(subdtype.shape):
+            return '%s[%s]' % (name, subdtype.shape)
+        else:
+            return name
+    def format_var(var, fmt, subdtype):
+        if subdtype.shape is not None and len(subdtype.shape):
+            return ' '.join([fmt % var[i] for i in range(subdtype.shape[0])])
+        else:
+            return fmt % var
+
+    with ff:
+        ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
+        ff.write("# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
+        ff.write("# bands: %s \n" % 'ugrizY')
+        for row in CANDIDATES:
+            for name in names:
+                ff.write(format_var(row[name], '%15.10f ', CANDIDATES.dtype[name]))
+            ff.write('\n')
 
 if __name__=="__main__":
 
-    ra,dc,mag = select_objs(ns)
+    CANDIDATES = select_objs(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        # Just write the ns.ObjectTypee to an ascii text file.
-        ff = open(ns.output,"w")
-        with ff:
-            ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
-            ff.write("# %13s %15s %15s" % ("RA","DEC","PhotoZ"))
-            for band in 'ugrizY':
-                ff.write(" %15s" % band)
-            ff.write("\n")
-            for i in range(ra.size):
-                ff.write("%15.10f %15.10f %15.10f"
-                    % (ra[i],dc[i],0.5))
-                for band in range(6):
-                    ff.write(" %15.10f" % mag[i][band])
-                ff.write("\n")
-        #
+        # Just write the candidates to an ascii text file.
+        write_text_output(CANDIDATES)
