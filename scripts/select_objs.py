@@ -144,8 +144,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     return CANDIDATES
 
-def write_text_output(CANDIDATES):
-    ff = open(ns.output,"w")
+def write_text_output(output, CANDIDATES):
     names = CANDIDATES.dtype.names
     def format_name(name, dtype):
         subdtype = dtype[name]
@@ -159,7 +158,7 @@ def write_text_output(CANDIDATES):
         else:
             return fmt % var
 
-    with ff:
+    with open(output, "w") as ff:
         ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
         ff.write("# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
         ff.write("# bands: %s \n" % 'ugrizY')
@@ -174,4 +173,4 @@ if __name__=="__main__":
 
     if MPI.COMM_WORLD.rank == 0:
         # Just write the candidates to an ascii text file.
-        write_text_output(CANDIDATES)
+        write_text_output(ns.output, CANDIDATES)
