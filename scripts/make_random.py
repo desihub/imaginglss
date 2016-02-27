@@ -116,6 +116,18 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     # fill it with random points 
     coord = fill_random(footprint, myNran, rng)
 
+    dtype = np.dtype([
+        ('RA', 'f8'),
+        ('DEC', 'f8'),
+        ('COMPLETENESS', 'f4'),
+        ('DECAM_NOISE_LEVEL', ('f4', 6)),
+        ])
+
+    CANDIDATES = np.empty(len(coord[0]), dtype=dtype)
+    CANDIDATES['RA'] = coord[0]
+    CANDIDATES['DEC'] = coord[1]
+    CANDIDATES['COMPLETENESS'] = 1.0
+
     ns.Nran = sum(comm.allgather(len(coord[0])))
 
     #Currently this applies cuts for the "100%" complete ns.ObjectTypee, i.e. assuming
@@ -130,61 +142,64 @@ def make_random(ns, comm=MPI.COMM_WORLD):
 
     mask = cuts.apply(comm, compcut(sigma), cat_lim)
 
-    # It's also useful to have r magnitude later.
-    LIM = cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']
+    # It's also useful to the 1 sigma limits later.
+    CANDIDATES['DECAM_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
 
     total_complete = sum(comm.allgather(mask.sum()))
     if comm.rank == 0:
         print('Total number of objects in complete area: ', total_complete)
-    RA, DEC = coord
-    RA  = RA [mask]
-    DEC = DEC[mask]
-    LIM = LIM[mask]
+
+    CANDIDATES = CANDIDATES[mask]
 
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (RA, DEC))
+        mask = veto(decals.tycho, (CANDIDATES['RA'], CANDIDATES['DEC']))
 
         total_complete = sum(comm.allgather(mask.sum()))
         if comm.rank == 0:
             print('Total number of objects not close to stars', total_complete)
 
-        RA  = RA [mask]
-        DEC = DEC[mask]
-        LIM = LIM[mask]
+        CANDIDATES = CANDIDATES[mask]
     else:
         if comm.rank == 0:
             print('Not applying cuts for star proximity.')
 
-    LIM = comm.gather(LIM)
-    coord = comm.gather((RA, DEC))
+    CANDIDATES  = comm.gather(CANDIDATES)
     if comm.rank == 0:
-        coord = np.concatenate(coord, axis=-1)
-        LIM = np.concatenate(LIM)
-        fraction = len(coord[0]) * 1.0 / ns.Nran
+        CANDIDATES = np.concatenate(CANDIDATES)
+        fraction = len(CANDIDATES) * 1.0 / ns.Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
-    return coord, LIM
+    return CANDIDATES
     #
 
+def write_text_output(output, CANDIDATES):
+    names = CANDIDATES.dtype.names
+    def format_name(name, dtype):
+        subdtype = dtype[name]
+        if subdtype.shape is not None and len(subdtype.shape):
+            return '%s[%s]' % (name, subdtype.shape)
+        else:
+            return name
+    def format_var(var, fmt, subdtype):
+        if subdtype.shape is not None and len(subdtype.shape):
+            return ' '.join([fmt % var[i] for i in range(subdtype.shape[0])])
+        else:
+            return fmt % var
+
+    with open(output, "w") as ff:
+        ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
+        ff.write("# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
+        ff.write("# bands: %s \n" % 'ugrizY')
+        for row in CANDIDATES:
+            for name in names:
+                ff.write(format_var(row[name], '%15.10f ', CANDIDATES.dtype[name]))
+            ff.write('\n')
 
 if __name__ == '__main__':    
 
-    coord, LIM = make_random(ns)
+    CANDIDATES = make_random(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        with open(ns.output,'w') as ff:
-            ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
-            ff.write("# ra dec weight ")
-            for band in 'ugrizY':
-                ff.write(" %15s" % band)
-            ff.write("\n")
-            
-            for j in range(0, len(LIM)):
-                ff.write("%15.10f %15.10f %15.10f "%\
-                  (coord[0][j],coord[1][j],0.5))
-                for band in range(6):
-                    ff.write(" %15.10f" % LIM[j][band])
-                ff.write("\n")
-
+        write_text_output(ns.output, CANDIDATES)
