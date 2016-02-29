@@ -251,6 +251,8 @@ class BrickIndex(object):
             coord = (RA, DEC) in degrees, vectorized.
 
         """
+        if not numpy.isscalar(coord[0]):
+            raise TypeError('Only takes tuple of scalars in the form (RA,DEC).')
         return self.get_brick(self.query_internal(coord))
 
     def query_region(self, extent):
