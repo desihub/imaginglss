@@ -7,6 +7,7 @@
 #SBATCH -t 00:30:00
 
 export OMP_NUM_THREADS=1
+module load python/2.7-anaconda
 
 source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
