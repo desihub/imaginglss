@@ -96,7 +96,9 @@ Here is an example configuration file (that works on Edison):
 DR2 at NERSC
 ------------
 
-ImagingLSS has been prepackaged for DR2 at Edison in the following locations:
+ImagingLSS has been prepackaged for DR2 at Edison in the following locations.
+
+These commands will work in JupyterHub: https://jupter.nersc.gov .
 
 .. code-block:: python
 
@@ -110,10 +112,10 @@ ImagingLSS has been prepackaged for DR2 at Edison in the following locations:
 Example Dataset
 ---------------
 
-For those who do not work on NERSC, 
-we provide a small sampling data set that covers the EDR3 foot-print.
+For those who do **not** work on NERSC, 
+we provide a small sampling data set that contains a few bricks from DR2. 
 
-http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-edr3.tar.gz 
+http://imaginglss.s3-website-us-west-1.amazonaws.com/dr2-mini.tar.gz 
 
 The total size is less than 45 MB after decompressing. 
 
@@ -134,8 +136,8 @@ see the following steps.
     mkdir testdata
     cd testdata
 
-    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr1j-mini.tar.gz
-    tar -xzvf dr1j-edr3.tar.gz
+    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr2-mini.tar.gz
+    tar -xzvf dr2-mini.tar.gz
 
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
     tar -xzvf SFD98.tar.gz
