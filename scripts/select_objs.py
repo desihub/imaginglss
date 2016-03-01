@@ -55,6 +55,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         ('PHOTO_Z', 'f8'),
         ('DECAM_MAG', ('f4', 6)),
         ('DECAM_NOISE_LEVEL', ('f4', 6)),
+        ('COMPLETE','f8'),
         ])
 
     # Get instances of a data release and SFD dust map.
@@ -123,7 +124,9 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print('Total number of objects in complete area: ', total_complete)
 
-    CANDIDATES = CANDIDATES[mask]
+    
+    CANDIDATES['COMPLETE'] = 0
+    CANDIDATES['COMPLETE'][mask] = 1
     
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
