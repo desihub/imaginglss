@@ -11,6 +11,11 @@
 
       https://desi.lbl.gov/trac/wiki/TargetSelection
 
+    Put your own target selection definitions in
+
+        local-targetselection.py 
+
+    of the same path.
 """
 
 __author__ = "Yu Feng and Martin White"
@@ -73,3 +78,17 @@ BGS &= TYPE != 'PSF'
 BGS &=  RFLUX > 10**((22.5-19.35)/2.5)
 
 __all__ = ['LRG', 'ELG', 'QSO', 'BGS']
+
+# now we try to import a local version the file
+def _local():
+    import os
+    local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
+    if os.path.exists(local):
+        exec(open(local, 'r').read(), globals())
+    del globals()['_local']
+_local()
+
+
+
+
+

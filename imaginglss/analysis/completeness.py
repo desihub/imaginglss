@@ -13,6 +13,12 @@ required depth.
 The requirements on colors are tricky to implement here. We currently
 require a 100% completeness.
 
+    Put your own complete area definitions in
+
+        local-completeness.py 
+
+    of the same path.
+
 """
 from imaginglss.utils.npyquery import Column as C
 
@@ -84,3 +90,13 @@ def BGS(sigma):
     BGS = sigma['r'] * R_LIMIT < 10**((22.5-19.5)/2.5)
     return BGS
 BGS.bands = 'r'
+
+# now we try to import a local version the file
+def _local():
+    import os
+    local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
+    if os.path.exists(local):
+        print("using %s" % local)
+        exec(open(local, 'r').read(), globals())
+    del globals()['_local']
+_local()
