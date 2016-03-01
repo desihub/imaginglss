@@ -197,6 +197,24 @@ sorted_dec == dec[indices]</p>
 <dl class="method">
 <dt id="imaginglss.model.brickindex.BrickIndex.query">
 <code class="descname">query</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brickindex.html#BrickIndex.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brickindex.BrickIndex.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a brick at coord=(RA,DEC) in decimal degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
+<blockquote class="last">
+<div><p>coord = (RA, DEC) in degrees, vectorized.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.brickindex.BrickIndex.query_internal">
+<code class="descname">query_internal</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brickindex.html#BrickIndex.query_internal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brickindex.BrickIndex.query_internal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the internal index of a brick at coord=(RA,DEC) in
 decimal degrees.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -213,6 +231,26 @@ decimal degrees.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Get Brick objects with <a class="reference internal" href="#imaginglss.model.brickindex.BrickIndex.get_bricks" title="imaginglss.model.brickindex.BrickIndex.get_bricks"><code class="xref py py-meth docutils literal"><span class="pre">get_bricks()</span></code></a> or <a class="reference internal" href="#imaginglss.model.brickindex.BrickIndex.get_brick" title="imaginglss.model.brickindex.BrickIndex.get_brick"><code class="xref py py-meth docutils literal"><span class="pre">get_brick()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.brickindex.BrickIndex.query_region">
+<code class="descname">query_region</code><span class="sig-paren">(</span><em>extent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brickindex.html#BrickIndex.query_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brickindex.BrickIndex.query_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of bricks covering the extent in decimal degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>extent</strong> : tuple, list</p>
+<blockquote class="last">
+<div><p>extent = (RA1, RA2, DEC1, DEC2) in degrees.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>RA1 is the left side and RA2 is the right side.</p>
 </dd></dl>
 
 <dl class="method">
@@ -330,7 +368,7 @@ decimal degrees.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

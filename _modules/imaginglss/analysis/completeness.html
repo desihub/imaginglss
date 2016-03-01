@@ -48,6 +48,8 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss.analysis.completeness</h1><div class="highlight"><pre>
+
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">A collection of helpful (static) methods to check whether a given</span>
 <span class="sd">position has imaging deep enough to be 100% complete to a certain</span>
@@ -64,17 +66,17 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">imaginglss.utils.npyquery</span> <span class="kn">import</span> <span class="n">Column</span> <span class="k">as</span> <span class="n">C</span>
 
-<span class="n">DECAM_INVVAR</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_INVVAR&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
-<span class="n">DECAM_MW_TRANSMISSION</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+<span class="n">DECAM_DEPTH</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_DEPTH&#39;</span><span class="p">)</span>
+<span class="n">DECAM_MW_TRANSMISSION</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">)</span>
 
 <span class="c"># 1-sigma limits</span>
-<span class="n">G_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_INVVAR</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">Z_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_INVVAR</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-<span class="n">R_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_INVVAR</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">G_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_DEPTH</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">Z_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_DEPTH</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">R_LIMIT</span> <span class="o">=</span> <span class="n">DECAM_DEPTH</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">DECAM_MW_TRANSMISSION</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="k">def</span> <span class="nf">LRG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+<div class="viewcode-block" id="LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.LRG">[docs]</a><span class="k">def</span> <span class="nf">LRG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for LRG.</span>
-<div class="viewcode-block" id="LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.LRG">[docs]</a>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sigma : dict </span>
@@ -85,12 +87,12 @@
     <span class="n">LRG</span>  <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">20.56</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">+</span><span class="mf">1.6</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">LRG</span>
+    <span class="k">return</span> <span class="n">LRG</span></div>
 <span class="n">LRG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;rz&#39;</span>
-</div>
-<span class="k">def</span> <span class="nf">ELG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ELG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.ELG">[docs]</a><span class="k">def</span> <span class="nf">ELG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for ELG.</span>
-<div class="viewcode-block" id="ELG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.ELG">[docs]</a>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sigma : dict </span>
@@ -101,12 +103,12 @@
     <span class="n">ELG</span> <span class="o">=</span>  <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span><span class="o">-</span><span class="mf">1.5</span><span class="o">+</span><span class="mf">0.2</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span>        <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span><span class="o">+</span><span class="mf">0.3</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ELG</span>
+    <span class="k">return</span> <span class="n">ELG</span></div>
 <span class="n">ELG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;grz&#39;</span>
-</div>
-<span class="k">def</span> <span class="nf">QSO</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+
+<div class="viewcode-block" id="QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.QSO">[docs]</a><span class="k">def</span> <span class="nf">QSO</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for QSO.</span>
-<div class="viewcode-block" id="QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.QSO">[docs]</a>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sigma : dict </span>
@@ -116,12 +118,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">QSO</span> <span class="o">=</span>  <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="n">QSO</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">QSO</span>
+    <span class="k">return</span> <span class="n">QSO</span></div>
 <span class="n">QSO</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;gr&#39;</span>
-</div>
-<span class="k">def</span> <span class="nf">BGS</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.BGS">[docs]</a><span class="k">def</span> <span class="nf">BGS</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for BGS.</span>
-<div class="viewcode-block" id="BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.BGS">[docs]</a>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        sigma : dict </span>
@@ -130,9 +132,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">BGS</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">19.5</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">BGS</span>
+    <span class="k">return</span> <span class="n">BGS</span></div>
 <span class="n">BGS</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span>
-</pre></div></div>
+</pre></div>
 
           </div>
         </div>
@@ -172,7 +174,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

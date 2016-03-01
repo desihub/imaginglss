@@ -26,7 +26,7 @@
     <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
     <link rel="up" title="imaginglss.analysis package" href="imaginglss.analysis.html" />
     <link rel="next" title="imaginglss.analysis.tycho_veto module" href="imaginglss.analysis.tycho_veto.html" />
-    <link rel="prev" title="imaginglss.analysis.gen_random module" href="imaginglss.analysis.gen_random.html" /> 
+    <link rel="prev" title="imaginglss.analysis.cuts module" href="imaginglss.analysis.cuts.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -42,7 +42,7 @@
           <a href="imaginglss.analysis.tycho_veto.html" title="imaginglss.analysis.tycho_veto module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
+          <a href="imaginglss.analysis.cuts.html" title="imaginglss.analysis.cuts module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
@@ -68,25 +68,25 @@ flux passes a given selection criterion (e.g. LRG, ELG or QSO).</p>
 <div><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></div></blockquote>
 <dl class="data">
 <dt id="imaginglss.analysis.targetselection.LRG">
-<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">LRG</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) &gt; 0.6309573444801932) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &gt; 5.970352865838375) &amp; ((WISE_FLUX.T[0] / WISE_MW_TRANSMISSION.T[0]) &gt; 18.197008586099805) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &gt; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) * 4.36515832240166)) &amp; (((WISE_FLUX.T[0] / WISE_MW_TRANSMISSION.T[0]) * ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) ** 0.33000000000000007)) &gt; (((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) ** 1.33) * 0.737904230129101)))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.LRG" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">LRG</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &gt; 0.6309573444801932) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; 5.970352865838375) &amp; ((WISE_FLUX[0] / WISE_MW_TRANSMISSION[0]) &gt; 18.197008586099805) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) * 4.36515832240166)) &amp; (((WISE_FLUX[0] / WISE_MW_TRANSMISSION[0]) * ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) ** 0.33000000000000007)) &gt; (((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) ** 1.33) * 0.737904230129101)))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.LRG" title="Permalink to this definition">¶</a></dt>
 <dd><p>LRG Cut</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imaginglss.analysis.targetselection.ELG">
-<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">ELG</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) &gt; 0.43651583224016655) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &gt; (1.318256738556407 * (DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]))) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &lt; (3.9810717055349722 * (DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]))) &amp; (((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) ** 2) &lt; ((DECAM_FLUX.T[1] / DECAM_MW_TRANSMISSION.T[1]) * (DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) * 0.831763771102671)) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &lt; ((DECAM_FLUX.T[1] / DECAM_MW_TRANSMISSION.T[1]) * 3.019951720402016)) &amp; (max(SHAPEDEV_R, SHAPEEXP_R) &lt; 1.5))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.ELG" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">ELG</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &gt; 0.43651583224016655) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; (1.318256738556407 * (DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]))) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &lt; (3.9810717055349722 * (DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]))) &amp; (((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) ** 2) &lt; ((DECAM_FLUX[1] / DECAM_MW_TRANSMISSION[1]) * (DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) * 0.831763771102671)) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &lt; ((DECAM_FLUX[1] / DECAM_MW_TRANSMISSION[1]) * 3.019951720402016)) &amp; (max(SHAPEDEV_R, SHAPEEXP_R) &lt; 1.5))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.ELG" title="Permalink to this definition">¶</a></dt>
 <dd><p>ELG Cut</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imaginglss.analysis.targetselection.QSO">
-<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">QSO</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; (TYPE == 'PSF ') &amp; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) &gt; 0.6309573444801932) &amp; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) &lt; (2.51188643150958 * (DECAM_FLUX.T[1] / DECAM_MW_TRANSMISSION.T[1]))) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &gt; (0.7585775750291838 * (DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]))) &amp; ((DECAM_FLUX.T[4] / DECAM_MW_TRANSMISSION.T[4]) &lt; (2.7542287033381667 * (DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]))) &amp; (((((0.75 * WISE_FLUX.T[0]) / WISE_MW_TRANSMISSION.T[0]) + ((0.25 * WISE_FLUX.T[1]) / WISE_MW_TRANSMISSION.T[1])) * ((DECAM_FLUX.T[1] / DECAM_MW_TRANSMISSION.T[1]) ** 1.2)) &gt; (0.6918309709189365 * ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) ** 2.2))))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.QSO" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">QSO</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; (TYPE == 'PSF ') &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &gt; 0.6309573444801932) &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &lt; (2.51188643150958 * (DECAM_FLUX[1] / DECAM_MW_TRANSMISSION[1]))) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; (0.7585775750291838 * (DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]))) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &lt; (2.7542287033381667 * (DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]))) &amp; (((((0.75 * WISE_FLUX[0]) / WISE_MW_TRANSMISSION[0]) + ((0.25 * WISE_FLUX[1]) / WISE_MW_TRANSMISSION[1])) * ((DECAM_FLUX[1] / DECAM_MW_TRANSMISSION[1]) ** 1.2)) &gt; (0.6918309709189365 * ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) ** 2.2))))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.QSO" title="Permalink to this definition">¶</a></dt>
 <dd><p>QSO Cut</p>
 </dd></dl>
 
 <dl class="data">
 <dt id="imaginglss.analysis.targetselection.BGS">
-<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">BGS</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; (TYPE != 'PSF') &amp; ((DECAM_FLUX.T[2] / DECAM_MW_TRANSMISSION.T[2]) &gt; 18.197008586099805))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.BGS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">BGS</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; (TYPE != 'PSF') &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &gt; 18.197008586099805))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.BGS" title="Permalink to this definition">¶</a></dt>
 <dd><p>BGS Cut</p>
 </dd></dl>
 
@@ -99,8 +99,8 @@ flux passes a given selection criterion (e.g. LRG, ELG or QSO).</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="imaginglss.analysis.gen_random.html"
-                        title="previous chapter">imaginglss.analysis.gen_random module</a></p>
+  <p class="topless"><a href="imaginglss.analysis.cuts.html"
+                        title="previous chapter">imaginglss.analysis.cuts module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="imaginglss.analysis.tycho_veto.html"
                         title="next chapter">imaginglss.analysis.tycho_veto module</a></p>
@@ -141,7 +141,7 @@ flux passes a given selection criterion (e.g. LRG, ELG or QSO).</p>
           <a href="imaginglss.analysis.tycho_veto.html" title="imaginglss.analysis.tycho_veto module"
              >next</a> |</li>
         <li class="right" >
-          <a href="imaginglss.analysis.gen_random.html" title="imaginglss.analysis.gen_random module"
+          <a href="imaginglss.analysis.cuts.html" title="imaginglss.analysis.cuts module"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
           <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
@@ -151,7 +151,7 @@ flux passes a given selection criterion (e.g. LRG, ELG or QSO).</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

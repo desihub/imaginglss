@@ -102,11 +102,11 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TAN&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;TAN&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a tangent plane projection.&quot;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Not a tangent plane projection.&quot;</span><span class="p">)</span>
     <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">ang2pix</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span></div>
     <span class="c">#</span>
-</div>
+
 <div class="viewcode-block" id="pix2ang_hdr"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_tangent.html#imaginglss.utils.wcs_tangent.pix2ang_hdr">[docs]</a><span class="k">def</span> <span class="nf">pix2ang_hdr</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">hdr</span><span class="p">,</span><span class="n">zero_offset</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply backward (x,y)-&gt;(ra,dec) TAN transformation</span>
@@ -114,11 +114,11 @@
 <span class="sd">    See :py:meth:`ang2pix_hdr`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="s">&#39;TAN&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE1&#39;</span><span class="p">])</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;TAN&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CTYPE2&#39;</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Not a tangent plane projection.&quot;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Not a tangent plane projection.&quot;</span><span class="p">)</span>
     <span class="n">cd</span><span class="p">,</span> <span class="n">crpix</span><span class="p">,</span> <span class="n">crval</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">cd</span><span class="p">,</span><span class="n">crpix</span><span class="p">,</span><span class="n">crval</span><span class="p">))</span></div>
     <span class="c">#</span>
-</div>
+
 <span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">zero_offset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a WCS header to arguments of pix2ang and ang2pix.</span>
@@ -154,7 +154,7 @@
        <span class="p">(</span><span class="s">&#39;CRPIX1&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CRPIX2&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span>\
        <span class="p">(</span><span class="s">&#39;CD1_1&#39;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CD1_2&#39;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span>\
        <span class="p">(</span><span class="s">&#39;CD2_1&#39;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="s">&#39;CD2_2&#39;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">,</span><span class="s">&quot;Unable to parse header.&quot;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Unable to parse header.&quot;</span><span class="p">)</span>
     <span class="n">cd</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CD1_1&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CD1_2&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CD2_1&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CD2_2&#39;</span><span class="p">]])</span>
     <span class="n">crpix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRPIX1&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRPIX2&#39;</span><span class="p">]])</span>
     <span class="n">crval</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRVAL1&#39;</span><span class="p">],</span><span class="n">hdr</span><span class="p">[</span><span class="s">&#39;CRVAL2&#39;</span><span class="p">]])</span>
@@ -192,12 +192,16 @@
 <span class="sd">    https://code.google.com/p/esutil/source/browse/trunk/esutil/wcsutil.py</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">coord</span>
+    <span class="k">if</span> <span class="n">coord</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
     <span class="c"># watch out, this may be wrong if the matrix is not diagonal</span>
     <span class="n">matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CD</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="n">r</span> <span class="o">=</span> <span class="n">CreateRotationMatrix_spam</span><span class="p">(</span><span class="n">CRVAL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">CRVAL</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">Rotate_spam</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> 
+    <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">Rotate_spam</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> 
     <span class="n">ra</span> <span class="o">*=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
     <span class="n">dec</span> <span class="o">*=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
 
@@ -207,11 +211,11 @@
 
     <span class="n">xy</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
     <span class="n">xy</span> <span class="o">+=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CRPIX</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">coord</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
     <span class="c">#</span>
 
 
-</div>
+
 <div class="viewcode-block" id="pix2ang"><a class="viewcode-back" href="../../../imaginglss.utils.wcs_tangent.html#imaginglss.utils.wcs_tangent.pix2ang">[docs]</a><span class="k">def</span> <span class="nf">pix2ang</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span><span class="n">CD</span><span class="p">,</span><span class="n">CRPIX</span><span class="p">,</span><span class="n">CRVAL</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert x, y to RA, DEC with TAN transformation.</span>
@@ -221,6 +225,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">xy</span>    <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xy</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;f8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">coord</span>
+    <span class="k">if</span> <span class="n">coord</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
     <span class="c"># watch out, this may be wrong if the matrix is not diagonal</span>
     <span class="n">matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CD</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -232,18 +241,18 @@
     <span class="n">rinv</span> <span class="o">**=</span> <span class="o">-</span><span class="mf">0.5</span>
     <span class="n">rinv</span>  <span class="o">*=</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
 
-    <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">rinv</span><span class="p">)</span>
-    <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">coord</span>   <span class="o">*=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">rinv</span><span class="p">)</span>
+    <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">view</span>   <span class="o">*=</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
     <span class="n">r</span>        <span class="o">=</span> <span class="n">CreateRotationMatrix_spam</span><span class="p">(</span><span class="n">CRVAL</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">CRVAL</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">coord</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">Rotate_spam</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coord</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> 
-    <span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">%=</span> <span class="mf">360.</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
+    <span class="n">view</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">Rotate_spam</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">view</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> 
+    <span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">%=</span> <span class="mf">360.</span>
+    <span class="k">return</span> <span class="n">coord</span></div>
 
 
 <span class="c">##############################</span>
 <span class="c">#  Private routines, taken from esutils.py</span>
-<span class="c">#</span></div>
+<span class="c">#</span>
 <span class="k">def</span> <span class="nf">CreateRotationMatrix_spam</span><span class="p">(</span><span class="n">native_longpole</span><span class="p">,</span> <span class="n">native_latpole</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; create rotation matrix for tan. adapted from esutil.py &quot;&quot;&quot;</span>
     <span class="n">longpole</span> <span class="o">=</span> <span class="mf">180.</span>
@@ -295,7 +304,7 @@
     <span class="n">b0</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">lmn2</span>
 
     <span class="c"># Account for possible roundoff</span>
-    <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="n">lat_new</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span><span class="o">*</span> <span class="p">(</span><span class="mf">180.</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
     <span class="n">lon_new</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span> <span class="n">b0</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -306,6 +315,7 @@
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c"># perform some tests</span>
     <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">ra0</span><span class="p">,</span> <span class="n">dec0</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">numpy.testing</span> <span class="kn">import</span> <span class="n">assert_allclose</span>
         <span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">wcs</span>
         <span class="n">header</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">CTYPE1</span>  <span class="o">=</span> <span class="s">&#39;RA---TAN&#39;</span><span class="p">,</span><span class="c">#           / TANgent plane</span>
@@ -337,7 +347,7 @@
         <span class="k">print</span><span class="p">(</span><span class="s">&#39;roundtrip&#39;</span><span class="p">,</span> <span class="n">back</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&#39;astropy has&#39;</span><span class="p">,</span> <span class="n">astropy</span><span class="p">)</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&#39;we have    &#39;</span><span class="p">,</span> <span class="n">ours</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ours</span> <span class="o">-</span> <span class="n">astropy</span>
+        <span class="n">assert_allclose</span><span class="p">(</span><span class="n">ours</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">astropy</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
         <span class="n">compare</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">31.</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
@@ -389,7 +399,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

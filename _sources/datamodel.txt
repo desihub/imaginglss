@@ -39,13 +39,18 @@ The member methods are
 
  - :py:meth:`~imaginglss.model.datarelease.DataRelease.readout`   : reading out pixel value of an image 
    for coordinates on the sky.
+ - :py:meth:`~imaginglss.model.datarelease.DataRelease.create_footprint`   : Creating a footprint for
+   a given extent on the sky. The footprint will be rounded to bricks. 
+ - :py:meth:`~imaginglss.model.datarelease.DataRelease.create_catalogue`   : Creating a catalogue for
+   a given footprint. Currently this is not cached and can be slow.
 
-Catalog information is handled by :py:class:`imaginglss.model.catalogue.Catalogue`, which stores the
+The full catalog information is handled by :py:class:`imaginglss.model.catalogue.CachedCatalogue`, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files, 
 but this class caches the
 information for speed and only columns that are accessed are loaded
-into memory. Use 'forget_cache.py' to clear this cache.
+into memory. Usually at a site where DECALS data is deployed, the cache only needs to be generated once.
+
 
 The images are represented by :py:class:`imaginglss.model.imagerepo.ImageRepo` objects. 
 An ImageRepo object takes care of reading the image tile of a Brick. 

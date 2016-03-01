@@ -8,7 +8,8 @@ In this section, we document the data pipeline. There are three steps:
 - Generating the object catalogue
 - Generating the random sampling of the mask
 
-We will cover them in the following sections.
+We will cover them in the following sections. The examples are based off our
+working configuration at NERSC.
 
 Building the Cache
 ------------------
@@ -39,7 +40,8 @@ The inline help of the script describes the usage:
       --conf CONF  Path to the imaginglss config file, default is from
                    DECALS_PY_CONFIG
 
-Here is an example job script that works on Edison (Note that python-mpi-bcast is used):
+Here is an example job script that works on Edison (Note that python-mpi-bcast is used). 
+Submit the job script with :code:`sbatch`.
 
 .. code-block:: bash
 
@@ -55,11 +57,10 @@ Here is an example job script that works on Edison (Note that python-mpi-bcast i
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your ImagingLSS is installed
-    mirror ~/source/imaginglss scripts
+    mirror ~/source/imaginglss imaginglss scripts
 
     # change conf to your imaginglss configuration file
-    srun -n 256 python-mpi /dev/shm/local/scripts/build_cache.py 
-    --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+    srun -n 256 python-mpi /dev/shm/local/scripts/build_cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
     
 Generating Object Catalogue
 ---------------------------
@@ -97,7 +98,11 @@ The inline help of the script describes the usage:
                             DECALS_PY_CONFIG
 
 
-Here is an example job script we use on Edison to generate the LRG catalogue: 
+Here is an example job script we use on Edison to generate the LRG catalogue.
+Submit the job script with :code:`sbatch`. We also encourage typing in the commands
+one by one from an interactive job session, obtained via :code:`salloc`. Refer to
+`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_.
+
 
 .. code-block:: bash
 
@@ -114,7 +119,7 @@ Here is an example job script we use on Edison to generate the LRG catalogue:
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your imaginglss is installed
-    mirror ../ imaginglss scripts
+    mirror ~/source/imaginglss imaginglss scripts
 
     # use without installing
     export PYTHONPATH=/dev/shm/local:$PYTHONPATH
@@ -158,6 +163,9 @@ The inline help of the script describes the usage:
 
 
 Here is an example job script we use on Edison to generate a QSO random catalogue.
+Submit the job script with :code:`sbatch`. We also encourage typing in the commands
+one by one from an interactive job session, obtained via :code:`salloc`. Refer to
+`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_.
 
 .. code:: 
 
@@ -174,7 +182,7 @@ Here is an example job script we use on Edison to generate a QSO random catalogu
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your imaginglss is installed
-    mirror ../ imaginglss scripts
+    mirror ~/source/imaginglss imaginglss scripts
 
     # use without installing
     export PYTHONPATH=/dev/shm/local:$PYTHONPATH

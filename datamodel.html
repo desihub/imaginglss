@@ -90,14 +90,18 @@ Important attributes are</p>
 <div><ul class="simple">
 <li><a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.readout" title="imaginglss.model.datarelease.DataRelease.readout"><code class="xref py py-meth docutils literal"><span class="pre">readout()</span></code></a>   : reading out pixel value of an image
 for coordinates on the sky.</li>
+<li><a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.create_footprint" title="imaginglss.model.datarelease.DataRelease.create_footprint"><code class="xref py py-meth docutils literal"><span class="pre">create_footprint()</span></code></a>   : Creating a footprint for
+a given extent on the sky. The footprint will be rounded to bricks.</li>
+<li><a class="reference internal" href="imaginglss.model.datarelease.html#imaginglss.model.datarelease.DataRelease.create_catalogue" title="imaginglss.model.datarelease.DataRelease.create_catalogue"><code class="xref py py-meth docutils literal"><span class="pre">create_catalogue()</span></code></a>   : Creating a catalogue for
+a given footprint. Currently this is not cached and can be slow.</li>
 </ul>
 </div></blockquote>
-<p>Catalog information is handled by <a class="reference internal" href="imaginglss.model.catalogue.html#imaginglss.model.catalogue.Catalogue" title="imaginglss.model.catalogue.Catalogue"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.catalogue.Catalogue</span></code></a>, which stores the
+<p>The full catalog information is handled by <a class="reference internal" href="imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue" title="imaginglss.model.catalogue.CachedCatalogue"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.catalogue.CachedCatalogue</span></code></a>, which stores the
 object catalogs associated with a data release.
 The catalogs are contained in many small FITS files,
 but this class caches the
 information for speed and only columns that are accessed are loaded
-into memory. Use &#8216;forget_cache.py&#8217; to clear this cache.</p>
+into memory. Usually at a site where DECALS data is deployed, the cache only needs to be generated once.</p>
 <p>The images are represented by <a class="reference internal" href="imaginglss.model.imagerepo.html#imaginglss.model.imagerepo.ImageRepo" title="imaginglss.model.imagerepo.ImageRepo"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.imagerepo.ImageRepo</span></code></a> objects.
 An ImageRepo object takes care of reading the image tile of a Brick.
 An image tile contains a padded region around the Brick,
@@ -185,7 +189,7 @@ sky coordinates to bricks, and acts as a factory that creates
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

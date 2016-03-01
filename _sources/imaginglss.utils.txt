@@ -18,7 +18,6 @@ Submodules
    imaginglss.utils.fsarray
    imaginglss.utils.kdtree
    imaginglss.utils.npyquery
-   imaginglss.utils.sharedmem
    imaginglss.utils.wcs_simplezea
    imaginglss.utils.wcs_tangent
 

@@ -27,6 +27,7 @@ http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.i
     these cannot be done with notebook. The notebooks are most useful for inspecting
     smaller chunks of data, individual bricks, etc. Refer to :doc:`datapipeline`.
 
-At NERSC, the jupyterhub service ImagingLSS can be used with https://jupyter.nersc.gov .
-Of course, one need to install imaginglss in from a Jupyter Terminal session first via pip.
-Refer to :doc:`install`.
+At NERSC, ImagingLSS can be used with the Jupyter Hub service at https://jupyter.nersc.gov .
+Of course, one need to properly set up imaginglss for the service.
+Refer to :doc:`install` and https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb
+

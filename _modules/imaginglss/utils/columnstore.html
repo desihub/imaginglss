@@ -63,8 +63,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_wrapped_fetch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-</div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_wrapped_fetch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="Rows"><a class="viewcode-back" href="../../../imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.Rows">[docs]</a><span class="k">class</span> <span class="nc">Rows</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
@@ -75,8 +75,8 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">//</span><span class="n">c</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">]</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">]</span></div>
+
 <div class="viewcode-block" id="ColumnStore"><a class="viewcode-back" href="../../../imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.ColumnStore">[docs]</a><span class="k">class</span> <span class="nc">ColumnStore</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A ColumnStore</span>
 
@@ -122,8 +122,8 @@
 
 <div class="viewcode-block" id="ColumnStore.fetch"><a class="viewcode-back" href="../../../imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.ColumnStore.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Load data from start to end for a column &quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
-</div>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
     <span class="k">def</span> <span class="nf">_wrapped_fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check _memorybuffer_ before fetch&quot;&quot;&quot;</span>
         <span class="n">_memorybuffer_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memorybuffer_</span>
@@ -190,7 +190,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
