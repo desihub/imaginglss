@@ -88,3 +88,7 @@ class DECALS(object):
                 dustdir=self.dust_dir)
         self.sfdmap = self.datarelease.sfdmap
         self.tycho = Tycho(self.tycho_dir)
+        self.filename = filename
+
+    def __repr__(self):
+        return os.path.abspath(self.filename)

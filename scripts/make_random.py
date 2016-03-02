@@ -17,24 +17,26 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import completeness
+from imaginglss.utils       import output
+from   imaginglss             import DECALS
 
 from argparse import ArgumentParser
 
 ap = ArgumentParser("make_random.py")
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
 ap.add_argument("ObjectType", choices=completeness.__all__)
-ap.add_argument("output")
+ap.add_argument("output", type=output.writer)
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
-ap.add_argument("--conf", default=None, 
+ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
+ns.conf = DECALS(ns.conf)
 
 import numpy             as np
-from   imaginglss             import DECALS
 from   imaginglss.model.datarelease import Footprint
 from mpi4py            import MPI
 from   imaginglss.analysis    import cuts
@@ -86,7 +88,7 @@ def make_random(ns, comm=MPI.COMM_WORLD):
 
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    decals = DECALS(ns.conf)
+    decals = ns.conf
     dr = decals.datarelease
     sfd= decals.sfdmap
 
@@ -170,34 +172,10 @@ def make_random(ns, comm=MPI.COMM_WORLD):
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
     return CANDIDATES
-    #
-
-def write_text_output(output, CANDIDATES):
-    names = CANDIDATES.dtype.names
-    def format_name(name, dtype):
-        subdtype = dtype[name]
-        if subdtype.shape is not None and len(subdtype.shape):
-            return '%s[%s]' % (name, subdtype.shape)
-        else:
-            return name
-    def format_var(var, fmt, subdtype):
-        if subdtype.shape is not None and len(subdtype.shape):
-            return ' '.join([fmt % var[i] for i in range(subdtype.shape[0])])
-        else:
-            return fmt % var
-
-    with open(output, "w") as ff:
-        ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
-        ff.write("# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
-        ff.write("# bands: %s \n" % 'ugrizY')
-        for row in CANDIDATES:
-            for name in names:
-                ff.write(format_var(row[name], '%15.10f ', CANDIDATES.dtype[name]))
-            ff.write('\n')
-
+    
 if __name__ == '__main__':    
 
     CANDIDATES = make_random(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        write_text_output(ns.output, CANDIDATES)
+        ns.output.write(CANDIDATES, ns.__dict__)

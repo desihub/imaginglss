@@ -24,21 +24,23 @@ from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
 from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import cuts
+from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
 ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
-ap.add_argument("output")
+ap.add_argument("output", type=output.writer)
 ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
-ap.add_argument("--conf", default=None, 
+ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
+ns.conf = DECALS(ns.conf)
 
 from mpi4py import MPI
 
@@ -59,7 +61,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         ])
 
     # Get instances of a data release and SFD dust map.
-    decals = DECALS(ns.conf)
+    decals = ns.conf
     dr     = decals.datarelease
     sfd    = decals.sfdmap
     cat    = dr.catalogue
@@ -147,33 +149,9 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     return CANDIDATES
 
-def write_text_output(output, CANDIDATES):
-    names = CANDIDATES.dtype.names
-    def format_name(name, dtype):
-        subdtype = dtype[name]
-        if subdtype.shape is not None and len(subdtype.shape):
-            return '%s[%s]' % (name, subdtype.shape)
-        else:
-            return name
-    def format_var(var, fmt, subdtype):
-        if subdtype.shape is not None and len(subdtype.shape):
-            return ' '.join([fmt % var[i] for i in range(subdtype.shape[0])])
-        else:
-            return fmt % var
-
-    with open(output, "w") as ff:
-        ff.write("# sigma_z=%g sigma_g=%g sigma_r=%g\n" % (ns.sigma_z, ns.sigma_g, ns.sigma_r))
-        ff.write("# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
-        ff.write("# bands: %s \n" % 'ugrizY')
-        for row in CANDIDATES:
-            for name in names:
-                ff.write(format_var(row[name], '%15.10f ', CANDIDATES.dtype[name]))
-            ff.write('\n')
-
 if __name__=="__main__":
 
     CANDIDATES = select_objs(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        # Just write the candidates to an ascii text file.
-        write_text_output(ns.output, CANDIDATES)
+        ns.output.write(CANDIDATES, ns.__dict__)
