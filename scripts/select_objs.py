@@ -28,7 +28,7 @@ from imaginglss.analysis    import cuts
 from argparse import ArgumentParser
 
 ap = ArgumentParser("select_objs.py")
-ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
+ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 ap.add_argument("output")
 ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue")
 ap.add_argument("--sigma-z", type=float, default=3.0)

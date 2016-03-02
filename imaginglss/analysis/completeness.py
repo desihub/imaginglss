@@ -13,8 +13,18 @@ required depth.
 The requirements on colors are tricky to implement here. We currently
 require a 100% completeness.
 
+    Put your own complete area definitions in
+
+        local-completeness.py 
+
+    of the same path.
+
+Remember to append the name of the object type to __all__ variable
+with __all__.append("ObjectType")
+
 """
 from imaginglss.utils.npyquery import Column as C
+__all__ = []
 
 DECAM_DEPTH = C('DECAM_DEPTH')
 DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION')
@@ -39,6 +49,7 @@ def LRG(sigma):
     LRG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.00+1.6)/2.5)
     return LRG
 LRG.bands = 'rz'
+__all__.append("LRG")
 
 def ELG(sigma):
     """ Create the completeness cut for ELG.
@@ -55,6 +66,7 @@ def ELG(sigma):
     ELG &= sigma['z'] * Z_LIMIT < 10**((22.5-23.4+0.3    )/2.5)
     return ELG
 ELG.bands = 'grz'
+__all__.append("ELG")
 
 def QSO(sigma):
     """ Create the completeness cut for QSO.
@@ -70,6 +82,7 @@ def QSO(sigma):
     QSO &= sigma['g'] * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
     return QSO
 QSO.bands = 'gr'
+__all__.append("QSO")
 
 def BGS(sigma):
     """ Create the completeness cut for BGS.
@@ -84,3 +97,15 @@ def BGS(sigma):
     BGS = sigma['r'] * R_LIMIT < 10**((22.5-19.5)/2.5)
     return BGS
 BGS.bands = 'r'
+__all__.append("BGS")
+
+# now we try to import a local version the file
+def _local():
+    import os
+    local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
+    if local.endswith('.pyc'): local = local[:-1]
+    if os.path.exists(local):
+        script = open(local, 'r').read()
+        exec(compile(script, local, 'exec'), globals())
+    del globals()['_local']
+_local()

@@ -1,0 +1,14 @@
+def MYBGS(sigma):
+    """ Create the completeness cut for BGS.
+
+        Parameters
+        ----------
+        sigma : dict 
+            'r', 'z', 'g' members specifies the confidents in that
+            band. ( :math:`n \\sigma`)
+
+    """
+    BGS = sigma['r'] * R_LIMIT < 10**((22.5-19.5)/2.5)
+    return BGS
+MYBGS.bands = 'r'
+__all__.append("MYBGS")

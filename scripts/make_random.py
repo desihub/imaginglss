@@ -16,12 +16,13 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 from imaginglss.analysis    import tycho_veto
+from imaginglss.analysis    import completeness
 
 from argparse import ArgumentParser
 
 ap = ArgumentParser("make_random.py")
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
-ap.add_argument("ObjectType", choices=["QSO", "LRG", "ELG", "BGS"])
+ap.add_argument("ObjectType", choices=completeness.__all__)
 ap.add_argument("output")
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
@@ -36,10 +37,7 @@ import numpy             as np
 from   imaginglss             import DECALS
 from   imaginglss.model.datarelease import Footprint
 from mpi4py            import MPI
-
 from   imaginglss.analysis    import cuts
-from imaginglss.analysis    import completeness
-from imaginglss.analysis    import tycho_veto
 
 np.seterr(divide='ignore', invalid='ignore')
 

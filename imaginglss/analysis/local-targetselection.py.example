@@ -1,0 +1,7 @@
+# example MYBGS
+
+MYBGS =  BRICK_PRIMARY != 0
+MYBGS &= TYPE != 'PSF '
+MYBGS &= RFLUX > 10**((22.5-19.35)/2.5)
+__all__.append("MYBGS")
+
