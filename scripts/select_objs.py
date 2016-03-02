@@ -55,8 +55,8 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         ('RA', 'f8'),
         ('DEC', 'f8'),
         ('PHOTO_Z', 'f8'),
-        ('DECAM_MAG', ('f4', 6)),
-        ('DECAM_NOISE_LEVEL', ('f4', 6)),
+        ('DECAM_INTRINSIC_FLUX', ('f4', 6)),
+        ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
         ('COMPLETE','f8'),
         ])
 
@@ -85,7 +85,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     CANDIDATES['DEC']   = cat['DEC'][mine][mask]
  
     FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
-    CANDIDATES['DECAM_MAG'] = 22.5-2.5*np.log10((FLUX).clip(1e-15,1e15))
+    CANDIDATES['DECAM_INTRINSIC_FLUX'] = (FLUX).clip(1e-15,1e15)
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
@@ -110,7 +110,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         cat_lim = dr.read_depths((CANDIDATES['RA'], CANDIDATES['DEC']), compcut.bands)
 
     # It's also useful to store the 1 sigma limits for later
-    CANDIDATES['DECAM_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
+    CANDIDATES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
 
     for band in compcut.bands:
         ind = dr.bands[band]
