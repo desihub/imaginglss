@@ -1,6 +1,5 @@
 *.pyc
 *.png
-*.e*
 docs/imaginglss.*.rst
 docs/_build
 testdata/
