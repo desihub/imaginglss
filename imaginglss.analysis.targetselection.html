@@ -66,6 +66,12 @@ flux passes a given selection criterion (e.g. LRG, ELG or QSO).</p>
 (flux/mw_transmission) and are taken from:</p>
 <blockquote>
 <div><a class="reference external" href="https://desi.lbl.gov/trac/wiki/TargetSelection">https://desi.lbl.gov/trac/wiki/TargetSelection</a></div></blockquote>
+<p>Put your own target selection definitions in</p>
+<blockquote>
+<div>local-targetselection.py</div></blockquote>
+<p>of the same path.</p>
+<p>Remember to append the name of the object type to __all__ variable
+with __all__.append(&#8220;ObjectType&#8221;)</p>
 <dl class="data">
 <dt id="imaginglss.analysis.targetselection.LRG">
 <code class="descclassname">imaginglss.analysis.targetselection.</code><code class="descname">LRG</code><em class="property"> = ((BRICK_PRIMARY != 0) &amp; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) &gt; 0.6309573444801932) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; 5.970352865838375) &amp; ((WISE_FLUX[0] / WISE_MW_TRANSMISSION[0]) &gt; 18.197008586099805) &amp; ((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) &gt; ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) * 4.36515832240166)) &amp; (((WISE_FLUX[0] / WISE_MW_TRANSMISSION[0]) * ((DECAM_FLUX[2] / DECAM_MW_TRANSMISSION[2]) ** 0.33000000000000007)) &gt; (((DECAM_FLUX[4] / DECAM_MW_TRANSMISSION[4]) ** 1.33) * 0.737904230129101)))</em><a class="headerlink" href="#imaginglss.analysis.targetselection.LRG" title="Permalink to this definition">¶</a></dt>

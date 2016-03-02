@@ -332,22 +332,18 @@
             <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">operands</span>
         <span class="p">]</span>
 
+        <span class="c"># note that we used to detect associativeness</span>
+        <span class="c"># by testing ufunc.identity. but there used </span>
+        <span class="c"># to be a leak (fixed in https://github.com/numpy/numpy/pull/5789)</span>
+        <span class="c"># It is easier to just list the associative operators here</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_associative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;+&#39;</span><span class="p">,</span> <span class="s">&#39;&amp;&#39;</span><span class="p">,</span> <span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">]</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">operands</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">operands</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span>
-
-<div class="viewcode-block" id="Expr.is_associative"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.analysis.targetselection.Expr.is_associative">[docs]</a>    <span class="k">def</span> <span class="nf">is_associative</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Is the operator associative?</span>
-
-<span class="sd">            We test this by see if the ufunc has a value identity property.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ufunc</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">identity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">return</span> <span class="bp">False</span></div>
 
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operands</span><span class="p">)</span>
@@ -361,7 +357,7 @@
 <span class="sd">            e.g. (a + b) + (c + d) becomes a + b + c + d</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_associative</span><span class="p">():</span> <span class="k">return</span> <span class="n">operands</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_associative</span><span class="p">:</span> <span class="k">return</span> <span class="n">operands</span>
         <span class="n">o</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">operands</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">Expr</span><span class="p">):</span>
@@ -476,7 +472,7 @@
 
 <div class="viewcode-block" id="QueryVisitor.visit_expr"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.analysis.targetselection.QueryVisitor.visit_expr">[docs]</a>    <span class="k">def</span> <span class="nf">visit_expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
         <span class="n">ops</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">operands</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_associative</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_associative</span><span class="p">:</span>
             <span class="c"># do not use ufunc reduction because ops can </span>
             <span class="c"># be of different shape</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>

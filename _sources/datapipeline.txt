@@ -54,6 +54,7 @@ Submit the job script with :code:`sbatch`.
 
     export OMP_NUM_THREADS=1
 
+    module load python/2.7-anaconda
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your ImagingLSS is installed
@@ -116,6 +117,7 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
 
     export OMP_NUM_THREADS=1
 
+    module load python/2.7-anaconda
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your imaginglss is installed
@@ -179,6 +181,7 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
 
     export OMP_NUM_THREADS=1
 
+    module load python/2.7-anaconda
     source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
     # change the following line to where your imaginglss is installed

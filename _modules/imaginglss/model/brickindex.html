@@ -301,6 +301,8 @@
 <span class="sd">            coord = (RA, DEC) in degrees, vectorized.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Only takes tuple of scalars in the form (RA,DEC).&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query_internal</span><span class="p">(</span><span class="n">coord</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="BrickIndex.query_region"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.query_region">[docs]</a>    <span class="k">def</span> <span class="nf">query_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">):</span>

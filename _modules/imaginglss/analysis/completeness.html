@@ -63,8 +63,18 @@
 <span class="sd">The requirements on colors are tricky to implement here. We currently</span>
 <span class="sd">require a 100% completeness.</span>
 
+<span class="sd">    Put your own complete area definitions in</span>
+
+<span class="sd">        local-completeness.py </span>
+
+<span class="sd">    of the same path.</span>
+
+<span class="sd">Remember to append the name of the object type to __all__ variable</span>
+<span class="sd">with __all__.append(&quot;ObjectType&quot;)</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">imaginglss.utils.npyquery</span> <span class="kn">import</span> <span class="n">Column</span> <span class="k">as</span> <span class="n">C</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="n">DECAM_DEPTH</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_DEPTH&#39;</span><span class="p">)</span>
 <span class="n">DECAM_MW_TRANSMISSION</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="s">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">)</span>
@@ -89,6 +99,7 @@
     <span class="n">LRG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">+</span><span class="mf">1.6</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">LRG</span></div>
 <span class="n">LRG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;rz&#39;</span>
+<span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;LRG&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ELG"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.ELG">[docs]</a><span class="k">def</span> <span class="nf">ELG</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for ELG.</span>
@@ -105,6 +116,7 @@
     <span class="n">ELG</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Z_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.4</span><span class="o">+</span><span class="mf">0.3</span>    <span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ELG</span></div>
 <span class="n">ELG</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;grz&#39;</span>
+<span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;ELG&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.QSO">[docs]</a><span class="k">def</span> <span class="nf">QSO</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for QSO.</span>
@@ -120,6 +132,7 @@
     <span class="n">QSO</span> <span class="o">&amp;=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;g&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">G_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">23.00</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">QSO</span></div>
 <span class="n">QSO</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;gr&#39;</span>
+<span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;QSO&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.completeness.html#imaginglss.analysis.completeness.BGS">[docs]</a><span class="k">def</span> <span class="nf">BGS</span><span class="p">(</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Create the completeness cut for BGS.</span>
@@ -134,6 +147,18 @@
     <span class="n">BGS</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="s">&#39;r&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">R_LIMIT</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">22.5</span><span class="o">-</span><span class="mf">19.5</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">BGS</span></div>
 <span class="n">BGS</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span>
+<span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;BGS&quot;</span><span class="p">)</span>
+
+<span class="c"># now we try to import a local version the file</span>
+<span class="k">def</span> <span class="nf">_local</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="n">local</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;local-</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">local</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.pyc&#39;</span><span class="p">):</span> <span class="n">local</span> <span class="o">=</span> <span class="n">local</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local</span><span class="p">):</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">local</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">local</span><span class="p">,</span> <span class="s">&#39;exec&#39;</span><span class="p">),</span> <span class="nb">globals</span><span class="p">())</span>
+    <span class="k">del</span> <span class="nb">globals</span><span class="p">()[</span><span class="s">&#39;_local&#39;</span><span class="p">]</span>
+<span class="n">_local</span><span class="p">()</span>
 </pre></div>
 
           </div>
