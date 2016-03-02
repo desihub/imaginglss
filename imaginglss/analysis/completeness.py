@@ -103,8 +103,9 @@ __all__.append("BGS")
 def _local():
     import os
     local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
+    if local.endswith('.pyc'): local = local[:-1]
     if os.path.exists(local):
-        print("using %s" % local)
-        exec(open(local, 'r').read(), globals())
+        script = open(local, 'r').read()
+        exec(compile(script, local, 'exec'), globals())
     del globals()['_local']
 _local()
