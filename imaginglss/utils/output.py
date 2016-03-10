@@ -73,6 +73,8 @@ def read_hdf5(output, extension):
 def write_hdf5(output, CANDIDATES, metadict, extension):
     import h5py
     with h5py.File(output) as ff:
+        if extension in ff:
+            del ff[extension]
         ds = ff.create_dataset(extension, data=CANDIDATES)
         for key, v in metadict.items():
             if isinstance(v, object):
