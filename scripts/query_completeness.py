@@ -33,7 +33,8 @@ def build_model(ns, fluxes, noises, sigmas={'r':3, 'g':3, 'z':3}):
         sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
         for band in fluxcut.bands]).T
 
-    mask = (fluxes > noises).all(axis=-1)
+    lim = fluxes.min(axis=0)
+    mask = (noises <= lim).all(axis=-1)
     model = fluxes[mask]
     tree = KDTree(model)
     root = tree.root 
