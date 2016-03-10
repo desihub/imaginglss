@@ -126,7 +126,10 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     cat_lim = dr.read_depths(coord, 'grz')
 
     # It's also useful to the 1 sigma limits later.
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+
+    nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
 
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)

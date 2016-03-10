@@ -112,7 +112,10 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     # It's also useful to store the 1 sigma limits for later
     NOISES['RA']   = FLUXES['RA']
     NOISES['DEC']   = FLUXES['DEC']
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+
+    nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
 
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
