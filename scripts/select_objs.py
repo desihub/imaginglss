@@ -21,7 +21,6 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
-from imaginglss.analysis    import completeness
 from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import cuts
 from imaginglss.utils       import output
@@ -32,9 +31,6 @@ ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 ap.add_argument("output", type=output.writer)
 ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue")
-ap.add_argument("--sigma-z", type=float, default=3.0)
-ap.add_argument("--sigma-g", type=float, default=5.0)
-ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
@@ -51,13 +47,16 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     Does the actual selection, imposing cuts on the fluxes
     """
 
-    dtype = np.dtype([
+    dtype1 = np.dtype([
         ('RA', 'f8'),
         ('DEC', 'f8'),
         ('PHOTO_Z', 'f8'),
-        ('DECAM_INTRINSIC_FLUX', ('f4', 6)),
+        ('DECAM_INTRINSIC_FLUX', ('f4', 6))])
+
+    dtype2 = np.dtype([
+        ('RA', 'f8'),
+        ('DEC', 'f8'),
         ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
-        ('COMPLETE','f8'),
         ])
 
     # Get instances of a data release and SFD dust map.
@@ -78,14 +77,17 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     if comm.rank == 0:
         print('Rank 0 with', myend - mystart, 'items')
+        print('Rank 0 selected', mask.sum(), 'items')
 
-    CANDIDATES = np.empty(mask.sum(), dtype=dtype)
-    CANDIDATES['PHOTO_Z']   = -1.0
-    CANDIDATES['RA']   = cat[ 'RA'][mine][mask]
-    CANDIDATES['DEC']   = cat['DEC'][mine][mask]
- 
+    FLUXES = np.empty(mask.sum(), dtype=dtype1)
+    NOISES = np.empty(mask.sum(), dtype=dtype2)
+
+    FLUXES['PHOTO_Z']   = -1.0
+    FLUXES['RA']   = cat[ 'RA'][mine][mask]
+    FLUXES['DEC']   = cat['DEC'][mine][mask]
+
     FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
-    CANDIDATES['DECAM_INTRINSIC_FLUX'] = (FLUX).clip(1e-15,1e15)
+    FLUXES['DECAM_INTRINSIC_FLUX'] = (FLUX).clip(1e-15,1e15)
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
@@ -97,61 +99,48 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     # ... and extract only the objects which passed the cuts.
 
-    compcut = getattr(completeness, ns.ObjectType)
-    sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
     if ns.use_tractor_depth:
-        cat_lim = np.empty(len(CANDIDATES), dtype=[
+        cat_lim = np.empty(len(FLUXES), dtype=[
             ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
             ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
             ])
         cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
         cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
     else:
-        cat_lim = dr.read_depths((CANDIDATES['RA'], CANDIDATES['DEC']), compcut.bands)
+        cat_lim = dr.read_depths((FLUXES['RA'], FLUXES['DEC']), 'grz')
 
     # It's also useful to store the 1 sigma limits for later
-    CANDIDATES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
+    NOISES['RA']   = FLUXES['RA']
+    NOISES['DEC']   = FLUXES['DEC']
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
 
-    for band in compcut.bands:
-        ind = dr.bands[band]
-        missing_depth = sum(comm.allgather(
-                (cat_lim['DECAM_DEPTH'][:, ind] == 0).sum()))
-        if comm.rank == 0:
-            print('Objects in bricks with missing depth images (',band,'): ',\
-                  missing_depth)
-
-    mask = cuts.apply(comm, compcut(sigma), cat_lim)
-
-    total_complete = sum(comm.allgather(mask.sum()))
-    if comm.rank == 0:
-        print('Total number of objects in complete area: ', total_complete)
-
-    
-    CANDIDATES['COMPLETE'] = 0
-    CANDIDATES['COMPLETE'][mask] = 1
-    
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (CANDIDATES['RA'], CANDIDATES['DEC']))
+        mask = veto(decals.tycho, (FLUXES['RA'], FLUXES['DEC']))
 
         total_complete = sum(comm.allgather(mask.sum()))
         if comm.rank == 0:
             print('Using tycho veto', ns.with_tycho,'...')
-            print('Total number of objects not close to stars', total_complete)
 
-        CANDIDATES = CANDIDATES[mask]
+        FLUXES = FLUXES[mask]
+        NOISES = NOISES[mask]
     else:
         if comm.rank == 0:
             print('Not applying cuts for star proximity.')
         
 
-    CANDIDATES  = np.concatenate(comm.allgather(CANDIDATES))
+    FLUXES  = np.concatenate(comm.allgather(FLUXES))
+    NOISES  = np.concatenate(comm.allgather(NOISES))
 
-    return CANDIDATES
+    if comm.rank == 0:
+        print('Total number of objects selected', len(FLUXES))
+
+    return FLUXES, NOISES
 
 if __name__=="__main__":
 
-    CANDIDATES = select_objs(ns)
+    FLUXES, NOISES = select_objs(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(CANDIDATES, ns.__dict__)
+        ns.output.write(FLUXES, ns.__dict__, 'FLUXES')
+        ns.output.write(NOISES, ns.__dict__, 'NOISES')

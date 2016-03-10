@@ -16,7 +16,6 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 from imaginglss.analysis    import tycho_veto
-from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
 from   imaginglss             import DECALS
 
@@ -24,11 +23,7 @@ from argparse import ArgumentParser
 
 ap = ArgumentParser("make_random.py")
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
-ap.add_argument("ObjectType", choices=completeness.__all__)
 ap.add_argument("output", type=output.writer)
-ap.add_argument("--sigma-z", type=float, default=3.0)
-ap.add_argument("--sigma-g", type=float, default=5.0)
-ap.add_argument("--sigma-r", type=float, default=5.0)
 ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
@@ -119,63 +114,44 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     dtype = np.dtype([
         ('RA', 'f8'),
         ('DEC', 'f8'),
-        ('COMPLETENESS', 'f4'),
-        ('DECAM_NOISE_LEVEL', ('f4', 6)),
+        ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
         ])
 
-    CANDIDATES = np.empty(len(coord[0]), dtype=dtype)
-    CANDIDATES['RA'] = coord[0]
-    CANDIDATES['DEC'] = coord[1]
-    CANDIDATES['COMPLETENESS'] = 1.0
+    NOISES = np.empty(len(coord[0]), dtype=dtype)
+    NOISES['RA'] = coord[0]
+    NOISES['DEC'] = coord[1]
 
     ns.Nran = sum(comm.allgather(len(coord[0])))
 
-    #Currently this applies cuts for the "100%" complete ns.ObjectTypee, i.e. assuming
-    #the LF is a delta function at the faint end cut.  This avoids needing
-    #to know the LF for now.  Later we could keep a fraction of the randoms
-    #based on the survey limit (and the LF) or we could produce randoms for
-    #"100%" complete ns.ObjectTypees of different luminosity thresholds.
-
-    compcut = getattr(completeness, ns.ObjectType)
-    sigma = dict(z=ns.sigma_z, g=ns.sigma_g, r=ns.sigma_r)
-    cat_lim = dr.read_depths(coord, compcut.bands)
-
-    mask = cuts.apply(comm, compcut(sigma), cat_lim)
+    cat_lim = dr.read_depths(coord, 'grz')
 
     # It's also useful to the 1 sigma limits later.
-    CANDIDATES['DECAM_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
-
-    total_complete = sum(comm.allgather(mask.sum()))
-    if comm.rank == 0:
-        print('Total number of objects in complete area: ', total_complete)
-
-    CANDIDATES = CANDIDATES[mask]
+    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION']).clip(0, 60)
 
     if ns.with_tycho is not None:
         veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (CANDIDATES['RA'], CANDIDATES['DEC']))
+        mask = veto(decals.tycho, (NOISES['RA'], NOISES['DEC']))
 
         total_complete = sum(comm.allgather(mask.sum()))
-        if comm.rank == 0:
-            print('Total number of objects not close to stars', total_complete)
-
-        CANDIDATES = CANDIDATES[mask]
+        NOISES = NOISES[mask]
     else:
         if comm.rank == 0:
             print('Not applying cuts for star proximity.')
 
-    CANDIDATES  = comm.gather(CANDIDATES)
+    NOISES  = comm.gather(NOISES)
     if comm.rank == 0:
-        CANDIDATES = np.concatenate(CANDIDATES)
-        fraction = len(CANDIDATES) * 1.0 / ns.Nran
+        NOISES = np.concatenate(NOISES)
+
+        print('Total number of objects ', len(NOISES))
+        fraction = len(NOISES) * 1.0 / ns.Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
-    return CANDIDATES
+    return NOISES
     
 if __name__ == '__main__':    
 
-    CANDIDATES = make_random(ns)
+    NOISES = make_random(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(CANDIDATES, ns.__dict__)
+        ns.output.write(NOISES, ns.__dict__, 'NOISES')

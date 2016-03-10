@@ -81,6 +81,7 @@ def QSO(sigma):
     """
     QSO =  sigma['r'] * R_LIMIT < 10**((22.5-23.00    )/2.5)
     QSO &= sigma['g'] * G_LIMIT < 10**((22.5-23.00-1.0)/2.5)
+    QSO &= sigma['z'] * Z_LIMIT < 10**((22.5-23.00-0.3)/2.5)
     return QSO
 QSO.bands = 'gr'
 __all__.append("QSO")

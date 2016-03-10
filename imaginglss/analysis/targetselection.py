@@ -55,7 +55,7 @@ LRG &= ZFLUX > 10**((22.5-20.56)/2.5)
 LRG &= W1FLUX > 10**((22.5-19.35)/2.5)
 LRG &= ZFLUX > RFLUX * 10**(1.6/2.5)
 LRG &= W1FLUX * RFLUX ** (1.33-1) > ZFLUX**1.33 * 10**(-0.33/2.5)
-
+LRG.bands = 'rz'
 __all__.append("LRG")
 
 ELG =  BRICK_PRIMARY != 0
@@ -67,6 +67,7 @@ ELG &= ZFLUX < 10**(1.5/2.5) * RFLUX
 ELG &= RFLUX**2 < GFLUX * ZFLUX * 10**(-0.2/2.5)
 ELG &= ZFLUX < GFLUX * 10**(1.2/2.5) 
 ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
+ELG.bands = 'rgz'
 
 __all__.append("ELG")
 
@@ -79,6 +80,7 @@ QSO &= RFLUX < 10**(1.0/2.5) * GFLUX
 QSO &= ZFLUX > 10**(-0.3/2.5) * RFLUX
 QSO &= ZFLUX < 10**(1.1/2.5) * RFLUX
 QSO &= WFLUX * GFLUX**1.2 > 10**(-0.4/2.5) * RFLUX**(1+1.2)
+QSO.bands = 'rgz'
 
 __all__.append("QSO")
 
@@ -87,7 +89,7 @@ BGS =  BRICK_PRIMARY != 0
 
 BGS &= TYPE != 'PSF'
 BGS &=  RFLUX > 10**((22.5-19.35)/2.5)
-
+BGS.bands = 'r'
 __all__.append("BGS")
 
 # now we try to import a local version the file
