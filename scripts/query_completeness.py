@@ -25,7 +25,7 @@ ns.conf = DECALS(ns.conf)
 
 np.seterr(divide='ignore', invalid='ignore')
 
-def build_model(ns, fluxes, noises, sigmas={'r':5,'g':5, 'z':3}):
+def build_model(ns, fluxes, noises, sigmas={'r': ns.sigma-r,'g': ns.sigma-g, 'z': ns.sigma-z}):
     fluxcut = getattr(targetselection, ns.ObjectType)
 
     fluxes = np.array([
