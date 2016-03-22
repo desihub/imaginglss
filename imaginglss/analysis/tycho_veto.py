@@ -11,46 +11,28 @@
     mask :
 
     >>> tycho = Tycho("pathto_tycho.fit")
-    >>> mask = DECAM_LRG(tycho, coord)
     >>>
 
     The return values are True for 'preserve',
     False for 'reject'
 """
 
-def BOSS_DR9(tycho, coord):
-    """ Returns True for 'keep' """
+def BOSS_DR9(bmag, vmag):
     # BOSS DR9-11
-    d, bmag, vmag = tycho.nearest(coord)
     b = bmag.clip(6, 11.5)
     R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
-    return d > R
+    return R
 
-BOSS_DR9.BIT = 1 << 0
-
-def DECAM_LRG(tycho, coord):
-    ra, dec = coord
-    d, bmag, vmag = tycho.nearest(coord)
+def DECAM_LRG(bmag, vmag):
     R = 10 ** (3.5 - 0.15 * vmag) / 3600. 
-    return d > R
-
-DECAM_LRG.BIT = 1 << 1
+    return R
 
 DECAM_ELG = DECAM_LRG
 
-DECAM_ELG.BIT = 1 << 2
-
-def DECAM_QSO(tycho, coord):
+def DECAM_QSO(bmag, vmag):
     # I recommend not applying a bright star mask 
-    ra, dec = coord
-    return ra == ra
+    return bmag - bmag
 
-DECAM_QSO.BIT = 1 << 3
-
-def DECAM_BGS(tycho, coord):
-    ra, dec = coord
-    d, bmag, vmag = tycho.nearest(coord)
+def DECAM_BGS(bmag, vmag):
     R = 10 ** (2.2 - 0.15 * vmag) / 3600. 
-    return d > R
-
-DECAM_BGS.BIT = 1 << 4
+    return R

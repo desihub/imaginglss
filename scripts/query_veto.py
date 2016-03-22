@@ -43,14 +43,14 @@ def query_veto(ns, comm=MPI.COMM_WORLD):
     DEC = objects['DEC']
     allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
     dataset = np.zeros(len(RA), dtype=
-            [('VETO', 'uint64')] +
+            [('VETO', 'int32')] +
             list(zip(allvetos, ['?'] * len(allvetos)))
             )
 
-    for vetoname in allvetos:
+    for ibit, vetoname in enumerate(allvetos):
         veto = getattr(tycho_veto, vetoname)
-        mask = veto(ns.conf.tycho, (RA, DEC))
-        dataset['VETO'][mask] |= veto.BIT
+        mask = ns.conf.tycho.veto((RA, DEC), veto)
+        dataset['VETO'][mask] |= (1 << ibit)
         dataset[vetoname][mask] = True
 
     return dataset
