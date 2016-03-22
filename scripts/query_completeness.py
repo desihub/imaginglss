@@ -48,10 +48,14 @@ def build_model(ns, fluxes, noises, sigmas={'r': 5.0, 'g': 5.0, 'z': 3.0}):
             sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
             for band in fluxcut.bands]).T
         seen = root.integrate(noises, np.inf)
+        mask = (noises <= lim).all(axis=-1)
+        fcomp = 1.0 * seen / (len(model) + 1.0)
+        fcomp[mask] = 1.0
 
-        return 1.0 * seen / len(model)
+        return fcomp
 
     return modelfunc
+
 
 def query_completeness(ns):
     object_fluxes = ns.objects.read('FLUXES')
@@ -68,6 +72,7 @@ def query_completeness(ns):
     dtype = [('FRACTION_COMPLETENESS', 'f8')]
     FC = np.empty(len(noises), dtype=dtype)
     FC['FRACTION_COMPLETENESS'][:] = model(noises) 
+
     return FC
 
 if __name__=="__main__":
