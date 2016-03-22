@@ -11,4 +11,4 @@ python scripts/make_random.py --conf=testdata/dr2-mini/dr2.conf.py 1000 QSO-rand
 python scripts/query_completeness.py --conf=testdata/dr2-mini/dr2.conf.py QSO QSO-random.txt QSO.txt QSO-random.txt || exit 1
 head QSO-random.txt.FC
 python scripts/query_tycho_veto.py --conf=testdata/dr2-mini/dr2.conf.py QSO-random.txt QSO-random.txt|| exit 1
-head QSO-random.txt.VETO
+head QSO-random.txt.TYCHOVETO
