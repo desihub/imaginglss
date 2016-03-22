@@ -9,3 +9,4 @@ head QSO-random.txt.NOISES
 python scripts/make_random.py --conf=testdata/dr2-mini/dr2.conf.py --with-tycho=DECAM_QSO 1000 QSO-random.hdf5 || exit 1
 
 python scripts/query_completeness.py --conf=testdata/dr2-mini/dr2.conf.py QSO QSO-random.txt QSO.txt QSO-random.txt || ext 1
+python scripts/query_veto.py --conf=testdata/dr2-mini/dr2.conf.py QSO-random.txt QSO-random.txt|| ext 1
