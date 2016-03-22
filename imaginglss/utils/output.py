@@ -35,8 +35,7 @@ def read_text(output, extension):
         ('DEC', 'f8'),
         ('DECAM_INTRINSIC_NOISE_LEVEL', ('f8', 6)),
         ])
-    } 
-    
+    }
     dtype = dtypes[extension]
 
     data = numpy.loadtxt(output + '.' + extension, dtype='f8')
@@ -45,16 +44,20 @@ def read_text(output, extension):
 
 def write_text(output, CANDIDATES, metadict, extension):
     names = CANDIDATES.dtype.names
+    fmts = {'f': '%15.10f ', 'd': '%15.10f ', 'u': '0X%08X ', 'i' : '%09d ', 'b' : '%d '}
+
     def format_name(name, dtype):
         subdtype = dtype[name]
         if subdtype.shape is not None and len(subdtype.shape):
             return '%s[%s]' % (name, subdtype.shape)
         else:
             return name
-    def format_var(var, fmt, subdtype):
+    def format_var(var, subdtype):
         if subdtype.shape is not None and len(subdtype.shape):
+            fmt = fmts[subdtype.base.kind]
             return ' '.join([fmt % var[i] for i in range(subdtype.shape[0])])
         else:
+            fmt = fmts[subdtype.kind]
             return fmt % var
 
     with open(output + '.' + extension, "w") as ff:
@@ -62,7 +65,8 @@ def write_text(output, CANDIDATES, metadict, extension):
         ff.write("\n# %s\n" % ' '.join([format_name(name, CANDIDATES.dtype) for name in names]))
         for row in CANDIDATES:
             for name in names:
-                ff.write(format_var(row[name], '%15.10f ', CANDIDATES.dtype[name]))
+                char = CANDIDATES.dtype[name].char
+                ff.write(format_var(row[name], CANDIDATES.dtype[name]))
             ff.write('\n')
 
 def read_hdf5(output, extension):

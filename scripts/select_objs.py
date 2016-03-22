@@ -21,7 +21,6 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
-from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import cuts
 from imaginglss.utils       import output
 
@@ -30,8 +29,7 @@ from argparse import ArgumentParser
 ap = ArgumentParser("select_objs.py")
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 ap.add_argument("output", type=output.writer)
-ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue")
-ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
+ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -116,21 +114,6 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
     NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
-
-    if ns.with_tycho is not None:
-        veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (FLUXES['RA'], FLUXES['DEC']))
-
-        total_complete = sum(comm.allgather(mask.sum()))
-        if comm.rank == 0:
-            print('Using tycho veto', ns.with_tycho,'...')
-
-        FLUXES = FLUXES[mask]
-        NOISES = NOISES[mask]
-    else:
-        if comm.rank == 0:
-            print('Not applying cuts for star proximity.')
-        
 
     FLUXES  = np.concatenate(comm.allgather(FLUXES))
     NOISES  = np.concatenate(comm.allgather(NOISES))
