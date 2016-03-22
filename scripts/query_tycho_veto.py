@@ -20,7 +20,19 @@ from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("select_objs.py")
+ap = ArgumentParser("query_veto.py",
+description=
+"""
+Query the TYCHOVETO flags of input data. The position is taken from the NOISES extension of input.
+The result is written to the TYCHOVETO extension of output.
+
+Currently, only veto by proximity to tycho stars are implemented. Each veto in
+imaginglss.analysis.tycho_veto is calculated as a column in the TYCHOVETO extension.
+
+Unfortunately, this script is not sufficiently smart to decide the correct TYCHOVETO for the target type.
+Therefore, no combined veto flag is generated.
+"""
+)
 ap.add_argument("input", type=output.writer)
 ap.add_argument("output", type=output.writer)
 ap.add_argument("--conf", default=None,
@@ -35,22 +47,23 @@ np.seterr(divide='ignore', invalid='ignore')
 
 def query_veto(ns, comm=MPI.COMM_WORLD):
     """
-
+        calculate VETO flag for all proximity vetos defined in tycho_veto.
     """
-    #FIXME: this reads only text files.
+
     objects = ns.input.read('NOISES')
     RA = objects['RA']
     DEC = objects['DEC']
     allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
     dataset = np.zeros(len(RA), dtype=
-            [('VETO', 'int32')] +
             list(zip(allvetos, ['?'] * len(allvetos)))
             )
 
     for ibit, vetoname in enumerate(allvetos):
         veto = getattr(tycho_veto, vetoname)
         mask = ns.conf.tycho.veto((RA, DEC), veto)
-        dataset['VETO'][mask] |= (1 << ibit)
+        # if we want to combine the bits, do it here.
+        # but there is no point of doing so for all tycho based proximity
+        # vetos. we will assembly the full veto bitmask later in the pipeline.
         dataset[vetoname][mask] = True
 
     return dataset
@@ -60,4 +73,4 @@ if __name__=="__main__":
     VETO = query_veto(ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(VETO, ns.__dict__, 'VETO')
+        ns.output.write(VETO, ns.__dict__, 'TYCHOVETO')
