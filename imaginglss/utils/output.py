@@ -44,7 +44,7 @@ def read_text(output, extension):
 
 def write_text(output, CANDIDATES, metadict, extension):
     names = CANDIDATES.dtype.names
-    fmts = {'f': '%15.10f ', 'd': '%15.10f ', 'u': '0X%013X ', 'i' : '%15d ', 'b' : '%01d '}
+    fmts = {'f': '%15.10f ', 'd': '%15.10f ', 'u': '0X%08X ', 'i' : '%09d ', 'b' : '%d '}
 
     def format_name(name, dtype):
         subdtype = dtype[name]
