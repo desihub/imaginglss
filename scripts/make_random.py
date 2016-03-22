@@ -15,7 +15,6 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-from imaginglss.analysis    import tycho_veto
 from imaginglss.utils       import output
 from   imaginglss             import DECALS
 
@@ -24,7 +23,6 @@ from argparse import ArgumentParser
 ap = ArgumentParser("make_random.py")
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
 ap.add_argument("output", type=output.writer)
-ap.add_argument("--with-tycho", choices=[i for i in dir(tycho_veto) if not str(i).startswith( '_' )], help="Type of veto.")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
@@ -131,15 +129,8 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
     NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
 
-    if ns.with_tycho is not None:
-        veto = getattr(tycho_veto, ns.with_tycho)
-        mask = veto(decals.tycho, (NOISES['RA'], NOISES['DEC']))
-
-        total_complete = sum(comm.allgather(mask.sum()))
-        NOISES = NOISES[mask]
-    else:
-        if comm.rank == 0:
-            print('Not applying cuts for star proximity.')
+    if comm.rank == 0:
+        print('Not applying cuts for star proximity.')
 
     NOISES  = comm.gather(NOISES)
     if comm.rank == 0:
