@@ -53,7 +53,7 @@ class Tycho(numpy.ndarray):
         R = 2 * numpy.sin(numpy.radians(R) * 0.5)
 
         Rmax = R.max()
-        print Rmax
+
         pos = radec2pos(coord[0], coord[1])
         other = KDTree(pos)
         vetoflag = numpy.zeros(len(pos), dtype='?')
