@@ -26,21 +26,31 @@ def BOSS_DR9(tycho, coord):
     R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
     return d > R
 
+BOSS_DR9.BIT = 1 << 0
+
 def DECAM_LRG(tycho, coord):
     ra, dec = coord
     d, bmag, vmag = tycho.nearest(coord)
     R = 10 ** (3.5 - 0.15 * vmag) / 3600. 
     return d > R
 
+DECAM_LRG.BIT = 1 << 1
+
 DECAM_ELG = DECAM_LRG
+
+DECAM_ELG.BIT = 1 << 2
 
 def DECAM_QSO(tycho, coord):
     # I recommend not applying a bright star mask 
     ra, dec = coord
     return ra == ra
 
+DECAM_QSO.BIT = 1 << 3
+
 def DECAM_BGS(tycho, coord):
     ra, dec = coord
     d, bmag, vmag = tycho.nearest(coord)
     R = 10 ** (2.2 - 0.15 * vmag) / 3600. 
     return d > R
+
+DECAM_BGS.BIT = 1 << 4
