@@ -9,7 +9,7 @@ from kdcount import KDTree
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("query_completeness.py")
+ap = ArgumentParser()
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 ap.add_argument("output", type=output.writer)
 ap.add_argument("objects", type=output.writer)

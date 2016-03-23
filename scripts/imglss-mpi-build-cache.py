@@ -17,7 +17,7 @@ import numpy
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("build_cache.py")
+ap = ArgumentParser()
 ap.add_argument("--conf", default=None, 
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 

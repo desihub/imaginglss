@@ -26,7 +26,7 @@ from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("select_objs.py")
+ap = ArgumentParser()
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 ap.add_argument("output", type=output.writer)
 ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
