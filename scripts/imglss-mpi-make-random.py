@@ -20,7 +20,7 @@ from   imaginglss             import DECALS
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("make_random.py")
+ap = ArgumentParser()
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
 ap.add_argument("output", type=output.writer)
 ap.add_argument("--conf", default=None,

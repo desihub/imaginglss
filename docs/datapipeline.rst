@@ -23,7 +23,7 @@ Before we start using ImagingLSS, it is crucial to build the catalogue cache.
     .. code-block:: bash
        	/project/projectdirs/m779/imaginglss/dr2.conf.py
 
-The application to build the cache is :code:`scripts/build_cache.py`. The application
+The application to build the cache is :code:`scripts/imglss-mpi-build-cache.py`. The application
 scans the files in the data release described by a configuration file (provided in
 :code:`--conf` argument), and converts the columns used by ImagingLSS to a binary 
 format that is much easier to use into the 'cache' directory specified in the configuration
@@ -33,7 +33,7 @@ The inline help of the script describes the usage:
 
 .. code-block:: bash
 
-    usage: build_cache.py [-h] [--conf CONF]
+    usage: imglss-mpi-build-cache.py [-h] [--conf CONF]
 
     optional arguments:
       -h, --help   show this help message and exit
@@ -46,9 +46,9 @@ Submit the job script with :code:`sbatch`.
 .. code-block:: bash
 
     #!/bin/bash
-    #SBATCH -J build_cache
+    #SBATCH -J imglss-mpi-build-cache
     #SBATCH -n 512
-    #SBATCH -o build_cache.%j
+    #SBATCH -o imglss-mpi-build-cache.%j
     #SBATCH -p debug
     #SBATCH -t 00:30:00
 
@@ -61,12 +61,12 @@ Submit the job script with :code:`sbatch`.
     mirror ~/source/imaginglss imaginglss scripts
 
     # change conf to your imaginglss configuration file
-    srun -n 256 python-mpi /dev/shm/local/scripts/build_cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+    srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
     
 Generating Object Catalogue
 ---------------------------
 
-:code:`scripts/select_objs.py` selects objects of a type, and writes out the objects
+:code:`scripts/imglss-mpi-select-objects.py` selects objects of a type, and writes out the objects
 that we will use in the LSS catalogue.
 
 The target types are defined at http://desi.lbl.gov/trac/wiki/TargetSelection
@@ -78,7 +78,7 @@ The inline help of the script describes the usage:
 
 .. code-block:: bash
 
-    usage: select_objs.py [-h] [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
+    usage: imglss-mpi-select-objects.py [-h] [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
                           [--sigma-r SIGMA_R]
                           [--with-tycho {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
                           [--conf CONF]
@@ -109,9 +109,9 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
 
     #!/bin/bash
 
-    #SBATCH -J select_objs
+    #SBATCH -J imglss-mpi-select-objects
     #SBATCH -n 512
-    #SBATCH -o select_objs.%j
+    #SBATCH -o imglss-mpi-select-objects.%j
     #SBATCH -p debug
     #SBATCH -t 00:30:00
 
@@ -127,13 +127,13 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
     export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
     # change conf to your imaginglss configuration file
-    srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py LRG LRG.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+    srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 
 Generating Complete Random Sky Mask
 -----------------------------------
 
-make_random.py generates the randoms for the sky mask of a target type.
+imglss-mpi-make-random.py generates the randoms for the sky mask of a target type.
 
 The output is the RA DEC and magnitudes limit at that location on the sky. 
 There is an option to use the Tycho star catalogue to veto regions near a known star.
@@ -142,7 +142,7 @@ The inline help of the script describes the usage:
 
 .. code-block:: bash
 
-    usage: make_random.py [-h] [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
+    usage: imglss-mpi-make-random.py [-h] [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
                           [--sigma-r SIGMA_R]
                           [--with-tycho {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
                           [--conf CONF]
@@ -173,9 +173,9 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
 
     #!/bin/bash
 
-    #SBATCH -J make_random
+    #SBATCH -J imglss-mpi-make-random
     #SBATCH -n 512
-    #SBATCH -o make_random.%j
+    #SBATCH -o imglss-mpi-make-random.%j
     #SBATCH -p debug
     #SBATCH -t 00:30:00
 
@@ -191,4 +191,4 @@ one by one from an interactive job session, obtained via :code:`salloc`. Refer t
     export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
     # change conf to your imaginglss configuration file
-    srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+    srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 6000000 QSO QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py

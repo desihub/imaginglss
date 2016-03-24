@@ -20,7 +20,7 @@ from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("query_veto.py",
+ap = ArgumentParser("",
 description=
 """
 Query the TYCHOVETO flags of input data. The position is taken from the NOISES extension of input.
