@@ -3,6 +3,8 @@ python scripts/imglss-mpi-build-cache.py --conf=testdata/dr2-mini/dr2.conf.py ||
 python scripts/imglss-mpi-select-objects.py --conf=testdata/dr2-mini/dr2.conf.py QSO QSO.txt || exit 1
 head QSO.txt.NOISES
 head QSO.txt.FLUXES
+head QSO.txt.CONFIDENCE
+
 python scripts/imglss-mpi-select-objects.py --conf=testdata/dr2-mini/dr2.conf.py QSO QSO.hdf5 || exit 1
 python scripts/imglss-mpi-make-random.py --conf=testdata/dr2-mini/dr2.conf.py 1000 QSO-random.txt || exit 1
 head QSO-random.txt.NOISES

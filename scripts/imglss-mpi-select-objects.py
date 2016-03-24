@@ -57,6 +57,10 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
         ])
 
+    dtype3 = np.dtype([
+        ('DECAM_CONFIDENCE', ('f4', 6)),
+        ])
+
     # Get instances of a data release and SFD dust map.
     decals = ns.conf
     dr     = decals.datarelease
@@ -79,6 +83,7 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     FLUXES = np.empty(mask.sum(), dtype=dtype1)
     NOISES = np.empty(mask.sum(), dtype=dtype2)
+    CONFIDENCE = np.empty(mask.sum(), dtype=dtype3)
 
     FLUXES['PHOTO_Z']   = -1.0
     FLUXES['RA']   = cat[ 'RA'][mine][mask]
@@ -115,18 +120,22 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
     nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
     NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
 
+    CONFIDENCE['DECAM_CONFIDENCE'] = FLUXES['DECAM_INTRINSIC_FLUX'] / NOISES['DECAM_INTRINSIC_NOISE_LEVEL']
+
     FLUXES  = np.concatenate(comm.allgather(FLUXES))
     NOISES  = np.concatenate(comm.allgather(NOISES))
+    CONFIDENCE = np.concatenate(comm.allgather(CONFIDENCE))
 
     if comm.rank == 0:
         print('Total number of objects selected', len(FLUXES))
 
-    return FLUXES, NOISES
+    return FLUXES, NOISES, CONFIDENCE
 
 if __name__=="__main__":
 
-    FLUXES, NOISES = select_objs(ns)
+    FLUXES, NOISES, CONFIDENCE = select_objs(ns)
 
     if MPI.COMM_WORLD.rank == 0:
         ns.output.write(FLUXES, ns.__dict__, 'FLUXES')
         ns.output.write(NOISES, ns.__dict__, 'NOISES')
+        ns.output.write(CONFIDENCE, ns.__dict__, 'CONFIDENCE')

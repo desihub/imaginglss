@@ -37,13 +37,15 @@ def build_model(ns, fluxes, noises, sigmas={'r': 5.0, 'g': 5.0, 'z': 3.0}):
         sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
         for band in fluxcut.bands]).T
 
+    # This will be the 100% completeness limit for the given sigmas
     lim = fluxes.min(axis=0)
+
     mask = (noises <= lim).all(axis=-1)
     model = fluxes[mask]
     tree = KDTree(model)
-    root = tree.root 
+    root = tree.root
 
-    def modelfunc(noises):
+    def fcmodelfunc(noises):
         noises = np.array([
             sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
             for band in fluxcut.bands]).T
@@ -51,11 +53,9 @@ def build_model(ns, fluxes, noises, sigmas={'r': 5.0, 'g': 5.0, 'z': 3.0}):
         mask = (noises <= lim).all(axis=-1)
         fcomp = 1.0 * seen / (len(model) + 1.0)
         fcomp[mask] = 1.0
-
         return fcomp
 
-    return modelfunc
-
+    return fcmodelfunc
 
 def query_completeness(ns):
     object_fluxes = ns.objects.read('FLUXES')
@@ -69,10 +69,9 @@ def query_completeness(ns):
 
     noises = ns.noises.read('NOISES')
 
-    dtype = [('FRACTION_COMPLETENESS', 'f8')]
+    dtype = [ ('FRACTION_COMPLETENESS', 'f8')]
     FC = np.empty(len(noises), dtype=dtype)
-    FC['FRACTION_COMPLETENESS'][:] = model(noises) 
-
+    FC['FRACTION_COMPLETENESS'][:] = model(noises)
     return FC
 
 if __name__=="__main__":
