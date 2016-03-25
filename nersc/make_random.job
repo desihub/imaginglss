@@ -18,6 +18,6 @@ export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
 srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 6000000 LRG_rand.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
-#srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 400000 ELG_rand.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+#srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 20000000 ELG_rand.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
-#srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+#srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 20000000 QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
