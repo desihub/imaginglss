@@ -20,7 +20,7 @@ from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
-ap = ArgumentParser("",
+ap = ArgumentParser(
 description=
 """
 Query the TYCHOVETO flags of input data. The position is taken from the NOISES extension of input.
@@ -33,8 +33,10 @@ Unfortunately, this script is not sufficiently smart to decide the correct TYCHO
 Therefore, no combined veto flag is generated.
 """
 )
-ap.add_argument("input", type=output.writer)
-ap.add_argument("output", type=output.writer)
+ap.add_argument("input", type=output.writer, 
+    help="Reads the position from the NOISES extension.")
+ap.add_argument("output", type=output.writer,
+    help="Writes the veto flags to the TYCHOVETO extension")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
