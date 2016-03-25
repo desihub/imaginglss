@@ -1,6 +1,5 @@
 import numpy
 from ..utils import fits
-from kdcount import KDTree
 
 __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
@@ -30,8 +29,6 @@ class Tycho(numpy.ndarray):
         self.bmag = self['BMAG']
         self.vmag = self['VMAG']
         self.varflag = self['VARFLAG']
-        pos = radec2pos(self['RA'], self['DEC'])
-        self.tree = KDTree(pos)
 
     def veto(self, coord, vetotype):
         """
@@ -47,6 +44,12 @@ class Tycho(numpy.ndarray):
             Vetomask : True for veto, False for keep.
 
         """
+
+        from kdcount import KDTree
+
+        pos = radec2pos(self['RA'], self['DEC'])
+        tree = KDTree(pos)
+
         R = vetotype(self.bmag, self.vmag) # in degrees
 
         # convert to euclidean distance
@@ -64,5 +67,5 @@ class Tycho(numpy.ndarray):
             jcut = j[r < rcut]
             vetoflag[jcut] |= True
 
-        self.tree.root.enum(other.root, Rmax, process)
+        tree.root.enum(other.root, Rmax, process)
         return vetoflag
