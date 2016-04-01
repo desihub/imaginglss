@@ -1,5 +1,14 @@
 import numpy
 import os
+def loadtxt2(filename, dtype='f8'):
+    try:
+        import pandas
+        data = pandas.read_csv(filename, 
+                delim_whitespace=True, comment='#', header=None).as_matrix().astype(dtype).copy()
+    except ImportError:
+        data = numpy.loadtxt(filename, dtype=dtype)
+    return data
+
 class writer(object):
     def __init__(self, filename):
         if filename.endswith('.txt'):
@@ -34,11 +43,13 @@ def read_text(output, extension):
         ('RA', 'f8'),
         ('DEC', 'f8'),
         ('DECAM_INTRINSIC_NOISE_LEVEL', ('f8', 6)),
+        ]),
+    'FC' : numpy.dtype([
+        ('COMPLETENESS', 'f8'),
         ])
     }
     dtype = dtypes[extension]
-
-    data = numpy.loadtxt(output + '.' + extension, dtype='f8')
+    data = loadtxt2(output + '.' + extension, dtype='f8')
     data = data.view(dtype=dtype).reshape(-1)
     return data
 
