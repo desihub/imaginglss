@@ -4,8 +4,8 @@ import numpy as np
 
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
+from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
-from kdcount import KDTree
 
 from argparse import ArgumentParser
 
@@ -32,48 +32,17 @@ ns.conf = DECALS(ns.conf)
 np.seterr(divide='ignore', invalid='ignore')
 
 
-def build_model(ns, fluxes, noises, sigmas={'r': 5.0, 'g': 5.0, 'z': 3.0}):
-    fluxcut = getattr(targetselection, ns.ObjectType)
-
-    fluxes = np.array([
-        fluxes['DECAM_INTRINSIC_FLUX'][:, ns.conf.datarelease.bands[band]]
-        for band in fluxcut.bands]).T
-
-    noises = np.array([
-        sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
-        for band in fluxcut.bands]).T
-
-    # This will be the 100% completeness limit for the given sigmas
-    lim = fluxes.min(axis=0)
-
-    mask = (noises <= lim).all(axis=-1)
-    model = fluxes[mask]
-    tree = KDTree(model)
-    root = tree.root
-
-    def fcmodelfunc(noises):
-        noises = np.array([
-            sigmas[band] * noises['DECAM_INTRINSIC_NOISE_LEVEL'][:, ns.conf.datarelease.bands[band]]
-            for band in fluxcut.bands]).T
-        seen = root.integrate(noises, np.inf)
-        mask = (noises <= lim).all(axis=-1)
-        fcomp = 1.0 * seen / (len(model) + 1.0)
-        fcomp[mask] = 1.0
-        return fcomp
-
-    return fcmodelfunc
-
 def query_completeness(ns):
-    object_fluxes = ns.objects.read('FLUXES')
-    object_noises = ns.objects.read('NOISES')
-    sigmas = {
+    object_fluxes = ns.objects.read('FLUXES')['DECAM_INTRINSIC_FLUX']
+    object_noises = ns.objects.read('NOISES')['DECAM_INTRINSIC_NOISE_LEVEL']
+    confidence = {
         'z': ns.sigma_z,
         'r': ns.sigma_r,
         'g': ns.sigma_g,
         }
-    model = build_model(ns, object_fluxes, object_noises, sigmas)
+    model = completeness.CompletenessEstimator(ns.conf.datarelease, ns.ObjectType, object_fluxes, object_noises, confidence)
 
-    noises = ns.noises.read('NOISES')
+    noises = ns.noises.read('NOISES')['DECAM_INTRINSIC_NOISE_LEVEL']
 
     dtype = [ ('FRACTION_COMPLETENESS', 'f8')]
     FC = np.empty(len(noises), dtype=dtype)
