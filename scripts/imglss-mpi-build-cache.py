@@ -26,8 +26,16 @@ ns = ap.parse_args()
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 
+# Staggered start up builds covered_bricks.i8 on root rank only
+if comm.rank != 0:
+    comm.barrier()
+
 decals = DECALS(ns.conf)
 cat = decals.datarelease.catalogue
+
+# Staggered start up builds covered_bricks.i8 on root rank only
+if comm.rank == 0:
+    comm.barrier()
 
 filenames = list(cat.filenames.values())
 
