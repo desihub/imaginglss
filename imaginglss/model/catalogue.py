@@ -211,6 +211,7 @@ class CachedCatalogue(ColumnStore):
         'DECAM_DEPTH',
         'DECAM_FLUX',
         'WISE_FLUX',
+        'WISE_FLUX_IVAR',
         'WISE_MW_TRANSMISSION',
         'TYPE',
         'SHAPEDEV_R',
