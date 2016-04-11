@@ -43,11 +43,9 @@ ap.add_argument("--conf", default=None,
 ns = ap.parse_args()
 ns.conf = DECALS(ns.conf)
 
-from mpi4py import MPI
-
 np.seterr(divide='ignore', invalid='ignore')
 
-def query_veto(ns, comm=MPI.COMM_WORLD):
+def query_veto(ns):
     """
         calculate VETO flag for all proximity vetos defined in tycho_veto.
     """
@@ -74,5 +72,4 @@ if __name__=="__main__":
 
     VETO = query_veto(ns)
 
-    if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(VETO, ns.__dict__, 'TYCHOVETO')
+    ns.output.write(VETO, ns.__dict__, 'TYCHOVETO')
