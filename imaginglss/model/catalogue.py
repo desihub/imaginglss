@@ -107,6 +107,26 @@ class Catalogue(object):
         A container of the data type of columns
         in :py:class:`numpy.dtype`
     """
+
+    COLUMNS = [
+        'BRICK_PRIMARY',
+        'RA',
+        'DEC',
+        'DECAM_FLUX_IVAR',
+        'DECAM_MW_TRANSMISSION',
+        'DECAM_PSFSIZE',
+        'DECAM_NOBS',
+        'DECAM_ANYMASK',
+        'DECAM_DEPTH',
+        'DECAM_FLUX',
+        'WISE_FLUX',
+        'WISE_FLUX_IVAR',
+        'WISE_MW_TRANSMISSION',
+        'TYPE',
+        'SHAPEDEV_R',
+        'SHAPEEXP_R',
+    ]
+
     def __init__(self, bricks, format_filename, aliases):
 
         filenames = [ format_filename(brick) for brick in bricks]
@@ -135,7 +155,12 @@ class Catalogue(object):
         return self.data.dtype
 
     def open(self, brick):
-        return fits.read_table(self.filenames[brick.name])
+        data = fits.read_table(self.filenames[brick.name])
+        dtype = [(column, data.dtype[column]) for column in self.COLUMNS]
+        data_compressed = numpy.empty(shape=data.shape, dtype=dtype)
+        for column in self.COLUMNS:
+            data_compressed[column][...] = data[column]
+        return data_compressed
 
     def __getitem__(self, column):
         if isinstance(column, basestring) and column in self.aliases:
@@ -199,24 +224,6 @@ class CachedCatalogue(ColumnStore):
         A mapping between the brickname and the filenames.
     
     """
-    COLUMNS = [
-        'BRICK_PRIMARY',
-        'RA',
-        'DEC',
-        'DECAM_FLUX_IVAR',
-        'DECAM_MW_TRANSMISSION',
-        'DECAM_PSFSIZE',
-        'DECAM_NOBS',
-        'DECAM_ANYMASK',
-        'DECAM_DEPTH',
-        'DECAM_FLUX',
-        'WISE_FLUX',
-        'WISE_FLUX_IVAR',
-        'WISE_MW_TRANSMISSION',
-        'TYPE',
-        'SHAPEDEV_R',
-        'SHAPEEXP_R',
-    ]
 
     def __init__(self, cachedir, bricks, format_filename, aliases):
 
@@ -274,7 +281,7 @@ class CachedCatalogue(ColumnStore):
             break
 
         first = fits.read_table(fn)
-        dtype = subdtype(uppercase_dtype(first.dtype), self.COLUMNS)
+        dtype = subdtype(uppercase_dtype(first.dtype), Catalogue.COLUMNS)
 
         total = len(filenames)
 
