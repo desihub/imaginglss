@@ -37,7 +37,7 @@ def veto(coord, center, R):
 
     pos = radec2pos(coord[0], coord[1])
     other = KDTree(pos)
-    vetoflag = numpy.zeros(len(coord), dtype='?')
+    vetoflag = numpy.zeros(len(pos), dtype='?')
 
     Rmax = R.max()
 
