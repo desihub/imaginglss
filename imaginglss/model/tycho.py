@@ -5,67 +5,34 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-def radec2pos(ra, dec):
-    """ converting ra dec to position on a unit sphere.
-        ra, dec are in degrees.
-    """
-    pos = numpy.empty(len(ra), dtype=('f8', 3))
-    ra = ra * (numpy.pi / 180)
-    dec = dec * (numpy.pi / 180)
-    pos[:, 2] = numpy.sin(dec)
-    pos[:, 0] = numpy.cos(dec) * numpy.sin(ra)
-    pos[:, 1] = numpy.cos(dec) * numpy.cos(ra)
-    return pos
 
 class Tycho(numpy.ndarray):
     """ Representing a Tycho catalogue that
         is used to veto objects near stars 
     """
     def __new__(kls, path):
-        self = fits.read_table(path).view(type=kls)
-        return self
+        data = fits.read_table(path).view(type=kls)
+        self = numpy.empty(len(data),
+            dtype=[
+                ('RA', 'f8'),
+                ('DEC', 'f8'),
+                ('VTMAG', 'f8'),
+                ('VMAG', 'f8'),
+                ('BMAG', 'f8'),
+                ('BTMAG', 'f8'),
+                ('VARFLAG', 'i8'),
+                ])
+        self['RA'] = data['RA']
+        self['DEC'] = data['DEC']
+        self['VARFLAG'] = data['VARFLAG']
+        self['VMAG'] = data['VMAG']
+        self['BMAG'] = data['BMAG']
+        v = self['VMAG'] 
+        b = self['BMAG'] 
+        vt = v + 0.09 / 0.85 * (b - v)
+        bt = 1.09 / 0.85 * (b - v) + v
+        self['VTMAG'] = vt
+        self['BTMAG'] = bt
 
-    def __init__(self, path):
-        self.bmag = self['BMAG']
-        self.vmag = self['VMAG']
-        self.varflag = self['VARFLAG']
+        return self.view(type=kls)
 
-    def veto(self, coord, vetotype):
-        """
-            Returns a veto mask for coord.
-
-            Parameters
-            ----------
-            coord : (RA, DEC)
-            vetotype : a function that f(bmag, vmag) -> Radius in degrees
-
-            Returns
-            -------
-            Vetomask : True for veto, False for keep.
-
-        """
-
-        from kdcount import KDTree
-
-        pos = radec2pos(self['RA'], self['DEC'])
-        tree = KDTree(pos)
-
-        R = vetotype(self.bmag, self.vmag) # in degrees
-
-        # convert to euclidean distance
-        R = 2 * numpy.sin(numpy.radians(R) * 0.5)
-
-        Rmax = R.max()
-
-        pos = radec2pos(coord[0], coord[1])
-        other = KDTree(pos)
-        vetoflag = numpy.zeros(len(pos), dtype='?')
-
-        def process(r, i, j):
-            # i is tycho, j is objects
-            rcut = R[i]
-            jcut = j[r < rcut]
-            vetoflag[jcut] |= True
-
-        tree.root.enum(other.root, Rmax, process)
-        return vetoflag

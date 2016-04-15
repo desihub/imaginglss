@@ -16,6 +16,7 @@ __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 import numpy as np
 from imaginglss             import DECALS
 from imaginglss.analysis    import tycho_veto
+from imaginglss.analysis    import veto
 from imaginglss.utils       import output
 
 from argparse import ArgumentParser
@@ -59,8 +60,10 @@ def query_veto(ns):
             )
 
     for ibit, vetoname in enumerate(allvetos):
-        veto = getattr(tycho_veto, vetoname)
-        mask = ns.conf.tycho.veto((RA, DEC), veto)
+        vetotype = getattr(tycho_veto, vetoname)
+        R = vetotype(ns.conf.tycho)
+        centers = (ns.conf.tycho['RA'], ns.conf.tycho['DEC'])
+        mask = veto.veto((RA, DEC), centers, R)
         # if we want to combine the bits, do it here.
         # but there is no point of doing so for all tycho based proximity
         # vetos. we will assembly the full veto bitmask later in the pipeline.
