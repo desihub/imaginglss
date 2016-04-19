@@ -140,11 +140,18 @@ class Node(object):
             length = len(array[array.keys()[0]])
         else:
             length = len(array)
-        result = numpy.empty(length, dtype='?')
+        result = None
         for i in range(0, length, chunksize):
             s = slice(i, i + chunksize)
             v = QueryVisitor(array, s)
-            result[s] = v.visit(self)
+            tmp = numpy.array(v.visit(self))
+            if result is None:
+                if len(tmp.shape) > 1:
+                    dtype = (tmp.dtype, tmp.shape[1:])
+                else:
+                    dtype = tmp.dtype
+                result = numpy.empty(length, dtype=dtype)
+            result[s] = tmp
         return result
 
     def assume(self, node, literal):
