@@ -2,14 +2,26 @@ Usage: Data Pipeline
 ====================
 
 The primary usage of ImagingLSS is to produce large scale structure catalogues.
-In this section, we document the data pipeline. There are three steps:
+In this section, we document the data pipeline. There are the steps:
 
 - Building the cache
 - Generating the object catalogue
 - Generating the random sampling of the mask
+- Applying veto based on proximity to stars
+- Estimating completeness for randoms and objects
+- Assemble and export final text files
+
+The first 3 steps are computational/data extensive and we provide mpi4py based
+scripts; which shall go through the job queue of a computing facility.
+
+The rest of the steps are very light weight and the head nodes can easily handle them.
 
 We will cover them in the following sections. The examples are based off our
 working configuration at NERSC.
+
+The source file `runtests.sh` in the root directory 
+contains an example of the full pipeline for producing randoms
+and objects of the QSO target type.
 
 Building the Cache
 ------------------
