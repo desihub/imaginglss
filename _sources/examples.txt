@@ -22,7 +22,7 @@ http://nbviewer.ipython.org/urls/imaginglss-git.s3.amazonaws.com/RandomMaskELG.i
 
 .. attention:: 
 
-    Note that the LSS generation pipe line (select_objs.py, make_randoms.py) 
+    Note that the part of the LSS generation pipe line (files in scripts/imglss-mpi-*.py ) 
     typically requires a high-throughput operation querying a large amount of data, 
     these cannot be done with notebook. The notebooks are most useful for inspecting
     smaller chunks of data, individual bricks, etc. Refer to :doc:`datapipeline`.

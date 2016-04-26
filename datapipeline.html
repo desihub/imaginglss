@@ -71,13 +71,13 @@ working configuration at NERSC.</p>
 <p class="last">On Edison for DR2, this step can be omitted
 if the following configuration file is used:</p>
 </div>
-<p>The application to build the cache is <code class="code docutils literal"><span class="pre">scripts/build_cache.py</span></code>. The application
+<p>The application to build the cache is <code class="code docutils literal"><span class="pre">scripts/imglss-mpi-build-cache.py</span></code>. The application
 scans the files in the data release described by a configuration file (provided in
 <code class="code docutils literal"><span class="pre">--conf</span></code> argument), and converts the columns used by ImagingLSS to a binary
 format that is much easier to use into the &#8216;cache&#8217; directory specified in the configuration
 file. For the format of the configuration file, refer to <cite>Configuration File</cite>.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: build_cache.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--conf CONF<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-build-cache.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--conf CONF<span class="o">]</span>
 
 optional arguments:
   -h, --help   show this <span class="nb">help </span>message and <span class="nb">exit</span>
@@ -88,9 +88,9 @@ optional arguments:
 <p>Here is an example job script that works on Edison (Note that python-mpi-bcast is used).
 Submit the job script with <code class="code docutils literal"><span class="pre">sbatch</span></code>.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
-<span class="c">#SBATCH -J build_cache</span>
+<span class="c">#SBATCH -J imglss-mpi-build-cache</span>
 <span class="c">#SBATCH -n 512</span>
-<span class="c">#SBATCH -o build_cache.%j</span>
+<span class="c">#SBATCH -o imglss-mpi-build-cache.%j</span>
 <span class="c">#SBATCH -p debug</span>
 <span class="c">#SBATCH -t 00:30:00</span>
 
@@ -103,21 +103,18 @@ module load python/2.7-anaconda
 mirror ~/source/imaginglss imaginglss scripts
 
 <span class="c"># change conf to your imaginglss configuration file</span>
-srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/build_cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 </pre></div>
 </div>
 </div>
 <div class="section" id="generating-object-catalogue">
 <h2>Generating Object Catalogue<a class="headerlink" href="#generating-object-catalogue" title="Permalink to this headline">¶</a></h2>
-<p><code class="code docutils literal"><span class="pre">scripts/select_objs.py</span></code> selects objects of a type, and writes out the objects
-that we will use in the LSS catalogue.</p>
+<p><code class="code docutils literal"><span class="pre">scripts/imglss-mpi-select-objects.py</span></code> selects objects of a type, and writes out the objects
+that we will use in the later stages of the pipeline.</p>
 <p>The target types are defined at <a class="reference external" href="http://desi.lbl.gov/trac/wiki/TargetSelection">http://desi.lbl.gov/trac/wiki/TargetSelection</a></p>
-<p>The output is the RA DEC and magnitudes of objects.
-There is an option to use the Tycho star catalogue to veto objects near a known star.</p>
+<p>The output is the RA DEC and magnitudes of objects.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: select_objs.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--sigma-z SIGMA_Z<span class="o">]</span> <span class="o">[</span>--sigma-g SIGMA_G<span class="o">]</span>
-                      <span class="o">[</span>--sigma-r SIGMA_R<span class="o">]</span>
-                      <span class="o">[</span>--with-tycho <span class="o">{</span>BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO<span class="o">}]</span>
+<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-select-objects.py <span class="o">[</span>-h<span class="o">]</span>
                       <span class="o">[</span>--conf CONF<span class="o">]</span>
                       <span class="o">{</span>QSO,LRG,ELG,BGS<span class="o">}</span> output
 
@@ -127,11 +124,6 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
-  --sigma-z SIGMA_Z
-  --sigma-g SIGMA_G
-  --sigma-r SIGMA_R
-  --with-tycho <span class="o">{</span>BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO<span class="o">}</span>
-                        Type of veto.
   --conf CONF           Path to the imaginglss config file, default is from
                         DECALS_PY_CONFIG
 </pre></div>
@@ -142,9 +134,9 @@ one by one from an interactive job session, obtained via <code class="code docut
 <a href="#id1"><span class="problematic" id="id2">`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_</span></a>.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
 
-<span class="c">#SBATCH -J select_objs</span>
+<span class="c">#SBATCH -J imglss-mpi-select-objects</span>
 <span class="c">#SBATCH -n 512</span>
-<span class="c">#SBATCH -o select_objs.%j</span>
+<span class="c">#SBATCH -o imglss-mpi-select-objects.%j</span>
 <span class="c">#SBATCH -p debug</span>
 <span class="c">#SBATCH -t 00:30:00</span>
 
@@ -160,34 +152,24 @@ mirror ~/source/imaginglss imaginglss scripts
 <span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span>/dev/shm/local:<span class="nv">$PYTHONPATH</span>
 
 <span class="c"># change conf to your imaginglss configuration file</span>
-srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/select_objs.py LRG LRG.txt --with-tycho DECAM_LRG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.hdf5 --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 </pre></div>
 </div>
 </div>
 <div class="section" id="generating-complete-random-sky-mask">
 <h2>Generating Complete Random Sky Mask<a class="headerlink" href="#generating-complete-random-sky-mask" title="Permalink to this headline">¶</a></h2>
-<p>make_random.py generates the randoms for the sky mask of a target type.</p>
-<p>The output is the RA DEC and magnitudes limit at that location on the sky.
-There is an option to use the Tycho star catalogue to veto regions near a known star.</p>
+<p>imglss-mpi-make-random.py generates the randoms for the sky mask. The points will be uniform within the survey footprint.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: make_random.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--sigma-z SIGMA_Z<span class="o">]</span> <span class="o">[</span>--sigma-g SIGMA_G<span class="o">]</span>
-                      <span class="o">[</span>--sigma-r SIGMA_R<span class="o">]</span>
-                      <span class="o">[</span>--with-tycho <span class="o">{</span>BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO<span class="o">}]</span>
+<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-make-random.py <span class="o">[</span>-h<span class="o">]</span>
                       <span class="o">[</span>--conf CONF<span class="o">]</span>
-                      Nran <span class="o">{</span>QSO,LRG,ELG,BGS<span class="o">}</span> output
+                      Nran output
 
 positional arguments:
   Nran                  Minimum number of randoms
-  <span class="o">{</span>QSO,LRG,ELG,BGS<span class="o">}</span>
   output
 
 optional arguments:
   -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
-  --sigma-z SIGMA_Z
-  --sigma-g SIGMA_G
-  --sigma-r SIGMA_R
-  --with-tycho <span class="o">{</span>BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO<span class="o">}</span>
-                        Type of veto.
   --conf CONF           Path to the imaginglss config file, default is from
                         DECALS_PY_CONFIG
 </pre></div>
@@ -198,9 +180,9 @@ one by one from an interactive job session, obtained via <code class="code docut
 <a href="#id3"><span class="problematic" id="id4">`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_</span></a>.</p>
 <div class="code highlight-python"><div class="highlight"><pre>#!/bin/bash
 
-#SBATCH -J make_random
+#SBATCH -J imglss-mpi-make-random
 #SBATCH -n 512
-#SBATCH -o make_random.%j
+#SBATCH -o imglss-mpi-make-random.%j
 #SBATCH -p debug
 #SBATCH -t 00:30:00
 
@@ -216,7 +198,95 @@ mirror ~/source/imaginglss imaginglss scripts
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
 # change conf to your imaginglss configuration file
-srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO QSO_rand.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 6000000 QSO-random.hdf5 --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="apply-star-veto-mask">
+<h2>Apply Star veto mask<a class="headerlink" href="#apply-star-veto-mask" title="Permalink to this headline">¶</a></h2>
+<p>imglss-query-tycho-veto.py applies the bright star veto masks to a target or random catalogue. The veto types are defined
+in imaginglss/analysis/tycho_veto.py . As you can tell, we currently only support vetoing via a Tycho2 catalogue.</p>
+<p>The star veto mask is important for correctly building the completeness estimator.</p>
+<p>The inline help of the script describes the usage:</p>
+<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-query-tycho-veto.py [-h] [--conf CONF] catalogue
+
+Query the TYCHOVETO flags of input data. The position is taken from the NOISES
+extension of input. The result is written to the TYCHOVETO extension of
+output. Currently, only veto by proximity to tycho stars are implemented. Each
+veto in imaginglss.analysis.tycho_veto is calculated as a column in the
+TYCHOVETO extension. Unfortunately, this script is not sufficiently smart to
+decide the correct TYCHOVETO for the target type. Therefore, no combined veto
+flag is generated.
+
+positional arguments:
+  catalogue    HDF5 catalogue file, can be either random or objects.
+               TYCHO_VETO dataset will be added
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --conf CONF  Path to the imaginglss config file, default is from
+               DECALS_PY_CONFIG
+</pre></div>
+</div>
+</div>
+<div class="section" id="query-completeness">
+<h2>Query Completeness<a class="headerlink" href="#query-completeness" title="Permalink to this headline">¶</a></h2>
+<p>imglss-query-completeness.py esitmates the fractional completeness for objects / randoms based on their depth.
+A threshold confidence level is used to generate a 100% complete sample based on an object catalogue. Then
+this sample is taken to model the fractional completeness. The result is appended as COMPLETENESS column to the
+catalogue.</p>
+<p>The inline help of the script describes the usage:</p>
+<div class="code highlight-python"><div class="highlight"><pre>Usage: imglss-query-completeness.py [-h]
+                                    [--use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
+                                    [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
+                                    [--sigma-r SIGMA_R] [--conf CONF]
+                                    {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS} objects
+                                    query
+
+positional arguments:
+  {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS}
+  objects               object catalogue for building the completeness model.
+  query                 catalogue to query completeness
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}
+  --sigma-z SIGMA_Z
+  --sigma-g SIGMA_G
+  --sigma-r SIGMA_R
+  --conf CONF           Path to the imaginglss config file, default is from
+                        DECALS_PY_CONFIG
+</pre></div>
+</div>
+</div>
+<div class="section" id="assemble-final-product">
+<h2>Assemble Final Product<a class="headerlink" href="#assemble-final-product" title="Permalink to this headline">¶</a></h2>
+<p>imglss-export-text.py assembles a final catalogue for objects or randoms. The final product is a plain text file.
+fluxes (only for objects) and depths of selected bands can be included in the final product.</p>
+<p>We need a threshold confidence level (usually identical to the one used in imglss-query-completenesss) to filter
+out poorly detected objects.</p>
+<p>Vetoing by proximity to stars is also applied at this final stage.</p>
+<p>The inline help of the script describes the usage:</p>
+<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-export-text.py [-h] [--conf CONF]
+                         [--use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
+                         [--bands {Y,W4,r,u,W1,g,i,W3,z,W2} [{Y,W4,r,u,W1,g,i,W3,z,W2} ...]]
+                         [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
+                         [--sigma-r SIGMA_R]
+                         catalogue output
+
+positional arguments:
+  catalogue             internal catalogue of HDF5 type.
+  output                text file to store the catalogue.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --conf CONF           Path to the imaginglss config file, default is from
+                        DECALS_PY_CONFIG
+  --use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}
+  --bands {Y,W4,r,u,W1,g,i,W3,z,W2} [{Y,W4,r,u,W1,g,i,W3,z,W2} ...]
+  --sigma-z SIGMA_Z
+  --sigma-g SIGMA_G
+  --sigma-r SIGMA_R
 </pre></div>
 </div>
 </div>
@@ -234,6 +304,9 @@ srun -n 256 python-mpi /dev/shm/local/scripts/make_random.py 6000000 QSO QSO_ran
 <li><a class="reference internal" href="#building-the-cache">Building the Cache</a></li>
 <li><a class="reference internal" href="#generating-object-catalogue">Generating Object Catalogue</a></li>
 <li><a class="reference internal" href="#generating-complete-random-sky-mask">Generating Complete Random Sky Mask</a></li>
+<li><a class="reference internal" href="#apply-star-veto-mask">Apply Star veto mask</a></li>
+<li><a class="reference internal" href="#query-completeness">Query Completeness</a></li>
+<li><a class="reference internal" href="#assemble-final-product">Assemble Final Product</a></li>
 </ul>
 </li>
 </ul>

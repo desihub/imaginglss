@@ -58,113 +58,28 @@
             
   <div class="section" id="module-imaginglss.analysis.completeness">
 <span id="imaginglss-analysis-completeness-module"></span><h1>imaginglss.analysis.completeness module<a class="headerlink" href="#module-imaginglss.analysis.completeness" title="Permalink to this headline">¶</a></h1>
-<p>A collection of helpful (static) methods to check whether a given
-position has imaging deep enough to be 100% complete to a certain
-selection (e.g. LRG, ELG or QSO).
-We should probably modify this later to easily allow querying of
-brighter limits.
-The methods assume they are passed N-sigma limits, corrected for
-MW transmission.
-Note: for a region to pass the N-sigma &#8220;noise&#8221; must be LESS THAN the
-required depth.
-The requirements on colors are tricky to implement here. We currently
-require a 100% completeness.</p>
+<dl class="function">
+<dt id="imaginglss.analysis.completeness.CompletenessEstimator">
+<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">CompletenessEstimator</code><span class="sig-paren">(</span><em>fluxes</em>, <em>noises</em>, <em>confidence</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#CompletenessEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.CompletenessEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a completeness estimator for an object type,
+based on the object type, intrinsic fluxes and intrinsic noise levels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fluxes</strong> : array_like (N, Nbands)</p>
 <blockquote>
-<div><p>Put your own complete area definitions in</p>
+<div><p>intrinsic fluxes from DECAM; usually calculated by imglss-mpi-select-objects.py.
+in nano-maggies.</p>
+</div></blockquote>
+<p><strong>noises</strong> : array_like (N, Nbands)</p>
 <blockquote>
-<div>local-completeness.py</div></blockquote>
-<p>of the same path.</p>
+<div><p>intrinsic 1-sigma noise level from DECAM; usually calculated by imglss-mpi-select-objects.py,
+in nano-maggies.</p>
 </div></blockquote>
-<p>Remember to append the name of the object type to __all__ variable
-with __all__.append(&#8220;ObjectType&#8221;)</p>
-<dl class="function">
-<dt id="imaginglss.analysis.completeness.LRG">
-<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">LRG</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.LRG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the completeness cut for LRG.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : dict</p>
+<p><strong>confidence</strong> : array_like (Nbands)</p>
 <blockquote class="last">
-<div><p>&#8216;r&#8217;, &#8216;z&#8217;, &#8216;g&#8217; members specifies the confidents in that
-band. ( <img class="math" src="_images/math/1ee32e08c42bdefaffaa4a70f494bf613e8a9618.png" alt="n \sigma"/>)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.analysis.completeness.ELG">
-<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">ELG</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#ELG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.ELG" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the completeness cut for ELG.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : dict</p>
-<blockquote class="last">
-<div><p>&#8216;r&#8217;, &#8216;z&#8217;, &#8216;g&#8217; members specifies the confidents in that
-band. ( <img class="math" src="_images/math/1ee32e08c42bdefaffaa4a70f494bf613e8a9618.png" alt="n \sigma"/>)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.analysis.completeness.QSO">
-<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">QSO</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.QSO" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the completeness cut for QSO.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : dict</p>
-<blockquote class="last">
-<div><p>&#8216;r&#8217;, &#8216;z&#8217;, &#8216;g&#8217; members specifies the confidents in that
-band. ( <img class="math" src="_images/math/1ee32e08c42bdefaffaa4a70f494bf613e8a9618.png" alt="n \sigma"/>)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.analysis.completeness.BGS">
-<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">BGS</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/completeness.html#BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.completeness.BGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the completeness cut for BGS.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : dict</p>
-<blockquote class="last">
-<div><p>&#8216;r&#8217;, &#8216;z&#8217;, &#8216;g&#8217; members specifies the confidents in that
-band. ( <img class="math" src="_images/math/1ee32e08c42bdefaffaa4a70f494bf613e8a9618.png" alt="n \sigma"/>)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.analysis.completeness.MYBGS">
-<code class="descclassname">imaginglss.analysis.completeness.</code><code class="descname">MYBGS</code><span class="sig-paren">(</span><em>sigma</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.analysis.completeness.MYBGS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the completeness cut for BGS.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : dict</p>
-<blockquote class="last">
-<div><p>&#8216;r&#8217;, &#8216;z&#8217;, &#8216;g&#8217; members specifies the confidents in that
-band. ( <img class="math" src="_images/math/1ee32e08c42bdefaffaa4a70f494bf613e8a9618.png" alt="n \sigma"/>)</p>
+<div><p>confidence (in sigma) for each band.</p>
 </div></blockquote>
 </td>
 </tr>

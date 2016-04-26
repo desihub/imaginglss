@@ -58,45 +58,26 @@
             
   <div class="section" id="module-imaginglss.model.tycho">
 <span id="imaginglss-model-tycho-module"></span><h1>imaginglss.model.tycho module<a class="headerlink" href="#module-imaginglss.model.tycho" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="attribute">
 <dt id="imaginglss.model.tycho.Tycho">
-<em class="property">class </em><code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho</code><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho</code><a class="headerlink" href="#imaginglss.model.tycho.Tycho" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#imaginglss.model.tycho.Tycho2" title="imaginglss.model.tycho.Tycho2"><code class="xref py py-class docutils literal"><span class="pre">Tycho2</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.model.tycho.Tycho1">
+<em class="property">class </em><code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho1</code><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></p>
 <p>Representing a Tycho catalogue that
 is used to veto objects near stars</p>
-<dl class="method">
-<dt id="imaginglss.model.tycho.Tycho.nearest">
-<code class="descname">nearest</code><span class="sig-paren">(</span><em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho.nearest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho.nearest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query Tycho catalogue, returns information about
-the nearest object. The distance is in degrees.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coord</strong> : array_like</p>
-<blockquote>
-<div><p>(ra, dec) in degrees</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">d, bmag, vmag:</p>
-<blockquote class="last">
-<div><p>the distance to each object in coord, and the
-mag in b and v.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="imaginglss.model.tycho.radec2pos">
-<code class="descclassname">imaginglss.model.tycho.</code><code class="descname">radec2pos</code><span class="sig-paren">(</span><em>ra</em>, <em>dec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/tycho.html#radec2pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.radec2pos" title="Permalink to this definition">¶</a></dt>
-<dd><p>converting ra dec to position on a unit sphere.
-ra, dec are in degrees.</p>
+<dl class="class">
+<dt id="imaginglss.model.tycho.Tycho2">
+<em class="property">class </em><code class="descclassname">imaginglss.model.tycho.</code><code class="descname">Tycho2</code><a class="reference internal" href="_modules/imaginglss/model/tycho.html#Tycho2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.tycho.Tycho2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<p>Representing a Tycho catalogue that
+is used to veto objects near stars</p>
 </dd></dl>
 
 </div>

@@ -61,39 +61,35 @@
 <span class="sd">    mask :</span>
 
 <span class="sd">    &gt;&gt;&gt; tycho = Tycho(&quot;pathto_tycho.fit&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; mask = DECAM_LRG(tycho, coord)</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 
 <span class="sd">    The return values are True for &#39;preserve&#39;,</span>
 <span class="sd">    False for &#39;reject&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BOSS_DR9"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.BOSS_DR9">[docs]</a><span class="k">def</span> <span class="nf">BOSS_DR9</span><span class="p">(</span><span class="n">tycho</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Returns True for &#39;keep&#39; &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BOSS_DR9"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.BOSS_DR9">[docs]</a><span class="k">def</span> <span class="nf">BOSS_DR9</span><span class="p">(</span><span class="n">tycho</span><span class="p">):</span>
+    <span class="n">bmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="p">[</span><span class="s">&#39;BMAG&#39;</span><span class="p">]</span>
     <span class="c"># BOSS DR9-11</span>
-    <span class="n">d</span><span class="p">,</span> <span class="n">bmag</span><span class="p">,</span> <span class="n">vmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">bmag</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">11.5</span><span class="p">)</span>
     <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0802</span> <span class="o">*</span> <span class="n">b</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">1.86</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="mf">11.625</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.</span> <span class="c"># </span>
-    <span class="k">return</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">R</span></div>
+    <span class="k">return</span> <span class="n">R</span></div>
 
-<div class="viewcode-block" id="DECAM_LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_LRG">[docs]</a><span class="k">def</span> <span class="nf">DECAM_LRG</span><span class="p">(</span><span class="n">tycho</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
-    <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">coord</span>
-    <span class="n">d</span><span class="p">,</span> <span class="n">bmag</span><span class="p">,</span> <span class="n">vmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="mf">3.5</span> <span class="o">-</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">vmag</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3600.</span> 
-    <span class="k">return</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">R</span></div>
+<div class="viewcode-block" id="DECAM_LRG"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_LRG">[docs]</a><span class="k">def</span> <span class="nf">DECAM_LRG</span><span class="p">(</span><span class="n">tycho</span><span class="p">):</span>
+    <span class="n">vtmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="p">[</span><span class="s">&#39;VTMAG&#39;</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="mf">3.5</span> <span class="o">-</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">vtmag</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3600.</span> 
+    <span class="k">return</span> <span class="n">R</span></div>
 
 <span class="n">DECAM_ELG</span> <span class="o">=</span> <span class="n">DECAM_LRG</span>
 
-<div class="viewcode-block" id="DECAM_QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_QSO">[docs]</a><span class="k">def</span> <span class="nf">DECAM_QSO</span><span class="p">(</span><span class="n">tycho</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
+<div class="viewcode-block" id="DECAM_QSO"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_QSO">[docs]</a><span class="k">def</span> <span class="nf">DECAM_QSO</span><span class="p">(</span><span class="n">tycho</span><span class="p">):</span>
+    <span class="n">vtmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="p">[</span><span class="s">&#39;VTMAG&#39;</span><span class="p">]</span>
     <span class="c"># I recommend not applying a bright star mask </span>
-    <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">coord</span>
-    <span class="k">return</span> <span class="n">ra</span> <span class="o">==</span> <span class="n">ra</span></div>
+    <span class="k">return</span> <span class="n">vtmag</span> <span class="o">-</span> <span class="n">vtmag</span></div>
 
-<div class="viewcode-block" id="DECAM_BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_BGS">[docs]</a><span class="k">def</span> <span class="nf">DECAM_BGS</span><span class="p">(</span><span class="n">tycho</span><span class="p">,</span> <span class="n">coord</span><span class="p">):</span>
-    <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span> <span class="o">=</span> <span class="n">coord</span>
-    <span class="n">d</span><span class="p">,</span> <span class="n">bmag</span><span class="p">,</span> <span class="n">vmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="o">.</span><span class="n">nearest</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="mf">2.2</span> <span class="o">-</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">vmag</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3600.</span> 
-    <span class="k">return</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="n">R</span></div>
+<div class="viewcode-block" id="DECAM_BGS"><a class="viewcode-back" href="../../../imaginglss.analysis.tycho_veto.html#imaginglss.analysis.tycho_veto.DECAM_BGS">[docs]</a><span class="k">def</span> <span class="nf">DECAM_BGS</span><span class="p">(</span><span class="n">tycho</span><span class="p">):</span>
+    <span class="n">vtmag</span> <span class="o">=</span> <span class="n">tycho</span><span class="p">[</span><span class="s">&#39;VTMAG&#39;</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="mf">2.2</span> <span class="o">-</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="n">vtmag</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3600.</span> 
+    <span class="k">return</span> <span class="n">R</span></div>
 </pre></div>
 
           </div>
