@@ -38,14 +38,15 @@ def apply_confcut(confidence, confcut):
 
 
 with h5py.File(ns.catalogue, 'r') as ff:
-    confmask = apply_confcut(ff['CONFIDENCE'][:], confcut)
+    mask = np.ones(len(ff['RA'][:]), dtype='?')
+
+    if 'CONFIDENCE' in ff:
+        confmask = apply_confcut(ff['CONFIDENCE'][:], confcut)
+        mask &= confmask
 
     if ns.use_tycho_veto is not None:
         vetomask = ~ff['TYCHO_VETO'][ns.use_tycho_veto]
-    else:
-        vetomask = np.ones(len(confmask), dtype='?')
-
-    mask = vetomask & confmask
+        mask &= vetomask
 
     ra = ff['RA'][:][mask]
     dec = ff['DEC'][:][mask]
@@ -55,12 +56,12 @@ with h5py.File(ns.catalogue, 'r') as ff:
 
     for band in ns.bands:
         iband = product.bands[band]
-        h.append(band + 'flux')
-        l.append(ff['INTRINSIC_FLUX'][:, iband])
+        if 'INTRINSIC_FLUX' in ff:
+            h.append(band + 'flux')
+            l.append(ff['INTRINSIC_FLUX'][:, iband][mask])
         h.append(band + 'noise')
-        l.append(ff['INTRINSIC_NOISELEVEL'][:, iband])
+        l.append(ff['INTRINSIC_NOISELEVEL'][:, iband][mask])
 
 with file(ns.output, 'w') as ff:
     ff.write('\t'.join(h) + '\n')
-
     np.savetxt(ff, np.array(l).T, fmt='%12f')
