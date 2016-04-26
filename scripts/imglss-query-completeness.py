@@ -61,7 +61,7 @@ def query_completeness(decals, ns):
 
     model = completeness.CompletenessEstimator(active_flux, active_noise, active_conf)
 
-    with h5py.File(ns.objects, 'r') as ff:
+    with h5py.File(ns.query, 'r') as ff:
         NOISE = ff['INTRINSIC_NOISELEVEL'][:]
 
     FC = model(NOISE[:, active_bands])
@@ -71,7 +71,7 @@ def query_completeness(decals, ns):
 if __name__=="__main__":
 
     FC = query_completeness(decals, ns)
-    print("Max FC = %g, MIN FC= %g" % (FC.max(), FC.min()))
+    print("N = %d Max FC = %g, MIN FC= %g" % (len(FC), FC.max(), FC.min()))
     with h5py.File(ns.query, 'r+') as ff:
         if 'COMPLETENESS' in ff:
             del ff['COMPLETENESS']
