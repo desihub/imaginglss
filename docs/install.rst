@@ -43,6 +43,9 @@ ImagingLSS is light on dependency.
 
  - mpi4py, for the parallel infrastructure. 
 
+ - h5py for accessing HDF5 files. HDF5 is the internal data storage format of the
+   data pipeline. The final data product is plain text.
+
  - fitsio 0.9.8 + for accessing FITS files.
    Do not use 0.9.7 due this bug: https://github.com/esheldon/fitsio/issues/39
    which affects building catalogue cache. 
