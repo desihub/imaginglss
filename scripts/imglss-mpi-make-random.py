@@ -15,23 +15,25 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-from imaginglss.utils       import output
+import h5py
+
 from   imaginglss             import DECALS
 
 from argparse import ArgumentParser
 
 ap = ArgumentParser()
 ap.add_argument("Nran", type=int, help="Minimum number of randoms")
-ap.add_argument("output", type=output.writer)
+ap.add_argument("output", help="File to store the randoms. Will be created." )
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
-ns.conf = DECALS(ns.conf)
+decals = DECALS(ns.conf)
 
 import numpy             as np
 from   imaginglss.model.datarelease import Footprint
-from mpi4py            import MPI
+from   imaginglss.model import product
+from   mpi4py            import MPI
 from   imaginglss.analysis    import cuts
 
 np.seterr(divide='ignore', invalid='ignore')
@@ -62,7 +64,7 @@ def fill_random(footprint, Nran, rng):
         #
         RA   = ramin + u1*(ramax-ramin)
         DEC  = 90-np.arccos(cmin+u2*(cmax-cmin))*180./np.pi
-        # Filter out those not in any bricks: only very few points remain
+        # Filter out those not in any bricks: only very few points remain 
         coord1 = footprint.filter((RA, DEC))
 
         # Are we full?
@@ -74,14 +76,13 @@ def fill_random(footprint, Nran, rng):
     return coord
 
 
-def make_random(ns, comm=MPI.COMM_WORLD):
+def make_random(decals, ns, comm=MPI.COMM_WORLD):
     """
     Does the work of making randoms.  The ns.ObjectTypee type is passed as a string.
     """
 
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
-    decals = ns.conf
     dr = decals.datarelease
     sfd= decals.sfdmap
 
@@ -109,43 +110,43 @@ def make_random(ns, comm=MPI.COMM_WORLD):
     # fill it with random points 
     coord = fill_random(footprint, myNran, rng)
 
-    dtype = np.dtype([
-        ('RA', 'f8'),
-        ('DEC', 'f8'),
-        ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
-        ])
-
-    NOISES = np.empty(len(coord[0]), dtype=dtype)
-    NOISES['RA'] = coord[0]
-    NOISES['DEC'] = coord[1]
+    randoms = np.empty(len(coord[0]), dtype=product.RandomCatalogue)
+    randoms['RA'] = coord[0]
+    randoms['DEC'] = coord[1]
 
     ns.Nran = sum(comm.allgather(len(coord[0])))
 
     cat_lim = dr.read_depths(coord, 'grz')
 
     # It's also useful to the 1 sigma limits later.
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+    randoms['INTRINSIC_NOISELEVEL'][:, :6] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+    randoms['INTRINSIC_NOISELEVEL'][:, 6:] = 0
 
-    nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
+    nanmask = np.isnan(randoms['INTRINSIC_NOISELEVEL'])
+    randoms['INTRINSIC_NOISELEVEL'][nanmask] = np.inf
 
     if comm.rank == 0:
         print('Not applying cuts for star proximity.')
 
-    NOISES  = comm.gather(NOISES)
+    randoms = comm.gather(randoms)
     if comm.rank == 0:
-        NOISES = np.concatenate(NOISES)
+        randoms = np.concatenate(randoms)
 
-        print('Total number of objects ', len(NOISES))
-        fraction = len(NOISES) * 1.0 / ns.Nran
+        print('Total number of objects ', len(randoms))
+        fraction = len(randoms) * 1.0 / ns.Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
-    return NOISES
+    return randoms
     
 if __name__ == '__main__':    
 
-    NOISES = make_random(ns)
+    randoms = make_random(decals, ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(NOISES, ns.__dict__, 'NOISES')
+        with h5py.File(ns.output, 'w') as ff:
+            ds = ff.create_dataset('_HEADER', shape=(0,))
+            for key, value in ns.__dict__.items():
+                ds.attrs[key] = value
+            for column in randoms.dtype.names:
+                ds = ff.create_dataset(column, data=randoms[column])

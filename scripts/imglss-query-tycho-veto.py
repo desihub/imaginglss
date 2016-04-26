@@ -14,10 +14,11 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import numpy as np
+import h5py
+
 from imaginglss             import DECALS
 from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import veto
-from imaginglss.utils       import output
 
 from argparse import ArgumentParser
 
@@ -34,26 +35,24 @@ Unfortunately, this script is not sufficiently smart to decide the correct TYCHO
 Therefore, no combined veto flag is generated.
 """
 )
-ap.add_argument("input", type=output.writer, 
-    help="Reads the position from the NOISES extension.")
-ap.add_argument("output", type=output.writer,
-    help="Writes the veto flags to the TYCHOVETO extension")
+ap.add_argument("catalogue", help="HDF5 catalogue file, can be either random or objects. TYCHO_VETO dataset will be added ")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
-ns.conf = DECALS(ns.conf)
+decals = DECALS(ns.conf)
 
 np.seterr(divide='ignore', invalid='ignore')
 
-def query_veto(ns):
+def query_veto(decals, ns):
     """
         calculate VETO flag for all proximity vetos defined in tycho_veto.
     """
 
-    objects = ns.input.read('NOISES')
-    RA = objects['RA']
-    DEC = objects['DEC']
+    with h5py.File(ns.catalogue, 'r') as ff:
+        RA = ff['RA'][:]
+        DEC = ff['DEC'][:]
+
     allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
     dataset = np.zeros(len(RA), dtype=
             list(zip(allvetos, ['?'] * len(allvetos)))
@@ -61,18 +60,21 @@ def query_veto(ns):
 
     for ibit, vetoname in enumerate(allvetos):
         vetotype = getattr(tycho_veto, vetoname)
-        R = vetotype(ns.conf.tycho)
-        centers = (ns.conf.tycho['RA'], ns.conf.tycho['DEC'])
+        R = vetotype(decals.tycho)
+        centers = (decals.tycho['RA'], decals.tycho['DEC'])
         mask = veto.veto((RA, DEC), centers, R)
         # if we want to combine the bits, do it here.
         # but there is no point of doing so for all tycho based proximity
         # vetos. we will assembly the full veto bitmask later in the pipeline.
         dataset[vetoname][mask] = True
-
+        print(vetoname, dataset[vetoname].sum())
     return dataset
 
 if __name__=="__main__":
 
-    VETO = query_veto(ns)
+    VETO = query_veto(decals, ns)
 
-    ns.output.write(VETO, ns.__dict__, 'TYCHOVETO')
+    with h5py.File(ns.catalogue, 'r+') as ff:
+        if 'TYCHO_VETO' in ff:
+            del ff['TYCHO_VETO']
+        ds = ff.create_dataset('TYCHO_VETO', data=VETO)

@@ -19,28 +19,29 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 import numpy as np
+import h5py
+
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import cuts
-from imaginglss.utils       import output
-
+from imaginglss.model       import product
 from argparse import ArgumentParser
 
 ap = ArgumentParser()
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
-ap.add_argument("output", type=output.writer)
+ap.add_argument("output", help="Output file name. A new object catalogue file will be created.")
 ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
 ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
-ns.conf = DECALS(ns.conf)
+decals = DECALS(ns.conf)
 
 from mpi4py import MPI
 
 np.seterr(divide='ignore', invalid='ignore')
 
-def select_objs(ns, comm=MPI.COMM_WORLD):
+def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     """
     Does the actual selection, imposing cuts on the fluxes
     """
@@ -62,7 +63,6 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         ])
 
     # Get instances of a data release and SFD dust map.
-    decals = ns.conf
     dr     = decals.datarelease
     sfd    = decals.sfdmap
     cat    = dr.catalogue
@@ -81,16 +81,15 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
         print('Rank 0 with', myend - mystart, 'items')
         print('Rank 0 selected', mask.sum(), 'items')
 
-    FLUXES = np.empty(mask.sum(), dtype=dtype1)
-    NOISES = np.empty(mask.sum(), dtype=dtype2)
-    CONFIDENCE = np.empty(mask.sum(), dtype=dtype3)
+    targets = np.empty(mask.sum(), dtype=product.ObjectCatalogue)
 
-    FLUXES['PHOTO_Z']   = -1.0
-    FLUXES['RA']   = cat[ 'RA'][mine][mask]
-    FLUXES['DEC']   = cat['DEC'][mine][mask]
+    targets['RA']   = cat[ 'RA'][mine][mask]
+    targets['DEC']   = cat['DEC'][mine][mask]
 
-    FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
-    FLUXES['DECAM_INTRINSIC_FLUX'] = (FLUX).clip(1e-15,1e15)
+    DECAM_FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
+    WISE_FLUX = cat['WISE_FLUX'][mine][mask] / cat['WISE_MW_TRANSMISSION'][mine][mask]
+    targets['INTRINSIC_FLUX'][:, :6] = (DECAM_FLUX).clip(1e-15,1e15)
+    targets['INTRINSIC_FLUX'][:, 6:] = (WISE_FLUX).clip(1e-15,1e15)
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
@@ -102,40 +101,47 @@ def select_objs(ns, comm=MPI.COMM_WORLD):
 
     # ... and extract only the objects which passed the cuts.
 
+    cat_lim = np.empty(len(targets), dtype=[
+        ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
+        ('WISE_FLUX_IVAR', cat.dtype['WISE_FLUX_IVAR']),
+        ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
+        ('WISE_MW_TRANSMISSION', cat.dtype['WISE_MW_TRANSMISSION']),
+        ])
     if ns.use_tractor_depth:
-        cat_lim = np.empty(len(FLUXES), dtype=[
-            ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
-            ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
-            ])
         cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
+        cat_lim['WISE_FLUX_IVAR'][:] = cat['WISE_FLUX_IVAR'][mine][mask]
         cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
+        cat_lim['WISE_MW_TRANSMISSION'][:] = cat['WISE_MW_TRANSMISSION'][mine][mask]
     else:
-        cat_lim = dr.read_depths((FLUXES['RA'], FLUXES['DEC']), 'grz')
+        cat_lim1 = dr.read_depths((targets['RA'], targets['DEC']), 'grz')
+        cat_lim['DECAM_DEPTH'][:] = cat_lim1['DECAM_DEPTH']
+        cat_lim['WISE_FLUX_IVAR'][:] = cat['WISE_FLUX_IVAR'][mine][mask]
+        cat_lim['DECAM_MW_TRANSMISSION'][:] = cat_lim1['DECAM_MW_TRANSMISSION']
+        cat_lim['WISE_MW_TRANSMISSION'][:] = cat['WISE_MW_TRANSMISSION'][mine][mask]
 
-    # It's also useful to store the 1 sigma limits for later
-    NOISES['RA']   = FLUXES['RA']
-    NOISES['DEC']   = FLUXES['DEC']
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+    targets['INTRINSIC_NOISELEVEL'][:, :6] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
+    targets['INTRINSIC_NOISELEVEL'][:, 6:] = (cat_lim['WISE_FLUX_IVAR'] ** -0.5 / cat_lim['WISE_MW_TRANSMISSION'])
 
-    nanmask = np.isnan(NOISES['DECAM_INTRINSIC_NOISE_LEVEL'])
-    NOISES['DECAM_INTRINSIC_NOISE_LEVEL'][nanmask] = np.inf
+    nanmask = np.isnan(targets['INTRINSIC_NOISELEVEL'])
+    targets['INTRINSIC_NOISELEVEL'][nanmask] = np.inf
 
-    CONFIDENCE['DECAM_CONFIDENCE'] = FLUXES['DECAM_INTRINSIC_FLUX'] / NOISES['DECAM_INTRINSIC_NOISE_LEVEL']
+    targets['CONFIDENCE'] = targets['INTRINSIC_FLUX'] / targets['INTRINSIC_NOISELEVEL']
 
-    FLUXES  = np.concatenate(comm.allgather(FLUXES))
-    NOISES  = np.concatenate(comm.allgather(NOISES))
-    CONFIDENCE = np.concatenate(comm.allgather(CONFIDENCE))
+    targets = np.concatenate(comm.allgather(targets))
 
     if comm.rank == 0:
-        print('Total number of objects selected', len(FLUXES))
+        print('Total number of objects selected', len(targets))
 
-    return FLUXES, NOISES, CONFIDENCE
+    return targets
 
 if __name__=="__main__":
 
-    FLUXES, NOISES, CONFIDENCE = select_objs(ns)
+    targets = select_objs(decals, ns)
 
     if MPI.COMM_WORLD.rank == 0:
-        ns.output.write(FLUXES, ns.__dict__, 'FLUXES')
-        ns.output.write(NOISES, ns.__dict__, 'NOISES')
-        ns.output.write(CONFIDENCE, ns.__dict__, 'CONFIDENCE')
+        with h5py.File(ns.output, 'w') as ff:
+            ds = ff.create_dataset('_HEADER', shape=(0,))
+            for key, value in ns.__dict__.items():
+                ds.attrs[key] = value
+            for column in targets.dtype.names:
+                ds = ff.create_dataset(column, data=targets[column])

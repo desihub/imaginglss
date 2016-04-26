@@ -1,24 +1,27 @@
 
 from __future__ import print_function
 import numpy as np
+import h5py
 
 from imaginglss             import DECALS
+from imaginglss.model             import product
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
+from imaginglss.analysis    import tycho_veto
 
 from argparse import ArgumentParser
 
 ap = ArgumentParser()
 ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
 
-ap.add_argument("output", type=output.writer,
-        help="Output file name. will write to the FC extension")
-ap.add_argument("objects", type=output.writer,
-        help="Object file name to build the model. NOISES and FLUXES extensions are used")
-ap.add_argument("noises", type=output.writer,
-        help="Input file name to query the completeness for NOISES extension is used.")
+ap.add_argument("objects", 
+        help="object catalogue for building the completeness model.")
+ap.add_argument("query", 
+        help="catalogue to query completeness")
 
+allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
+ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None)
 ap.add_argument("--sigma-z", type=float, default=3.0)
 ap.add_argument("--sigma-g", type=float, default=5.0)
 ap.add_argument("--sigma-r", type=float, default=5.0)
@@ -27,30 +30,51 @@ ap.add_argument("--conf", default=None,
         help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
 ns = ap.parse_args()
-ns.conf = DECALS(ns.conf)
+decals = DECALS(ns.conf)
 
 np.seterr(divide='ignore', invalid='ignore')
 
+def query_completeness(decals, ns):
+    with h5py.File(ns.objects, 'r') as ff:
+        FLUX = ff['INTRINSIC_FLUX'][:]
+        NOISE = ff['INTRINSIC_NOISELEVEL'][:]
+        if ns.use_tycho_veto is not None:
+            veto = ff['TYCHO_VETO'][ns.use_tycho_veto][:]
+            FLUX = FLUX[~veto]
+            NOISE = NOISE[~veto]
 
-def query_completeness(ns):
-    object_fluxes = ns.objects.read('FLUXES')['DECAM_INTRINSIC_FLUX']
-    object_noises = ns.objects.read('NOISES')['DECAM_INTRINSIC_NOISE_LEVEL']
     confidence = {
         'z': ns.sigma_z,
         'r': ns.sigma_r,
         'g': ns.sigma_g,
         }
-    model = completeness.CompletenessEstimator(ns.conf.datarelease, ns.ObjectType, object_fluxes, object_noises, confidence)
 
-    noises = ns.noises.read('NOISES')['DECAM_INTRINSIC_NOISE_LEVEL']
+    bands = product.bands
+    # a list of active_bands in integer indices
+    active_bands = getattr(targetselection, ns.ObjectType).bands
+    active_conf  = np.array([confidence[band] for band in active_bands])
+    active_bands = [bands[band] for band in active_bands]
+    
+    active_flux = FLUX[:, active_bands]
 
-    dtype = [ ('FRACTION_COMPLETENESS', 'f8')]
-    FC = np.empty(len(noises), dtype=dtype)
-    FC['FRACTION_COMPLETENESS'][:] = model(noises)
+    active_noise = active_conf[None, :] * NOISE[:, active_bands]
+
+    model = completeness.CompletenessEstimator(active_flux, active_noise, active_conf)
+
+    with h5py.File(ns.objects, 'r') as ff:
+        NOISE = ff['INTRINSIC_NOISELEVEL'][:]
+
+    FC = model(NOISE[:, active_bands])
+
     return FC
 
 if __name__=="__main__":
 
-    FC = query_completeness(ns)
-
-    ns.output.write(FC, ns.__dict__, 'FC')
+    FC = query_completeness(decals, ns)
+    print("Max FC = %g, MIN FC= %g" % (FC.max(), FC.min()))
+    with h5py.File(ns.query, 'r+') as ff:
+        if 'COMPLETENESS' in ff:
+            del ff['COMPLETENESS']
+        ds = ff.create_dataset('COMPLETENESS', data=FC)
+        for k, v in ns.__dict__.items():
+            ds.attrs[k] = v

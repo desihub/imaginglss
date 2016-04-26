@@ -2,27 +2,20 @@ from __future__ import print_function
 import numpy as np
 from imaginglss.analysis    import targetselection
 
-def CompletenessEstimator(datarelease, objecttype,
-    fluxes, noises, confidence={'r': 5.0, 'g': 5.0, 'z': 3.0}):
+def CompletenessEstimator(fluxes, noises, confidence):
     """
         Create a completeness estimator for an object type,
         based on the object type, intrinsic fluxes and intrinsic noise levels.
 
         Parameters
         ----------
-        datarelease : 
-            a data release object, where we look up the translation between
-            band name and band index.
-        objectype : string
-            type of object. We use this string to look up the target definition
-            and the involved bands in the definition.
-        fluxes : array_like (N, 6)
+        fluxes : array_like (N, Nbands)
             intrinsic fluxes from DECAM; usually calculated by imglss-mpi-select-objects.py.
             in nano-maggies.
-        noises : array_like (N, 6)
+        noises : array_like (N, Nbands)
             intrinsic 1-sigma noise level from DECAM; usually calculated by imglss-mpi-select-objects.py,
             in nano-maggies.
-        confidence : dictionary, optional
+        confidence : array_like (Nbands)
             confidence (in sigma) for each band.
     """
 
@@ -35,16 +28,6 @@ def CompletenessEstimator(datarelease, objecttype,
     # FIXME: @ekitanidis what about adding a link to your talk slides 
     # explaining this?
 
-    fluxcut = getattr(targetselection, objecttype)
-
-    fluxes = np.array([
-        fluxes[:, datarelease.bands[band]]
-        for band in fluxcut.bands]).T
-
-    noises = np.array([
-        confidence[band] * noises[:, datarelease.bands[band]]
-        for band in fluxcut.bands]).T
-
     # This will be the 100% completeness limit for the given confidence
     lim = fluxes.min(axis=0)
 
@@ -54,9 +37,7 @@ def CompletenessEstimator(datarelease, objecttype,
     root = tree.root
 
     def fcmodelfunc(noises):
-        noises = np.array([
-            confidence[band] * noises[:, datarelease.bands[band]]
-            for band in fluxcut.bands]).T
+        noises = confidence[None, :] * noises
         seen = root.integrate(noises, np.inf)
         mask = (noises <= lim).all(axis=-1)
 
