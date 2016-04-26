@@ -19,6 +19,10 @@ The rest of the steps are very light weight and the head nodes can easily handle
 We will cover them in the following sections. The examples are based off our
 working configuration at NERSC.
 
+The source file `runtests.sh` in the root directory 
+contains an example of the full pipeline for producing randoms
+and objects of the QSO target type.
+
 Building the Cache
 ------------------
 Before we start using ImagingLSS, it is crucial to build the catalogue cache. 
