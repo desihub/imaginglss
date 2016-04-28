@@ -31,9 +31,9 @@ from imaginglss.utils.npyquery import Max, Min
 LRG =  BRICK_PRIMARY != 0
 LRG &= ZFLUX > 10**((22.5-20.46)/2.5)
 LRG &= ZFLUX > RFLUX * 10**(1.5/2.5)
-LRG &= W1FLUX > 10**((22.5-19.35)/2.5)
 LRG &= W1FLUX * RFLUX ** (1.8-1) > ZFLUX**1.8 * 10**(-1.0/2.5)
-LRG.bands = 'rz'
+LRG &= W1FLUX > 0
+LRG.bands = 'z'
 
 ELG =  BRICK_PRIMARY != 0
 ELG &= RFLUX > 10**((22.5-23.4)/2.5)
