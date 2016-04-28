@@ -58,12 +58,22 @@ ImagingLSS is light on dependency.
    We still do support astropy.io.fits, but the use of astropy.io.fits is not
    recommended.
  
+ - kdcount for spatial queries.
+   Some of the scripts in imaginglss, including the completeness estimator is build with
+   kdcount. Install with
 
+   .. code-block:: bash
+      
+      pip install -U --no-deps --user kdcount
+
+   
 On parallel HPC systems where files are hosted in a shared file system, 
 the time it takes to launch a Python application may fluctuate badly. 
 This applies to ImagingLSS, too. 
-At NERSC, we set up python-mpi-bcast to eliminate this issue https://github.com/rainwoodman/python-mpi-bcast .
-This will be noted in the full examples.
+At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to 
+https://github.com/rainwoodman/python-mpi-bcast .
+
+The usage of python-mpi-bcast will be noted in the NERSC examples.
 
 Data Dependency
 ---------------
@@ -71,12 +81,12 @@ Data Dependency
 Besides the DECALS catalogue and coadd image data, ImagingLSS also needs 
 
  - SFD98 dust map [todo give a reference]
- - Tycho star catalogue [http://slac.stanford.edu/~erykoff/catalogs/tycho.fit]
+ - Tycho2 star catalogue 
 
 We provide mirrors of these files at
     
  - http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
- - http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz
+ - http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz
 
 Location of Data Release
 ------------------------
@@ -94,14 +104,17 @@ Here is an example configuration file (that works on Edison):
     decals_cache = "/project/projectdirs/m779/imaginglss/dr2/cache"
     decals_release = "DR2"
     dust_dir = "/project/projectdirs/desi/software/edison/dust/v0_0/"
-    tycho_dir = "/project/projectdirs/m779/imaginglss/tycho.fit"
+    tycho_dir = "/project/projectdirs/m779/imaginglss/tycho2.fit"
     
 DR2 at NERSC
 ------------
 
 ImagingLSS has been prepackaged for DR2 at Edison in the following locations.
 
-These commands will work in JupyterHub: https://jupyter.nersc.gov .
+After imaginglss is installed, these commands will work in JupyterHub: https://jupter.nersc.gov .
+
+For installation on the JupyterHub service at NERSC, please refer to the notebook example at:
+https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb
 
 .. code-block:: python
 
@@ -127,9 +140,9 @@ The SFD98 file is somewhat larger, on the order of 100 MB.
 
 http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz 
 
-The Tycho star catalogue is required for target selelection and completeness masks.
+The Tycho2 star catalogue is required for target selelection and completeness masks.
 
-http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz 
+http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz 
 
 To deploy this dataset with the source code tree, 
 see the following steps.
@@ -145,8 +158,8 @@ see the following steps.
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
     tar -xzvf SFD98.tar.gz
 
-    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz
-    tar -xzvf tycho.tar.gz
+    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz
+    tar -xzvf tycho2.tar.gz
 
     cd -
 
