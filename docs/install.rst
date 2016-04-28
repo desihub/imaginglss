@@ -111,7 +111,7 @@ DR2 at NERSC
 
 ImagingLSS has been prepackaged for DR2 at Edison in the following locations.
 
-After imaginglss is installed, these commands will work in JupyterHub: https://jupter.nersc.gov .
+After imaginglss is installed, these commands will work in JupyterHub: https://jupyter.nersc.gov .
 
 For installation on the JupyterHub service at NERSC, please refer to the notebook example at:
 https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb
