@@ -101,7 +101,7 @@ DR2 at NERSC
 
 ImagingLSS has been prepackaged for DR2 at Edison in the following locations.
 
-These commands will work in JupyterHub: https://jupter.nersc.gov .
+These commands will work in JupyterHub: https://jupyter.nersc.gov .
 
 .. code-block:: python
 
