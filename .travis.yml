@@ -33,7 +33,7 @@ before_script:
       mkdir -p testdata;
       pushd testdata;
       curl https://s3-us-west-1.amazonaws.com/imaginglss/SFD98.tar.gz | tar -xz;
-      curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho.tar.gz | tar -xz;
+      curl https://s3-us-west-1.amazonaws.com/imaginglss/tycho2.tar.gz | tar -xz;
       curl https://s3-us-west-1.amazonaws.com/imaginglss/dr2-mini.tar.gz | tar -xz;
       ls testdata ;
       ls testdata/dr2-mini;
