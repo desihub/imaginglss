@@ -25,7 +25,7 @@ The package only declares the dependency for the data model.
 
 However, some basic packages need to be set up before using the data pipeline.
 We also need to tell ImagingLSS the location of files. These post-installation
-steps are documented in the `Data Dependency` section.
+steps are documented in the ``Data Dependency`` section.
 
 Dependency
 ----------
