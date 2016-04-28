@@ -25,9 +25,9 @@ The package only declares the dependency for the data model.
 
 However, some basic packages need to be set up before using the data pipeline.
 We also need to tell ImagingLSS the location of files. These post-installation
-steps are documented in the following section.
+steps are documented in the `Data Dependency` section.
 
-Depencency
+Dependency
 ----------
 
 ImagingLSS is light on dependency.
@@ -38,10 +38,10 @@ ImagingLSS is light on dependency.
    To check the version of numpy, use
 
    .. code-block:: bash
-    
+
        python -c 'import numpy; print numpy.version.version'
 
- - mpi4py, for the parallel infrastructure. 
+ - mpi4py, for the parallel infrastructure.
 
  - h5py for accessing HDF5 files. HDF5 is the internal data storage format of the
    data pipeline. The final data product is plain text.
@@ -63,10 +63,10 @@ ImagingLSS is light on dependency.
    kdcount. Install with
 
    .. code-block:: bash
-      
+
       pip install -U --no-deps --user kdcount
 
-   
+
 On parallel HPC systems where files are hosted in a shared file system, 
 the time it takes to launch a Python application may fluctuate badly. 
 This applies to ImagingLSS, too. 
@@ -84,7 +84,7 @@ Besides the DECALS catalogue and coadd image data, ImagingLSS also needs
  - Tycho2 star catalogue 
 
 We provide mirrors of these files at
-    
+
  - http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
  - http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz
 
