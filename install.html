@@ -100,13 +100,21 @@ For now, you can install the rc2 prerelease of fitsio.</p>
 <p>We still do support astropy.io.fits, but the use of astropy.io.fits is not
 recommended.</p>
 </li>
+<li><p class="first">kdcount for spatial queries.
+Some of the scripts in imaginglss, including the completeness estimator is build with
+kdcount. Install with</p>
+<div class="highlight-bash"><div class="highlight"><pre>pip install -U --no-deps --user kdcount
+</pre></div>
+</div>
+</li>
 </ul>
 </div></blockquote>
 <p>On parallel HPC systems where files are hosted in a shared file system,
 the time it takes to launch a Python application may fluctuate badly.
 This applies to ImagingLSS, too.
-At NERSC, we set up python-mpi-bcast to eliminate this issue <a class="reference external" href="https://github.com/rainwoodman/python-mpi-bcast">https://github.com/rainwoodman/python-mpi-bcast</a> .
-This will be noted in the full examples.</p>
+At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to
+<a class="reference external" href="https://github.com/rainwoodman/python-mpi-bcast">https://github.com/rainwoodman/python-mpi-bcast</a> .</p>
+<p>The usage of python-mpi-bcast will be noted in the NERSC examples.</p>
 </div>
 <div class="section" id="data-dependency">
 <h2>Data Dependency<a class="headerlink" href="#data-dependency" title="Permalink to this headline">¶</a></h2>
@@ -114,14 +122,14 @@ This will be noted in the full examples.</p>
 <blockquote>
 <div><ul class="simple">
 <li>SFD98 dust map [todo give a reference]</li>
-<li>Tycho star catalogue [<a class="reference external" href="http://slac.stanford.edu/~erykoff/catalogs/tycho.fit">http://slac.stanford.edu/~erykoff/catalogs/tycho.fit</a>]</li>
+<li>Tycho2 star catalogue</li>
 </ul>
 </div></blockquote>
 <p>We provide mirrors of these files at</p>
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz</a></li>
-<li><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz</a></li>
+<li><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz</a></li>
 </ul>
 </div></blockquote>
 </div>
@@ -136,14 +144,16 @@ or by setting the environment variable <code class="code docutils literal"><span
 <span class="n">decals_cache</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/m779/imaginglss/dr2/cache&quot;</span>
 <span class="n">decals_release</span> <span class="o">=</span> <span class="s">&quot;DR2&quot;</span>
 <span class="n">dust_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/desi/software/edison/dust/v0_0/&quot;</span>
-<span class="n">tycho_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/m779/imaginglss/tycho.fit&quot;</span>
+<span class="n">tycho_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/m779/imaginglss/tycho2.fit&quot;</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="dr2-at-nersc">
 <h2>DR2 at NERSC<a class="headerlink" href="#dr2-at-nersc" title="Permalink to this headline">¶</a></h2>
 <p>ImagingLSS has been prepackaged for DR2 at Edison in the following locations.</p>
-<p>These commands will work in JupyterHub: <a class="reference external" href="https://jupyter.nersc.gov">https://jupyter.nersc.gov</a> .</p>
+<p>After imaginglss is installed, these commands will work in JupyterHub: <a class="reference external" href="https://jupter.nersc.gov">https://jupter.nersc.gov</a> .</p>
+<p>For installation on the JupyterHub service at NERSC, please refer to the notebook example at:
+<a class="reference external" href="https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb">https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb</a></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">imaginglss</span> <span class="kn">import</span> <span class="n">DECALS</span>
 <span class="n">decals</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">(</span><span class="s">&#39;/global/project/projectdirs/m779/imaginglss/dr2.conf.py&#39;</span><span class="p">)</span>
 
@@ -161,8 +171,8 @@ we provide a small sampling data set that contains a few bricks from DR2.</p>
 <p>The SFD98 dust map is required for target selelection and completeness masks
 The SFD98 file is somewhat larger, on the order of 100 MB.</p>
 <p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz</a></p>
-<p>The Tycho star catalogue is required for target selelection and completeness masks.</p>
-<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz</a></p>
+<p>The Tycho2 star catalogue is required for target selelection and completeness masks.</p>
+<p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz</a></p>
 <p>To deploy this dataset with the source code tree,
 see the following steps.</p>
 <div class="highlight-bash"><div class="highlight"><pre>mkdir testdata
@@ -174,8 +184,8 @@ tar -xzvf dr2-mini.tar.gz
 wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
 tar -xzvf SFD98.tar.gz
 
-wget http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho.tar.gz
-tar -xzvf tycho.tar.gz
+wget http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz
+tar -xzvf tycho2.tar.gz
 
 <span class="nb">cd</span> -
 </pre></div>
