@@ -63,5 +63,5 @@ with h5py.File(ns.catalogue, 'r') as ff:
         l.append(ff['INTRINSIC_NOISELEVEL'][:, iband][mask])
 
 with open(ns.output, 'wb') as ff:
-    ff.write(bytes('\t'.join(h) + '\n', encoding='utf8'))
+    ff.write(('# ' + '\t'.join(h) + '\n').encode())
     np.savetxt(ff, np.array(l).T, fmt='%12f')
