@@ -59,7 +59,8 @@ In this section, we document the data pipeline. There are the steps:</p>
 <ul class="simple">
 <li>Building the cache</li>
 <li>Generating the object catalogue</li>
-<li>Generating the random sampling of the mask</li>
+<li>Generating the random sampling of the mask,
+or Querying depth for given RA DEC positions</li>
 <li>Applying veto based on proximity to stars</li>
 <li>Estimating completeness for randoms and objects</li>
 <li>Assemble and export final text files</li>
@@ -123,16 +124,17 @@ that we will use in the later stages of the pipeline.</p>
 <p>The target types are defined at <a class="reference external" href="http://desi.lbl.gov/trac/wiki/TargetSelection">http://desi.lbl.gov/trac/wiki/TargetSelection</a></p>
 <p>The output is the RA DEC and magnitudes of objects.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-select-objects.py <span class="o">[</span>-h<span class="o">]</span>
-                      <span class="o">[</span>--conf CONF<span class="o">]</span>
-                      <span class="o">{</span>QSO,LRG,ELG,BGS<span class="o">}</span> output
+<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-select-objects.py [-h] [--use-tractor-depth] [--conf CONF]
+                                    {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS} output
 
 positional arguments:
-  <span class="o">{</span>QSO,LRG,ELG,BGS<span class="o">}</span>
-  output
+  {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS}
+  output                Output file name. A new object catalogue file will be
+                        created.
 
 optional arguments:
-  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -h, --help            show this help message and exit
+  --use-tractor-depth   Use Tractor&#39;s Depth in the catalogue, very fast!
   --conf CONF           Path to the imaginglss config file, default is from
                         DECALS_PY_CONFIG
 </pre></div>
@@ -208,6 +210,29 @@ export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
 # change conf to your imaginglss configuration file
 srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 6000000 QSO-random.hdf5 --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+</pre></div>
+</div>
+<p>Sometimes the position of a random catalogue is already specified. In this case we provide
+another script, <cite>imglss-mpi-query-depth.py</cite>, to query the depth / noise level of the deccals survey of these points.
+The RA and DEC of these points must be stored as two datasets name &#8216;RA&#8217; and &#8216;DEC&#8217; in a HDF5 file. Here is the help of
+the script:</p>
+<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-mpi-query-depth.py [-h] [--conf CONF] query
+
+Query Depth from DECALS data for input RA DEC of points. The input must be
+saved in a HDF5 with two datasets &#39;RA&#39; and &#39;DEC&#39;. The output will be written
+in the same file as INTRINSIC_NOISELEVEL data set. To lookup the columns, use
+the dictionary in `imaginglss.model.dataproduct.bands`. The output of this
+script can be directly fed into imglss-query-completeness.py as the query
+input.
+
+positional arguments:
+  query        An HDF5 file with RA and DEC dataset, the position of to query
+               the depth.
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --conf CONF  Path to the imaginglss config file, default is from
+               DECALS_PY_CONFIG
 </pre></div>
 </div>
 </div>
