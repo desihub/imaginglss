@@ -4,7 +4,7 @@ import numpy as np
 import h5py
 
 from imaginglss             import DECALS
-from imaginglss.model             import product
+from imaginglss.model             import dataproduct
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
@@ -49,7 +49,7 @@ def query_completeness(decals, ns):
         'g': ns.sigma_g,
         }
 
-    bands = product.bands
+    bands = dataproduct.bands
     # a list of active_bands in integer indices
     active_bands = getattr(targetselection, ns.ObjectType).bands
     active_conf  = np.array([confidence[band] for band in active_bands])

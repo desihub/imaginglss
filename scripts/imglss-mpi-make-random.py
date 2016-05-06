@@ -32,7 +32,7 @@ decals = DECALS(ns.conf)
 
 import numpy             as np
 from   imaginglss.model.datarelease import Footprint
-from   imaginglss.model import product
+from   imaginglss.model import dataproduct
 from   mpi4py            import MPI
 from   imaginglss.analysis    import cuts
 
@@ -110,7 +110,7 @@ def make_random(decals, ns, comm=MPI.COMM_WORLD):
     # fill it with random points 
     coord = fill_random(footprint, myNran, rng)
 
-    randoms = np.empty(len(coord[0]), dtype=product.RandomCatalogue)
+    randoms = np.empty(len(coord[0]), dtype=dataproduct.RandomCatalogue)
     randoms['RA'] = coord[0]
     randoms['DEC'] = coord[1]
 

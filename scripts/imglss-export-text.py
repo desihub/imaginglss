@@ -3,7 +3,7 @@ import numpy as np
 
 from   imaginglss             import DECALS
 from imaginglss.analysis import tycho_veto
-from imaginglss.model import product
+from imaginglss.model import dataproduct
 
 from argparse import ArgumentParser
 
@@ -15,7 +15,7 @@ ap.add_argument("--conf", default=None,
 
 allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
 ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None, help="Apply tycho veto, must run imglss-query-tycho-veto first!")
-ap.add_argument("--bands", nargs='+', type=str, choices=product.bands.keys(), default=['r', 'g', 'z'], help="Bands to export in the text file")
+ap.add_argument("--bands", nargs='+', type=str, choices=dataproduct.bands.keys(), default=['r', 'g', 'z'], help="Bands to export in the text file")
 ap.add_argument("--sigma-z", type=float, default=3.0, help="apply a confidence cut in z")
 ap.add_argument("--sigma-g", type=float, default=5.0, help="apply a confidence cut in g")
 ap.add_argument("--sigma-r", type=float, default=5.0, help="apply a confidence cut in r")
@@ -32,7 +32,7 @@ confcut = {
 def apply_confcut(confidence, confcut):
     result = np.ones(len(confidence), dtype='?')
     for band in confcut:
-        iband = product.bands[band]
+        iband = dataproduct.bands[band]
         result &= confidence[:, iband] > confcut[band]
     return result
 
@@ -63,7 +63,7 @@ with h5py.File(ns.catalogue, 'r') as ff:
     l = [ra, dec, fc]
 
     for band in ns.bands:
-        iband = product.bands[band]
+        iband = dataproduct.bands[band]
         if 'INTRINSIC_FLUX' in ff:
             # this is a catalogue, dump flux as well as noise
             h.append(band + 'flux')

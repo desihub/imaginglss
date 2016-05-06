@@ -24,7 +24,7 @@ import h5py
 from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import cuts
-from imaginglss.model       import product
+from imaginglss.model       import dataproduct
 from argparse import ArgumentParser
 
 ap = ArgumentParser()
@@ -81,7 +81,7 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
         print('Rank 0 with', myend - mystart, 'items')
         print('Rank 0 selected', mask.sum(), 'items')
 
-    targets = np.empty(mask.sum(), dtype=product.ObjectCatalogue)
+    targets = np.empty(mask.sum(), dtype=dataproduct.ObjectCatalogue)
 
     targets['RA']   = cat[ 'RA'][mine][mask]
     targets['DEC']   = cat['DEC'][mine][mask]
