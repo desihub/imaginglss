@@ -67,7 +67,7 @@ QSOd &= Max(SHAPEDEV_R, SHAPEEXP_R) < 0.5
 QSOd.bands = 'rgz'
 
 BGS =  BRICK_PRIMARY != 0
-BGS &= TYPE != 'PSF'
+BGS &= TYPE != 'PSF '
 BGS &= RFLUX > 10**((22.5-19.5)/2.5)
 BGS.bands = 'r'
 
