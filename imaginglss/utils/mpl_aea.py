@@ -39,7 +39,7 @@ from matplotlib.patches import Rectangle, Polygon
 from matplotlib.path import Path
 from matplotlib.collections import PolyCollection
 from matplotlib.ticker import NullLocator, Formatter, FixedLocator, MaxNLocator
-from matplotlib.transforms import Affine2D, BboxTransformTo, Transform, blended_transform_factory
+from matplotlib.transforms import Affine2D, BboxTransformTo, Transform, blended_transform_factory, Bbox
 from matplotlib.projections import register_projection
 import matplotlib.spines as mspines
 import matplotlib.axis as maxis
@@ -447,7 +447,7 @@ class SkymapperAxes(Axes):
             w[mask] /= N[mask]
         else:
             mask = w > 0
-
+        
         return w, mask, self.mapshow(w, mask, nest=False, **kwargs)
 
     def mapshow(self, map, mask=None, nest=False, **kwargs):
@@ -460,12 +460,13 @@ class SkymapperAxes(Axes):
         defaults.update(kwargs)
         if mask is None:
             mask = map == map
-        v = _boundary(mask, nest)
-        coll = PolyCollection(v, array=map[mask], 
+
+        coll = HealpixCollection(map, mask, 
                 transform=self.transData, **defaults)
         coll.set_clim(vmin=vmin, vmax=vmax)
         self.add_collection(coll)
         self._sci(coll)
+        self.autoscale_view(tight=True)
         return coll
 
     def format_coord(self, lon, lat):
@@ -746,6 +747,23 @@ class AlbersEqualAreaAxes(SkymapperAxes):
             return self.inverted
 
         inverted.__doc__ = Transform.inverted.__doc__
+
+class HealpixCollection(PolyCollection):
+    def __init__(self, map, mask, nest=False, **kwargs):
+        self.v = _boundary(mask, nest)
+        PolyCollection.__init__(self, self.v, array=map[mask], **kwargs)
+
+    def get_datalim(self, transData):
+        """ The data lim of a healpix collection.
+        """ 
+        # FIXME: it is currently set to the full sky.
+        #    This could have been trimmed down. 
+        #    We want to set xlim smartly such that the largest
+        #    empty region is chopped off. I think it is possible, by
+        #    doing a histogram in ra, for example. 
+        vmin = (0, -90)
+        vmax = (360, 90)
+        return Bbox((vmin, vmax))
 
 # a few helper functions talking to healpy/healpix.
 def _boundary(mask, nest=False):
