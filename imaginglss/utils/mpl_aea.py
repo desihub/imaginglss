@@ -649,7 +649,8 @@ class AlbersEqualAreaAxes(SkymapperAxes):
                 rt = np.array([
                        rho*np.sin(theta),
                        self.rho0 - rho*np.cos(theta)]).T
-            if np.isnan(rt).any(): raise ValueError('abc')
+            #if np.isnan(rt).any(): 
+            #    raise ValueError('nan occured : ll =%s' % (str(ll)))
             return rt
 
         # This is where things get interesting.  With this projection,
