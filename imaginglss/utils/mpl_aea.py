@@ -37,7 +37,7 @@ import matplotlib
 from matplotlib.axes import Axes
 from matplotlib.patches import Rectangle, Polygon
 from matplotlib.path import Path
-from matplotlib.collections import PolyCollection
+from matplotlib.collections import PolyCollection, Collection, allow_rasterization
 from matplotlib.ticker import NullLocator, Formatter, FixedLocator, MaxNLocator
 from matplotlib.transforms import Affine2D, BboxTransformTo, Transform, blended_transform_factory, Bbox
 from matplotlib.projections import register_projection
@@ -447,7 +447,7 @@ class SkymapperAxes(Axes):
             w[mask] /= N[mask]
         else:
             mask = w > 0
-        return w, mask, self.mapshow(w, mask, nest=False, **kwargs)
+        return w, mask, show(w, mask, nest=False, **kwargs)
 
     def histmap(self, ra, dec, weights=None, nside=32, perarea=False, mean=False, range=None, **kwargs):
         return self._histmap(self.mapshow, ra, dec, weights, nside, perarea, mean, range, **kwargs)
@@ -455,7 +455,7 @@ class SkymapperAxes(Axes):
     def histcontour(self, ra, dec, weights=None, nside=32, perarea=False, mean=False, range=None, **kwargs):
         return self._histmap(self.mapcontour, ra, dec, weights, nside, perarea, mean, range, **kwargs)
 
-    def mapshow(self, map, mask=None, nest=False, **kwargs):
+    def mapshow(self, map, mask=None, nest=False, shading='flat', **kwargs):
         """ Display a healpix map """
         vmin = kwargs.pop('vmin', None)
         vmax = kwargs.pop('vmax', None)
@@ -466,8 +466,12 @@ class SkymapperAxes(Axes):
         if mask is None:
             mask = map == map
 
-        coll = HealpixCollection(map, mask, 
-                transform=self.transData, **defaults)
+        if shading == 'flat':
+            coll = HealpixCollection(map, mask, 
+                    transform=self.transData, **defaults)
+        else:
+            raise TypeError('gouraud does not work. We do not know colors on the vertices')
+
         coll.set_clim(vmin=vmin, vmax=vmax)
         self.add_collection(coll)
         self._sci(coll)
@@ -475,7 +479,7 @@ class SkymapperAxes(Axes):
         return coll
 
     def mapcontour(self, map, mask=None, nest=False, **kwargs):
-        """ Display a healpix map """
+        """ Display a healpix map as coutours. This is approximate. """
         if mask is None:
             mask = map == map
 
@@ -767,7 +771,8 @@ class AlbersEqualAreaAxes(SkymapperAxes):
 
 class HealpixCollection(PolyCollection):
     def __init__(self, map, mask, nest=False, **kwargs):
-        self.v = self._boundary(mask, nest)
+        nside = healpix.npix2nside(len(mask))
+        self.v = pix2quad(nside, mask.nonzero()[0], nest)
         PolyCollection.__init__(self, self.v, array=map[mask], **kwargs)
 
     def get_datalim(self, transData):
@@ -782,36 +787,66 @@ class HealpixCollection(PolyCollection):
         vmax = (360, 90)
         return Bbox((vmin, vmax))
 
-    # a few helper functions talking to healpy/healpix.
-    def _boundary(self, mask, nest=False):
-        """Generate healpix vertices for pixels where mask is True
+# a few helper functions talking to healpy/healpix.
+def pix2quad(nside, pix, nest=False):
+    """Generate healpix quad vertices for pixels where mask is True
 
-        Args:
-            pix: list of pixel numbers
-            nest: nested or not
-            nside: HealPix nside
+    Args:
+        pix: list of pixel numbers
+        nest: nested or not
+        nside: HealPix nside
 
-        Returns:
-            vertices
-            vertices: (N,4,2), RA/Dec coordinates of 4 boundary points of cell
-        """
+    Returns:
+        vertices
+        vertices: (N,4,2), RA/Dec coordinates of 4 boundary points of cell
+    """
 
-        pix = mask.nonzero()[0]
+    pix = np.asarray(pix)
+    vertices = np.zeros((pix.size, 4, 2))
 
-        nside = healpix.npix2nside(len(mask))
+    theta, phi = healpix.vertices(nside, pix)
+    theta = np.degrees(theta)
+    phi = np.degrees(phi)
+    diff = phi - phi[:, 0][:, None] 
+    diff[diff > 180] -= 360 
+    diff[diff < -180] += 360
+    phi = phi[:, 0][:, None] + diff
+    vertices[:,:,0] = phi
+    vertices[:,:,1] = 90.0 - theta
 
-        vertices = np.zeros((pix.size, 4, 2))
-        theta, phi = healpix.vertices(nside, pix)
-        theta = np.degrees(theta)
-        phi = np.degrees(phi)
-        diff = phi - phi[:, 0][:, None]
-        diff[diff > 180] -= 360
-        diff[diff < -180] += 360
-        phi = phi[:, 0][:, None] + diff
-        vertices[:,:,0] = phi
-        vertices[:,:,1] = 90.0 - theta
+    return vertices
 
-        return vertices
+def pix2tri(nside, pix, nest=False):
+    """Generate healpix quad vertices for pixels where mask is True
+
+    Args:
+        pix: list of pixel numbers
+        nest: nested or not
+        nside: HealPix nside
+
+    Returns:
+        vertices
+        vertices: (N,3,2,2), RA/Dec coordinates of 3 boundary points of 2 triangles
+    """
+
+    # each pixel contains 2 triangles.
+    pix = np.asarray(pix)
+    vertices = np.zeros((pix.size, 2, 3, 2))
+
+    theta, phi = healpix.vertices(nside, pix)
+    theta = np.degrees(theta)
+    phi = np.degrees(phi)
+    diff = phi - phi[:, 0][:, None]
+    diff[diff > 180] -= 360
+    diff[diff < -180] += 360
+    phi = phi[:, 0][:, None] + diff
+
+    vertices[:, 0, :, 0] = phi[:, [2, 1, 0]]
+    vertices[:, 0, :, 1] = 90.0 - theta[:, [2, 1, 0]]
+    vertices[:, 1, :, 0] = phi[:, [0, 3, 2]]
+    vertices[:, 1, :, 1] = 90.0 - theta[:, [0, 3, 2]]
+
+    return vertices
 
 def pix2radec(nside, pix):
     theta, phi = healpix.pix2ang(nside, pix)
@@ -1091,16 +1126,23 @@ if __name__ == '__main__':
     ax.axhline(-20)
     ax.axvline(140)
 
-    ra = np.random.uniform(size=1000, low=0, high=360)
-    dec = np.random.uniform(size=1000, low=-90, high=90)
-    ax.histmap(ra, dec, nside=8)
+    ax.plot(*pix2tri(8, [104, 105, 106]).reshape(-1, 2).T, color='k')
+
+    ra = np.random.uniform(size=1000, low=30, high=60)
+    dec = np.random.uniform(size=1000, low=-50, high=50)
+    ax.histmap(ra, dec, nside=32, weights=ra * dec, mean=True)
+
+    ra = np.random.uniform(size=1000, low=120, high=160)
+    dec = np.random.uniform(size=1000, low=-50, high=50)
+    ax.histcontour(ra, dec, weights=ra * dec, nside=32, mean=True)
 
     ax.tick_params(labelright=True, labeltop=True)
+
+    ax.tripcolor(ra, dec, ra*dec)
+    fig.colorbar(ax._gci())
 
     ax.set_meridian_grid(30)
     ax.set_parallel_grid(30)
     ax.grid()
-    ax.tripcolor(ra, dec, ra)
-    fig.colorbar(ax._gci())
     canvas = FigureCanvasAgg(fig)
     fig.savefig('xxx.png')
