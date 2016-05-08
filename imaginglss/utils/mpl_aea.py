@@ -435,8 +435,8 @@ class SkymapperAxes(Axes):
         Axes.set_ylim(self, *args, **kwargs)
         self._update_affine()
 
-    def histmap(self, ra, dec, weights=None, nside=32, perarea=False, mean=False, **kwargs):
-        r = histogrammap(ra, dec, weights, nside, perarea=perarea)
+    def _histmap(self, show, ra, dec, weights=None, nside=32, perarea=False, mean=False, range=None, **kwargs):
+        r = histogrammap(ra, dec, weights, nside, perarea=perarea, range=range)
 
         if weights is not None:
             w, N = r
@@ -449,21 +449,22 @@ class SkymapperAxes(Axes):
             mask = w > 0
         return w, mask, self.mapshow(w, mask, nest=False, **kwargs)
 
+    def histmap(self, ra, dec, weights=None, nside=32, perarea=False, mean=False, range=None, **kwargs):
+        return self._histmap(self.mapshow, ra, dec, weights, nside, perarea, mean, range, **kwargs)
+
+    def histcontour(self, ra, dec, weights=None, nside=32, perarea=False, mean=False, range=None, **kwargs):
+        return self._histmap(self.mapcontour, ra, dec, weights, nside, perarea, mean, range, **kwargs)
+
     def mapshow(self, map, mask=None, nest=False, **kwargs):
         """ Display a healpix map """
         vmin = kwargs.pop('vmin', None)
         vmax = kwargs.pop('vmax', None)
         defaults = dict(rasterized=True,
-                    alpha=0.8,
+                    alpha=1.0,
                     linewidth=0)
         defaults.update(kwargs)
         if mask is None:
             mask = map == map
-
-        if vmin is None:
-            vmin = np.nanmin(map[mask])
-        if vmax is None:
-            vmax = np.nanmax(map[mask])
 
         coll = HealpixCollection(map, mask, 
                 transform=self.transData, **defaults)
@@ -472,6 +473,17 @@ class SkymapperAxes(Axes):
         self._sci(coll)
         self.autoscale_view(tight=True)
         return coll
+
+    def mapcontour(self, map, mask=None, nest=False, **kwargs):
+        """ Display a healpix map """
+        if mask is None:
+            mask = map == map
+
+        ra, dec = pix2radec(healpix.npix2nside(len(map)), mask.nonzero()[0])
+        im = self.tricontour(ra, dec, map[mask], **kwargs)
+        self._sci(im)
+        self.autoscale_view(tight=True)
+        return im
 
     def format_coord(self, lon, lat):
         """
@@ -755,7 +767,7 @@ class AlbersEqualAreaAxes(SkymapperAxes):
 
 class HealpixCollection(PolyCollection):
     def __init__(self, map, mask, nest=False, **kwargs):
-        self.v = _boundary(mask, nest)
+        self.v = self._boundary(mask, nest)
         PolyCollection.__init__(self, self.v, array=map[mask], **kwargs)
 
     def get_datalim(self, transData):
@@ -770,38 +782,51 @@ class HealpixCollection(PolyCollection):
         vmax = (360, 90)
         return Bbox((vmin, vmax))
 
-# a few helper functions talking to healpy/healpix.
-def _boundary(mask, nest=False):
-    """Generate healpix vertices for pixels where mask is True
+    # a few helper functions talking to healpy/healpix.
+    def _boundary(self, mask, nest=False):
+        """Generate healpix vertices for pixels where mask is True
 
-    Args:
-        pix: list of pixel numbers
-        nest: nested or not
-        nside: HealPix nside
+        Args:
+            pix: list of pixel numbers
+            nest: nested or not
+            nside: HealPix nside
 
-    Returns:
-        vertices
-        vertices: (N,4,2), RA/Dec coordinates of 4 boundary points of cell
-    """
+        Returns:
+            vertices
+            vertices: (N,4,2), RA/Dec coordinates of 4 boundary points of cell
+        """
 
-    pix = mask.nonzero()[0]
+        pix = mask.nonzero()[0]
 
-    nside = healpix.npix2nside(len(mask))
+        nside = healpix.npix2nside(len(mask))
 
-    vertices = np.zeros((pix.size, 4, 2))
-    theta, phi = healpix.vertices(nside, pix)
-    theta = np.degrees(theta)
-    phi = np.degrees(phi)
-    diff = phi - phi[:, 0][:, None]
-    diff[diff > 180] -= 360
-    diff[diff < -180] += 360
-    phi = phi[:, 0][:, None] + diff
-    vertices[:,:,0] = phi
-    vertices[:,:,1] = 90.0 - theta
+        vertices = np.zeros((pix.size, 4, 2))
+        theta, phi = healpix.vertices(nside, pix)
+        theta = np.degrees(theta)
+        phi = np.degrees(phi)
+        diff = phi - phi[:, 0][:, None]
+        diff[diff > 180] -= 360
+        diff[diff < -180] += 360
+        phi = phi[:, 0][:, None] + diff
+        vertices[:,:,0] = phi
+        vertices[:,:,1] = 90.0 - theta
 
-    return vertices
+        return vertices
 
-def histogrammap(ra, dec, weights=None, nside=32, perarea=False):
+def pix2radec(nside, pix):
+    theta, phi = healpix.pix2ang(nside, pix)
+    return np.degrees(phi), 90 - np.degrees(theta)
+    
+def histogrammap(ra, dec, weights=None, nside=32, perarea=False, range=None):
+    if range is not None:
+        (ra1, ra2), (dec1, dec2) = range
+        m  = (ra >= ra1)& (ra <= ra2)
+        m &= (dec >= dec1)& (dec <= dec2)
+        ra = ra[m]
+        dec = dec[m]
+        if weights is not None:
+            weights = weights[m]
+
     ipix = healpix.ang2pix(nside, np.radians(90-dec), np.radians(ra))
     npix = healpix.nside2npix(nside)
     if perarea:
@@ -1075,7 +1100,7 @@ if __name__ == '__main__':
     ax.set_meridian_grid(30)
     ax.set_parallel_grid(30)
     ax.grid()
-    ax.tricontour(ra, dec, ra)
+    ax.tripcolor(ra, dec, ra)
     fig.colorbar(ax._gci())
     canvas = FigureCanvasAgg(fig)
     fig.savefig('xxx.png')
