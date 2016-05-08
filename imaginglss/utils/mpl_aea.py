@@ -447,7 +447,6 @@ class SkymapperAxes(Axes):
             w[mask] /= N[mask]
         else:
             mask = w > 0
-        
         return w, mask, self.mapshow(w, mask, nest=False, **kwargs)
 
     def mapshow(self, map, mask=None, nest=False, **kwargs):
@@ -460,6 +459,11 @@ class SkymapperAxes(Axes):
         defaults.update(kwargs)
         if mask is None:
             mask = map == map
+
+        if vmin is None:
+            vmin = np.nanmin(map[mask])
+        if vmax is None:
+            vmax = np.nanmax(map[mask])
 
         coll = HealpixCollection(map, mask, 
                 transform=self.transData, **defaults)
