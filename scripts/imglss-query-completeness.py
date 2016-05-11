@@ -57,7 +57,7 @@ def query_completeness(decals, ns):
     
     active_flux = FLUX[:, active_bands]
 
-    active_noise = active_conf[None, :] * NOISE[:, active_bands]
+    active_noise = NOISE[:, active_bands]
 
     model = completeness.CompletenessEstimator(active_flux, active_noise, active_conf)
 
