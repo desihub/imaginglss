@@ -1,6 +1,10 @@
 from imaginglss.model.catalogue import C
 from imaginglss.utils.npyquery import Min, Max
 
+RA = C('RA')
+DEC = C('DEC')
+
+DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION')
 DECAM_FLUX = C('DECAM_FLUX')
 DECAM_MW_TRANSMISSION = C('DECAM_MW_TRANSMISSION')
 WISE_FLUX = C('WISE_FLUX')
