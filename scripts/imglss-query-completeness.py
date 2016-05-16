@@ -50,21 +50,34 @@ def query_completeness(decals, ns):
         }
 
     bands = dataproduct.bands
-    # a list of active_bands in integer indices
-    active_bands = getattr(targetselection, ns.ObjectType).bands
-    active_conf  = np.array([confidence[band] for band in active_bands])
-    active_bands = [bands[band] for band in active_bands]
-    
-    active_flux = FLUX[:, active_bands]
+    # a list of limit_bands in integer indices
+    active_bands = getattr(targetselection, ns.ObjectType).limit_bands
 
-    active_noise = NOISE[:, active_bands]
+    active_ibands = [bands[band] for band in active_bands]
+
+    active_conf  = np.array([ confidence[band] for band in active_bands])
+
+    # if a band is used and unvisited we will exclude it from
+    # the model, and later require the completeness as 0.
+    # (it is outside of survey for this target type)
+
+    all_bands = getattr(targetselection, ns.ObjectType).bands
+    all_ibands = np.array([ bands[band] for band in all_bands])
+
+    visitedmask = (~np.isinf(NOISE[:, all_ibands])).all(axis=-1)
+    print ('Number of visited objects', visitedmask.sum())
+    active_flux = FLUX[:, active_ibands][visitedmask]
+
+    active_noise = NOISE[:, active_ibands][visitedmask]
 
     model = completeness.CompletenessEstimator(active_flux, active_noise, active_conf)
 
     with h5py.File(ns.query, 'r') as ff:
         NOISE = ff['INTRINSIC_NOISELEVEL'][:]
 
-    FC = model(NOISE[:, active_bands])
+    FC = model(NOISE[:, active_ibands])
+    visitedmask = (~np.isinf(NOISE[:, all_ibands])).all(axis=-1)
+    FC[~visitedmask] = 0
 
     return FC
 

@@ -33,7 +33,8 @@ LRG &= ZFLUX > 10**((22.5-20.46)/2.5)
 LRG &= ZFLUX > RFLUX * 10**(1.5/2.5)
 LRG &= W1FLUX * RFLUX ** (1.8-1) > ZFLUX**1.8 * 10**(-1.0/2.5)
 LRG &= W1FLUX > 0
-LRG.bands = 'z'
+LRG.limit_bands = 'z'
+LRG.bands = 'zr'
 
 ELG =  BRICK_PRIMARY != 0
 ELG &= RFLUX > 10**((22.5-23.4)/2.5)
@@ -42,6 +43,7 @@ ELG &= ZFLUX < 10**(1.6/2.5) * RFLUX
 ELG &= RFLUX**2.15 < GFLUX * ZFLUX**1.15 * 10**(-0.15/2.5)
 ELG &= ZFLUX**1.2 < GFLUX * RFLUX**0.2 * 10**(1.6/2.5)
 #ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
+ELG.limit_bands = 'r'
 ELG.bands = 'rgz'
 
 # QSO by colors only
@@ -58,17 +60,20 @@ QSOC &= SNRW2 > 2
 QSO = BRICK_PRIMARY != 0
 QSO &= QSOC
 QSO &= TYPE == 'PSF '
+QSO.limit_bands = 'r'
 QSO.bands = 'rgz'
 
 # David's variant of QSO
 QSOd = BRICK_PRIMARY != 0
 QSOd &= QSOC
 QSOd &= Max(SHAPEDEV_R, SHAPEEXP_R) < 0.5
+QSOd.limit_bands = 'r'
 QSOd.bands = 'rgz'
 
 BGS =  BRICK_PRIMARY != 0
 BGS &= TYPE != 'PSF '
 BGS &= RFLUX > 10**((22.5-19.5)/2.5)
+BGS.limit_bands = 'r'
 BGS.bands = 'r'
 
 __all__ = []

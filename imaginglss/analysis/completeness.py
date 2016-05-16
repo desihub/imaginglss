@@ -32,7 +32,7 @@ def CompletenessEstimator(fluxes, noises, confidence):
     lim = fluxes.min(axis=0)
 
     noises = confidence[None, :] * noises
-    mask = (noises <= lim).all(axis=-1)
+    mask = (noises < lim).all(axis=-1)
     model = fluxes[mask]
     tree = KDTree(model)
     root = tree.root
@@ -40,7 +40,7 @@ def CompletenessEstimator(fluxes, noises, confidence):
     def fcmodelfunc(query_noises):
         query_noises = confidence[None, :] * query_noises
         seen = root.integrate(query_noises, np.inf)
-        mask = (query_noises <= lim).all(axis=-1)
+        mask = (query_noises < lim).all(axis=-1)
 
         # Watchout:
         # Only 100% complete area has fcomp == 1.0
