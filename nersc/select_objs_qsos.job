@@ -20,8 +20,4 @@ export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
 time srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py QSO QSO.hdf5 --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py
 
-time srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 10000000 QSO-RANDOM.hdf5 --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py
-
-#time srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py ELG ELG-tractor.txt --with-tycho DECAM_ELG --conf /project/projectdirs/m779/imaginglss/dr2.conf.py --use-tractor-depth
-
 #srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py QSO QSO.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
