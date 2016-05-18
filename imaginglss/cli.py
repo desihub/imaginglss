@@ -22,10 +22,11 @@ class CLI(object):
             allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
             ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None, 
                 help="Apply tycho veto, must run imglss-query-tycho-veto first!")
+
         if enable_confidence:
-            ap.add_argument("--sigma-z", type=float, default=3.0, help="apply a confidence cut in z")
-            ap.add_argument("--sigma-g", type=float, default=5.0, help="apply a confidence cut in g")
-            ap.add_argument("--sigma-r", type=float, default=5.0, help="apply a confidence cut in r")
+            ap.add_argument("--sigma-z", type=float, default=3.0, help="confidence in z band. (relates noise to mag)")
+            ap.add_argument("--sigma-g", type=float, default=5.0, help="confidence in g band. (relates noise to mag)")
+            ap.add_argument("--sigma-r", type=float, default=5.0, help="confidence in r band. (relates noise to mag)")
 
         ap.add_argument("--help", action=_HelpAction)
         ap.add_argument("--conf", default=None,

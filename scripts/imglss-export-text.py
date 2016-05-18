@@ -11,6 +11,7 @@ cli = CLI("Export Final Data Products",
         enable_tycho_veto=True,
         enable_confidence=True)
 
+cli.add_target_type_argument("ObjectType")
 cli.add_argument("catalogue", help="internal catalogue of HDF5 type.")
 cli.add_argument("output", help="text file to store the catalogue." )
 cli.add_argument("--bands", nargs='+', type=str, 
@@ -26,9 +27,10 @@ confcut = {
     'g': ns.sigma_g,
     }
 
-def apply_confcut(confidence, confcut):
+def apply_confcut(objecttype, confidence, confcut):
     result = np.ones(len(confidence), dtype='?')
     for band in confcut:
+        if not band in objecttype.mag_bands: continue
         iband = dataproduct.bands[band]
         result &= confidence[:, iband] > confcut[band]
     return result
@@ -39,14 +41,13 @@ with h5py.File(ns.catalogue, 'r') as ff:
 
     if 'CONFIDENCE' in ff:
         # this is a catalogue, apply confidence cut.
-        confmask = apply_confcut(ff['CONFIDENCE'][:], confcut)
+        confmask = apply_confcut(ns.ObjectType, ff['CONFIDENCE'][:], confcut)
         mask &= confmask
 
     if ns.use_tycho_veto is not None:
         if not 'TYCHO_VETO' in ff:
             raise KeyError("TYCHO_VETO dataset is not found. Run imglss-query-tycho-veto on `%s` first." % ns.catalogue)
         vetomask = ~ff['TYCHO_VETO'][ns.use_tycho_veto]
-            
         mask &= vetomask
 
     ra = ff['RA'][:][mask]
@@ -54,7 +55,7 @@ with h5py.File(ns.catalogue, 'r') as ff:
 
     if not 'COMPLETENESS' in ff:
         raise KeyError("COMPLETENESS dataset is not found. Run imglss-query-completeness on `%s` first." % ns.catalogue)
-        
+
     fc = ff['COMPLETENESS'][:][mask]
     h = ['RA', 'DEC', 'COMPETENESS']
     l = [ra, dec, fc]

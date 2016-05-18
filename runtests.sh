@@ -12,5 +12,5 @@ python scripts/imglss-query-tycho-veto.py --conf=testdata/dr2-mini/dr2.conf.py Q
 python scripts/imglss-query-completeness.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 QSO QSO.hdf5 QSO-random.hdf5 || exit 1
 python scripts/imglss-query-completeness.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 QSO QSO.hdf5 QSO.hdf5 || exit 1
 
-python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- QSO.hdf5 QSO.txt
-python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- QSO-random.hdf5 QSO-random.txt
+python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- QSO QSO.hdf5 QSO.txt
+python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- QSO QSO-random.hdf5 QSO-random.txt
