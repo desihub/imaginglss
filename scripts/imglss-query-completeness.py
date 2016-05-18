@@ -46,7 +46,8 @@ def query_completeness(decals, ns):
 
     bands = dataproduct.bands
     # a list of limit_bands in integer indices
-    active_bands = getattr(targetselection, ns.ObjectType).limit_bands
+    ObjectType = getattr(targetselection, ns.ObjectType)
+    active_bands = targetselection.gather_magnitude_bands(ObjectType)
 
     active_ibands = [bands[band] for band in active_bands]
 
@@ -56,7 +57,7 @@ def query_completeness(decals, ns):
     # the model, and later require the completeness as 0.
     # (it is outside of survey for this target type)
 
-    all_bands = getattr(targetselection, ns.ObjectType).bands
+    all_bands = targetselection.gather_color_bands(ObjectType)
     all_ibands = np.array([ bands[band] for band in all_bands])
 
     visitedmask = (~np.isinf(NOISE[:, all_ibands])).all(axis=-1)

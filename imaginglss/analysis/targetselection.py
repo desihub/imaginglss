@@ -25,16 +25,19 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
+# * is evil but exactly what we want to do here
 from imaginglss.model.columnnames import *
-from imaginglss.utils.npyquery import Max, Min
+
+WFLUX = 0.75 * W1FLUX + 0.25 * W2FLUX[1]
+GRZFLUX = (GFLUX + 0.8* RFLUX + 0.5* ZFLUX ) / 2.4
+SNRW1 = (WISE_FLUX[0] * WISE_FLUX_IVAR[0] ** 0.5)
+SNRW2 = (WISE_FLUX[1] * WISE_FLUX_IVAR[1] ** 0.5)
 
 LRG =  BRICK_PRIMARY != 0
 LRG &= ZFLUX > 10**((22.5-20.46)/2.5)
 LRG &= ZFLUX > RFLUX * 10**(1.5/2.5)
 LRG &= W1FLUX * RFLUX ** (1.8-1) > ZFLUX**1.8 * 10**(-1.0/2.5)
 LRG &= W1FLUX > 0
-LRG.limit_bands = 'z'
-LRG.bands = 'zr'
 
 ELG =  BRICK_PRIMARY != 0
 ELG &= RFLUX > 10**((22.5-23.4)/2.5)
@@ -43,8 +46,6 @@ ELG &= ZFLUX < 10**(1.6/2.5) * RFLUX
 ELG &= RFLUX**2.15 < GFLUX * ZFLUX**1.15 * 10**(-0.15/2.5)
 ELG &= ZFLUX**1.2 < GFLUX * RFLUX**0.2 * 10**(1.6/2.5)
 #ELG &= Max(SHAPEDEV_R, SHAPEEXP_R) < 1.5
-ELG.limit_bands = 'r'
-ELG.bands = 'rgz'
 
 # QSO by colors only
 QSOC  = RFLUX > 10**((22.5-23.0)/2.5)
@@ -60,21 +61,15 @@ QSOC &= SNRW2 > 2
 QSO = BRICK_PRIMARY != 0
 QSO &= QSOC
 QSO &= TYPE == 'PSF '
-QSO.limit_bands = 'r'
-QSO.bands = 'rgz'
 
 # David's variant of QSO
 QSOd = BRICK_PRIMARY != 0
 QSOd &= QSOC
 QSOd &= Max(SHAPEDEV_R, SHAPEEXP_R) < 0.5
-QSOd.limit_bands = 'r'
-QSOd.bands = 'rgz'
 
 BGS =  BRICK_PRIMARY != 0
 BGS &= TYPE != 'PSF '
 BGS &= RFLUX > 10**((22.5-19.5)/2.5)
-BGS.limit_bands = 'r'
-BGS.bands = 'r'
 
 
 __all__ = []
@@ -92,6 +87,38 @@ def load(path):
 
         exec(compile(script, path, 'exec'), globals())
         _prune()
+
+def gather_color_bands(expr):
+    result = []
+    def walk(expr):
+        for c in expr.children:
+            walk(c)
+        if hasattr(expr, 'band'):
+            result.append(expr.band)
+    walk(expr)
+    return list(set(result))
+
+def gather_magnitude_bands(expr):
+    from imaginglss.utils.npyquery import Expr, Literal
+    result = []
+    def walk(expr):
+        for c in expr.children:
+            walk(c)
+        # see if this is a magnitude cut
+        # which is a lower limit on flux
+        # so match for the pattern
+        # Node_with_band_attribute > Literal
+        if not isinstance(expr, Expr):
+            return
+        if expr.operator != '>':
+            return
+        if not isinstance(expr.children[1], Literal):
+            return
+        if not hasattr(expr.children[0], 'band'):
+            return
+        result.append(expr.children[0].band)
+    walk(expr)
+    return list(set(result))
 
 # now we try to import a local version the file
 def _local():
