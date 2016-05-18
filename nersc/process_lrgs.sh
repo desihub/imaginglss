@@ -1,6 +1,8 @@
 #!/bin/bash
 CONF=/project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py
 
+cp RANDOM.hdf5 LRG-RANDOM.hdf5
+
 python ../scripts/imglss-query-tycho-veto.py LRG-RANDOM.hdf5 --conf $CONF
 python ../scripts/imglss-query-tycho-veto.py LRG.hdf5 --conf $CONF
 python ../scripts/imglss-query-completeness.py --conf $CONF \
