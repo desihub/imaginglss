@@ -76,23 +76,45 @@ BGS &= RFLUX > 10**((22.5-19.5)/2.5)
 BGS.limit_bands = 'r'
 BGS.bands = 'r'
 
+
 __all__ = []
+
+def load(path):
+    """ Recursively load target definitions in the path."""
+    import os
+    if os.path.isdir(path):
+        for f in os.listdir(path):
+            if os.path.isdir(path) or \
+              (f.endswith('.py') and not f.startswith('_')):
+                load(os.path.join(path, f))
+    else:
+        script = open(path, 'r').read()
+
+        exec(compile(script, path, 'exec'), globals())
+        _prune()
+
 # now we try to import a local version the file
 def _local():
-    global __all__
 
     import os
 
     local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
     if local.endswith('.pyc'): local = local[:-1]
+
     if os.path.exists(local):
-        script = open(local, 'r').read()
-        exec(compile(script, local, 'exec'), globals())
+        load(local)
+
+def _prune():
+    global __all__
     g = globals()
 
     # This will filter out names that does not appear to be a target type.
     import imaginglss.model.columnnames as columnnames
     blacklist = dir(columnnames)
+    blacklist.append('load')
+
+    __all__ = []
+
     for k in g.keys():
         if k in blacklist:
             continue
@@ -102,9 +124,6 @@ def _local():
             continue
         __all__.append(k)
 
+
 _local()
-
-
-
-
-
+_prune()

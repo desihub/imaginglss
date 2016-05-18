@@ -10,26 +10,21 @@ from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
 from imaginglss.analysis    import tycho_veto
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser()
-ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
+cli = CLI("Query completeness",
+        enable_target_plugins=True,
+        enable_confidence=True,
+        enable_tycho_veto=True)
 
-ap.add_argument("objects", 
+cli.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
+
+cli.add_argument("objects",
         help="object catalogue for building the completeness model.")
-ap.add_argument("query", 
+cli.add_argument("query",
         help="catalogue to query completeness")
 
-allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
-ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None)
-ap.add_argument("--sigma-z", type=float, default=3.0)
-ap.add_argument("--sigma-g", type=float, default=5.0)
-ap.add_argument("--sigma-r", type=float, default=5.0)
-
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
-
-ns = ap.parse_args()
+ns = cli.parse_args()
 decals = DECALS(ns.conf)
 
 np.seterr(divide='ignore', invalid='ignore')

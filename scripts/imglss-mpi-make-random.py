@@ -19,15 +19,13 @@ import h5py
 
 from   imaginglss             import DECALS
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser()
-ap.add_argument("Nran", type=int, help="Minimum number of randoms")
-ap.add_argument("output", help="File to store the randoms. Will be created." )
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+cli = CLI("Generate Uniform Randoms in the footprint and query the depth.")
+cli.add_argument("Nran", type=int, help="Minimum number of randoms")
+cli.add_argument("output", help="File to store the randoms. Will be created." )
 
-ns = ap.parse_args()
+ns = cli.parse_args()
 decals = DECALS(ns.conf)
 
 import numpy             as np

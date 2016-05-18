@@ -10,24 +10,22 @@ import h5py
 
 from   imaginglss             import DECALS
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser(description="""
+cli = CLI("""
 Query Depth from DECALS data for input RA DEC of points.
 The input must be saved in a HDF5 with two datasets 'RA' and 'DEC'.
 The output will be written in the same file as INTRINSIC_NOISELEVEL data set.
-To lookup the columns, use the dictionary in `imaginglss.model.dataproduct.bands`.
+To lookup the columns, use the dictionary in `imaginglss.model.datcliroduct.bands`.
 
 The output of this script can be directly fed into imglss-query-completeness.py
 as the query input.
 
 """)
 
-ap.add_argument("query", help="An HDF5 file with RA and DEC dataset, the position of to query the depth." )
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+cli.add_argument("query", help="An HDF5 file with RA and DEC dataset, the position of to query the depth." )
 
-ns = ap.parse_args()
+ns = cli.parse_args()
 decals = DECALS(ns.conf)
 
 import numpy             as np

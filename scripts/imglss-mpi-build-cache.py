@@ -15,11 +15,9 @@ from imaginglss import DECALS
 from imaginglss.utils import filehandler
 import numpy
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser()
-ap.add_argument("--conf", default=None, 
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+ap = CLI("Build cache")
 
 ns = ap.parse_args()
 

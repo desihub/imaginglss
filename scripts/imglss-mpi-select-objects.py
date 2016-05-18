@@ -25,16 +25,15 @@ from imaginglss             import DECALS
 from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import cuts
 from imaginglss.model       import dataproduct
-from argparse import ArgumentParser
+from imaginglss.cli         import CLI
 
-ap = ArgumentParser()
-ap.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
-ap.add_argument("output", help="Output file name. A new object catalogue file will be created.")
-ap.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+cli = CLI("Select Objects based on Target definitions", enable_target_plugins=True)
+cli.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
+cli.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
+cli.add_argument("output", help="Output file name. A new object catalogue file will be created.")
 
-ns = ap.parse_args()
+ns = cli.parse_args()
+
 decals = DECALS(ns.conf)
 
 from mpi4py import MPI

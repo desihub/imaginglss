@@ -20,10 +20,9 @@ from imaginglss             import DECALS
 from imaginglss.analysis    import tycho_veto
 from imaginglss.analysis    import veto
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser(
-description=
+cli = CLI(
 """
 Query the TYCHOVETO flags of input data. The position is taken from the NOISES extension of input.
 The result is written to the TYCHOVETO extension of output.
@@ -35,11 +34,9 @@ Unfortunately, this script is not sufficiently smart to decide the correct TYCHO
 Therefore, no combined veto flag is generated.
 """
 )
-ap.add_argument("catalogue", help="HDF5 catalogue file, can be either random or objects. TYCHO_VETO dataset will be added ")
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+cli.add_argument("catalogue", help="HDF5 catalogue file, can be either random or objects. TYCHO_VETO dataset will be added ")
 
-ns = ap.parse_args()
+ns = cli.parse_args()
 decals = DECALS(ns.conf)
 
 np.seterr(divide='ignore', invalid='ignore')

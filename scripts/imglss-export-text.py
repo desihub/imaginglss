@@ -5,22 +5,18 @@ from   imaginglss             import DECALS
 from imaginglss.analysis import tycho_veto
 from imaginglss.model import dataproduct
 
-from argparse import ArgumentParser
+from imaginglss.cli import CLI
 
-ap = ArgumentParser()
-ap.add_argument("catalogue", help="internal catalogue of HDF5 type.")
-ap.add_argument("output", help="text file to store the catalogue." )
-ap.add_argument("--conf", default=None,
-        help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
+cli = CLI("Export Final Data Products",
+        enable_target_plugins=True,
+        enable_tycho_veto=True,
+        enable_confidence=True)
 
-allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
-ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None, help="Apply tycho veto, must run imglss-query-tycho-veto first!")
-ap.add_argument("--bands", nargs='+', type=str, choices=dataproduct.bands.keys(), default=['r', 'g', 'z'], help="Bands to export in the text file")
-ap.add_argument("--sigma-z", type=float, default=3.0, help="apply a confidence cut in z")
-ap.add_argument("--sigma-g", type=float, default=5.0, help="apply a confidence cut in g")
-ap.add_argument("--sigma-r", type=float, default=5.0, help="apply a confidence cut in r")
+cli.add_argument("catalogue", help="internal catalogue of HDF5 type.")
+cli.add_argument("output", help="text file to store the catalogue." )
+cli.add_argument("--bands", nargs='+', type=str, choices=dataproduct.bands.keys(), default=['r', 'g', 'z'], help="Bands to export in the text file")
 
-ns = ap.parse_args()
+ns = cli.parse_args()
 decals = DECALS(ns.conf)
 
 confcut = {
