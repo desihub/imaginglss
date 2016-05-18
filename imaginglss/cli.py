@@ -31,8 +31,10 @@ class CLI(object):
         ap.add_argument("--conf", default=None,
             help="Path to the imaginglss config file, default is from DECALS_PY_CONFIG")
 
-    def add_target_type_arguments(self, name):
-        self.ap.add_argument(name, choices=[i for i in targetselection.__all__])
+    def add_target_type_argument(self, name):
+        self.ap.add_argument(name, choices=[i for i in targetselection.__all__], 
+                type=lambda x:getattr(targetselection, x), 
+                help="Type of Target")
 
     def add_argument(self, *args, **kwargs):
         self.ap.add_argument(*args, **kwargs)
@@ -40,3 +42,11 @@ class CLI(object):
     def parse_args(self):
         return self.ap.parse_args()
 
+    def prune_namespace(self, namespace):
+        d = {}
+        for key, value in namespace.__dict__.items():
+            # FIXME: test if the key matches target_type
+            if hasattr(value, 'name'):
+                value = value.name
+            d[key] = value
+        return d

@@ -32,7 +32,6 @@ import numpy             as np
 from   imaginglss.model.datarelease import Footprint
 from   imaginglss.model import dataproduct
 from   mpi4py            import MPI
-from   imaginglss.analysis    import cuts
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -144,7 +143,6 @@ if __name__ == '__main__':
     if MPI.COMM_WORLD.rank == 0:
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
-            for key, value in ns.__dict__.items():
-                ds.attrs[key] = value
+            ds.attrs.update(cli.prune_namespace(ns))
             for column in randoms.dtype.names:
                 ds = ff.create_dataset(column, data=randoms[column])

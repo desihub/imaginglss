@@ -84,5 +84,4 @@ if __name__ == '__main__':
             if 'INTRINSIC_NOISELEVEL' in ff:
                 del ff['INTRINSIC_NOISELEVEL']
             ds = ff.create_dataset('INTRINSIC_NOISELEVEL', data=randoms['INTRINSIC_NOISELEVEL'])
-            for key, value in ns.__dict__.items():
-                ds.attrs[key] = value
+            ds.attrs.update(cli.prune_namespace(ns))

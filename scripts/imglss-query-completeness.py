@@ -5,10 +5,8 @@ import h5py
 
 from imaginglss             import DECALS
 from imaginglss.model             import dataproduct
-from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import completeness
 from imaginglss.utils       import output
-from imaginglss.analysis    import tycho_veto
 
 from imaginglss.cli import CLI
 
@@ -17,7 +15,7 @@ cli = CLI("Query completeness",
         enable_confidence=True,
         enable_tycho_veto=True)
 
-cli.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
+cli.add_target_type_argument("ObjectType")
 
 cli.add_argument("objects",
         help="object catalogue for building the completeness model.")
@@ -46,8 +44,7 @@ def query_completeness(decals, ns):
 
     bands = dataproduct.bands
     # a list of limit_bands in integer indices
-    ObjectType = getattr(targetselection, ns.ObjectType)
-    active_bands = targetselection.gather_magnitude_bands(ObjectType)
+    active_bands = ns.ObjectType.mag_bands
 
     active_ibands = [bands[band] for band in active_bands]
 
@@ -57,7 +54,7 @@ def query_completeness(decals, ns):
     # the model, and later require the completeness as 0.
     # (it is outside of survey for this target type)
 
-    all_bands = targetselection.gather_color_bands(ObjectType)
+    all_bands = ns.ObjectType.color_bands
     all_ibands = np.array([ bands[band] for band in all_bands])
 
     visitedmask = (~np.isinf(NOISE[:, all_ibands])).all(axis=-1)
@@ -85,5 +82,4 @@ if __name__=="__main__":
         if 'COMPLETENESS' in ff:
             del ff['COMPLETENESS']
         ds = ff.create_dataset('COMPLETENESS', data=FC)
-        for k, v in ns.__dict__.items():
-            ds.attrs[k] = v
+        ds.attrs.update(cli.prune_namespace(ns))

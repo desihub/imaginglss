@@ -22,14 +22,13 @@ import numpy as np
 import h5py
 
 from imaginglss             import DECALS
-from imaginglss.analysis    import targetselection
 from imaginglss.analysis    import cuts
 from imaginglss.model       import dataproduct
 from imaginglss.cli         import CLI
 
 cli = CLI("Select Objects based on Target definitions", enable_target_plugins=True)
 cli.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
-cli.add_argument("ObjectType", choices=[i for i in targetselection.__all__])
+cli.add_target_type_argument("ObjectType")
 cli.add_argument("output", help="Output file name. A new object catalogue file will be created.")
 
 ns = cli.parse_args()
@@ -73,8 +72,7 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
 
     with dr.catalogue as cat:
         rows = cat[mine]
-        fluxcut = getattr(targetselection, ns.ObjectType)
-        mask = cuts.apply(comm, fluxcut, rows)
+        mask = cuts.apply(comm, ns.ObjectType, rows)
 
     if comm.rank == 0:
         print('Rank 0 with', myend - mystart, 'items')
@@ -92,7 +90,7 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
-    # for a complete ns.ObjectTypee.
+    # for a complete ns.ObjectType.
 
     # note that although DR2 has these numbers, we query the raw images
     # to keep it consistent with make_randoms.py.  This shall agree with
@@ -140,7 +138,7 @@ if __name__=="__main__":
     if MPI.COMM_WORLD.rank == 0:
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
-            for key, value in ns.__dict__.items():
-                ds.attrs[key] = value
+            ds.attrs.update(cli.prune_namespace(ns))
+
             for column in targets.dtype.names:
                 ds = ff.create_dataset(column, data=targets[column])

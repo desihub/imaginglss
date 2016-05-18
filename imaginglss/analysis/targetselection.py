@@ -84,11 +84,11 @@ def load(path):
                 load(os.path.join(path, f))
     else:
         script = open(path, 'r').read()
+        d = {}
+        exec(compile(script, path, 'exec'), globals(), d)
+        _export(d)
 
-        exec(compile(script, path, 'exec'), globals())
-        _prune()
-
-def gather_color_bands(expr):
+def _gather_color_bands(expr):
     result = []
     def walk(expr):
         for c in expr.children:
@@ -98,7 +98,7 @@ def gather_color_bands(expr):
     walk(expr)
     return list(set(result))
 
-def gather_magnitude_bands(expr):
+def _gather_magnitude_bands(expr):
     from imaginglss.utils.npyquery import Expr, Literal
     result = []
     def walk(expr):
@@ -131,17 +131,14 @@ def _local():
     if os.path.exists(local):
         load(local)
 
-def _prune():
+def _export(g):
     global __all__
-    g = globals()
 
     # This will filter out names that does not appear to be a target type.
     import imaginglss.model.columnnames as columnnames
     blacklist = dir(columnnames)
-    blacklist.append('load')
-
-    __all__ = []
-
+    blacklist.extend(['load', 'WFLUX', 'GRZFLUX', 'SNRW1', 'SNRW2'])
+    g1 = globals()
     for k in g.keys():
         if k in blacklist:
             continue
@@ -149,8 +146,14 @@ def _prune():
             continue
         if k.startswith('_'):
             continue
+        g1[k] = g[k]
+        item = g[k]
+        item.name = k
+        item.color_bands = _gather_color_bands(item)
+        item.mag_bands = _gather_magnitude_bands(item)
+
         __all__.append(k)
 
 
+_export(globals())
 _local()
-_prune()

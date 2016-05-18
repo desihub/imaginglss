@@ -2,7 +2,6 @@ import h5py
 import numpy as np
 
 from   imaginglss             import DECALS
-from imaginglss.analysis import tycho_veto
 from imaginglss.model import dataproduct
 
 from imaginglss.cli import CLI
@@ -14,7 +13,9 @@ cli = CLI("Export Final Data Products",
 
 cli.add_argument("catalogue", help="internal catalogue of HDF5 type.")
 cli.add_argument("output", help="text file to store the catalogue." )
-cli.add_argument("--bands", nargs='+', type=str, choices=dataproduct.bands.keys(), default=['r', 'g', 'z'], help="Bands to export in the text file")
+cli.add_argument("--bands", nargs='+', type=str, 
+        choices=dataproduct.bands.keys(), 
+        default=['r', 'g', 'z'], help="Bands to export in the text file")
 
 ns = cli.parse_args()
 decals = DECALS(ns.conf)
