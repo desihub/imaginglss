@@ -235,16 +235,20 @@ class CachedCatalogue(ColumnStore):
         self.aliases = dict([(new, (old, transform)) 
                 for old, new, transform in aliases])
         self.cachedir = cachedir
+
+        self._size = filehandler.size(self.cachedir, 'BRICK_PRIMARY')
+        columns = filehandler.list(self.cachedir)
+        self._dtype = numpy.dtype([(key, columns[key]) for key in columns])
+
         ColumnStore.__init__(self)
 
     @property
     def size(self):
-        return filehandler.size(self.cachedir, 'BRICK_PRIMARY')
+        return self._size
 
     @property
     def dtype(self):
-        columns = filehandler.list(self.cachedir)
-        return numpy.dtype([(key, columns[key]) for key in columns])
+        return self._dtype
 
     def open(self, brick):
         return fits.read_table(self.filenames[brick.name])
