@@ -2,7 +2,7 @@
 
 #SBATCH -A desi
 #SBATCH -J select_objs
-#SBATCH -n 512
+#SBATCH -n 32
 #SBATCH -o select_objs.%j
 #SBATCH -p debug
 #SBATCH -t 00:20:00
@@ -18,6 +18,11 @@ mirror ../ imaginglss scripts
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-time srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py ELG ELG.hdf5 --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py
+for T in ELG LRG QSO; do
+    time srun -n 16 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py \
+    --extra-target-definitions=targets/ \
+    --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py \
+    ${T} ${T}.hdf5
+done
 
 #srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py QSO QSO.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
