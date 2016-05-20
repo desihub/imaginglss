@@ -78,8 +78,6 @@ def load(path):
     """ Recursively load target definitions in the path."""
     import os
     if path.startswith('_'): return
-    if path.startswith('.'): return
-
     if os.path.isdir(path):
         for f in sorted(os.listdir(path)):
             load(os.path.join(path, f))
