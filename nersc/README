@@ -1,0 +1,28 @@
+1. First modify and run jobs 
+
+1.1 For randoms
+
+make_rans.job
+
+1.2. For targets (add types and --extra-target-definitions if you want)
+
+select_objs.job
+
+2. Next, run
+
+postprocess.sh 
+
+to finish it. 
+
+3. Tricks:
+
+3.1 To see a list of targets run 
+
+imglss-export-text.py --help
+
+3.2 I usually symlink photodesi/scripts/targets to this directory 
+    and set extra-target-definitions to targets/
+
+
+
+

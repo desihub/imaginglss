@@ -15,13 +15,15 @@ source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
 mirror ../ imaginglss scripts
 
+OPTIONS="--conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py"
+OPTIONS+="--extra-target-definitions targets"
+
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
 for T in ELG LRG QSO; do
     time srun -n 16 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py \
-    --extra-target-definitions=targets/ \
-    --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py \
+    $OPTIONS \
     ${T} ${T}.hdf5
 done
 
