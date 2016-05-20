@@ -25,10 +25,14 @@ def corr():
     randfile = h5py.File(ns.random, 'r')
 
     datamask = datafile['COMPLETENESS'][:] >= 1
+    if ns.use_tycho_veto is not None:
+        datamask &= ~datafile['TYCHO_VETO'][ns.use_tycho_veto][:]
     dataRA = datafile['RA'][:][datamask]
     dataDEC = datafile['DEC'][:][datamask]
 
     randmask = randfile['COMPLETENESS'][:] >= 1
+    if ns.use_tycho_veto is not None:
+        randmask &= ~randfile['TYCHO_VETO'][ns.use_tycho_veto][:]
     randRA = randfile['RA'][:][randmask]
     randDEC = randfile['DEC'][:][randmask]
 
@@ -41,6 +45,7 @@ def corr():
     RR = correlate.paircount(rand, rand, abin, np=ns.np)
 
     r =  1. * len(data) / len(rand)
+
     dd = 1.0 * DD.sum1
     dr = 1.0 * DR.sum1 * r
     rr =  1.0 * RR.sum1 * (r * r)
@@ -51,5 +56,5 @@ def corr():
 if __name__ == '__main__':
 
     t, w = corr()
-    np.savetxt(ns.output, zip(t, w), header="# theta w")
+    np.savetxt(ns.output, zip(t, w), header="theta w")
 
