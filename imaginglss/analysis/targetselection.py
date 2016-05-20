@@ -77,12 +77,15 @@ __all__ = []
 def load(path):
     """ Recursively load target definitions in the path."""
     import os
+    if path.startswith('_'): return
+    if path.startswith('.'): return
+
     if os.path.isdir(path):
-        for f in os.listdir(path):
-            if os.path.isdir(path) or \
-              (f.endswith('.py') and not f.startswith('_')):
-                load(os.path.join(path, f))
+        for f in sorted(os.listdir(path)):
+            load(os.path.join(path, f))
     else:
+        if not path.endswith('.py'): return
+        print("loading plugin", path)
         script = open(path, 'r').read()
         d = {}
         exec(compile(script, path, 'exec'), globals(), d)
@@ -124,11 +127,16 @@ def _gather_magnitude_bands(expr):
 def _local():
 
     import os
+    import warnings
 
     local = os.path.join(os.path.dirname(__file__), 'local-%s' % os.path.basename(__file__))
     if local.endswith('.pyc'): local = local[:-1]
 
     if os.path.exists(local):
+        warnings.warn(
+             "Using local-target-selection.py is deprecated. \n" +
+             ("Rename %s to my-targets.py, and add it to the commandline via " % local) +
+             "--extra-target-definitions=my-targets.py" , stacklevel=2) 
         load(local)
 
 def _export(g):
