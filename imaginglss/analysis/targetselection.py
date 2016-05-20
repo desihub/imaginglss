@@ -85,7 +85,6 @@ def load(path):
             load(os.path.join(path, f))
     else:
         if not path.endswith('.py'): return
-        print("loading plugin", path)
         script = open(path, 'r').read()
         d = {}
         exec(compile(script, path, 'exec'), globals(), d)
