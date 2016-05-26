@@ -17,8 +17,8 @@ mirror ../ imaginglss scripts
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+#srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 #srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py ELG ELG.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
-#srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py QSO QSO.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py QSOd QSOd.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
