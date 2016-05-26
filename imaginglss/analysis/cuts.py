@@ -13,7 +13,13 @@ def apply(comm, query, data):
         The Queres
     """
     total = sum(comm.allgather(len(data)) )
+    if comm.rank == 0: 
+        print(total)
+
     for expr in query:
+        if comm.rank == 0:
+            print("Applying Cut :", expr)
+        comm.barrier()
         mask = expr.apply(data)
         selected = sum(comm.allgather(mask.sum())) 
         if comm.rank == 0:

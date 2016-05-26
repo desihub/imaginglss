@@ -1,24 +1,38 @@
 #!/bin/bash
 
+#SBATCH -A desi
 #SBATCH -J select_objs
-#SBATCH -n 512
+#SBATCH -n 32
 #SBATCH -o select_objs.%j
 #SBATCH -p debug
-#SBATCH -t 00:30:00
+#SBATCH -t 00:20:00
 
 export OMP_NUM_THREADS=1
+set -x
 
 module load python/2.7-anaconda
-
 source /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
 mirror ../ imaginglss scripts
 
+OPTIONS="--conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py"
+OPTIONS+="--extra-target-definitions targets"
+
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
+<<<<<<< HEAD
 #srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 #srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py ELG ELG.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py QSOd QSOd.txt --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+=======
+for T in ELG LRG QSO; do
+    time srun -n 16 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py \
+    $OPTIONS \
+    ${T} ${T}.hdf5
+done
+
+#srun -n 256 python-mpi /dev/shm/local/scripts/select_objs.py QSO QSO.txt --with-tycho DECAM_QSO --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+>>>>>>> 0114286b03e67c4be8efc5dc63ea554bd8e550e4

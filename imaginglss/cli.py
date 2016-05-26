@@ -11,7 +11,8 @@ class CLI(object):
 
         ap = ArgumentParser(add_help=False, description=description)
         self.ap = ap
-        if enable_target_plugins:
+        if True or enable_target_plugins:
+            # always enable target definition plugins
             self.ap.add_argument("--extra-target-definitions", action='append', default=[],
                     help="Path to additional target definitions.")
 

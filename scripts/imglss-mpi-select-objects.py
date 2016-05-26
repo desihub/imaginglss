@@ -27,7 +27,7 @@ from imaginglss.model       import dataproduct
 from imaginglss.cli         import CLI
 
 cli = CLI("Select Objects based on Target definitions", enable_target_plugins=True)
-cli.add_argument("--use-tractor-depth", action='store_true', default=False, help="Use Tractor's Depth in the catalogue, very fast!")
+cli.add_argument("--use-depth-bricks", action='store_true', default=False, help="Use Tractor's Brick Depth in the catalogue, very slow!")
 cli.add_target_type_argument("ObjectType")
 cli.add_argument("output", help="Output file name. A new object catalogue file will be created.")
 
@@ -70,12 +70,14 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     #
     mine = slice(mystart, myend)
 
+    if comm.rank == 0:
+        print('Rank 0 with', myend - mystart, 'items', 'total', cat.size)
+
     with dr.catalogue as cat:
         rows = cat[mine]
         mask = cuts.apply(comm, ns.ObjectType, rows)
 
     if comm.rank == 0:
-        print('Rank 0 with', myend - mystart, 'items')
         print('Rank 0 selected', mask.sum(), 'items')
 
     targets = np.empty(mask.sum(), dtype=dataproduct.ObjectCatalogue)
@@ -104,7 +106,7 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
         ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
         ('WISE_MW_TRANSMISSION', cat.dtype['WISE_MW_TRANSMISSION']),
         ])
-    if ns.use_tractor_depth:
+    if not ns.use_depth_bricks:
         cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
         cat_lim['WISE_FLUX_IVAR'][:] = cat['WISE_FLUX_IVAR'][mine][mask]
         cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]

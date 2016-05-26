@@ -86,9 +86,17 @@ class DECALS(object):
         self.datarelease = DataRelease(root=self.decals_root, 
                 cache=self.cache_dir, version=self.decals_release,
                 dustdir=self.dust_dir)
-        self.sfdmap = self.datarelease.sfdmap
-        self.tycho = Tycho(self.tycho_dir)
         self.filename = filename
+
+    @property
+    def tycho(self):
+        if not hasattr(self, '_tycho'):
+            self._tycho = Tycho(self.tycho_dir)
+        return self._tycho
+
+    @property
+    def sfdmap(self):
+        return self.datarelease.sfdmap
 
     def __repr__(self):
         return os.path.abspath(self.filename)
