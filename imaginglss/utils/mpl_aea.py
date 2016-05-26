@@ -791,8 +791,6 @@ class HealpixCollection(PolyCollection):
         return Bbox((vmin, vmax))
 
 import matplotlib.transforms as mtransforms
-from matplotlib.externals import six
-from matplotlib.externals.six.moves import zip
 import warnings
 import numpy as np
 import numpy.ma as ma
