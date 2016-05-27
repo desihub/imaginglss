@@ -15,3 +15,4 @@ python scripts/imglss-query-completeness.py --conf=testdata/dr2-mini/dr2.conf.py
 python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- ELG ELG.hdf5 ELG.txt
 python scripts/imglss-export-text.py --conf=testdata/dr2-mini/dr2.conf.py --use-tycho-veto=BOSS_DR9 --bands W1 -- ELG ELG-random.hdf5 ELG-random.txt
 python scripts/imglss-naive-correlation.py --use-tycho-veto=BOSS_DR9 ELG.hdf5 ELG-random.hdf5 ELG-w.txt
+python scripts/imglss-naive-crosscorrelation.py --use-tycho-veto=BOSS_DR9 ELG.hdf5 ELG-random.hdf5 ELG.hdf5 ELG-w.txt

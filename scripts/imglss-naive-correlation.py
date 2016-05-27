@@ -56,5 +56,5 @@ def corr():
 if __name__ == '__main__':
 
     t, w = corr()
-    np.savetxt(ns.output, zip(t, w), header="theta w")
+    np.savetxt(ns.output, np.array([t, w]).T, header="theta w")
 
