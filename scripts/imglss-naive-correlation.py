@@ -50,7 +50,7 @@ def corr():
     dr = 1.0 * DR.sum1 * r
     rr =  1.0 * RR.sum1 * (r * r)
 
-    return abin.centers, (dd - 2 * dr + rr) / rr
+    return abin.angular_centers, (dd - 2 * dr + rr) / rr
 
 
 if __name__ == '__main__':
