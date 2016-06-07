@@ -35,6 +35,14 @@ def apply_confcut(objecttype, confidence, confcut):
         result &= confidence[:, iband] > confcut[band]
     return result
 
+def apply_nonobs(objecttype, noiselevel):
+    result = np.ones(len(noiselevel), dtype='?')
+    for band in confcut:
+        if not band in objecttype.mag_bands: continue
+        iband = dataproduct.bands[band]
+        result &= ~np.isinf(noiselevel[:, iband])
+    return result
+
 
 with h5py.File(ns.catalogue, 'r') as ff:
     mask = np.ones(len(ff['RA'][:]), dtype='?')
@@ -43,6 +51,12 @@ with h5py.File(ns.catalogue, 'r') as ff:
         # this is a catalogue, apply confidence cut.
         confmask = apply_confcut(ns.ObjectType, ff['CONFIDENCE'][:], confcut)
         mask &= confmask
+        print("Cut out %d non-confident objects " % (~confmask).sum())
+    else:
+        # this is a random, reject non-observations
+        obsmask = apply_nonobs(ns.ObjectType, ff['INTRINSIC_NOISELEVEL'][:])
+        mask &= obsmask
+        print("Cut out %d non-observed random points" % (~obsmask).sum())
 
     if ns.use_tycho_veto is not None:
         if not 'TYCHO_VETO' in ff:
