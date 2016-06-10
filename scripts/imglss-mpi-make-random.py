@@ -144,5 +144,7 @@ if __name__ == '__main__':
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
             ds.attrs.update(cli.prune_namespace(ns))
+            ds.attrs['FootPrintArea'] = decals.datarelease.footprint.area
+            ds.attrs['NumberDensity'] = 1.0 * len(randoms) / decals.datarelease.footprint.area
             for column in randoms.dtype.names:
                 ds = ff.create_dataset(column, data=randoms[column])
