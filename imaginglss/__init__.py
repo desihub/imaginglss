@@ -64,6 +64,7 @@ class DECALS(object):
         d['decals_cache'] = os.environ.get("DECALS_CACHE", '.') 
         d['dust_dir'] = os.environ.get("DUST_DIR", '.') 
         d['tycho_dir'] = os.environ.get("TYCHO_DIR", '.') 
+        d['wise_dir'] = os.environ.get("WISE_DIR", '.') 
         d['decals_release'] = os.path.basename(d['decals_root']).upper()
 
         if filename:
@@ -82,6 +83,7 @@ class DECALS(object):
         self.cache_dir = d['decals_cache']
         self.dust_dir = d['dust_dir']
         self.tycho_dir = d['tycho_dir']
+        self.wise_dir = d['wise_dir']
 
         self.datarelease = DataRelease(root=self.decals_root, 
                 cache=self.cache_dir, version=self.decals_release,
@@ -93,6 +95,12 @@ class DECALS(object):
         if not hasattr(self, '_tycho'):
             self._tycho = Tycho(self.tycho_dir)
         return self._tycho
+
+    @property
+    def wise(self):
+        if not hasattr(self, '_wise'):
+            self._wise = Wise(self.wise_dir)
+        return self._wise
 
     @property
     def sfdmap(self):
