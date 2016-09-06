@@ -57,8 +57,9 @@ def query_veto(decals, ns):
 
     for ibit, vetoname in enumerate(allvetos):
         vetotype = getattr(tycho_veto, vetoname)
-        R = vetotype(decals.tycho)
-        centers = (decals.tycho['RA'], decals.tycho['DEC'])
+        RAc, DECc, R = vetotype(decals)
+        print(R.min(), R.max())
+        centers = (RAc, DECc)
         mask = veto.veto((RA, DEC), centers, R)
         # if we want to combine the bits, do it here.
         # but there is no point of doing so for all tycho based proximity

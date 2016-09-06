@@ -1,42 +1,54 @@
 """
-    veto objects based on Tycho catalogue. This
-    is based on the email discussion at:
+    veto objects based on a star catalogue.
+    The tycho vetos are based on the email discussion at:
 
     Date: June 18, 2015 at 3:44:09 PM PDT
     To: decam-data@desi.lbl.gov
     Subject: decam-data Digest, Vol 12, Issue 29
 
-    Current usage is to first create a Tycho catalogue
-    object, then use DECAM_XXX functions to create a
-    mask :
+    These objects takes a decals object and calculates the
+    center and rejection radius for the catalogue in degrees.
 
-    >>> tycho = Tycho("pathto_tycho.fit")
+    Note : The convention for veto flags is True for 'reject',
+    False for 'preserve'.
+
     >>>
-
-    The return values are True for 'preserve',
-    False for 'reject'
 """
 
-def BOSS_DR9(tycho):
+def BOSS_DR9(decals):
+    tycho = decals.tycho
     bmag = tycho['BMAG']
     # BOSS DR9-11
     b = bmag.clip(6, 11.5)
     R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
-    return R
+    return tycho['RA'], tycho['DEC'], R
 
-def DECAM_LRG(tycho):
+def DECAM_LRG(decals):
+    tycho = decals.tycho
     vtmag = tycho['VTMAG']
     R = 10 ** (3.5 - 0.15 * vtmag) / 3600. 
-    return R
+    return tycho['RA'], tycho['DEC'], R
 
 DECAM_ELG = DECAM_LRG
 
-def DECAM_QSO(tycho):
+def DECAM_QSO(decals):
+    tycho = decals.tycho
     vtmag = tycho['VTMAG']
-    # I recommend not applying a bright star mask 
-    return vtmag - vtmag
+    # "I recommend not applying a bright star mask" -- D. Schlegal
+    return tycho['RA'], tycho['DEC'], vtmag - vtmag
 
-def DECAM_BGS(tycho):
+def DECAM_BGS(decals):
+    tycho = decals.tycho
     vtmag = tycho['VTMAG']
     R = 10 ** (2.2 - 0.15 * vtmag) / 3600. 
-    return R
+    return tycho['RA'], tycho['DEC'], R
+
+def EBOSS_V6(decals):
+    wise = decals.wise
+    W1mpro = wise['W1MPRO']
+    # first do arcsecs then convert to degrees
+    radius = 1397.5 - 569.34 * W1mpro + 79.88 * W1mpro ** 2 - 3.75 * W1mpro ** 3
+    radius[W1mpro < 2] = 550.
+
+    R = radius / 3600.
+    return wise['RA'], wise['DEC'], R
