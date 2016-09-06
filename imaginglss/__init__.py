@@ -1,6 +1,7 @@
 from .model.datarelease import DataRelease
 from .model.sfdmap import SFDMap
 from .model.tycho import Tycho
+from .model.wise import WISE
 
 import os.path
 
@@ -99,7 +100,7 @@ class DECALS(object):
     @property
     def wise(self):
         if not hasattr(self, '_wise'):
-            self._wise = Wise(self.wise_dir)
+            self._wise = WISE(self.wise_dir)
         return self._wise
 
     @property

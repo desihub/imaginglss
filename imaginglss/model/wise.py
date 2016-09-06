@@ -1,10 +1,11 @@
-import h5py
+import numpy
 
 class WISE(numpy.ndarray):
     """ Representing a WISE catalogue that
         is used to veto objects near stars 
     """
     def __new__(kls, path):
+        import h5py
         data = h5py.File(path, 'r')
         self = numpy.empty(len(data['RA']),
             dtype=[
