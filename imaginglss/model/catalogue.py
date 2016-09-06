@@ -236,10 +236,13 @@ class CachedCatalogue(ColumnStore):
                 for old, new, transform in aliases])
         self.cachedir = cachedir
 
-        self._size = filehandler.size(self.cachedir, 'BRICK_PRIMARY')
-        columns = filehandler.list(self.cachedir)
-        self._dtype = numpy.dtype([(key, columns[key]) for key in columns])
-
+        try:
+            self._size = filehandler.size(self.cachedir, 'BRICK_PRIMARY')
+            columns = filehandler.list(self.cachedir)
+            self._dtype = numpy.dtype([(key, columns[key]) for key in columns])
+        except:
+            self._size = None
+            self._dtype = None
         ColumnStore.__init__(self)
 
     @property
@@ -281,12 +284,17 @@ class CachedCatalogue(ColumnStore):
         cachedir = self.cachedir
 
         # get the first filename
-        for fn in self.filenames.values():
-            break
-
-        first = fits.read_table(fn)
-        dtype = subdtype(uppercase_dtype(first.dtype), Catalogue.COLUMNS)
-
+        dtype = None
+        for i, fn in enumerate(self.filenames.values()):
+            try:
+                first = fits.read_table(fn)
+                dtype = subdtype(uppercase_dtype(first.dtype), Catalogue.COLUMNS)
+            except:
+                if i < 10 and i != len(self.filenames) - 1:
+                    pass
+                else :
+                    raise
+                
         total = len(filenames)
 
         data = numpy.empty(0, dtype)
