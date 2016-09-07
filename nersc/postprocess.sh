@@ -12,8 +12,8 @@
 
 trap "kill 0" SIGINT
 
-OPTIONS="--conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py"
-OPTIONS+="--extra-target-definitions targets"
+OPTIONS="--conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py "
+OPTIONS+="--extra-target-definitions targets "
 
 if ! [ -f RANDOM.hdf5 ]; then
     echo "RANDOM.hdf5 not found!"
@@ -23,6 +23,7 @@ fi
 for T in $*; do
     cp RANDOM.hdf5 $T-RANDOM.hdf5
     (
+    set -x
     python ../scripts/imglss-query-tycho-veto.py $OPTIONS $T-RANDOM.hdf5
     python ../scripts/imglss-query-tycho-veto.py $OPTIONS $T.hdf5
     python ../scripts/imglss-query-completeness.py $OPTIONS --use-tycho-veto=BOSS_DR9 $T $T.hdf5 $T.hdf5
