@@ -9,13 +9,14 @@
 export OMP_NUM_THREADS=1
 module load python/2.7-anaconda
 
-source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
+
 mirror ../ imaginglss scripts
 
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
+srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
 
 
 
