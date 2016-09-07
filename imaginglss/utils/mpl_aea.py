@@ -965,6 +965,11 @@ def pix2tri(nside, pix, nest=False):
 def pix2radec(nside, pix):
     theta, phi = healpix.pix2ang(nside, pix)
     return np.degrees(phi), 90 - np.degrees(theta)
+
+def radec2pix(nside, ra, dec):
+    phi = np.radians(ra)
+    theta = np.radians(90 - dec)
+    return healpix.ang2pix(nside, theta, phi)
     
 def histogrammap(ra, dec, weights=None, nside=32, perarea=False, range=None):
     if range is not None:
