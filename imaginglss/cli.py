@@ -50,8 +50,8 @@ class CLI(object):
             # FIXME: test if the key matches target_type
             if hasattr(value, 'name'):
                 value = value.name
-            if isinstance(value, (list, tuple)) and hasattr(value[0], 'encode'):
-                value = [ v.encode('utf8') for v in value]
+            if isinstance(value, (list, tuple)):
+                value = [ v.encode('utf8') if hasattr(v, 'encode') else v for v in value]
 
             d[key] = value
         return d
