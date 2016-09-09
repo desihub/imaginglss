@@ -157,7 +157,7 @@ class DR2(EDR4):
 
     pass
 
-class DR3pre1(DR2):
+class DR3(DR2):
     """ Schema for DR3. Added new images.
 
     """
@@ -165,11 +165,11 @@ class DR3pre1(DR2):
     @staticmethod
     def format_image_filenames():
         images = {
-        'depth': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-depth-%(band)s.fits',
-        'galdepth': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-galdepth-%(band)s.fits',
-        'nexp': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-nexp-%(band)s.fits',
-        'model': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-model-%(band)s.fits',
-        'image': 'coadd/%(pre)s/%(brickname)s/decals-%(brickname)s-image-%(band)s.fits',
+        'depth': 'coadd/%(pre)s/%(brickname)s/legacysurvey-%(brickname)s-depth-%(band)s.fits',
+        'galdepth': 'coadd/%(pre)s/%(brickname)s/legacysurvey-%(brickname)s-galdepth-%(band)s.fits',
+        'nexp': 'coadd/%(pre)s/%(brickname)s/legacysurvey-%(brickname)s-nexp-%(band)s.fits',
+        'model': 'coadd/%(pre)s/%(brickname)s/legacysurvey-%(brickname)s-model-%(band)s.fits',
+        'image': 'coadd/%(pre)s/%(brickname)s/legacysurvey-%(brickname)s-image-%(band)s.fits',
         }
         imagerepos= {}
         for image in images:
