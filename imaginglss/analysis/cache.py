@@ -38,7 +38,6 @@ class CacheBuilder(object):
 
         fulldtype = bcast_call(comm, lambda : fits.read_table(files[0]).dtype)
 
-        print(sorted(fulldtype.names))
         dtype = [(column, fulldtype[column]) for column in self.columns if column is not 'BRICK_PRIMARY']
 
         dtype.append(('BRICK_PRIMARY', '?'))
@@ -63,5 +62,6 @@ class CacheBuilder(object):
             bf.create_from_array(column, cdata)
 
     def listfiles(self):
-        return list(sorted(glob(os.path.join(self.sweepdir, '*.fits'))))
+        return (list(sorted(glob(os.path.join(self.sweepdir, '*.fits'))))
+             +  list(sorted(glob(os.path.join(self.sweepdir, '*.fits.gz')))))
 
