@@ -256,8 +256,6 @@ class DataRelease(object):
     def __init__(self, root, cache, version, dustdir):
         root = os.path.normpath(root)
 
-        cache = os.path.join(cache, version)
-
         self.root = root
         self.cache = cache
 
@@ -311,12 +309,15 @@ class DataRelease(object):
 
         self.footprint = Footprint(bricks, self.brickindex) # build the footprint property
 
-        self.catalogue = catalogue.CachedCatalogue(
-            cachedir=os.path.join(self.cache, 'catalogue'),
-            bricks=self.footprint.bricks,
-            format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
-            aliases=myschema.CATALOGUE_ALIASES
-            )
+        self.catalogue = catalogue.BigFileCatalogue(os.path.join(self.cache, 'catalogue'), aliases=myschema.CATALOGUE_ALIASES)
+
+        #self.catalogue = catalogue.CachedCatalogue(
+        #    cachedir=os.path.join(self.cache, 'catalogue'),
+        #    bricks=self.footprint.bricks,
+        #    format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
+        #    aliases=myschema.CATALOGUE_ALIASES
+        #    )
+
         self.init_from_state()
 
     def create_footprint(self, extent):
@@ -358,7 +359,6 @@ class DataRelease(object):
                     self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
             else:
                 self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image])
-            
 
     def __getstate__(self):
         d = self.__dict__.copy()

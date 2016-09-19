@@ -12,10 +12,11 @@ __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
 from imaginglss import DECALS
-from imaginglss.utils import filehandler
 import numpy
 
 from imaginglss.cli import CLI
+from imaginglss.analysis import cache
+from imaginglss.model.catalogue import Catalogue
 
 ap = CLI("Build cache")
 
@@ -24,51 +25,8 @@ ns = ap.parse_args()
 from mpi4py import MPI
 comm = MPI.COMM_WORLD
 
-# Staggered start up builds covered_bricks.i8 on root rank only
-if comm.rank != 0:
-    comm.barrier()
-
 decals = DECALS(ns.conf)
-cat = decals.datarelease.catalogue
+builder = cache.CacheBuilder(decals.sweep_dir, decals.cache_dir, Catalogue.COLUMNS)
 
-# Staggered start up builds covered_bricks.i8 on root rank only
-if comm.rank == 0:
-    comm.barrier()
-
-filenames = list(cat.filenames.values())
-
-mystart = len(filenames) * comm.rank // comm.size
-myend = len(filenames) * (comm.rank + 1)// comm.size
-
-if comm.rank == 0:
-    print("reading files ...")
-
-data = cat.build_cache(filenames[mystart:myend])
-
-comm.barrier()
-
-if comm.rank == 0:
-    print("writing cache ...")
-
-if comm.rank == 0:
-    filehandler.write(cat.cachedir, data, mode='w')
-
-comm.barrier()
-
-N = comm.allgather(len(data))
-
-filehandler.write(cat.cachedir, data, mode='r+', offset=sum(N[:comm.rank]))
-
-
-print("chunk %d / %d done" %( comm.rank, comm.size))
-comm.barrier()
-
-if comm.rank == 0:
-    print("%d items are written" % sum(N))
-    total = len(filenames)
-    d = {
-        'nfiles': numpy.array([total],dtype='i8') 
-        }
-
-    filehandler.write(cat.cachedir, d)
+builder.build(comm)
 

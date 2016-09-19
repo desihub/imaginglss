@@ -16,7 +16,7 @@ from __future__ import print_function
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
-__all__ = ['read_image', 'read_table', 'read_metadata']
+__all__ = ['read_image', 'read_table', 'read_metadata', 'size_table']
 
 import numpy
 
@@ -24,6 +24,7 @@ def use_astropy():
     """ select the astropy backend """
     global read_image
     global read_table
+    global size_table
     global read_metadata
     global backend 
 
@@ -43,12 +44,22 @@ def use_astropy():
         #    fashion.
         return numpy.array(file[hdu].data, copy=True)
 
-    def read_table(filename, hdu=1):
+    def read_table(filename, hdu=1, subset=None):
         """ 
             Read the first HDU table from a fits file
         """
         file = fits.open(filename)
+        if subset is not None:
+            column, start, end = subset
+            return numpy.array(file[hdu][column][start:end], copy=True)
         return numpy.array(file[hdu].data, copy=True)
+
+    def size_table(filename, hdu=1):
+        """ 
+            Read the first HDU table from a fits file
+        """
+        file = fits.open(filename)
+        return file[hdu].shape[0]
 
     def read_metadata(filename, hdu=0):
         """ 
@@ -61,6 +72,7 @@ def use_fitsio():
     """ select the fitsio backend """
     global read_image
     global read_table
+    global size_table
     global read_metadata
     global backend 
 
@@ -80,12 +92,23 @@ def use_fitsio():
         #    fashion.
         return numpy.array(file[hdu].read(), copy=True)
 
-    def read_table(filename, hdu=1):
+    def read_table(filename, hdu=1, subset=None):
         """ 
             Read the first HDU table from a fits file
         """
         file = FITS(filename, upper=True)
-        return numpy.array(file[hdu].read(), copy=True)
+        if subset is not None:
+            column, start, end = subset
+            return numpy.array(file[hdu][column][start:end], copy=True)
+        else:
+            return numpy.array(file[hdu].read(), copy=True)
+
+    def size_table(filename, hdu=1):
+        """ 
+            Read the first HDU table from a fits file
+        """
+        file = FITS(filename, upper=True)
+        return file[hdu].get_nrows()
 
     def read_metadata(filename, hdu=0):
         """ 

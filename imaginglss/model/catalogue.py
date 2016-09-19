@@ -345,3 +345,49 @@ class CachedCatalogue(ColumnStore):
 
     def neighbours(self, coord, sep):
         pass
+
+class BigFileCatalogue(ColumnStore):
+    """
+    """
+
+    def __init__(self, cachedir, aliases):
+        import bigfile
+        self.cachedir = cachedir
+
+        with bigfile.BigFile(cachedir) as bf:
+            bd = bigfile.BigData(bf)
+
+            self._size = bd.size
+            self._dtype = bd.dtype
+            print (bf, cachedir, bd.dtype, bd.size)
+        self.aliases = aliases
+        ColumnStore.__init__(self)
+
+    @property
+    def size(self):
+        return self._size
+
+    @property
+    def dtype(self):
+        return self._dtype
+
+    def open(self, brick):
+        raise RuntimeError("FIXME: currently cannot open a brick from a sweep.")
+
+    def __getitem__(self, column):
+        if isinstance(column, basestring) and column in self.aliases:
+            old, transform = self.aliases[column]
+            return TransformedColumn(self[old], transform)
+        else:
+            return ColumnStore.__getitem__(self, column)
+
+    def fetch(self, column, start, end):
+        import bigfile
+        with bigfile.BigFile(self.cachedir) as bf:
+            return bf[column][start:end]
+
+    def __repr__(self):
+        return 'BigFileCatalogue: %s' % str(self.dtype)
+
+    def neighbours(self, coord, sep):
+        pass

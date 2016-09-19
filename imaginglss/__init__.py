@@ -63,6 +63,7 @@ class DECALS(object):
         d = {}
         d['decals_root'] = os.environ.get("DECALS_IMAGING", '.') 
         d['decals_cache'] = os.environ.get("DECALS_CACHE", '.') 
+        d['sweep_dir'] = os.environ.get("LEGACYSURVEY_SWEEP", '.') 
         d['dust_dir'] = os.environ.get("DUST_DIR", '.') 
         d['tycho_dir'] = os.environ.get("TYCHO_DIR", '.') 
         d['wise_dir'] = os.environ.get("WISE_DIR", '.') 
@@ -82,14 +83,20 @@ class DECALS(object):
         self.decals_root = d['decals_root']
         self.decals_release = d['decals_release']
         self.cache_dir = d['decals_cache']
+        self.sweep_dir = d['sweep_dir']
         self.dust_dir = d['dust_dir']
         self.tycho_dir = d['tycho_dir']
         self.wise_dir = d['wise_dir']
 
-        self.datarelease = DataRelease(root=self.decals_root, 
+        self.filename = filename
+
+    @property
+    def datarelease(self):
+        if not hasattr(self, '_datarelease'):
+            self._datarelease = DataRelease(root=self.decals_root, 
                 cache=self.cache_dir, version=self.decals_release,
                 dustdir=self.dust_dir)
-        self.filename = filename
+        return self._datarelease
 
     @property
     def tycho(self):
