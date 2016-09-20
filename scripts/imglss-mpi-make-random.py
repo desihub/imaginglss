@@ -81,7 +81,6 @@ def make_random(decals, ns, comm=MPI.COMM_WORLD):
     # Get the total footprint bounds, to throw randoms within, and an E(B-V)
     # map instance.
     dr = decals.datarelease
-    sfd= decals.sfdmap
 
     rng = np.random.RandomState(99934123)
     seeds = rng.randint(99999999, size=comm.size)
