@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #SBATCH -J build_cache
-#SBATCH -n 512
+#SBATCH -N 1
 #SBATCH -o build_cache.%j
 #SBATCH -p debug
 #SBATCH -t 00:30:00
 
 export OMP_NUM_THREADS=1
-module load python/2.7-anaconda
+module load python/3.5-anaconda
 
 source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
 
@@ -16,7 +16,7 @@ mirror ../ imaginglss scripts
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
+srun -n 1 python -u /dev/shm/local/scripts/imglss-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
 
 
 
