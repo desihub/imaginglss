@@ -41,24 +41,22 @@ class CacheBuilder(object):
         dtype = [(column, fulldtype[column]) for column in self.columns if column is not 'BRICK_PRIMARY']
 
         dtype.append(('BRICK_PRIMARY', '?'))
-
-        data = []
-        for i, filename in zip(range(start, end), files[start:end]):
-            onefile = fits.read_table(filename)
-            onedata = numpy.empty(len(onefile), dtype=dtype)
-            for column in self.columns:
-                if column != 'BRICK_PRIMARY':
-                    onedata[column][...] = onefile[column]
-                    if not column in onefile.dtype.names:
-                        raise KeyError("column `%s` not found in sweep files")
-                else:
-                    onedata[column][...] = True
-
-            data.append(onedata)
+        dtype = numpy.dtype(dtype)
 
         for column in self.columns:
-            cdata = numpy.concatenate([data1[column] for data1 in data], axis=0)
-            #print(cdata.dtype.itemsize, cdata.shape, cdata.dtype.str)
+            data = []
+            for i, filename in zip(range(start, end), files[start:end]):
+                size =fits.size_table(filename)
+                onefile = fits.read_table(filename, subset=(column, 0, size))
+                onedata = numpy.empty(len(onefile), dtype=dtype[column])
+                if column != 'BRICK_PRIMARY':
+                    onedata[...] = onefile
+                else:
+                    onedata[...] = True
+
+                data.append(onedata)
+
+            cdata = numpy.concatenate(data, axis=0)
             bf.create_from_array(column, cdata)
 
     def listfiles(self):
