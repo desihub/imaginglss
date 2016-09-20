@@ -22,11 +22,8 @@ ap = CLI("Build cache")
 
 ns = ap.parse_args()
 
-from mpi4py import MPI
-comm = MPI.COMM_WORLD
-
 decals = DECALS(ns.conf)
 builder = cache.CacheBuilder(decals.sweep_dir, decals.cache_dir, Catalogue.COLUMNS)
 
-builder.build(comm)
+builder.build()
 

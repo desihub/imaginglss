@@ -25,44 +25,45 @@ class CacheBuilder(object):
         self.columns = columns
         self.destdir = os.path.join(cachedir, 'catalogue')
         print(self.destdir)
-    # build cache from MPI
-    def build(self, comm):
-        files = bcast_call(comm, self.listfiles)
 
-        start = comm.rank * len(files) // comm.size
-        end = (comm.rank + 1) * len(files) // comm.size
+    def build(self):
 
-        rows = 0
+        files = self.listfiles()
 
-        bf = bigfile.BigFileMPI(comm, self.destdir, create=True)
+        bf = bigfile.BigFile(self.destdir, create=True)
 
-        fulldtype = bcast_call(comm, lambda : fits.read_table(files[0]).dtype)
+        fulldtype = fits.read_table(files[0]).dtype
 
         dtype = [(column, fulldtype[column]) for column in self.columns if column is not 'BRICK_PRIMARY']
 
         dtype.append(('BRICK_PRIMARY', '?'))
         dtype = numpy.dtype(dtype)
 
+        sizes = []
+        for filename in files:
+            sizes.append(fits.size_table(filename))
+
+        sizes = numpy.array(sizes)
+        offsets = numpy.concatenate([[0], numpy.cumsum(sizes)])
+
+        blocks = {}
         for column in self.columns:
-            data = []
-            for i, filename in zip(range(start, end), files[start:end]):
-                size = fits.size_table(filename)
-                onedata = numpy.empty(size, dtype=dtype[column])
+            blocks[column] = bf.create(column, dtype=dtype[column], size=sizes.sum(), Nfile=1)
+
+        for i, filename in enumerate(files):
+            onefile = fits.read_table(filename)
+            for column in self.columns:
+                onedata = numpy.empty(len(onefile), dtype=dtype[column])
+
                 if column != 'BRICK_PRIMARY':
-                    onefile = fits.read_table(filename, subset=(column, 0, size))
-                    onedata[...] = onefile
+                    onedata[...] = onefile[column]
                 else:
                     try:
-                        onefile = fits.read_table(filename, subset=(column, 0, size))
-                        onedata[...] = onefile
+                        onedata[...] = onefile[column]
                     except:
                         onedata[...] = True
-
-                data.append(onedata)
-
-            cdata = numpy.concatenate(data, axis=0)
-            bf.create_from_array(column, cdata)
-
+                blocks[column].write(offsets[i], onedata)
+            print(filename, 'done')
     def listfiles(self):
         return (list(sorted(glob(os.path.join(self.sweepdir, '*.fits'))))
              +  list(sorted(glob(os.path.join(self.sweepdir, '*.fits.gz')))))

@@ -1,5 +1,5 @@
 
-python scripts/imglss-mpi-build-cache.py --conf=testdata/dr3-mini/dr3.conf.py || exit 1
+python scripts/imglss-build-cache.py --conf=testdata/dr3-mini/dr3.conf.py || exit 1
 
 python scripts/imglss-mpi-select-objects.py --conf=testdata/dr3-mini/dr3.conf.py LRG LRG.hdf5|| exit 1
 
