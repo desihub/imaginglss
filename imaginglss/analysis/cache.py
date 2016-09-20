@@ -46,13 +46,17 @@ class CacheBuilder(object):
         for column in self.columns:
             data = []
             for i, filename in zip(range(start, end), files[start:end]):
-                size =fits.size_table(filename)
-                onefile = fits.read_table(filename, subset=(column, 0, size))
-                onedata = numpy.empty(len(onefile), dtype=dtype[column])
+                size = fits.size_table(filename)
+                onedata = numpy.empty(size, dtype=dtype[column])
                 if column != 'BRICK_PRIMARY':
+                    onefile = fits.read_table(filename, subset=(column, 0, size))
                     onedata[...] = onefile
                 else:
-                    onedata[...] = True
+                    try:
+                        onefile = fits.read_table(filename, subset=(column, 0, size))
+                        onedata[...] = onefile
+                    except:
+                        onedata[...] = True
 
                 data.append(onedata)
 
