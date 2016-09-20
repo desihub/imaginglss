@@ -5,7 +5,7 @@
 #SBATCH -n 512
 #SBATCH -o make_rans.%j
 #SBATCH -p debug
-#SBATCH -t 00:14:00
+#SBATCH -t 00:29:00
 
 export OMP_NUM_THREADS=1
 set -x
@@ -19,4 +19,4 @@ mirror ../ imaginglss scripts
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-time srun -n 256 python-mpi -u /dev/shm/local/scripts/imglss-mpi-make-random.py 10000000 RANDOM.hdf5 --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py
+time srun -n 256 python-mpi -u /dev/shm/local/scripts/imglss-mpi-make-random.py 20000000 RANDOM.hdf5 --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py
