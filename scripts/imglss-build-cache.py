@@ -23,7 +23,12 @@ ap = CLI("Build cache")
 ns = ap.parse_args()
 
 decals = DECALS(ns.conf)
+print('building brick index')
+dr = decals.datarelease
+
+print('building tractor cache')
 builder = cache.CacheBuilder(decals.sweep_dir, decals.cache_dir, Catalogue.COLUMNS)
 
 builder.build()
+print('done')
 
