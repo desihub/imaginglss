@@ -10,12 +10,13 @@
 export OMP_NUM_THREADS=1
 set -x
 
-module load python/2.7-anaconda
-source /project/projectdirs/m779/python-mpi/nersc/activate.sh
+module load python/3.5-anaconda
+source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
+bcast-pip bigfile
 
 mirror ../ imaginglss scripts
 
 # use without installing
 export PYTHONPATH=/dev/shm/local:$PYTHONPATH
 
-time srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 10000000 RANDOM.hdf5 --conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py
+time srun -n 256 python-mpi -u /dev/shm/local/scripts/imglss-mpi-make-random.py 10000000 RANDOM.hdf5 --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py
