@@ -12,7 +12,7 @@
 
 trap "kill 0" SIGINT
 
-OPTIONS="--conf /project/projectdirs/m779/yfeng1/imaginglss/dr2.conf.py "
+OPTIONS="--conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py "
 OPTIONS+="--extra-target-definitions targets "
 
 if ! [ -f RANDOM.hdf5 ]; then
@@ -26,10 +26,10 @@ for T in $*; do
     set -x
     python ../scripts/imglss-query-tycho-veto.py $OPTIONS $T-RANDOM.hdf5
     python ../scripts/imglss-query-tycho-veto.py $OPTIONS $T.hdf5
-    python ../scripts/imglss-query-completeness.py $OPTIONS --use-tycho-veto=BOSS_DR9 $T $T.hdf5 $T.hdf5
-    python ../scripts/imglss-query-completeness.py $OPTIONS --use-tycho-veto=BOSS_DR9 $T $T.hdf5 $T-RANDOM.hdf5
-    python '../scripts/imglss-export-text.py' $OPTIONS --use-tycho-veto=BOSS_DR9 --bands r g z W1 W2 -- $T $T.hdf5 $T.txt
-    python '../scripts/imglss-export-text.py' $OPTIONS --use-tycho-veto=BOSS_DR9 --bands r g z W1 W2 -- $T $T-RANDOM.hdf5 $T-RANDOM.txt
+    python ../scripts/imglss-query-completeness.py $OPTIONS --use-tycho-veto=DECAM_LRG $T $T.hdf5 $T.hdf5
+    python ../scripts/imglss-query-completeness.py $OPTIONS --use-tycho-veto=DECAM_LRG $T $T.hdf5 $T-RANDOM.hdf5
+    python '../scripts/imglss-export-text.py' $OPTIONS --use-tycho-veto=DECAM_LRG --bands r g z W1 W2 -- $T $T.hdf5 $T.txt
+    python '../scripts/imglss-export-text.py' $OPTIONS --use-tycho-veto=DECAM_LRG --bands r g z W1 W2 -- $T $T-RANDOM.hdf5 $T-RANDOM.txt
     ) &
 done
 
