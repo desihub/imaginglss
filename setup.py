@@ -10,6 +10,18 @@ setup(name="imaginglss", version="0.1.0rc0",
       package_dir = {'imaginglss': 'imaginglss'},
       include_package_data=False,
       packages = find_packages(),
-      install_requires=['numpy']
+      scripts = [
+            'scripts/imglss-build-cache.py',
+            'scripts/imglss-export-text.py',
+            'scripts/imglss-mpi-make-random.py',
+            'scripts/imglss-mpi-query-depth.py',
+            'scripts/imglss-mpi-select-objects.py',
+            'scripts/imglss-query-completeness.py',
+            'scripts/imglss-query-tycho-veto.py',
+            'scripts/imglss-naive-correlation.py',
+            'scripts/imglss-naive-crosscorrelation.py',
+      ],
+      install_requires=['numpy'],
+      requires=['bigfile'],
 )
 
