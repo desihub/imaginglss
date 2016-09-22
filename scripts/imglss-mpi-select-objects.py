@@ -126,21 +126,25 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
 
     targets['CONFIDENCE'] = targets['INTRINSIC_FLUX'] / targets['INTRINSIC_NOISELEVEL']
 
-    targets = np.concatenate(comm.allgather(targets))
-
-    if comm.rank == 0:
-        print('Total number of objects selected', len(targets))
-
     return targets
 
 if __name__=="__main__":
 
     targets = select_objs(decals, ns)
 
-    if MPI.COMM_WORLD.rank == 0:
+    comm = MPI.COMM_WORLD
+    size = comm.allreduce(len(targets))
+
+    if comm.rank == 0:
+        print('Total number of objects selected', size)
+
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
             ds.attrs.update(cli.prune_namespace(ns))
 
-            for column in targets.dtype.names:
-                ds = ff.create_dataset(column, data=targets[column])
+    for column in targets.dtype.names:
+        data = comm.gather(targets[column])
+        if comm.rank == 0:
+            with h5py.File(ns.output, 'r+') as ff:
+                ds = ff.create_dataset(column, data=np.concatenate(data))
+
