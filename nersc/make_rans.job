@@ -12,11 +12,11 @@ set -x
 
 module load python/3.5-anaconda
 source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
-bcast-pip bigfile
 
-mirror ../ imaginglss scripts
+# install the 'nersc' version of imaginglss
+bcast-pip bigfile /project/projectdirs/desi/users/yfeng1/imaginglss/imaginglss
 
-# use without installing
-export PYTHONPATH=/dev/shm/local:$PYTHONPATH
-
-time srun -n 256 python-mpi -u /dev/shm/local/scripts/imglss-mpi-make-random.py 20000000 RANDOM.hdf5 --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py
+time srun -n 512 python-mpi -u /dev/shm/local/bin/imglss-mpi-make-random.py \
+    --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py \
+    20000000 \
+    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3/RANDOM.hdf5

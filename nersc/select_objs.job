@@ -13,18 +13,16 @@ set -x
 module load python/3.5-anaconda
 source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
 
-mirror ../ imaginglss scripts
-bcast-pip bigfile
+# install the 'nersc' version of imaginglss
+bcast-pip bigfile /project/projectdirs/desi/users/yfeng1/imaginglss/imaginglss
 
 OPTIONS=" --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py "
 OPTIONS+=" --extra-target-definitions targets "
 
-# use without installing
-export PYTHONPATH=/dev/shm/local:$PYTHONPATH
-
 for T in ELG LRG QSO; do
-    time srun -n 16 python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py \
+    time srun -n 16 python-mpi /dev/shm/local/bin/imglss-mpi-select-objects.py \
     $OPTIONS \
-    ${T} ${T}.hdf5
+    ${T} \
+    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3/${T}.hdf5
 done
 
