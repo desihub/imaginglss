@@ -40,7 +40,9 @@ def DECAM_QSO(decals):
 def DECAM_BGS(decals):
     tycho = decals.tycho
     vtmag = tycho['VTMAG']
-    R = 10 ** (2.2 - 0.15 * vtmag) / 3600. 
+#    R = 10 ** (2.2 - 0.15 * vtmag) / 3600. 
+    # The above mask is not conservative enough. Ellie suggests:
+    R = 10 ** (3.3 - 0.15 * vtmag) / 3600.
     return tycho['RA'], tycho['DEC'], R
 
 def EBOSS_V6(decals):
