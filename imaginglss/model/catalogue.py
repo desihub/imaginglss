@@ -354,7 +354,7 @@ class BigFileCatalogue(ColumnStore):
         import bigfile
         self.cachedir = cachedir
 
-        with bigfile.BigFile(cachedir) as bf:
+        with bigfile.BigFile(cachedir, create=True) as bf:
             bd = bigfile.BigData(bf)
 
             self._size = bd.size
