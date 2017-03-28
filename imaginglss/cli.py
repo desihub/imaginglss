@@ -53,5 +53,5 @@ class CLI(object):
             if isinstance(value, (list, tuple)):
                 value = [ v.encode('utf8') if hasattr(v, 'encode') else v for v in value]
 
-            d[key] = value
+            d[key] = str(value)
         return d
