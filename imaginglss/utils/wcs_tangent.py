@@ -143,15 +143,17 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
     """
     coord = numpy.array(coord, dtype='f8').copy()
     view = coord
-    if coord.ndim == 1:
-        view = view.reshape(2, 1)
+    view = view.reshape(2, -1)
+    CRVAL = numpy.array(CRVAL).reshape(2, -1)
+    CRPIX = numpy.array(CRPIX).reshape(2, -1)
 
     xy    = numpy.empty_like(view)
-    # watch out, this may be wrong if the matrix is not diagonal
-    matrix = numpy.linalg.inv(numpy.array(CD).reshape(2, 2))
 
-    r = CreateRotationMatrix_spam(CRVAL[0],CRVAL[1])
-    ra, dec = Rotate_spam(r, view[0], view[1]) 
+    # watch out, this may be wrong if the matrix is not diagonal
+    matrix = numpy.linalg.inv(numpy.array(CD).reshape(2, 2, -1).transpose((2, 0, 1)))
+
+    ra, dec = native_transform(CRVAL[0], CRVAL[1], view[0], view[1], inverted=False)
+
     ra *= numpy.pi / 180.
     dec *= numpy.pi / 180.
 
@@ -159,12 +161,64 @@ def ang2pix(coord,CD,CRPIX,CRVAL):
     xy[0] = rdiv * numpy.sin(ra)
     xy[1] = -rdiv * numpy.cos(ra)
 
-    xy = matrix.dot(xy)
-    xy += numpy.array(CRPIX).reshape(2, 1)
+    xy = numpy.einsum('imn,ni->mi', matrix, xy)
+    xy += numpy.array(CRPIX).reshape(2, -1)
     return xy.reshape(coord.shape)
     #
+def native_transform(native_longpole, native_latpole, longitude, latitude, inverted=False):
+    
+    longpole = 180.
+    d2r = numpy.pi / 180.
+    # If Theta0 = 90 then CRVAL gives the coordinates of the origin in the
+    # native system.   This must be converted (using Eq. 7 in Greisen &
+    # Calabretta with theta0 = 0) to give the coordinates of the North
+    # pole (longitude_p, latitude_p)
 
+    # Longpole is the longitude in the native system of the North Pole in
+    # the standard system (default = 180 degrees).
+    sp = numpy.sin(longpole*d2r)
+    cp = numpy.cos(longpole*d2r)
 
+    sa = numpy.sin(native_longpole * d2r)
+    ca = numpy.cos(native_longpole * d2r)
+    sd = numpy.sin(native_latpole * d2r)
+    cd = numpy.cos(native_latpole * d2r)
+
+    # calculate rotation matrix
+
+    # esutils has this transpolsed
+    # we transpose it back 
+    r = numpy.array([[-sa*sp - ca*cp*sd,   sa*cp - ca*sp*sd, ca*cd ] ,
+                     [ ca*sp - sa*cp*sd , -ca*cp - sa*sp*sd, sa*cd ] ,
+                     [ cp*cd           ,   sp*cd           , sd    ] ],
+                    dtype='f8').transpose((2, 1, 0))
+
+    
+    latitude = latitude * (numpy.pi / 180)
+    longitude = longitude * (numpy.pi / 180)
+    x = numpy.cos(latitude)*numpy.cos(longitude)
+    y = numpy.cos(latitude)*numpy.sin(longitude)
+    z = numpy.sin(latitude)
+
+    xyz = numpy.array([x, y, z])
+
+    # find solution to the system of equations and put it in b
+    # Can't use matrix notation in case l,m,n are arrays
+
+    if not inverted:
+        lmn2 = numpy.einsum('imn,ni->mi', r, xyz)
+    else:
+        lmn2 = numpy.einsum('inm,ni->mi', r, xyz)
+    
+    b0, b1, b2 = lmn2
+
+    # Account for possible roundoff
+    b2 = numpy.clip(b2, -1, 1)
+
+    lat_new = numpy.arcsin(b2)* (180. / numpy.pi)
+    lon_new = numpy.arctan2(b1, b0) * (180. / numpy.pi)
+
+    return lon_new, lat_new
 
 def pix2ang(xy,CD,CRPIX,CRVAL):
     """
@@ -176,16 +230,19 @@ def pix2ang(xy,CD,CRPIX,CRVAL):
     xy    = numpy.array(xy, dtype='f8').copy()
     coord = numpy.empty_like(xy)
     view = coord
-    if coord.ndim == 1:
-        view = view.reshape(2, 1)
-        xy = xy.reshape(2, 1)
+
+    view = view.reshape(2, -1)
+    xy = xy.reshape(2, -1)
+    CRVAL = numpy.array(CRVAL).reshape(2, -1)
+    CRPIX = numpy.array(CRPIX).reshape(2, -1)
 
     # watch out, this may be wrong if the matrix is not diagonal
-    matrix = numpy.array(CD).reshape(2, 2)
+    matrix = numpy.array(CD).reshape(2, 2, -1).transpose((2, 0, 1)).copy()
 
-    xy  -= numpy.array(CRPIX).reshape(2, 1)
-    xy   = matrix.dot(xy)
-    rinv = numpy.einsum('ij,ij->j',xy,xy)
+    xy  -= numpy.array(CRPIX).reshape(2, -1)
+    xy   = numpy.einsum('imn,ni->mi', matrix, xy)
+    rinv = numpy.einsum('mi,mi->i',xy,xy)
+
     # this will give a reasonable coord[1] at pole
     rinv.clip(1e-28, out=rinv)
     rinv **= -0.5
@@ -194,73 +251,9 @@ def pix2ang(xy,CD,CRPIX,CRVAL):
     view[1] = numpy.arctan(rinv)
     view[0] = numpy.arctan2(xy[0],-xy[1])
     view   *= 180 / numpy.pi
-    r        = CreateRotationMatrix_spam(CRVAL[0], CRVAL[1])
-    view[:] = Rotate_spam(r.T, view[0], view[1]) 
+    ra, dec = native_transform(CRVAL[0], CRVAL[1], view[0], view[1], inverted=True)
     view[0]%= 360.
     return coord
-
-
-##############################
-#  Private routines, taken from esutils.py
-#
-def CreateRotationMatrix_spam(native_longpole, native_latpole):
-    """ create rotation matrix for tan. adapted from esutil.py """
-    longpole = 180.
-    d2r = numpy.pi / 180.
-    # If Theta0 = 90 then CRVAL gives the coordinates of the origin in the
-    # native system.   This must be converted (using Eq. 7 in Greisen &
-    # Calabretta with theta0 = 0) to give the coordinates of the North
-    # pole (longitude_p, latitude_p)
-
-    # Longpole is the longitude in the native system of the North Pole in
-    # the standard system (default = 180 degrees).
-    sp = math.sin(longpole*d2r)
-    cp = math.cos(longpole*d2r)
-
-    sa = math.sin(native_longpole * d2r)
-    ca = math.cos(native_longpole * d2r)
-    sd = math.sin(native_latpole * d2r)
-    cd = math.cos(native_latpole * d2r)
-
-    # calculate rotation matrix
-
-    # esutils has this transpolsed
-    r = numpy.array([[-sa*sp - ca*cp*sd,   sa*cp - ca*sp*sd, ca*cd ] ,
-                     [ ca*sp - sa*cp*sd , -ca*cp - sa*sp*sd, sa*cd ] ,
-                     [ cp*cd           ,   sp*cd           , sd    ] ],
-                    dtype='f8')
-
-    # we transpose it back 
-    return r.T.copy()
-
-def Rotate_spam(r, longitude, latitude):
-    """
-    Apply a rotation matrix to the input longitude and latitude
-    inputs must be numpy arrays; stolen from esutils.py
-    """
-    latitude = latitude * (numpy.pi / 180)
-    longitude = longitude * (numpy.pi / 180)
-    l = numpy.cos(latitude)*numpy.cos(longitude)
-    m = numpy.cos(latitude)*numpy.sin(longitude)
-    n = numpy.sin(latitude)
-
-    lmn = numpy.array([l, m, n])
-
-    # find solution to the system of equations and put it in b
-    # Can't use matrix notation in case l,m,n are arrays
-
-    lmn2 = r.dot(lmn)
-
-    b0, b1, b2 = lmn2
-
-    # Account for possible roundoff
-    b2 = numpy.clip(b2, -1, 1)
-
-    lat_new = numpy.arcsin(b2)* (180. / numpy.pi)
-    lon_new = numpy.arctan2(b1, b0) * (180. / numpy.pi)
-
-    return lon_new, lat_new
-
 
 if __name__ == '__main__':
     # perform some tests
@@ -300,6 +293,21 @@ if __name__ == '__main__':
         assert_allclose(ours.T, astropy, rtol=1e-9)
 
     def test():
+        # assert vector input runs.
+        ra = [30] * 2
+        dec = [30] * 2
+        ra0 = [40] * 2
+        dec0 = [50] * 2
+
+        ours = ang2pix((ra, dec), 
+                CD=(-7.27777777777778E-05,0., 0.,7.27777777777778E-05,),
+                CRPIX=(1800.5,1800.5),
+                CRVAL=(ra0, dec0))
+        back = pix2ang(ours, 
+                CD=(-7.27777777777778E-05,0., 0.,7.27777777777778E-05,),
+                CRPIX=(1800.5,1800.5),
+                CRVAL=(ra0, dec0))
+
         compare(30, 30, 31., 30)
         compare(30, 30, 30., 30)
         compare(30, 30, 30., 31)
@@ -308,4 +316,5 @@ if __name__ == '__main__':
         # we still have an issue at the north pole 
         # is this the right name for DEC=90? -YF
         compare(0., 90, 0., 89.9)
+
     test()
