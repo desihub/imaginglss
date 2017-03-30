@@ -21,9 +21,9 @@ cli.add_argument("query",
         help="catalogue to query ccd systematic")
 
 cli.add_argument("ccdfile",
-        help="survey ccd fits file")
+        help="survey ccd fits file; this is the path to the -decals file. we also need the -nondecals and -extras file.")
 
-cli.add_argument("ccdattr",
+cli.add_argument("ccdattr", type=lambda x: x.upper(),
         help="column name to query ")
 
 ns = cli.parse_args()
@@ -35,25 +35,34 @@ import fitsio
 
 class CCDTable(object):
     def __init__(self, filename):
-        ccdhdu = fitsio.FITS(ns.ccdfile)[1]
-        self.RA = ccdhdu['RA'][:]
-        self.DEC = ccdhdu['DEC'][:]
+        data = []
+        for fn in [filename,
+                   filename.replace('ccds-decals', 'ccds-nondecals'),
+                   filename.replace('ccds-decals', 'ccds-extra')]:
+            ccdhdu = fitsio.FITS(fn, upper=True)[1]
+            data.append(ccdhdu[:])
+
+        data = concatenate_struct_arrays(data)
+
+        self.data = data
+
+        self.RA = data['RA'][:]
+        self.DEC = data['DEC'][:]
         self.CD = np.array([
-                ccdhdu['CD1_1'][:],
-                ccdhdu['CD1_2'][:],
-                ccdhdu['CD2_1'][:],
-                ccdhdu['CD2_2'][:],]).copy()
+                data['CD1_1'][:],
+                data['CD1_2'][:],
+                data['CD2_1'][:],
+                data['CD2_2'][:],]).copy()
         self.CRVAL = np.array([
-                ccdhdu['CRVAL1'][:],
-                ccdhdu['CRVAL2'][:]]).copy()
+                data['CRVAL1'][:],
+                data['CRVAL2'][:]]).copy()
         # offset by one since Python starts from 0.
         self.CRPIX = np.array([
-                ccdhdu['CRPIX1'][:],
-                ccdhdu['CRPIX2'][:]]).copy() - 1
+                data['CRPIX1'][:],
+                data['CRPIX2'][:]]) - 1
         self.SIZE = np.array([
-                ccdhdu['WIDTH'][:],
-                ccdhdu['HEIGHT'][:]]).copy()
-        self.data = ccdhdu[:]
+                data['WIDTH'][:],
+                data['HEIGHT'][:]]).copy()
 
     def __len__(self):
         return len(self.data)
@@ -78,9 +87,9 @@ def main():
     print("size of query is %d" % len(RA))
     print("number of CCDS is %d" % len(ccdtable))
 
-    if ns.ccdattr not in ccdtable.data.dtype.names:
+    if ns.ccdattr not in ccdtable.data.dtype.names and ns.ccdattr != 'NEXP':
         raise RuntimeError("ccdattr not found, available ones are %s"
-                    % str(ccdtable.data.dtype.names))
+                    % str(list(ccdtable.data.dtype.names) + ['NEXP']))
         
     r1 = np.zeros_like(RA)
     r2 = np.zeros_like(RA)
@@ -93,16 +102,20 @@ def main():
         i = i[mask]
         j = j[mask]
 
-        v = ccdtable.data[ns.ccdattr][i]
-        np.add.at(r1, j, v)
-        np.add.at(r2, j, v ** 2)
+        if ns.ccdattr != 'NEXP':
+            v = ccdtable.data[ns.ccdattr][i]
+            np.add.at(r1, j, v)
+            np.add.at(r2, j, v ** 2)
         np.add.at(N, j, 1)
 
     ccdtree.root.enum(querytree.root, np.radians(0.2), process)
 
-    COLUMNNAME = 'CCD-%s' % ns.ccdattr.upper()
+    COLUMNNAME = 'CCD-%s' % ns.ccdattr
 
-    r1 /= N
+    if ns.ccdattr != 'NEXP':
+        r1 /= N
+    else:
+        r1 = N
 
     print('mean and std of %s from the query is %g %g' % (ns.ccdattr, r1.mean(), r1.std()))
 
@@ -113,6 +126,26 @@ def main():
         ds.attrs.update(cli.prune_namespace(ns))
 
     print('written as %s in %s' % ( COLUMNNAME, ns.query))
+
+def concatenate_struct_arrays(arrays):
+    names = None
+    for array in arrays:
+        if names is None:
+            names = set(array.dtype.names)
+        else:
+            names = names.union(set(array.dtype.names))
+    dtype = []
+    for name in names:
+        dtype.append((name, array[0].dtype[name]))
+    dtype = np.dtype(dtype)
+    result = np.empty(sum(len(a) for a in arrays), dtype=dtype)
+    offset = 0
+    for array in arrays:
+        for name in names:
+            result[offset:offset+len(array)][name] = array[name]
+        offset = offset + len(array)
+        
+    return result
 
 if __name__ == "__main__":
     main()
