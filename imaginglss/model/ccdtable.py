@@ -19,25 +19,27 @@ class CCDTable(object):
 
         data = concatenate_struct_arrays(data)
 
-        self.data = data
+        mask = get_legacy_cataloged(data)
 
-        self.RA = data['RA'][:]
-        self.DEC = data['DEC'][:]
+        self.data = data[mask]
+
+        self.RA = data['RA'][mask]
+        self.DEC = data['DEC'][mask]
         self.CD = np.array([
-                data['CD1_1'][:],
-                data['CD1_2'][:],
-                data['CD2_1'][:],
-                data['CD2_2'][:],]).copy()
+                data['CD1_1'][mask],
+                data['CD1_2'][mask],
+                data['CD2_1'][mask],
+                data['CD2_2'][mask],]).copy()
         self.CRVAL = np.array([
-                data['CRVAL1'][:],
-                data['CRVAL2'][:]]).copy()
+                data['CRVAL1'][mask],
+                data['CRVAL2'][mask]]).copy()
         # offset by one since Python starts from 0.
         self.CRPIX = np.array([
-                data['CRPIX1'][:],
-                data['CRPIX2'][:]]) - 1
+                data['CRPIX1'][mask],
+                data['CRPIX2'][mask]]) - 1
         self.SIZE = np.array([
-                data['WIDTH'][:],
-                data['HEIGHT'][:]]).copy()
+                data['WIDTH'][mask],
+                data['HEIGHT'][mask]]).copy()
 
     def __len__(self):
         return len(self.data)
@@ -71,3 +73,20 @@ def concatenate_struct_arrays(arrays):
         
     return result
 
+def get_legacy_cataloged(data):
+
+    zp0 = dict(g=25.08, r=25.29, z=24.92)
+    
+    mask = data['EXPTIME'] >= 30
+    mask &= data['CCDNMATCH'] >= 20
+    mask &= np.abs(data['ZPT'] - data['CCDZPT']) <= 0.1
+
+    for band in 'grz':
+        hasband = data['FILTER'] == bytes(band,'utf-8')
+        mask[hasband] &= data['ZPT'][hasband] >= (zp0[band] - 0.5) 
+        mask[hasband] &= data['ZPT'][hasband] <= (zp0[band] + 0.25)
+
+    kept = mask.sum() * 100.0 / len(mask)
+    print('Percentage of CCDs propagated to Legacy catalogs:',np.round(kept,1))
+
+    return mask
