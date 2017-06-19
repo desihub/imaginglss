@@ -48,7 +48,7 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss.utils.euler</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="euler"><a class="viewcode-back" href="../../../imaginglss.utils.euler.html#imaginglss.utils.euler.euler">[docs]</a><span class="k">def</span> <span class="nf">euler</span><span class="p">(</span><span class="n">ai</span><span class="p">,</span> <span class="n">bi</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fk4</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
    <span class="sd">&quot;&quot;&quot;</span>
@@ -103,41 +103,41 @@
    <span class="n">n_params</span> <span class="o">=</span> <span class="mi">5</span>
    <span class="n">select1</span> <span class="o">=</span> <span class="n">select</span>
    
-   <span class="c"># ON_ERROR, 2</span>
+   <span class="c1"># ON_ERROR, 2</span>
    
-<span class="c">#   print &#39;Syntax - EULER, AI, BI, A0, B0, [ SELECT, /FK4, SELECT= ]&#39;</span>
-<span class="c">#   print &#39;    AI,BI - Input longitude,latitude in degrees&#39;</span>
-<span class="c">#   print &#39;    AO,BO - Output longitude, latitude in degrees&#39;</span>
-<span class="c">#   print &#39;    SELECT - Scalar (1-6) specifying transformation type&#39;</span>
+<span class="c1">#   print &#39;Syntax - EULER, AI, BI, A0, B0, [ SELECT, /FK4, SELECT= ]&#39;</span>
+<span class="c1">#   print &#39;    AI,BI - Input longitude,latitude in degrees&#39;</span>
+<span class="c1">#   print &#39;    AO,BO - Output longitude, latitude in degrees&#39;</span>
+<span class="c1">#   print &#39;    SELECT - Scalar (1-6) specifying transformation type&#39;</span>
    
    <span class="n">twopi</span> <span class="o">=</span> <span class="mf">2.0e0</span> <span class="o">*</span> <span class="n">pi</span>
    <span class="n">fourpi</span> <span class="o">=</span> <span class="mf">4.0e0</span> <span class="o">*</span> <span class="n">pi</span>
    <span class="n">deg_to_rad</span> <span class="o">=</span> <span class="mf">180.0e0</span> <span class="o">/</span> <span class="n">pi</span>
    
-   <span class="c">#   J2000 coordinate conversions are based on the following constants</span>
-   <span class="c">#   (see the Hipparcos explanatory supplement).</span>
-   <span class="c">#  eps = 23.4392911111d              Obliquity of the ecliptic</span>
-   <span class="c">#  alphaG = 192.85948d               Right Ascension of Galactic North Pole</span>
-   <span class="c">#  deltaG = 27.12825d                Declination of Galactic North Pole</span>
-   <span class="c">#  lomega = 32.93192d                Galactic longitude of celestial equator</span>
-   <span class="c">#  alphaE = 180.02322d              Ecliptic longitude of Galactic North Pole</span>
-   <span class="c">#  deltaE = 29.811438523d            Ecliptic latitude of Galactic North Pole</span>
-   <span class="c">#  Eomega  = 6.3839743d              Galactic longitude of ecliptic equator</span>
+   <span class="c1">#   J2000 coordinate conversions are based on the following constants</span>
+   <span class="c1">#   (see the Hipparcos explanatory supplement).</span>
+   <span class="c1">#  eps = 23.4392911111d              Obliquity of the ecliptic</span>
+   <span class="c1">#  alphaG = 192.85948d               Right Ascension of Galactic North Pole</span>
+   <span class="c1">#  deltaG = 27.12825d                Declination of Galactic North Pole</span>
+   <span class="c1">#  lomega = 32.93192d                Galactic longitude of celestial equator</span>
+   <span class="c1">#  alphaE = 180.02322d              Ecliptic longitude of Galactic North Pole</span>
+   <span class="c1">#  deltaE = 29.811438523d            Ecliptic latitude of Galactic North Pole</span>
+   <span class="c1">#  Eomega  = 6.3839743d              Galactic longitude of ecliptic equator</span>
    
    <span class="k">if</span> <span class="n">fk4</span><span class="p">:</span>   
-      <span class="n">equinox</span> <span class="o">=</span> <span class="s">&#39;(B1950)&#39;</span>
+      <span class="n">equinox</span> <span class="o">=</span> <span class="s1">&#39;(B1950)&#39;</span>
       <span class="n">psi</span> <span class="o">=</span> <span class="n">array</span> <span class="p">([</span><span class="mf">0.57595865315e0</span><span class="p">,</span> <span class="mf">4.9261918136e0</span><span class="p">,</span> <span class="mf">0.00000000000e0</span><span class="p">,</span> <span class="mf">0.0000000000e0</span><span class="p">,</span> <span class="mf">0.11129056012e0</span><span class="p">,</span> <span class="mf">4.7005372834e0</span><span class="p">])</span>
       <span class="n">stheta</span> <span class="o">=</span> <span class="n">array</span> <span class="p">([</span><span class="mf">0.88781538514e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.88781538514e0</span><span class="p">,</span> <span class="mf">0.39788119938e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39788119938e0</span><span class="p">,</span> <span class="mf">0.86766174755e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86766174755e0</span><span class="p">])</span>
       <span class="n">ctheta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.46019978478e0</span><span class="p">,</span> <span class="mf">0.46019978478e0</span><span class="p">,</span> <span class="mf">0.91743694670e0</span><span class="p">,</span> <span class="mf">0.91743694670e0</span><span class="p">,</span> <span class="mf">0.49715499774e0</span><span class="p">,</span> <span class="mf">0.49715499774e0</span><span class="p">])</span>
       <span class="n">phi</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">4.9261918136e0</span><span class="p">,</span> <span class="mf">0.57595865315e0</span><span class="p">,</span> <span class="mf">0.0000000000e0</span><span class="p">,</span> <span class="mf">0.00000000000e0</span><span class="p">,</span> <span class="mf">4.7005372834e0</span><span class="p">,</span> <span class="mf">0.11129056012e0</span><span class="p">])</span>
    <span class="k">else</span><span class="p">:</span>   
-      <span class="n">equinox</span> <span class="o">=</span> <span class="s">&#39;(J2000)&#39;</span>
+      <span class="n">equinox</span> <span class="o">=</span> <span class="s1">&#39;(J2000)&#39;</span>
       <span class="n">psi</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.57477043300e0</span><span class="p">,</span> <span class="mf">4.9368292465e0</span><span class="p">,</span> <span class="mf">0.00000000000e0</span><span class="p">,</span> <span class="mf">0.0000000000e0</span><span class="p">,</span> <span class="mf">0.11142137093e0</span><span class="p">,</span> <span class="mf">4.71279419371e0</span><span class="p">])</span>
       <span class="n">stheta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.88998808748e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.88998808748e0</span><span class="p">,</span> <span class="mf">0.39777715593e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.39777715593e0</span><span class="p">,</span> <span class="mf">0.86766622025e0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.86766622025e0</span><span class="p">])</span>
       <span class="n">ctheta</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">0.45598377618e0</span><span class="p">,</span> <span class="mf">0.45598377618e0</span><span class="p">,</span> <span class="mf">0.91748206207e0</span><span class="p">,</span> <span class="mf">0.91748206207e0</span><span class="p">,</span> <span class="mf">0.49714719172e0</span><span class="p">,</span> <span class="mf">0.49714719172e0</span><span class="p">])</span>
       <span class="n">phi</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">4.9368292465e0</span><span class="p">,</span> <span class="mf">0.57477043300e0</span><span class="p">,</span> <span class="mf">0.0000000000e0</span><span class="p">,</span> <span class="mf">0.00000000000e0</span><span class="p">,</span> <span class="mf">4.71279419371e0</span><span class="p">,</span> <span class="mf">0.11142137093e0</span><span class="p">])</span>
       
-   <span class="n">i</span> <span class="o">=</span> <span class="n">select</span> <span class="o">-</span> <span class="mi">1</span>                         <span class="c"># IDL offset</span>
+   <span class="n">i</span> <span class="o">=</span> <span class="n">select</span> <span class="o">-</span> <span class="mi">1</span>                         <span class="c1"># IDL offset</span>
    <span class="n">a</span> <span class="o">=</span> <span class="n">ai</span> <span class="o">/</span> <span class="n">deg_to_rad</span> <span class="o">-</span> <span class="n">phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
    <span class="n">b</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">/</span> <span class="n">deg_to_rad</span>
    <span class="n">sb</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">;</span>        <span class="n">cb</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>

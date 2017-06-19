@@ -47,9 +47,10 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">.model.datarelease</span> <span class="kn">import</span> <span class="n">DataRelease</span>
+<span></span><span class="kn">from</span> <span class="nn">.model.datarelease</span> <span class="kn">import</span> <span class="n">DataRelease</span>
 <span class="kn">from</span> <span class="nn">.model.sfdmap</span> <span class="kn">import</span> <span class="n">SFDMap</span>
 <span class="kn">from</span> <span class="nn">.model.tycho</span> <span class="kn">import</span> <span class="n">Tycho</span>
+<span class="kn">from</span> <span class="nn">.model.wise</span> <span class="kn">import</span> <span class="n">WISE</span>
 
 <span class="kn">import</span> <span class="nn">os.path</span>
 
@@ -106,38 +107,61 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;DECALS_PY_CONFIG&#39;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DECALS_PY_CONFIG&#39;</span><span class="p">)</span>
 
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DECALS_IMAGING&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> 
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_cache&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DECALS_CACHE&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> 
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;dust_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;DUST_DIR&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> 
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;tycho_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;TYCHO_DIR&quot;</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span> 
-        <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_release&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_root&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_root&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DECALS_IMAGING&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_cache&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DECALS_CACHE&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;sweep_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LEGACYSURVEY_SWEEP&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;dust_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DUST_DIR&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;tycho_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TYCHO_DIR&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;wise_dir&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;WISE_DIR&quot;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span> 
+        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_release&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_root&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
-            <span class="c"># if a configuration file is specified.</span>
+            <span class="c1"># if a configuration file is specified.</span>
 
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;__file__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;os&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span>
-            <span class="n">d</span><span class="p">[</span><span class="s">&#39;__path__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;__file__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;os&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span>
+            <span class="n">d</span><span class="p">[</span><span class="s1">&#39;__path__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
 
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
                 <span class="n">script</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                 <span class="k">exec</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">decals_root</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_root&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decals_release</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_release&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;decals_cache&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dust_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;dust_dir&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tycho_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;tycho_dir&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decals_root</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_root&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decals_release</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_release&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;decals_cache&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sweep_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;sweep_dir&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dust_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;dust_dir&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tycho_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;tycho_dir&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wise_dir</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;wise_dir&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">datarelease</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decals_root</span><span class="p">,</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">datarelease</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_datarelease&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_datarelease</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decals_root</span><span class="p">,</span> 
                 <span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cache_dir</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">decals_release</span><span class="p">,</span>
                 <span class="n">dustdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dust_dir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sfdmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">sfdmap</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tycho</span> <span class="o">=</span> <span class="n">Tycho</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tycho_dir</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datarelease</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tycho</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_tycho&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tycho</span> <span class="o">=</span> <span class="n">Tycho</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tycho_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tycho</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">wise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_wise&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wise</span> <span class="o">=</span> <span class="n">WISE</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wise_dir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wise</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sfdmap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">sfdmap</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span></div>

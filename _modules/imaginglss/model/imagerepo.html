@@ -48,7 +48,7 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss.model.imagerepo</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">fits</span>
+<span></span><span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">fits</span>
 <span class="kn">import</span> <span class="nn">os.path</span>
 
 <div class="viewcode-block" id="ImageRepo"><a class="viewcode-back" href="../../../imaginglss.model.imagerepo.html#imaginglss.model.imagerepo.ImageRepo">[docs]</a><span class="k">class</span> <span class="nc">ImageRepo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -121,7 +121,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">brick</span><span class="p">]</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> does not exist&#39;</span> <span class="o">%</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="n">fname</span><span class="p">)</span>
         <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_image</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span></div>
         
@@ -162,16 +162,16 @@
 <span class="sd">            the brick whose filename will be generated.</span>
 <span class="sd">         </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="s">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
             <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">(</span><span class="n">brick</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;brickid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">id</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;brickname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;brickid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;brickname&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span><span class="o">.</span><span class="n">name</span>
             <span class="n">fn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> 
                 <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">)</span> <span class="o">%</span> <span class="n">kwargs</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-            <span class="n">fngz</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">+</span> <span class="s">&#39;.gz&#39;</span> 
+            <span class="n">fngz</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">+</span> <span class="s1">&#39;.gz&#39;</span> 
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fngz</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">fngz</span>
         <span class="k">return</span> <span class="n">fn</span></div></div>

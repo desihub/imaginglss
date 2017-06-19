@@ -48,7 +48,7 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss.model.brickindex</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Python code to provide a high level table/list/index of</span>
 <span class="sd">bricks, and methods for organizing and querying them and</span>
 <span class="sd">returning brick objects.</span>
@@ -59,9 +59,9 @@
 
 <span class="kn">from</span> <span class="nn">.brick</span> <span class="kn">import</span> <span class="n">Brick</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Yu Feng and Martin White&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;1.0&quot;</span>
-<span class="n">__email__</span>  <span class="o">=</span> <span class="s">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Yu Feng and Martin White&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s2">&quot;yfeng1@berkeley.edu or mjwhite@lbl.gov&quot;</span>
 
 
 
@@ -114,28 +114,28 @@
 
 <div class="viewcode-block" id="BrickIndex.init_from_state"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.init_from_state">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">brickdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKROW&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKROW&#39;</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ROWMAX</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKROW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKCOL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">ROWMAX</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKROW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKCOL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> 
 
-        <span class="c"># fast querying from row col</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKROW&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>\
-                    <span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKCOL&#39;</span><span class="p">]</span>
+        <span class="c1"># fast querying from row col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash</span> <span class="o">=</span> <span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKROW&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">COLMAX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>\
+                    <span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKCOL&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">RA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DEC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RA1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA1&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DEC1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC1&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RA2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA2&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DEC2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEC</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RA1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA1&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEC1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC1&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RA2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEC2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC2&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">]</span>
 
-        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+        <span class="k">assert</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKID&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BrickIndex.build"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NROWS</span><span class="p">,</span> <span class="n">NCOLS</span><span class="p">):</span>
         <span class="n">height</span> <span class="o">=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">NROWS</span>
@@ -187,14 +187,14 @@
         <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
             <span class="n">brick</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span>
                     <span class="n">index</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA1&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA2&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC1&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC2&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKNAME&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA1&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA2&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC1&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">],</span> 
+                    <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC2&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">brick</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
 
@@ -233,7 +233,7 @@
 <span class="sd">        -----</span>
 <span class="sd">        This function is not vectorized.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">foo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">foo</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKNAME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">brickname</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">names_sortarg</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">names_sorted</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">foo</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">return</span> <span class="n">bid</span></div>
@@ -257,11 +257,11 @@
 <span class="sd">        Get Brick objects with :py:meth:`get_bricks` or :py:meth:`get_brick`.</span>
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">rt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">brickid</span><span class="p">)</span>
+        <span class="n">rt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">brickid</span><span class="p">)</span>
         <span class="n">rt</span> <span class="o">=</span> <span class="n">rt</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">rt</span><span class="p">]</span> <span class="o">==</span> <span class="n">brickid</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;BRICKID&#39;</span><span class="p">][</span><span class="n">rt</span><span class="p">]</span> <span class="o">==</span> <span class="n">brickid</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&quot;Some brickid </span><span class="si">%s</span><span class="s"> are not found&quot;</span><span class="o">%</span>\
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Some brickid </span><span class="si">%s</span><span class="s2"> are not found&quot;</span><span class="o">%</span>\
               <span class="nb">str</span><span class="p">(</span><span class="n">brickid</span><span class="p">[</span><span class="o">~</span><span class="n">found</span><span class="p">]))</span>
         <span class="k">return</span> <span class="n">rt</span></div>
 
@@ -302,7 +302,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">coord</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&#39;Only takes tuple of scalars in the form (RA,DEC).&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Only takes tuple of scalars in the form (RA,DEC).&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_brick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query_internal</span><span class="p">(</span><span class="n">coord</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="BrickIndex.query_region"><a class="viewcode-back" href="../../../imaginglss.model.brickindex.html#imaginglss.model.brickindex.BrickIndex.query_region">[docs]</a>    <span class="k">def</span> <span class="nf">query_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">):</span>
@@ -322,10 +322,10 @@
         <span class="n">RA1</span><span class="p">,</span> <span class="n">RA2</span><span class="p">,</span> <span class="n">DEC1</span><span class="p">,</span> <span class="n">DEC2</span> <span class="o">=</span> <span class="n">extent</span>
 
         <span class="n">RA2</span> <span class="o">=</span> <span class="p">(</span><span class="n">RA2</span> <span class="o">-</span> <span class="n">RA1</span><span class="p">)</span> <span class="o">%</span> <span class="mf">360.</span>
-        <span class="n">RA1B</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA1&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">RA1</span><span class="p">)</span> <span class="o">%</span> <span class="mf">360.</span>
-        <span class="n">RA2B</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;RA2&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">RA1</span><span class="p">)</span> <span class="o">%</span> <span class="mf">360.</span>
-        <span class="n">mask</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC1&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">DEC2</span>
-        <span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s">&#39;DEC2&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">DEC1</span>
+        <span class="n">RA1B</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA1&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">RA1</span><span class="p">)</span> <span class="o">%</span> <span class="mf">360.</span>
+        <span class="n">RA2B</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;RA2&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">RA1</span><span class="p">)</span> <span class="o">%</span> <span class="mf">360.</span>
+        <span class="n">mask</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC1&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">DEC2</span>
+        <span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">brickdata</span><span class="p">[</span><span class="s1">&#39;DEC2&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">DEC1</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">RA1B</span> <span class="o">&lt;=</span> <span class="n">RA2</span>
         <span class="n">mask</span> <span class="o">&amp;=</span> <span class="n">RA2B</span> <span class="o">&gt;=</span> <span class="mi">0</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
@@ -365,10 +365,10 @@
         <span class="n">coord</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
         <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_internal</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">bid</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-        <span class="c">#</span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="n">return_inverse</span><span class="p">:</span>
             <span class="n">invarg</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
-            <span class="n">invarg</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;i8&#39;</span><span class="p">)</span>
+            <span class="n">invarg</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;i8&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">return_index</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coord</span><span class="p">[:,</span> <span class="n">arg</span><span class="p">]),</span> <span class="n">arg</span><span class="p">,</span> <span class="n">invarg</span>
             <span class="k">else</span><span class="p">:</span>

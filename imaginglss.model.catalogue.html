@@ -62,6 +62,37 @@
 a data release.  The catalogs are obtained from FITS files.
 This class does some caching for speed.</p>
 <dl class="class">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue">
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">BigFileCatalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#BigFileCatalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.ColumnStore" title="imaginglss.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.columnstore.ColumnStore</span></code></a></p>
+<dl class="attribute">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue.dtype">
+<code class="descname">dtype</code><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue.dtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue.fetch">
+<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#BigFileCatalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue.fetch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue.neighbours">
+<code class="descname">neighbours</code><span class="sig-paren">(</span><em>coord</em>, <em>sep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#BigFileCatalogue.neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue.neighbours" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#BigFileCatalogue.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue.open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.catalogue.BigFileCatalogue.size">
+<code class="descname">size</code><a class="headerlink" href="#imaginglss.model.catalogue.BigFileCatalogue.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="imaginglss.model.catalogue.C">
 <em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">C</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.C" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.Column" title="imaginglss.utils.npyquery.Column"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.npyquery.Column</span></code></a></p>
@@ -125,11 +156,11 @@ directory.</p>
 <p>This class caches the information on disk for speed. 
 Only columns that are accessed are loaded into memory.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">catalogue</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:</span><span class="mi">100</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:]</span> <span class="c"># may be huge!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:</span><span class="mi">100</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:]</span> <span class="c1"># may be huge!</span>
 </pre></div>
 </div>
 <p class="rubric">Attributes</p>

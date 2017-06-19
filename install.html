@@ -57,16 +57,16 @@
 <p>ImagingLSS can be installed as a regular Python package, but it can also be
 used without installation (since the code evolves rapidly with time).</p>
 <p>To install (this is how we test ImagingLSS at home)</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/desihub/imaginglss/
-<span class="nb">cd </span>imaginglss
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/desihub/imaginglss/
+<span class="nb">cd</span> imaginglss
 pip install --user -e .
 </pre></div>
 </div>
 <p>To use without installation (this is how we test ImagingLSS at NERSC)</p>
-<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/desihub/imaginglss/
-<span class="nb">cd </span>imaginglss
-<span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PWD</span>:<span class="nv">$PYTHONPATH</span>
-<span class="c"># remember to set PYTHONPATH in new shells.</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/desihub/imaginglss/
+<span class="nb">cd</span> imaginglss
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$PWD</span>:<span class="nv">$PYTHONPATH</span>
+<span class="c1"># remember to set PYTHONPATH in new shells.</span>
 </pre></div>
 </div>
 <p>The package only declares the dependency for the data model.</p>
@@ -81,7 +81,7 @@ steps are documented in the <code class="docutils literal"><span class="pre">Dat
 <li><p class="first">numpy 1.8+.
 Do not use 1.7.x due to this bug: <a class="reference external" href="https://github.com/numpy/numpy/issues/3469">https://github.com/numpy/numpy/issues/3469</a></p>
 <p>To check the version of numpy, use</p>
-<div class="highlight-bash"><div class="highlight"><pre>python -c <span class="s1">&#39;import numpy; print numpy.version.version&#39;</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>python -c <span class="s1">&#39;import numpy; print numpy.version.version&#39;</span>
 </pre></div>
 </div>
 </li>
@@ -94,7 +94,7 @@ data pipeline. The final data product is plain text.</p>
 Do not use 0.9.7 due this bug: <a class="reference external" href="https://github.com/esheldon/fitsio/issues/39">https://github.com/esheldon/fitsio/issues/39</a>
 which affects building catalogue cache.
 For now, you can install the rc2 prerelease of fitsio.</p>
-<div class="highlight-bash"><div class="highlight"><pre>pip install -U --no-deps --user https://github.com/esheldon/fitsio/archive/v0.9.8rc2.tar.gz
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -U --no-deps --user https://github.com/esheldon/fitsio/archive/v0.9.8rc2.tar.gz
 </pre></div>
 </div>
 <p>We still do support astropy.io.fits, but the use of astropy.io.fits is not
@@ -103,7 +103,7 @@ recommended.</p>
 <li><p class="first">kdcount for spatial queries.
 Some of the scripts in imaginglss, including the completeness estimator is build with
 kdcount. Install with</p>
-<div class="highlight-bash"><div class="highlight"><pre>pip install -U --no-deps --user kdcount
+<div class="highlight-bash"><div class="highlight"><pre><span></span>pip install -U --no-deps --user kdcount
 </pre></div>
 </div>
 </li>
@@ -123,6 +123,7 @@ At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to
 <div><ul class="simple">
 <li>SFD98 dust map [todo give a reference]</li>
 <li>Tycho2 star catalogue</li>
+<li>Wise Bright star catalogue (converted from WISE data release)</li>
 </ul>
 </div></blockquote>
 <p>We provide mirrors of these files at</p>
@@ -130,6 +131,7 @@ At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to
 <div><ul class="simple">
 <li><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz</a></li>
 <li><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz</a></li>
+<li><a class="reference external" href="https://s3-us-west-1.amazonaws.com/imaginglss/WISE-BRIGHT.hdf5">https://s3-us-west-1.amazonaws.com/imaginglss/WISE-BRIGHT.hdf5</a></li>
 </ul>
 </div></blockquote>
 </div>
@@ -139,12 +141,12 @@ At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to
 either passing in the file name as an argument to <a class="reference internal" href="imaginglss.html#imaginglss.DECALS" title="imaginglss.DECALS"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.DECALS</span></code></a>,
 or by setting the environment variable <code class="code docutils literal"><span class="pre">DECALS_PY_CONFIG</span></code>.</p>
 <p>Here is an example configuration file (that works on Edison):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># dr2.conf.py</span>
-<span class="n">decals_root</span> <span class="o">=</span> <span class="s">&quot;/global/project/projectdirs/cosmo/data/legacysurvey/dr2&quot;</span>
-<span class="n">decals_cache</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/m779/imaginglss/dr2/cache&quot;</span>
-<span class="n">decals_release</span> <span class="o">=</span> <span class="s">&quot;DR2&quot;</span>
-<span class="n">dust_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/desi/software/edison/dust/v0_0/&quot;</span>
-<span class="n">tycho_dir</span> <span class="o">=</span> <span class="s">&quot;/project/projectdirs/m779/imaginglss/tycho2.fit&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># dr2.conf.py</span>
+<span class="n">decals_root</span> <span class="o">=</span> <span class="s2">&quot;/global/project/projectdirs/cosmo/data/legacysurvey/dr2&quot;</span>
+<span class="n">decals_cache</span> <span class="o">=</span> <span class="s2">&quot;/project/projectdirs/m779/imaginglss/dr2/cache&quot;</span>
+<span class="n">decals_release</span> <span class="o">=</span> <span class="s2">&quot;DR2&quot;</span>
+<span class="n">dust_dir</span> <span class="o">=</span> <span class="s2">&quot;/project/projectdirs/desi/software/edison/dust/v0_0/&quot;</span>
+<span class="n">tycho_dir</span> <span class="o">=</span> <span class="s2">&quot;/project/projectdirs/m779/imaginglss/tycho2.fit&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -154,8 +156,8 @@ or by setting the environment variable <code class="code docutils literal"><span
 <p>After imaginglss is installed, these commands will work in JupyterHub: <a class="reference external" href="https://jupyter.nersc.gov">https://jupyter.nersc.gov</a> .</p>
 <p>For installation on the JupyterHub service at NERSC, please refer to the notebook example at:
 <a class="reference external" href="https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb">https://github.com/bccp/imaginglss-notebooks/blob/master/NERSCJupyterGuide.ipynb</a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">imaginglss</span> <span class="kn">import</span> <span class="n">DECALS</span>
-<span class="n">decals</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">(</span><span class="s">&#39;/global/project/projectdirs/m779/imaginglss/dr2.conf.py&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">imaginglss</span> <span class="kn">import</span> <span class="n">DECALS</span>
+<span class="n">decals</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">(</span><span class="s1">&#39;/global/project/projectdirs/m779/imaginglss/dr2.conf.py&#39;</span><span class="p">)</span>
 
 <span class="n">dr</span> <span class="o">=</span> <span class="n">decals</span><span class="o">.</span><span class="n">datarelease</span>
 <span class="n">cat</span> <span class="o">=</span> <span class="n">decals</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">catalogue</span>
@@ -175,8 +177,8 @@ The SFD98 file is somewhat larger, on the order of 100 MB.</p>
 <p><a class="reference external" href="http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz">http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz</a></p>
 <p>To deploy this dataset with the source code tree,
 see the following steps.</p>
-<div class="highlight-bash"><div class="highlight"><pre>mkdir testdata
-<span class="nb">cd </span>testdata
+<div class="highlight-bash"><div class="highlight"><pre><span></span>mkdir testdata
+<span class="nb">cd</span> testdata
 
 wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr2-mini.tar.gz
 tar -xzvf dr2-mini.tar.gz

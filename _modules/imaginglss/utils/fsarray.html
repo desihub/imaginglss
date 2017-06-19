@@ -48,9 +48,9 @@
           <div class="body" role="main">
             
   <h1>Source code for imaginglss.utils.fsarray</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ElasticArray&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ElasticArray&#39;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -95,10 +95,10 @@
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Size of new column does not match the columnArray&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Size of new column does not match the columnArray&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="s">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&quot;key must not contain &#39;:&#39; or white spaces&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;key must not contain &#39;:&#39; or white spaces&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
@@ -134,7 +134,7 @@
 <div class="viewcode-block" id="ElasticArray.select"><a class="viewcode-back" href="../../../imaginglss.utils.fsarray.html#imaginglss.utils.fsarray.ElasticArray.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; returns a new ElasticArray with only items at indices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">indices</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">char</span> <span class="o">==</span> <span class="s">&#39;?&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">indices</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">char</span> <span class="o">==</span> <span class="s1">&#39;?&#39;</span><span class="p">:</span>
             <span class="n">newsize</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
             <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
@@ -152,7 +152,7 @@
         <span class="k">return</span> <span class="n">subset</span> </div>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&quot;ElasticArray: size=</span><span class="si">%d</span><span class="s"> columns = </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;ElasticArray: size=</span><span class="si">%d</span><span class="s2"> columns = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
 
 <div class="viewcode-block" id="ElasticArray.tondarray"><a class="viewcode-back" href="../../../imaginglss.utils.fsarray.html#imaginglss.utils.fsarray.ElasticArray.tondarray">[docs]</a>    <span class="k">def</span> <span class="nf">tondarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -173,14 +173,14 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="ElasticArray.fromfile"><a class="viewcode-back" href="../../../imaginglss.utils.fsarray.html#imaginglss.utils.fsarray.ElasticArray.fromfile">[docs]</a>    <span class="k">def</span> <span class="nf">fromfile</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
-        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&#39;__dtype__.info&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;__dtype__.info&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
 
-        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;ROWS&#39;</span><span class="p">)</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">assert</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;ROWS&#39;</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">ca</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
-            <span class="n">key</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">shape</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
             <span class="n">shape</span> <span class="o">=</span> <span class="n">parse_tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
@@ -188,7 +188,7 @@
         <span class="k">return</span> <span class="n">ca</span></div>
 
 <div class="viewcode-block" id="ElasticArray.tofile"><a class="viewcode-back" href="../../../imaginglss.utils.fsarray.html#imaginglss.utils.fsarray.ElasticArray.tofile">[docs]</a>    <span class="k">def</span> <span class="nf">tofile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
-        <span class="c"># first create the directory</span>
+        <span class="c1"># first create the directory</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
@@ -197,24 +197,24 @@
                 <span class="k">pass</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-        <span class="c"># now serialize the metadata in text</span>
-        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&#39;__dtype__.info&#39;</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
+        <span class="c1"># now serialize the metadata in text</span>
+        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;__dtype__.info&#39;</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
             <span class="n">dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span>
-            <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;ROWS : </span><span class="si">%d</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;ROWS : </span><span class="si">%d</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-                <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> : </span><span class="si">%s</span><span class="s"> : </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
+                <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> : </span><span class="si">%s</span><span class="s1"> : </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)))</span>
 
-        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&#39;__header__.info&#39;</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;__header__.info&#39;</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">storage</span><span class="p">:</span>
             <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">header</span><span class="p">:</span>
-                <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> : </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">])))</span></div></div>
+                <span class="n">storage</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> : </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">])))</span></div></div>
 
-<span class="c"># SPAMS</span>
+<span class="c1"># SPAMS</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="k">def</span> <span class="nf">parse_tuple</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; parse (1, 2, 3) tuples.  &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&#39;^[0-9, ()]*$&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;unsupported shape&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;^[0-9, ()]*$&#39;</span><span class="p">,</span> <span class="n">shape</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;unsupported shape&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
@@ -223,26 +223,26 @@
     <span class="n">data3</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="n">ca</span> <span class="o">=</span> <span class="n">ElasticArray</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-    <span class="n">ca</span><span class="p">[</span><span class="s">&#39;col1d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data3</span>
-    <span class="n">ca</span><span class="p">[</span><span class="s">&#39;col2d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data1</span>
-    <span class="n">ca</span><span class="p">[</span><span class="s">&#39;col3d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data2</span>
+    <span class="n">ca</span><span class="p">[</span><span class="s1">&#39;col1d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data3</span>
+    <span class="n">ca</span><span class="p">[</span><span class="s1">&#39;col2d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data1</span>
+    <span class="n">ca</span><span class="p">[</span><span class="s1">&#39;col3d&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data2</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">ca</span><span class="p">[</span><span class="s">&#39;badcol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">ca</span><span class="p">[</span><span class="s1">&#39;badcol&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">pass</span>
-    <span class="k">assert</span> <span class="s">&#39;col1d&#39;</span> <span class="ow">in</span> <span class="n">ca</span>
-    <span class="n">ca</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="s">&#39;testarray&#39;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s1">&#39;col1d&#39;</span> <span class="ow">in</span> <span class="n">ca</span>
+    <span class="n">ca</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="s1">&#39;testarray&#39;</span><span class="p">)</span>
 
-    <span class="n">ca2</span> <span class="o">=</span> <span class="n">ElasticArray</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s">&#39;testarray&#39;</span><span class="p">)</span>
+    <span class="n">ca2</span> <span class="o">=</span> <span class="n">ElasticArray</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="s1">&#39;testarray&#39;</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">ca2</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">tondarray</span><span class="p">())</span>
     <span class="k">print</span><span class="p">(</span><span class="n">ca2</span><span class="o">.</span><span class="n">tondarray</span><span class="p">())</span>
     <span class="k">print</span><span class="p">(</span><span class="n">ElasticArray</span><span class="o">.</span><span class="n">fromndarray</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">tondarray</span><span class="p">())</span><span class="o">.</span><span class="n">tondarray</span><span class="p">())</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;col1d&#39;</span><span class="p">,</span> <span class="s">&#39;col3d&#39;</span><span class="p">]))</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">[</span><span class="s">&#39;col1d&#39;</span><span class="p">,</span> <span class="s">&#39;col3d&#39;</span><span class="p">]))</span>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;col1d&#39;</span><span class="p">,</span> <span class="s1">&#39;col3d&#39;</span><span class="p">]))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ca</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">[</span><span class="s1">&#39;col1d&#39;</span><span class="p">,</span> <span class="s1">&#39;col3d&#39;</span><span class="p">]))</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">test</span><span class="p">()</span>
 </pre></div>
 

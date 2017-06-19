@@ -82,11 +82,13 @@ Besides the DECALS catalogue and coadd image data, ImagingLSS also needs
 
  - SFD98 dust map [todo give a reference]
  - Tycho2 star catalogue 
+ - Wise Bright star catalogue (converted from WISE data release)
 
 We provide mirrors of these files at
 
  - http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
  - http://imaginglss.s3-website-us-west-1.amazonaws.com/tycho2.tar.gz
+ - https://s3-us-west-1.amazonaws.com/imaginglss/WISE-BRIGHT.hdf5
 
 Location of Data Release
 ------------------------

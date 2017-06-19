@@ -58,43 +58,46 @@
             
   <div class="section" id="module-imaginglss.analysis.tycho_veto">
 <span id="imaginglss-analysis-tycho-veto-module"></span><h1>imaginglss.analysis.tycho_veto module<a class="headerlink" href="#module-imaginglss.analysis.tycho_veto" title="Permalink to this headline">¶</a></h1>
-<p>veto objects based on Tycho catalogue. This
-is based on the email discussion at:</p>
+<p>veto objects based on a star catalogue.
+The tycho vetos are based on the email discussion at:</p>
 <p>Date: June 18, 2015 at 3:44:09 PM PDT
 To: <a class="reference external" href="mailto:decam-data&#37;&#52;&#48;desi&#46;lbl&#46;gov">decam-data<span>&#64;</span>desi<span>&#46;</span>lbl<span>&#46;</span>gov</a>
 Subject: decam-data Digest, Vol 12, Issue 29</p>
-<p>Current usage is to first create a Tycho catalogue
-object, then use DECAM_XXX functions to create a
-mask :</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tycho</span> <span class="o">=</span> <span class="n">Tycho</span><span class="p">(</span><span class="s">&quot;pathto_tycho.fit&quot;</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
+<p>These objects takes a decals object and calculates the
+center and rejection radius for the catalogue in degrees.</p>
+<p>Note : The convention for veto flags is True for &#8216;reject&#8217;,
+False for &#8216;preserve&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p>The return values are True for &#8216;preserve&#8217;,
-False for &#8216;reject&#8217;</p>
 <dl class="function">
 <dt id="imaginglss.analysis.tycho_veto.BOSS_DR9">
-<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">BOSS_DR9</code><span class="sig-paren">(</span><em>tycho</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#BOSS_DR9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.BOSS_DR9" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">BOSS_DR9</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#BOSS_DR9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.BOSS_DR9" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="imaginglss.analysis.tycho_veto.DECAM_BGS">
-<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_BGS</code><span class="sig-paren">(</span><em>tycho</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_BGS" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_BGS</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_BGS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_BGS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="imaginglss.analysis.tycho_veto.DECAM_ELG">
-<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_ELG</code><span class="sig-paren">(</span><em>tycho</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_ELG" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_ELG</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_ELG" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="imaginglss.analysis.tycho_veto.DECAM_LRG">
-<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_LRG</code><span class="sig-paren">(</span><em>tycho</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_LRG" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_LRG</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_LRG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_LRG" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="imaginglss.analysis.tycho_veto.DECAM_QSO">
-<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_QSO</code><span class="sig-paren">(</span><em>tycho</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_QSO" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">DECAM_QSO</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#DECAM_QSO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.DECAM_QSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="imaginglss.analysis.tycho_veto.EBOSS_V6">
+<code class="descclassname">imaginglss.analysis.tycho_veto.</code><code class="descname">EBOSS_V6</code><span class="sig-paren">(</span><em>decals</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/analysis/tycho_veto.html#EBOSS_V6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.analysis.tycho_veto.EBOSS_V6" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
