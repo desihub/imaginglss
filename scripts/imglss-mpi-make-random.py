@@ -125,27 +125,53 @@ def make_random(decals, ns, comm=MPI.COMM_WORLD):
     if comm.rank == 0:
         print('Not applying cuts for star proximity.')
 
-    randoms = comm.gather(randoms)
-    if comm.rank == 0:
-        randoms = np.concatenate(randoms)
+    Ntot = comm.allreduce(len(randoms))
 
-        print('Total number of objects ', len(randoms))
-        fraction = len(randoms) * 1.0 / ns.Nran
+    if comm.rank == 0:
+        print('Total number of objects ', Ntot)
+        fraction = Ntot * 1.0 / ns.Nran
         print('Accept rate', fraction)
         print('Total area (sq.deg.) ',dr.footprint.area * fraction)
         print('Done!')
+
+    # watch out randoms is distributed.
     return randoms
-    
+
 if __name__ == '__main__':    
 
     randoms = make_random(decals, ns)
 
-    if MPI.COMM_WORLD.rank == 0:
+    comm = MPI.COMM_WORLD
+
+    Ntot = comm.allreduce(len(randoms))
+
+    if comm.rank == 0:
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
             ds.attrs.update(cli.prune_namespace(ns))
-            ds.attrs['MPISize'] = MPI.COMM_WORLD.size
+            ds.attrs['MPISize'] = comm.size
             ds.attrs['FootPrintArea'] = decals.datarelease.footprint.area
             ds.attrs['NumberDensity'] = 1.0 * len(randoms) / decals.datarelease.footprint.area
+
             for column in randoms.dtype.names:
-                ds = ff.create_dataset(column, data=randoms[column])
+                shape = tuple([Ntot] + list(randoms[column].shape[1:]))
+                dtype = randoms[column].dtype
+                ds = ff.create_dataset(column, shape=shape, dtype=dtype)
+
+    comm.barrier()
+
+    # the loop makes sure the ranks take turns; avoiding race condition
+    # with HDF5. Really could have saved as a bigfile instead to avoid
+    # this craziness.
+
+    offset = sum(comm.allgather(len(randoms))[:comm.rank])
+    for i in range(comm.size):
+        comm.barrier()
+
+        if i != comm.rank :
+            continue
+
+        with h5py.File(ns.output, 'r+') as ff:
+            for column in randoms.dtype.names:
+                ff[column][offset:len(randoms)] = randoms[column]
+
