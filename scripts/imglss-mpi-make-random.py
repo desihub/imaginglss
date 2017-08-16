@@ -22,6 +22,7 @@ from   imaginglss             import DECALS
 from imaginglss.cli import CLI
 
 cli = CLI("Generate Uniform Randoms in the footprint and query the depth.")
+cli.add_argument("--seed", type=int, help="random seed; the result is also affected by the number of ranks.", default=99934123)
 cli.add_argument("Nran", type=int, help="Minimum number of randoms")
 cli.add_argument("output", help="File to store the randoms. Will be created." )
 
@@ -82,7 +83,7 @@ def make_random(decals, ns, comm=MPI.COMM_WORLD):
     # map instance.
     dr = decals.datarelease
 
-    rng = np.random.RandomState(99934123)
+    rng = np.random.RandomState(ns.seed)
     seeds = rng.randint(99999999, size=comm.size)
     rng = np.random.RandomState(seeds[comm.rank])
     if comm.rank == 0:
@@ -143,6 +144,7 @@ if __name__ == '__main__':
         with h5py.File(ns.output, 'w') as ff:
             ds = ff.create_dataset('_HEADER', shape=(0,))
             ds.attrs.update(cli.prune_namespace(ns))
+            ds.attrs['MPISize'] = MPI.COMM_WORLD.size
             ds.attrs['FootPrintArea'] = decals.datarelease.footprint.area
             ds.attrs['NumberDensity'] = 1.0 * len(randoms) / decals.datarelease.footprint.area
             for column in randoms.dtype.names:
