@@ -173,5 +173,5 @@ if __name__ == '__main__':
 
         with h5py.File(ns.output, 'r+') as ff:
             for column in randoms.dtype.names:
-                ff[column][offset:len(randoms)] = randoms[column]
+                ff[column][offset:offset+len(randoms)] = randoms[column]
 
