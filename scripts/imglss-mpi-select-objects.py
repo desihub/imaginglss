@@ -44,22 +44,6 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     Does the actual selection, imposing cuts on the fluxes
     """
 
-    dtype1 = np.dtype([
-        ('RA', 'f8'),
-        ('DEC', 'f8'),
-        ('PHOTO_Z', 'f8'),
-        ('DECAM_INTRINSIC_FLUX', ('f4', 6))])
-
-    dtype2 = np.dtype([
-        ('RA', 'f8'),
-        ('DEC', 'f8'),
-        ('DECAM_INTRINSIC_NOISE_LEVEL', ('f4', 6)),
-        ])
-
-    dtype3 = np.dtype([
-        ('DECAM_CONFIDENCE', ('f4', 6)),
-        ])
-
     # Get instances of a data release and SFD dust map.
     dr     = decals.datarelease
     sfd    = decals.sfdmap
@@ -85,10 +69,20 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     targets['RA']   = cat[ 'RA'][mine][mask]
     targets['DEC']   = cat['DEC'][mine][mask]
 
-    DECAM_FLUX = cat['DECAM_FLUX'][mine][mask] / cat['DECAM_MW_TRANSMISSION'][mine][mask]
-    WISE_FLUX = cat['WISE_FLUX'][mine][mask] / cat['WISE_MW_TRANSMISSION'][mine][mask]
-    targets['INTRINSIC_FLUX'][:, :6] = (DECAM_FLUX).clip(1e-15,1e15)
-    targets['INTRINSIC_FLUX'][:, 6:] = (WISE_FLUX).clip(1e-15,1e15)
+    for i, flux, mw in [
+            (1, 'FLUX_G', 'MW_TRANSMISSION_G'),
+            (2, 'FLUX_R', 'MW_TRANSMISSION_R'),
+            (4, 'FLUX_Z', 'MW_TRANSMISSION_Z'),
+            (6, 'LC_FLUX_W1', 'MW_TRANSMISSION_W1'),
+            (7, 'LC_FLUX_W2', 'MW_TRANSMISSION_W2')]:
+
+        GFLUX = cat['FLUX_G'][mine][mask] / cat['MW_TRANSMISSION_G'][mine][mask]
+        RFLUX = cat['FLUX_R'][mine][mask] / cat['MW_TRANSMISSION_R'][mine][mask]
+        ZFLUX = cat['FLUX_Z'][mine][mask] / cat['MW_TRANSMISSION_Z'][mine][mask]
+        W1FLUX = cat['LC_FLUX_W1'][mine][mask] / cat['MW_TRANSMISSION_W1'][mine][mask]
+        W2FLUX = cat['LC_FLUX_W2'][mine][mask] / cat['MW_TRANSMISSION_W2'][mine][mask]
+
+        targets['INTRINSIC_FLUX'][:, i] = (cat[flux][mine][mask] / cat[mw][mine][mask]).clip(1e-15, 1e15)
 
     # Now we need to pass this through our mask since galaxies can
     # appear even in regions where our nominal depth is insufficient
@@ -100,23 +94,35 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
 
     # ... and extract only the objects which passed the cuts.
 
+    # we convert cat-lim to the DR3-like schema, because read_depth is doing
+    # that.
     cat_lim = np.empty(len(targets), dtype=[
         ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
         ('WISE_FLUX_IVAR', cat.dtype['WISE_FLUX_IVAR']),
         ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
         ('WISE_MW_TRANSMISSION', cat.dtype['WISE_MW_TRANSMISSION']),
         ])
+
     if not ns.use_depth_bricks:
-        cat_lim['DECAM_DEPTH'][:] = cat['DECAM_DEPTH'][mine][mask]
-        cat_lim['WISE_FLUX_IVAR'][:] = cat['WISE_FLUX_IVAR'][mine][mask]
-        cat_lim['DECAM_MW_TRANSMISSION'][:] = cat['DECAM_MW_TRANSMISSION'][mine][mask]
-        cat_lim['WISE_MW_TRANSMISSION'][:] = cat['WISE_MW_TRANSMISSION'][mine][mask]
+        for i, depth, mw in [
+            (1, 'PSFDEPTH_G', 'MW_TRANSMISSION_G'),
+            (2, 'PSFDEPTH_R', 'MW_TRANSMISSION_R'),
+            (4, 'PSFDEPTH_Z', 'MW_TRANSMISSION_Z')
+        ]:
+
+            cat_lim['DECAM_DEPTH'][:, i] = cat[depth][mine][mask]
+            cat_lim['DECAM_MW_TRANSMISSION'][:, i] = cat[mw][mine][mask]
     else:
         cat_lim1 = dr.read_depths((targets['RA'], targets['DEC']), 'grz')
-        cat_lim['DECAM_DEPTH'][:] = cat_lim1['DECAM_DEPTH']
-        cat_lim['WISE_FLUX_IVAR'][:] = cat['WISE_FLUX_IVAR'][mine][mask]
-        cat_lim['DECAM_MW_TRANSMISSION'][:] = cat_lim1['DECAM_MW_TRANSMISSION']
-        cat_lim['WISE_MW_TRANSMISSION'][:] = cat['WISE_MW_TRANSMISSION'][mine][mask]
+        cat_lim['DECAM_DEPTH'][:, i] = cat_lim1['DECAM_DEPTH']
+        cat_lim['DECAM_MW_TRANSMISSION'][:, i] = cat_lim1['DECAM_MW_TRANSMISSION']
+
+    for i, ivar, mw in [
+        (0, 'LC_FLUX_IVAR_W1', 'MW_TRANSMISSION_W1'),
+        (1, 'LC_FLUX_IVAR_W2', 'MW_TRANSMISSION_W2')
+        ]:
+        cat_lim['WISE_FLUX_IVAR'][:, i] = cat[ivar][mine][mask]
+        cat_lim['WISE_MW_TRANSMISSION'][:, i] = cat[mw][mine][mask]
 
     targets['INTRINSIC_NOISELEVEL'][:, :6] = (cat_lim['DECAM_DEPTH'] ** -0.5 / cat_lim['DECAM_MW_TRANSMISSION'])
     targets['INTRINSIC_NOISELEVEL'][:, 6:] = (cat_lim['WISE_FLUX_IVAR'] ** -0.5 / cat_lim['WISE_MW_TRANSMISSION'])

@@ -9,10 +9,10 @@ __author__ = "Yu Feng and Martin White"
 __version__ = "1.0"
 __email__  = "yfeng1@berkeley.edu or mjwhite@lbl.gov"
 
-WFLUX = 0.75 * W1FLUX + 0.25 * W2FLUX[1]
+WFLUX = 0.75 * W1FLUX + 0.25 * W2FLUX
 GRZFLUX = (GFLUX + 0.8* RFLUX + 0.5* ZFLUX ) / 2.4
-SNRW1 = (WISE_FLUX[0] * WISE_FLUX_IVAR[0] ** 0.5)
-SNRW2 = (WISE_FLUX[1] * WISE_FLUX_IVAR[1] ** 0.5)
+SNRW1 = (W1FLUX * W1FLUX_IVAR ** 0.5)
+SNRW2 = (W2FLUX * W2FLUX_IVAR ** 0.5)
 
 LRG =  BRICK_PRIMARY != 0
 LRG &= ZFLUX > 10**((22.5-20.46)/2.5)
