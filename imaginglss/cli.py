@@ -21,7 +21,7 @@ class CLI(object):
                 targetselection.load(path)
         if enable_tycho_veto:
             allvetos = [i for i in dir(tycho_veto) if not str(i).startswith( '_' )]
-            ap.add_argument("--use-tycho-veto", type=str, choices=allvetos, default=None, 
+            ap.add_argument("--use-tycho-veto", type=str, nargs='+', choices=allvetos, default=[], 
                 help="Apply tycho veto, must run imglss-query-tycho-veto first!")
 
         if enable_confidence:

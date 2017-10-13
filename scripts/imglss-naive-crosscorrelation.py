@@ -27,20 +27,20 @@ def corr():
     rand1file = h5py.File(ns.random1, 'r')
 
     data1mask = data1file['COMPLETENESS'][:] >= 1
-    if ns.use_tycho_veto is not None:
-        data1mask &= ~data1file['TYCHO_VETO'][ns.use_tycho_veto][:]
+    for vetoname in ns.use_tycho_veto:
+        data1mask &= ~data1file['TYCHO_VETO'][vetoname][:]
     data1RA = data1file['RA'][:][data1mask]
     data1DEC = data1file['DEC'][:][data1mask]
 
     rand1mask = rand1file['COMPLETENESS'][:] >= 1
-    if ns.use_tycho_veto is not None:
-        rand1mask &= ~rand1file['TYCHO_VETO'][ns.use_tycho_veto][:]
+    for vetoname in ns.use_tycho_veto:
+        rand1mask &= ~rand1file['TYCHO_VETO'][vetoname][:]
     rand1RA = rand1file['RA'][:][rand1mask]
     rand1DEC = rand1file['DEC'][:][rand1mask]
 
 #    data2mask = data2file['COMPLETENESS'][:] >= 1
-#    if ns.use_tycho_veto is not None:
-#        data2mask &= ~data2file['TYCHO_VETO'][ns.use_tycho_veto][:]
+#    for vetoname in ns.use_tycho_veto:
+#        data2mask &= ~data2file['TYCHO_VETO'][vetoname][:]
     data2mask = Ellipsis
     data2RA = data2file['RA'][:][data2mask]
     data2DEC = data2file['DEC'][:][data2mask]

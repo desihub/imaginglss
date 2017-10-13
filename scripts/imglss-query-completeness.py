@@ -31,8 +31,8 @@ def query_completeness(decals, ns):
     with h5py.File(ns.objects, 'r') as ff:
         FLUX = ff['INTRINSIC_FLUX'][:]
         NOISE = ff['INTRINSIC_NOISELEVEL'][:]
-        if ns.use_tycho_veto is not None:
-            veto = ff['TYCHO_VETO'][ns.use_tycho_veto][:]
+        for vetoname in ns.use_tycho_veto:
+            veto = ff['TYCHO_VETO'][vetoname][:]
             FLUX = FLUX[~veto]
             NOISE = NOISE[~veto]
 

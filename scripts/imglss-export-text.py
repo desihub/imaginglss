@@ -58,10 +58,10 @@ with h5py.File(ns.catalogue, 'r') as ff:
         mask &= obsmask
         print("Cut out %d non-observed random points" % (~obsmask).sum())
 
-    if ns.use_tycho_veto is not None:
+    for vetoname in ns.use_tycho_veto:
         if not 'TYCHO_VETO' in ff:
             raise KeyError("TYCHO_VETO dataset is not found. Run imglss-query-tycho-veto on `%s` first." % ns.catalogue)
-        vetomask = ~ff['TYCHO_VETO'][ns.use_tycho_veto]
+        vetomask = ~ff['TYCHO_VETO'][vetoname]
         mask &= vetomask
 
     ra = ff['RA'][:][mask]

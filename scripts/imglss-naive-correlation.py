@@ -25,14 +25,14 @@ def corr():
     randfile = h5py.File(ns.random, 'r')
 
     datamask = datafile['COMPLETENESS'][:] >= 1
-    if ns.use_tycho_veto is not None:
-        datamask &= ~datafile['TYCHO_VETO'][ns.use_tycho_veto][:]
+    for vetoname in ns.use_tycho_veto:
+        datamask &= ~datafile['TYCHO_VETO'][vetoname][:]
     dataRA = datafile['RA'][:][datamask]
     dataDEC = datafile['DEC'][:][datamask]
 
     randmask = randfile['COMPLETENESS'][:] >= 1
-    if ns.use_tycho_veto is not None:
-        randmask &= ~randfile['TYCHO_VETO'][ns.use_tycho_veto][:]
+    for vetoname in ns.use_tycho_veto:
+        randmask &= ~randfile['TYCHO_VETO'][vetoname][:]
     randRA = randfile['RA'][:][randmask]
     randDEC = randfile['DEC'][:][randmask]
 

@@ -12,7 +12,7 @@ python scripts/imglss-query-tycho-veto.py --conf=testdata/dr3-mini/dr3.conf.py L
 python scripts/imglss-query-completeness.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 LRG LRG.hdf5 LRG-random.hdf5 || exit 1
 python scripts/imglss-query-completeness.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 LRG LRG.hdf5 LRG.hdf5 || exit 1
 
-python scripts/imglss-export-text.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 --bands g r z W1 -- LRG LRG.hdf5 LRG.txt
-python scripts/imglss-export-text.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 --bands g r z W1 -- LRG LRG-random.hdf5 LRG-random.txt
+python scripts/imglss-export-text.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 --use-tycho-veto=EBOSS_V6 --bands g r z W1 -- LRG LRG.hdf5 LRG.txt
+python scripts/imglss-export-text.py --conf=testdata/dr3-mini/dr3.conf.py --use-tycho-veto=BOSS_DR9 --use-tycho-veto=EBOSS_V6 --bands g r z W1 -- LRG LRG-random.hdf5 LRG-random.txt
 python scripts/imglss-naive-correlation.py --use-tycho-veto=BOSS_DR9 LRG.hdf5 LRG-random.hdf5 LRG-w.txt
 python scripts/imglss-naive-crosscorrelation.py --use-tycho-veto=BOSS_DR9 LRG.hdf5 LRG-random.hdf5 LRG.hdf5 LRG-w.txt
