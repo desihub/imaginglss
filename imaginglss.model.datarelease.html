@@ -1,34 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.datarelease module &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.datarelease module &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="imaginglss.model.imagerepo module" href="imaginglss.model.imagerepo.html" />
     <link rel="prev" title="imaginglss.model.catalogue module" href="imaginglss.model.catalogue.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,10 +42,10 @@
         <li class="right" >
           <a href="imaginglss.model.catalogue.html" title="imaginglss.model.catalogue module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -59,8 +57,8 @@
   <div class="section" id="module-imaginglss.model.datarelease">
 <span id="imaginglss-model-datarelease-module"></span><h1>imaginglss.model.datarelease module<a class="headerlink" href="#module-imaginglss.model.datarelease" title="Permalink to this headline">¶</a></h1>
 <p>Python code to look at the imaging data, containing
-interfaces to deal with &#8220;bricks&#8221; and &#8220;catalogs&#8221;.
-This is the &#8220;highest level&#8221; interface to the
+interfaces to deal with “bricks” and “catalogs”.
+This is the “highest level” interface to the
 imaging data and makes use of several lower
 level objects.</p>
 <dl class="class">
@@ -68,10 +66,10 @@ level objects.</p>
 <em class="property">class </em><code class="descclassname">imaginglss.model.datarelease.</code><code class="descname">DataRelease</code><span class="sig-paren">(</span><em>root</em>, <em>cache</em>, <em>version</em>, <em>dustdir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/datarelease.html#DataRelease"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.datarelease.DataRelease" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The highest level interface into the data for a given imaging
-data release.  Uses several &#8220;helper&#8221; classes and has methods for
+data release.  Uses several “helper” classes and has methods for
 looking at pixelized data or catalogs arranged in bricks.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span> <span class="o">=</span> <span class="n">DataRelease</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">][</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>  <span class="c1"># r band depth images.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">][</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>  <span class="c1"># r band coadd images.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dr</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;r&#39;</span><span class="p">]</span>  <span class="c1"># r band tractor model images.</span>
@@ -80,26 +78,26 @@ looking at pixelized data or catalogs arranged in bricks.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="6%" />
-<col width="94%" />
+<col width="9%" />
+<col width="91%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>brickindex</td>
+<tr class="row-odd"><td><strong>brickindex</strong></td>
 <td>(<code class="xref py py-class docutils literal"><span class="pre">BrickIndex</span></code>) an index object of all of the bricks (covering the entire sky)</td>
 </tr>
-<tr class="row-even"><td>bands</td>
+<tr class="row-even"><td><strong>bands</strong></td>
 <td>(dict) a dictionary translating from band name to integer used in Tractor catalogue</td>
 </tr>
-<tr class="row-odd"><td>catalogue</td>
+<tr class="row-odd"><td><strong>catalogue</strong></td>
 <td>(<code class="xref py py-class docutils literal"><span class="pre">CachedCatalogue</span></code>) the concatenated tractor catalogue, accessed by attributes.</td>
 </tr>
-<tr class="row-even"><td>extinction</td>
+<tr class="row-even"><td><strong>extinction</strong></td>
 <td>(array_like) an array storing the extinction coeffcients. The array matches the defination of <cite>DECAM_FLUX</cite> column of the catalogue, u, g, r, i, z, Y.</td>
 </tr>
-<tr class="row-odd"><td>images</td>
+<tr class="row-odd"><td><strong>images</strong></td>
 <td>(<code class="xref py py-class docutils literal"><span class="pre">ImageRepo</span></code>) Image repositories. These image repositories are used by py:meth:<cite>readout</cite>.</td>
 </tr>
-<tr class="row-even"><td>footprint</td>
+<tr class="row-even"><td><strong>footprint</strong></td>
 <td>(<a class="reference internal" href="#imaginglss.model.datarelease.Footprint" title="imaginglss.model.datarelease.Footprint"><code class="xref py py-class docutils literal"><span class="pre">Footprint</span></code></a>) the footprint of the data release.</td>
 </tr>
 </tbody>
@@ -210,24 +208,24 @@ have readout in ImageRepo.</p>
 <p>footprint of a data release.</p>
 <p>Use indexing to construct sub-regions of the footprint, for example</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">datarelease</span><span class="o">.</span><span class="n">footprint</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">datarelease</span><span class="o">.</span><span class="n">footprint</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
 <span class="go">Footprint(.....)</span>
 </pre></div>
 </div>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="7%" />
-<col width="93%" />
+<col width="11%" />
+<col width="89%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>bricks</td>
+<tr class="row-odd"><td><strong>bricks</strong></td>
 <td>(list of model.brick.Brick) A list of Bricks that are covered by the footprint</td>
 </tr>
-<tr class="row-even"><td>range</td>
+<tr class="row-even"><td><strong>range</strong></td>
 <td>( tuple) The range of RA and DEC of all bricks (ramin, ramax, decmin, decmax)</td>
 </tr>
-<tr class="row-odd"><td>area</td>
+<tr class="row-odd"><td><strong>area</strong></td>
 <td>(float) Covered outline area in square degrees</td>
 </tr>
 </tbody>
@@ -340,7 +338,7 @@ becomes extremely inefficient.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">contains</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">contains</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 <span class="go">[True]</span>
 </pre></div>
 </div>
@@ -363,21 +361,18 @@ becomes extremely inefficient.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.model.datarelease.txt"
+      <li><a href="_sources/imaginglss.model.datarelease.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -399,15 +394,15 @@ becomes extremely inefficient.</p>
         <li class="right" >
           <a href="imaginglss.model.catalogue.html" title="imaginglss.model.catalogue module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

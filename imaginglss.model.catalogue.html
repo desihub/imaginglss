@@ -1,34 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.catalogue module &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.catalogue module &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="imaginglss.model.datarelease module" href="imaginglss.model.datarelease.html" />
     <link rel="prev" title="imaginglss.model.brickindex module" href="imaginglss.model.brickindex.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,10 +42,10 @@
         <li class="right" >
           <a href="imaginglss.model.brickindex.html" title="imaginglss.model.brickindex module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -108,154 +106,12 @@ with the <a class="reference internal" href="imaginglss.utils.npyquery.html#modu
 <dl class="exception">
 <dt id="imaginglss.model.catalogue.CacheExpired">
 <em class="property">exception </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">CacheExpired</code><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CacheExpired"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CacheExpired" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.RuntimeError</span></code></p>
-</dd></dl>
-
-<dl class="class">
-<dt id="imaginglss.model.catalogue.CachedCatalogue">
-<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">CachedCatalogue</code><span class="sig-paren">(</span><em>cachedir</em>, <em>bricks</em>, <em>format_filename</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="imaginglss.utils.columnstore.html#imaginglss.utils.columnstore.ColumnStore" title="imaginglss.utils.columnstore.ColumnStore"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.utils.columnstore.ColumnStore</span></code></a></p>
-<p>Class for handling object catalogs associated with a data release.</p>
-<p>Access via the <code class="xref py py-attr docutils literal"><span class="pre">catalogue</span></code> attribute of <code class="xref py py-class docutils literal"><span class="pre">DataRelease</span></code>
-object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cachedir</strong> : string</p>
-<blockquote>
-<div><p>the location for caching.</p>
-</div></blockquote>
-<p><strong>bricks: list</strong></p>
-<blockquote>
-<div><p>a list of bricks names that the catalogue covers.</p>
-</div></blockquote>
-<p><strong>format_filename</strong> : function</p>
-<blockquote>
-<div><p>a function converts a brick object to a filename of the tractor
-catalogue</p>
-</div></blockquote>
-<p><strong>aliases</strong> : list</p>
-<blockquote class="last">
-<div><p>a list of fields to transform; this is to support migration
-of schema from older data release to newer ones. The list
-is of from (oldname, newname, transformfunction)</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>The catalogs are contained in many small FITS files. Accesing them 
-directly is slow. 
-The columns must be first converted from the many-small file original
-format to a cache format via a script, <code class="code docutils literal"><span class="pre">scripts/build_cache.py</span></code>.
-The scripts calls the function <a class="reference internal" href="#imaginglss.model.catalogue.CachedCatalogue.build_cache" title="imaginglss.model.catalogue.CachedCatalogue.build_cache"><code class="xref py py-meth docutils literal"><span class="pre">build_cache()</span></code></a> to build the cache
-for chunks of catalogue in parallel, then write them to the correct cache
-directory.</p>
-<p>This class caches the information on disk for speed. 
-Only columns that are accessed are loaded into memory.</p>
-<p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">DECALS</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cat</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">datarelease</span><span class="o">.</span><span class="n">catalogue</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:</span><span class="mi">100</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cat</span><span class="p">[</span><span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">][:]</span> <span class="c1"># may be huge!</span>
-</pre></div>
-</div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="11%" />
-<col width="89%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>dtype</td>
-<td>(dtype) A container of the data type of columns in <code class="xref py py-class docutils literal"><span class="pre">numpy.dtype</span></code></td>
-</tr>
-<tr class="row-even"><td>filenames</td>
-<td>(dict) A mapping between the brickname and the filenames.</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.build_cache">
-<code class="descname">build_cache</code><span class="sig-paren">(</span><em>filenames</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue.build_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.build_cache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build cache of the catalogue files listed in filenames</p>
-<p>The fits files are converted to file handler format.
-Each column becomes a single file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cachedir</strong> : string</p>
-<blockquote>
-<div><p>directory for holding the cache</p>
-</div></blockquote>
-<p><strong>filenames</strong> : list</p>
-<blockquote>
-<div><p>list of FITS files to read from</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">concatenated catalogue for filenames</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Notes</p>
-<p>This shall be run before using the catalogue. 
-And it takes a long time.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.check_cache">
-<code class="descname">check_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue.check_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.check_cache" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if cache is consistent</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>consistent</strong> : boolean</p>
-<blockquote class="last">
-<div><p>True if consistent, Falst if need to rebuild with <a class="reference internal" href="#imaginglss.model.catalogue.CachedCatalogue.build_cache" title="imaginglss.model.catalogue.CachedCatalogue.build_cache"><code class="xref py py-meth docutils literal"><span class="pre">build_cache()</span></code></a>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.dtype">
-<code class="descname">dtype</code><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.dtype" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.fetch">
-<code class="descname">fetch</code><span class="sig-paren">(</span><em>column</em>, <em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.fetch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.neighbours">
-<code class="descname">neighbours</code><span class="sig-paren">(</span><em>coord</em>, <em>sep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue.neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.neighbours" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.open">
-<code class="descname">open</code><span class="sig-paren">(</span><em>brick</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#CachedCatalogue.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.open" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="imaginglss.model.catalogue.CachedCatalogue.size">
-<code class="descname">size</code><a class="headerlink" href="#imaginglss.model.catalogue.CachedCatalogue.size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">RuntimeError</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="imaginglss.model.catalogue.Catalogue">
-<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>bricks</em>, <em>format_filename</em>, <em>aliases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">Catalogue</code><span class="sig-paren">(</span><em>bricks</em>, <em>format_filename</em>, <em>aliases</em>, <em>columns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#Catalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -283,20 +139,15 @@ is of from (oldname, newname, transformfunction)</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="6%" />
-<col width="94%" />
+<col width="11%" />
+<col width="89%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>dtype</td>
+<tr class="row-odd"><td><strong>dtype</strong></td>
 <td>(dtype) A container of the data type of columns in <code class="xref py py-class docutils literal"><span class="pre">numpy.dtype</span></code></td>
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="imaginglss.model.catalogue.Catalogue.COLUMNS">
-<code class="descname">COLUMNS</code><em class="property"> = ['BRICK_PRIMARY', 'RA', 'DEC', 'DECAM_FLUX_IVAR', 'DECAM_MW_TRANSMISSION', 'DECAM_PSFSIZE', 'DECAM_NOBS', 'DECAM_ANYMASK', 'DECAM_DEPTH', 'DECAM_FLUX', 'WISE_FLUX', 'WISE_FLUX_IVAR', 'WISE_MW_TRANSMISSION', 'TYPE', 'SHAPEDEV_R', 'SHAPEEXP_R']</em><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.COLUMNS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="imaginglss.model.catalogue.Catalogue.dtype">
 <code class="descname">dtype</code><a class="headerlink" href="#imaginglss.model.catalogue.Catalogue.dtype" title="Permalink to this definition">¶</a></dt>
@@ -316,7 +167,7 @@ is of from (oldname, newname, transformfunction)</p>
 
 <dl class="class">
 <dt id="imaginglss.model.catalogue.TransformedColumn">
-<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">TransformedColumn</code><span class="sig-paren">(</span><em>ref</em>, <em>transform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#TransformedColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.TransformedColumn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">imaginglss.model.catalogue.</code><code class="descname">TransformedColumn</code><span class="sig-paren">(</span><em>ref</em>, <em>columns</em>, <em>transform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/catalogue.html#TransformedColumn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.catalogue.TransformedColumn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 </dd></dl>
 
@@ -380,21 +231,18 @@ is of from (oldname, newname, transformfunction)</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.model.catalogue.txt"
+      <li><a href="_sources/imaginglss.model.catalogue.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -416,15 +264,15 @@ is of from (oldname, newname, transformfunction)</p>
         <li class="right" >
           <a href="imaginglss.model.brickindex.html" title="imaginglss.model.brickindex module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

@@ -1,32 +1,30 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.utils.npyquery &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.utils.npyquery &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html" />
-    <link rel="up" title="imaginglss" href="../../imaginglss.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -36,9 +34,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -81,14 +79,14 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ndarray</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span> <span class="nn">operator</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="nb">basestring</span>
+    <span class="n">basestring</span>
 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
-    <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+    <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
 
 <div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; A node in the query expression.</span>
@@ -104,21 +102,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span> <span class="nf">__invert__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__invert__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__invert__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__neg__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__neg__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__le__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__le__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__lt__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__lt__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__eq__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;==&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__eq__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;!=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__ne__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;!=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__ne__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__gt__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__gt__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="n">__ge__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&gt;=&quot;</span><span class="p">,</span> <span class="n">operator</span><span class="o">.</span><span class="fm">__ge__</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="s2">&quot;&amp;&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">])</span>
     <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -190,12 +188,12 @@
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">):</span>
             <span class="n">s</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">chunksize</span><span class="p">)</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">QueryVisitor</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">dtype</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -232,11 +230,11 @@
 <div class="viewcode-block" id="repr_slice"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.repr_slice">[docs]</a><span class="k">def</span> <span class="nf">repr_slice</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="s1">&#39;:&#39;</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
-    <span class="n">stop</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">step</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
@@ -428,7 +426,7 @@
 
 <div class="viewcode-block" id="AssumptionVisitor"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.AssumptionVisitor">[docs]</a><span class="k">class</span> <span class="nc">AssumptionVisitor</span><span class="p">(</span><span class="n">Visitor</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">literal</span><span class="p">):</span>
-        <span class="n">Visitor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Visitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">literal</span><span class="p">,</span> <span class="n">Node</span><span class="p">):</span>
             <span class="n">literal</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="n">literal</span><span class="p">)</span>
@@ -446,7 +444,7 @@
 
 <div class="viewcode-block" id="QueryVisitor"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.QueryVisitor">[docs]</a><span class="k">class</span> <span class="nc">QueryVisitor</span><span class="p">(</span><span class="n">Visitor</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-        <span class="n">Visitor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Visitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="n">array</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
 
@@ -465,7 +463,7 @@
         <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="QueryVisitor.visit_literal"><a class="viewcode-back" href="../../../imaginglss.utils.npyquery.html#imaginglss.utils.npyquery.QueryVisitor.visit_literal">[docs]</a>    <span class="k">def</span> <span class="nf">visit_literal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">basestring</span><span class="p">):</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;S&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span>
@@ -499,7 +497,7 @@
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;BlackholeMass&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;PhaseOfMoon&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;PhaseOfMoon&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Position&#39;</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Position&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N1&#39;</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;N2&#39;</span>
@@ -525,7 +523,7 @@
                 <span class="o">.</span><span class="n">assume</span><span class="p">(</span><span class="n">Column</span><span class="p">(</span><span class="s1">&#39;Position&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">query7</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span></div>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">test</span><span class="p">()</span>
 </pre></div>
 
@@ -537,14 +535,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -560,14 +555,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

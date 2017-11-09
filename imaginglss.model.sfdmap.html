@@ -1,34 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.sfdmap module &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.sfdmap module &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="imaginglss.model.tycho module" href="imaginglss.model.tycho.html" />
     <link rel="prev" title="imaginglss.model.schema module" href="imaginglss.model.schema.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,10 +42,10 @@
         <li class="right" >
           <a href="imaginglss.model.schema.html" title="imaginglss.model.schema module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -77,8 +75,8 @@ replaced the transformation with ours.</p>
 <col width="98%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>extinctions</td>
-<td>(dict) These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, &#8220;New recommended SFD coefficients for DECam.&#8221;  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
+<tr class="row-odd"><td><strong>extinctions</strong></td>
+<td>(dict) These values are not useful for us, but we keep them for reference.  These come from Schlafly &amp; Finkbeiner, arxiv 1012.4804v2, Table 6, Rv=3.1 but updated (and adding DES u) via email from Schlafly, decam-data thread from 11/13/2014, “New recommended SFD coefficients for DECam.”  The coefficients for the four WISE filters are derived from Fitzpatrick 1999, as recommended by Schafly &amp; Finkbeiner, considered better than either the Cardelli et al 1989 curves or the newer Fitzpatrick &amp; Massa 2009 NIR curve not vetted beyond 2 micron). These coefficients are A / E(B-V) = 0.184, 0.113, 0.0241, 0.00910.</td>
 </tr>
 </tbody>
 </table>
@@ -125,7 +123,7 @@ Use <a class="reference internal" href="#imaginglss.model.sfdmap.SFDMap.ebv" tit
 
 <dl class="attribute">
 <dt id="imaginglss.model.sfdmap.SFDMap.extinctions">
-<code class="descname">extinctions</code><em class="property"> = {'DES i': 1.592, 'DES g': 3.214, 'DES z': 1.211, 'DES u': 3.995, 'DES r': 2.165, 'SDSS u': 4.239, 'WISE W2': 0.113, 'WISE W3': 0.0241, 'WISE W1': 0.184, 'DES Y': 1.064, 'WISE W4': 0.0091}</em><a class="headerlink" href="#imaginglss.model.sfdmap.SFDMap.extinctions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">extinctions</code><em class="property"> = {'SDSS u': 4.239, 'DES u': 3.995, 'DES g': 3.214, 'DES r': 2.165, 'DES i': 1.592, 'DES z': 1.211, 'DES Y': 1.064, 'WISE W1': 0.184, 'WISE W2': 0.113, 'WISE W3': 0.0241, 'WISE W4': 0.0091}</em><a class="headerlink" href="#imaginglss.model.sfdmap.SFDMap.extinctions" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -147,21 +145,18 @@ Use <a class="reference internal" href="#imaginglss.model.sfdmap.SFDMap.ebv" tit
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.model.sfdmap.txt"
+      <li><a href="_sources/imaginglss.model.sfdmap.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -183,15 +178,15 @@ Use <a class="reference internal" href="#imaginglss.model.sfdmap.SFDMap.ebv" tit
         <li class="right" >
           <a href="imaginglss.model.schema.html" title="imaginglss.model.schema module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

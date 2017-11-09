@@ -1,34 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.brick module &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.brick module &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="imaginglss.model.brickindex module" href="imaginglss.model.brickindex.html" />
     <link rel="prev" title="imaginglss.model package" href="imaginglss.model.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,10 +42,10 @@
         <li class="right" >
           <a href="imaginglss.model.html" title="imaginglss.model package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -72,35 +70,35 @@ looking up the pixel-level information.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="9%" />
-<col width="91%" />
+<col width="13%" />
+<col width="88%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>index</td>
+<tr class="row-odd"><td><strong>index</strong></td>
 <td>(  integer) Internal index used by <code class="xref py py-class docutils literal"><span class="pre">BrickIndex</span></code></td>
 </tr>
-<tr class="row-even"><td>id</td>
+<tr class="row-even"><td><strong>id</strong></td>
 <td>(  integer) ID of the brick as in the Tractor catalogue (unique). Note that we do not use it in indexing.</td>
 </tr>
-<tr class="row-odd"><td>name</td>
+<tr class="row-odd"><td><strong>name</strong></td>
 <td>(string_like) name of the brick as in the Tractor catalogue (unique)</td>
 </tr>
-<tr class="row-even"><td>ra</td>
+<tr class="row-even"><td><strong>ra</strong></td>
 <td>(float) center coordinate ra</td>
 </tr>
-<tr class="row-odd"><td>dec</td>
+<tr class="row-odd"><td><strong>dec</strong></td>
 <td>(float) center coordinate dec</td>
 </tr>
-<tr class="row-even"><td>ra1</td>
+<tr class="row-even"><td><strong>ra1</strong></td>
 <td>(float) min coordinate ra</td>
 </tr>
-<tr class="row-odd"><td>dec1</td>
+<tr class="row-odd"><td><strong>dec1</strong></td>
 <td>(float) min coordinate dec</td>
 </tr>
-<tr class="row-even"><td>ra2</td>
+<tr class="row-even"><td><strong>ra2</strong></td>
 <td>(float) max coordinate ra</td>
 </tr>
-<tr class="row-odd"><td>dec2: float</td>
+<tr class="row-odd"><td><strong>dec2: float</strong></td>
 <td>max coordinate dec</td>
 </tr>
 </tbody>
@@ -108,7 +106,7 @@ looking up the pixel-level information.</p>
 <dl class="method">
 <dt id="imaginglss.model.brick.Brick.query">
 <code class="descname">query</code><span class="sig-paren">(</span><em>repo</em>, <em>coord</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick.query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query the pixel coordinate in &#8216;xy&#8217; system from RA/DEC system.</p>
+<dd><p>Query the pixel coordinate in ‘xy’ system from RA/DEC system.</p>
 <p>Note that the returned array is in a x-first-varying order.
 To index the ndarray image, use [y, x].</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -171,7 +169,7 @@ for this brick</p>
 <dl class="method">
 <dt id="imaginglss.model.brick.Brick.revert">
 <code class="descname">revert</code><span class="sig-paren">(</span><em>repo</em>, <em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/brick.html#Brick.revert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.brick.Brick.revert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Look up RA/DEC coord from pixels coordinate in &#8216;xy&#8217; system.</p>
+<dd><p>Look up RA/DEC coord from pixels coordinate in ‘xy’ system.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -213,21 +211,18 @@ for this brick</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.model.brick.txt"
+      <li><a href="_sources/imaginglss.model.brick.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -249,15 +244,15 @@ for this brick</p>
         <li class="right" >
           <a href="imaginglss.model.html" title="imaginglss.model package"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

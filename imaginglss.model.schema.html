@@ -1,34 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.schema module &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.schema module &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
-    <link rel="up" title="imaginglss.model package" href="imaginglss.model.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="imaginglss.model.sfdmap module" href="imaginglss.model.sfdmap.html" />
     <link rel="prev" title="imaginglss.model.imagerepo module" href="imaginglss.model.imagerepo.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -44,10 +42,10 @@
         <li class="right" >
           <a href="imaginglss.model.imagerepo.html" title="imaginglss.model.imagerepo module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" accesskey="U">imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -113,9 +111,51 @@ schema.</p>
 <code class="descname">BRICKS_FILENAME</code><em class="property"> = 'survey-bricks.fits.gz'</em><a class="headerlink" href="#imaginglss.model.schema.DR3.BRICKS_FILENAME" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="imaginglss.model.schema.DR3.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_FLUX', 'FLUX_G', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_FLUX', 'FLUX_R', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_FLUX', 'FLUX_Z', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_FLUX_IVAR', 'FLUX_IVAR_G', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_FLUX_IVAR', 'FLUX_IVAR_R', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_FLUX_IVAR', 'FLUX_IVAR_Z', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_DEPTH', 'PSFDEPTH_G', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_DEPTH', 'PSFDEPTH_R', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_DEPTH', 'PSFDEPTH_Z', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_G', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_R', &lt;function DR3.&lt;lambda&gt;&gt;), ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_Z', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_FLUX', 'FLUX_W1', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_FLUX', 'FLUX_W2', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_FLUX_IVAR', 'FLUX_IVAR_W1', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_FLUX_IVAR', 'FLUX_IVAR_W2', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_MW_TRANSMISSION', 'MW_TRANSMISSION_W1', &lt;function DR3.&lt;lambda&gt;&gt;), ('WISE_MW_TRANSMISSION', 'MW_TRANSMISSION_W2', &lt;function DR3.&lt;lambda&gt;&gt;)]</em><a class="headerlink" href="#imaginglss.model.schema.DR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="staticmethod">
 <dt id="imaginglss.model.schema.DR3.format_image_filenames">
 <em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/schema.html#DR3.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.schema.DR3.format_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.model.schema.DR4">
+<em class="property">class </em><code class="descclassname">imaginglss.model.schema.</code><code class="descname">DR4</code><a class="reference internal" href="_modules/imaginglss/model/schema.html#DR4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.schema.DR4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.model.schema.DR3" title="imaginglss.model.schema.DR3"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.schema.DR3</span></code></a></p>
+<dl class="attribute">
+<dt id="imaginglss.model.schema.DR4.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#imaginglss.model.schema.DR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.schema.DR4.CATALOGUE_COLUMNS">
+<code class="descname">CATALOGUE_COLUMNS</code><em class="property"> = ['BRICK_PRIMARY', 'RA', 'DEC', 'TYPE', 'SHAPEDEV_R', 'SHAPEEXP_R', 'NOBS_G', 'NOBS_R', 'NOBS_Z', 'ANYMASK_G', 'ANYMASK_R', 'ANYMASK_Z', 'FLUX_G', 'FLUX_R', 'FLUX_Z', 'FLUX_IVAR_G', 'FLUX_IVAR_R', 'FLUX_IVAR_Z', 'PSFDEPTH_G', 'PSFDEPTH_R', 'PSFDEPTH_Z', 'PSFSIZE_G', 'PSFSIZE_R', 'PSFSIZE_Z', 'MW_TRANSMISSION_G', 'MW_TRANSMISSION_R', 'MW_TRANSMISSION_Z', 'FLUX_W1', 'FLUX_W2', 'FLUX_IVAR_W1', 'FLUX_IVAR_W2', 'MW_TRANSMISSION_W1', 'MW_TRANSMISSION_W2']</em><a class="headerlink" href="#imaginglss.model.schema.DR4.CATALOGUE_COLUMNS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imaginglss.model.schema.DR5">
+<em class="property">class </em><code class="descclassname">imaginglss.model.schema.</code><code class="descname">DR5</code><a class="reference internal" href="_modules/imaginglss/model/schema.html#DR5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.schema.DR5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#imaginglss.model.schema.DR4" title="imaginglss.model.schema.DR4"><code class="xref py py-class docutils literal"><span class="pre">imaginglss.model.schema.DR4</span></code></a></p>
+<dl class="attribute">
+<dt id="imaginglss.model.schema.DR5.CATALOGUE_ALIASES">
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#imaginglss.model.schema.DR5.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.schema.DR5.IMAGE_HDU">
+<code class="descname">IMAGE_HDU</code><em class="property"> = 1</em><a class="headerlink" href="#imaginglss.model.schema.DR5.IMAGE_HDU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="imaginglss.model.schema.DR5.format_image_filenames">
+<em class="property">static </em><code class="descname">format_image_filenames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/imaginglss/model/schema.html#DR5.format_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.schema.DR5.format_image_filenames" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -132,7 +172,12 @@ schema.</p>
 
 <dl class="attribute">
 <dt id="imaginglss.model.schema.EDR.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x7f652cfd1848&gt;)]</em><a class="headerlink" href="#imaginglss.model.schema.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function EDR.&lt;lambda&gt;&gt;)]</em><a class="headerlink" href="#imaginglss.model.schema.EDR.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.schema.EDR.IMAGE_HDU">
+<code class="descname">IMAGE_HDU</code><em class="property"> = 0</em><a class="headerlink" href="#imaginglss.model.schema.EDR.IMAGE_HDU" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -164,7 +209,12 @@ schema.</p>
 
 <dl class="attribute">
 <dt id="imaginglss.model.schema.EDR3.CATALOGUE_ALIASES">
-<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function &lt;lambda&gt; at 0x7f652cfd1a28&gt;)]</em><a class="headerlink" href="#imaginglss.model.schema.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<code class="descname">CATALOGUE_ALIASES</code><em class="property"> = [('DECAM_EXTINCTION', 'DECAM_MW_TRANSMISSION', &lt;function EDR3.&lt;lambda&gt;&gt;)]</em><a class="headerlink" href="#imaginglss.model.schema.EDR3.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="imaginglss.model.schema.EDR3.IMAGE_HDU">
+<code class="descname">IMAGE_HDU</code><em class="property"> = 0</em><a class="headerlink" href="#imaginglss.model.schema.EDR3.IMAGE_HDU" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
@@ -195,12 +245,18 @@ Changed to DECAM_MW_TRANSMISSION</p>
 <code class="descname">CATALOGUE_ALIASES</code><em class="property"> = []</em><a class="headerlink" href="#imaginglss.model.schema.EDR4.CATALOGUE_ALIASES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="imaginglss.model.schema.EDR4.CATALOGUE_COLUMNS">
+<code class="descname">CATALOGUE_COLUMNS</code><em class="property"> = ['BRICK_PRIMARY', 'RA', 'DEC', 'DECAM_FLUX_IVAR', 'DECAM_MW_TRANSMISSION', 'DECAM_PSFSIZE', 'DECAM_NOBS', 'DECAM_ANYMASK', 'DECAM_DEPTH', 'DECAM_FLUX', 'WISE_FLUX', 'WISE_FLUX_IVAR', 'WISE_MW_TRANSMISSION', 'TYPE', 'SHAPEDEV_R', 'SHAPEEXP_R']</em><a class="headerlink" href="#imaginglss.model.schema.EDR4.CATALOGUE_COLUMNS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="imaginglss.model.schema.Schema">
 <em class="property">class </em><code class="descclassname">imaginglss.model.schema.</code><code class="descname">Schema</code><a class="reference internal" href="_modules/imaginglss/model/schema.html#Schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#imaginglss.model.schema.Schema" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+</dd></dl>
 
 </div>
 
@@ -219,21 +275,18 @@ Changed to DECAM_MW_TRANSMISSION</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/imaginglss.model.schema.txt"
+      <li><a href="_sources/imaginglss.model.schema.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -255,15 +308,15 @@ Changed to DECAM_MW_TRANSMISSION</p>
         <li class="right" >
           <a href="imaginglss.model.imagerepo.html" title="imaginglss.model.imagerepo module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &raquo;</li>
-          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="imaginglss.html" >imaginglss package</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="imaginglss.model.html" >imaginglss.model package</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

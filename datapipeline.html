@@ -1,33 +1,32 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Usage: Data Pipeline &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>Usage: Data Pipeline &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Data Model" href="datamodel.html" />
     <link rel="prev" title="Installation" href="install.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,7 +42,7 @@
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -78,41 +77,44 @@ and objects of the QSO target type.</p>
 <p>Before we start using ImagingLSS, it is crucial to build the catalogue cache.</p>
 <div class="admonition attention">
 <p class="first admonition-title">Attention</p>
-<p class="last">On Edison for DR2, this step can be omitted
+<p>On Edison for DR2, this step can be omitted
 if the following configuration file is used:</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span></span>/project/projectdirs/m779/imaginglss/dr2.conf.py
+</pre></div>
+</div>
 </div>
 <p>The application to build the cache is <code class="code docutils literal"><span class="pre">scripts/imglss-mpi-build-cache.py</span></code>. The application
 scans the files in the data release described by a configuration file (provided in
 <code class="code docutils literal"><span class="pre">--conf</span></code> argument), and converts the columns used by ImagingLSS to a binary
-format that is much easier to use into the &#8216;cache&#8217; directory specified in the configuration
+format that is much easier to use into the ‘cache’ directory specified in the configuration
 file. For the format of the configuration file, refer to <cite>Configuration File</cite>.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-build-cache.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--conf CONF<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>usage: imglss-mpi-build-cache.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--conf CONF<span class="o">]</span>
 
 optional arguments:
-  -h, --help   show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -h, --help   show this <span class="nb">help</span> message and <span class="nb">exit</span>
   --conf CONF  Path to the imaginglss config file, default is from
                DECALS_PY_CONFIG
 </pre></div>
 </div>
 <p>Here is an example job script that works on Edison (Note that python-mpi-bcast is used).
 Submit the job script with <code class="code docutils literal"><span class="pre">sbatch</span></code>.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
-<span class="c">#SBATCH -J imglss-mpi-build-cache</span>
-<span class="c">#SBATCH -n 512</span>
-<span class="c">#SBATCH -o imglss-mpi-build-cache.%j</span>
-<span class="c">#SBATCH -p debug</span>
-<span class="c">#SBATCH -t 00:30:00</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1">#SBATCH -J imglss-mpi-build-cache</span>
+<span class="c1">#SBATCH -n 512</span>
+<span class="c1">#SBATCH -o imglss-mpi-build-cache.%j</span>
+<span class="c1">#SBATCH -p debug</span>
+<span class="c1">#SBATCH -t 00:30:00</span>
 
-<span class="nb">export </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 
 module load python/2.7-anaconda
 <span class="nb">source</span> /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
-<span class="c"># change the following line to where your ImagingLSS is installed</span>
+<span class="c1"># change the following line to where your ImagingLSS is installed</span>
 mirror ~/source/imaginglss imaginglss scripts
 
-<span class="c"># change conf to your imaginglss configuration file</span>
+<span class="c1"># change conf to your imaginglss configuration file</span>
 srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/imglss-mpi-build-cache.py --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 </pre></div>
 </div>
@@ -124,7 +126,7 @@ that we will use in the later stages of the pipeline.</p>
 <p>The target types are defined at <a class="reference external" href="http://desi.lbl.gov/trac/wiki/TargetSelection">http://desi.lbl.gov/trac/wiki/TargetSelection</a></p>
 <p>The output is the RA DEC and magnitudes of objects.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-select-objects.py [-h] [--use-tractor-depth] [--conf CONF]
+<div class="highlight-bash"><div class="highlight"><pre><span></span>usage: imglss-mpi-select-objects.py [-h] [--use-tractor-depth] [--conf CONF]
                                     {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS} output
 
 positional arguments:
@@ -142,27 +144,27 @@ optional arguments:
 <p>Here is an example job script we use on Edison to generate the LRG catalogue.
 Submit the job script with <code class="code docutils literal"><span class="pre">sbatch</span></code>. We also encourage typing in the commands
 one by one from an interactive job session, obtained via <code class="code docutils literal"><span class="pre">salloc</span></code>. Refer to
-<a href="#id1"><span class="problematic" id="id2">`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_</span></a>.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/bin/bash</span>
+<a class="reference external" href="http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/">http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/</a>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 
-<span class="c">#SBATCH -J imglss-mpi-select-objects</span>
-<span class="c">#SBATCH -n 512</span>
-<span class="c">#SBATCH -o imglss-mpi-select-objects.%j</span>
-<span class="c">#SBATCH -p debug</span>
-<span class="c">#SBATCH -t 00:30:00</span>
+<span class="c1">#SBATCH -J imglss-mpi-select-objects</span>
+<span class="c1">#SBATCH -n 512</span>
+<span class="c1">#SBATCH -o imglss-mpi-select-objects.%j</span>
+<span class="c1">#SBATCH -p debug</span>
+<span class="c1">#SBATCH -t 00:30:00</span>
 
-<span class="nb">export </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span>1
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">1</span>
 
 module load python/2.7-anaconda
 <span class="nb">source</span> /project/projectdirs/m779/python-mpi/nersc/activate.sh
 
-<span class="c"># change the following line to where your imaginglss is installed</span>
+<span class="c1"># change the following line to where your imaginglss is installed</span>
 mirror ~/source/imaginglss imaginglss scripts
 
-<span class="c"># use without installing</span>
-<span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span>/dev/shm/local:<span class="nv">$PYTHONPATH</span>
+<span class="c1"># use without installing</span>
+<span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>/dev/shm/local:<span class="nv">$PYTHONPATH</span>
 
-<span class="c"># change conf to your imaginglss configuration file</span>
+<span class="c1"># change conf to your imaginglss configuration file</span>
 srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/imglss-mpi-select-objects.py LRG LRG.hdf5 --conf /project/projectdirs/m779/imaginglss/dr2.conf.py
 </pre></div>
 </div>
@@ -171,7 +173,7 @@ srun -n <span class="m">256</span> python-mpi /dev/shm/local/scripts/imglss-mpi-
 <h2>Generating Complete Random Sky Mask<a class="headerlink" href="#generating-complete-random-sky-mask" title="Permalink to this headline">¶</a></h2>
 <p>imglss-mpi-make-random.py generates the randoms for the sky mask. The points will be uniform within the survey footprint.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="highlight-bash"><div class="highlight"><pre>usage: imglss-mpi-make-random.py <span class="o">[</span>-h<span class="o">]</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>usage: imglss-mpi-make-random.py <span class="o">[</span>-h<span class="o">]</span>
                       <span class="o">[</span>--conf CONF<span class="o">]</span>
                       Nran output
 
@@ -180,7 +182,7 @@ positional arguments:
   output
 
 optional arguments:
-  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
   --conf CONF           Path to the imaginglss config file, default is from
                         DECALS_PY_CONFIG
 </pre></div>
@@ -188,8 +190,8 @@ optional arguments:
 <p>Here is an example job script we use on Edison to generate a QSO random catalogue.
 Submit the job script with <code class="code docutils literal"><span class="pre">sbatch</span></code>. We also encourage typing in the commands
 one by one from an interactive job session, obtained via <code class="code docutils literal"><span class="pre">salloc</span></code>. Refer to
-<a href="#id3"><span class="problematic" id="id4">`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_</span></a>.</p>
-<div class="code highlight-python"><div class="highlight"><pre>#!/bin/bash
+<a class="reference external" href="http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/">http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/</a>.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span>#!/bin/bash
 
 #SBATCH -J imglss-mpi-make-random
 #SBATCH -n 512
@@ -214,9 +216,9 @@ srun -n 256 python-mpi /dev/shm/local/scripts/imglss-mpi-make-random.py 6000000 
 </div>
 <p>Sometimes the position of a random catalogue is already specified. In this case we provide
 another script, <cite>imglss-mpi-query-depth.py</cite>, to query the depth / noise level of the deccals survey of these points.
-The RA and DEC of these points must be stored as two datasets name &#8216;RA&#8217; and &#8216;DEC&#8217; in a HDF5 file. Here is the help of
+The RA and DEC of these points must be stored as two datasets name ‘RA’ and ‘DEC’ in a HDF5 file. Here is the help of
 the script:</p>
-<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-mpi-query-depth.py [-h] [--conf CONF] query
+<div class="code highlight-default"><div class="highlight"><pre><span></span>usage: imglss-mpi-query-depth.py [-h] [--conf CONF] query
 
 Query Depth from DECALS data for input RA DEC of points. The input must be
 saved in a HDF5 with two datasets &#39;RA&#39; and &#39;DEC&#39;. The output will be written
@@ -242,24 +244,24 @@ optional arguments:
 in imaginglss/analysis/tycho_veto.py . As you can tell, we currently only support vetoing via a Tycho2 catalogue.</p>
 <p>The star veto mask is important for correctly building the completeness estimator.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-query-tycho-veto.py [-h] [--conf CONF] catalogue
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">imglss</span><span class="o">-</span><span class="n">query</span><span class="o">-</span><span class="n">tycho</span><span class="o">-</span><span class="n">veto</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span><span class="p">]</span> <span class="n">catalogue</span>
 
-Query the TYCHOVETO flags of input data. The position is taken from the NOISES
-extension of input. The result is written to the TYCHOVETO extension of
-output. Currently, only veto by proximity to tycho stars are implemented. Each
-veto in imaginglss.analysis.tycho_veto is calculated as a column in the
-TYCHOVETO extension. Unfortunately, this script is not sufficiently smart to
-decide the correct TYCHOVETO for the target type. Therefore, no combined veto
-flag is generated.
+<span class="n">Query</span> <span class="n">the</span> <span class="n">TYCHOVETO</span> <span class="n">flags</span> <span class="n">of</span> <span class="nb">input</span> <span class="n">data</span><span class="o">.</span> <span class="n">The</span> <span class="n">position</span> <span class="ow">is</span> <span class="n">taken</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">NOISES</span>
+<span class="n">extension</span> <span class="n">of</span> <span class="nb">input</span><span class="o">.</span> <span class="n">The</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">written</span> <span class="n">to</span> <span class="n">the</span> <span class="n">TYCHOVETO</span> <span class="n">extension</span> <span class="n">of</span>
+<span class="n">output</span><span class="o">.</span> <span class="n">Currently</span><span class="p">,</span> <span class="n">only</span> <span class="n">veto</span> <span class="n">by</span> <span class="n">proximity</span> <span class="n">to</span> <span class="n">tycho</span> <span class="n">stars</span> <span class="n">are</span> <span class="n">implemented</span><span class="o">.</span> <span class="n">Each</span>
+<span class="n">veto</span> <span class="ow">in</span> <span class="n">imaginglss</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">tycho_veto</span> <span class="ow">is</span> <span class="n">calculated</span> <span class="k">as</span> <span class="n">a</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">the</span>
+<span class="n">TYCHOVETO</span> <span class="n">extension</span><span class="o">.</span> <span class="n">Unfortunately</span><span class="p">,</span> <span class="n">this</span> <span class="n">script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">sufficiently</span> <span class="n">smart</span> <span class="n">to</span>
+<span class="n">decide</span> <span class="n">the</span> <span class="n">correct</span> <span class="n">TYCHOVETO</span> <span class="k">for</span> <span class="n">the</span> <span class="n">target</span> <span class="nb">type</span><span class="o">.</span> <span class="n">Therefore</span><span class="p">,</span> <span class="n">no</span> <span class="n">combined</span> <span class="n">veto</span>
+<span class="n">flag</span> <span class="ow">is</span> <span class="n">generated</span><span class="o">.</span>
 
-positional arguments:
-  catalogue    HDF5 catalogue file, can be either random or objects.
-               TYCHO_VETO dataset will be added
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">catalogue</span>    <span class="n">HDF5</span> <span class="n">catalogue</span> <span class="n">file</span><span class="p">,</span> <span class="n">can</span> <span class="n">be</span> <span class="n">either</span> <span class="n">random</span> <span class="ow">or</span> <span class="n">objects</span><span class="o">.</span>
+               <span class="n">TYCHO_VETO</span> <span class="n">dataset</span> <span class="n">will</span> <span class="n">be</span> <span class="n">added</span>
 
-optional arguments:
-  -h, --help   show this help message and exit
-  --conf CONF  Path to the imaginglss config file, default is from
-               DECALS_PY_CONFIG
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>   <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span>  <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">imaginglss</span> <span class="n">config</span> <span class="n">file</span><span class="p">,</span> <span class="n">default</span> <span class="ow">is</span> <span class="kn">from</span>
+               <span class="nn">DECALS_PY_CONFIG</span>
 </pre></div>
 </div>
 </div>
@@ -270,26 +272,26 @@ A threshold confidence level is used to generate a 100% complete sample based on
 this sample is taken to model the fractional completeness. The result is appended as COMPLETENESS column to the
 catalogue.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="code highlight-python"><div class="highlight"><pre>Usage: imglss-query-completeness.py [-h]
-                                    [--use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
-                                    [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
-                                    [--sigma-r SIGMA_R] [--conf CONF]
-                                    {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS} objects
-                                    query
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span> <span class="n">imglss</span><span class="o">-</span><span class="n">query</span><span class="o">-</span><span class="n">completeness</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+                                    <span class="p">[</span><span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">tycho</span><span class="o">-</span><span class="n">veto</span> <span class="p">{</span><span class="n">BOSS_DR9</span><span class="p">,</span><span class="n">DECAM_BGS</span><span class="p">,</span><span class="n">DECAM_ELG</span><span class="p">,</span><span class="n">DECAM_LRG</span><span class="p">,</span><span class="n">DECAM_QSO</span><span class="p">}]</span>
+                                    <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">z</span> <span class="n">SIGMA_Z</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">g</span> <span class="n">SIGMA_G</span><span class="p">]</span>
+                                    <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">r</span> <span class="n">SIGMA_R</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span><span class="p">]</span>
+                                    <span class="p">{</span><span class="n">MYBGS</span><span class="p">,</span><span class="n">ELG</span><span class="p">,</span><span class="n">QSOC</span><span class="p">,</span><span class="n">LRG</span><span class="p">,</span><span class="n">QSO</span><span class="p">,</span><span class="n">QSOd</span><span class="p">,</span><span class="n">BGS</span><span class="p">}</span> <span class="n">objects</span>
+                                    <span class="n">query</span>
 
-positional arguments:
-  {MYBGS,ELG,QSOC,LRG,QSO,QSOd,BGS}
-  objects               object catalogue for building the completeness model.
-  query                 catalogue to query completeness
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="p">{</span><span class="n">MYBGS</span><span class="p">,</span><span class="n">ELG</span><span class="p">,</span><span class="n">QSOC</span><span class="p">,</span><span class="n">LRG</span><span class="p">,</span><span class="n">QSO</span><span class="p">,</span><span class="n">QSOd</span><span class="p">,</span><span class="n">BGS</span><span class="p">}</span>
+  <span class="n">objects</span>               <span class="nb">object</span> <span class="n">catalogue</span> <span class="k">for</span> <span class="n">building</span> <span class="n">the</span> <span class="n">completeness</span> <span class="n">model</span><span class="o">.</span>
+  <span class="n">query</span>                 <span class="n">catalogue</span> <span class="n">to</span> <span class="n">query</span> <span class="n">completeness</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}
-  --sigma-z SIGMA_Z
-  --sigma-g SIGMA_G
-  --sigma-r SIGMA_R
-  --conf CONF           Path to the imaginglss config file, default is from
-                        DECALS_PY_CONFIG
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">tycho</span><span class="o">-</span><span class="n">veto</span> <span class="p">{</span><span class="n">BOSS_DR9</span><span class="p">,</span><span class="n">DECAM_BGS</span><span class="p">,</span><span class="n">DECAM_ELG</span><span class="p">,</span><span class="n">DECAM_LRG</span><span class="p">,</span><span class="n">DECAM_QSO</span><span class="p">}</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">z</span> <span class="n">SIGMA_Z</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">g</span> <span class="n">SIGMA_G</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">r</span> <span class="n">SIGMA_R</span>
+  <span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span>           <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">imaginglss</span> <span class="n">config</span> <span class="n">file</span><span class="p">,</span> <span class="n">default</span> <span class="ow">is</span> <span class="kn">from</span>
+                        <span class="nn">DECALS_PY_CONFIG</span>
 </pre></div>
 </div>
 </div>
@@ -301,26 +303,26 @@ fluxes (only for objects) and depths of selected bands can be included in the fi
 out poorly detected objects.</p>
 <p>Vetoing by proximity to stars is also applied at this final stage.</p>
 <p>The inline help of the script describes the usage:</p>
-<div class="code highlight-python"><div class="highlight"><pre>usage: imglss-export-text.py [-h] [--conf CONF]
-                         [--use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}]
-                         [--bands {Y,W4,r,u,W1,g,i,W3,z,W2} [{Y,W4,r,u,W1,g,i,W3,z,W2} ...]]
-                         [--sigma-z SIGMA_Z] [--sigma-g SIGMA_G]
-                         [--sigma-r SIGMA_R]
-                         catalogue output
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">imglss</span><span class="o">-</span><span class="n">export</span><span class="o">-</span><span class="n">text</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">tycho</span><span class="o">-</span><span class="n">veto</span> <span class="p">{</span><span class="n">BOSS_DR9</span><span class="p">,</span><span class="n">DECAM_BGS</span><span class="p">,</span><span class="n">DECAM_ELG</span><span class="p">,</span><span class="n">DECAM_LRG</span><span class="p">,</span><span class="n">DECAM_QSO</span><span class="p">}]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">bands</span> <span class="p">{</span><span class="n">Y</span><span class="p">,</span><span class="n">W4</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">W1</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">W3</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">W2</span><span class="p">}</span> <span class="p">[{</span><span class="n">Y</span><span class="p">,</span><span class="n">W4</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">W1</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">W3</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">W2</span><span class="p">}</span> <span class="o">...</span><span class="p">]]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">z</span> <span class="n">SIGMA_Z</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">g</span> <span class="n">SIGMA_G</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">r</span> <span class="n">SIGMA_R</span><span class="p">]</span>
+                         <span class="n">catalogue</span> <span class="n">output</span>
 
-positional arguments:
-  catalogue             internal catalogue of HDF5 type.
-  output                text file to store the catalogue.
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">catalogue</span>             <span class="n">internal</span> <span class="n">catalogue</span> <span class="n">of</span> <span class="n">HDF5</span> <span class="nb">type</span><span class="o">.</span>
+  <span class="n">output</span>                <span class="n">text</span> <span class="n">file</span> <span class="n">to</span> <span class="n">store</span> <span class="n">the</span> <span class="n">catalogue</span><span class="o">.</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --conf CONF           Path to the imaginglss config file, default is from
-                        DECALS_PY_CONFIG
-  --use-tycho-veto {BOSS_DR9,DECAM_BGS,DECAM_ELG,DECAM_LRG,DECAM_QSO}
-  --bands {Y,W4,r,u,W1,g,i,W3,z,W2} [{Y,W4,r,u,W1,g,i,W3,z,W2} ...]
-  --sigma-z SIGMA_Z
-  --sigma-g SIGMA_G
-  --sigma-r SIGMA_R
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">conf</span> <span class="n">CONF</span>           <span class="n">Path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">imaginglss</span> <span class="n">config</span> <span class="n">file</span><span class="p">,</span> <span class="n">default</span> <span class="ow">is</span> <span class="kn">from</span>
+                        <span class="nn">DECALS_PY_CONFIG</span>
+  <span class="o">--</span><span class="n">use</span><span class="o">-</span><span class="n">tycho</span><span class="o">-</span><span class="n">veto</span> <span class="p">{</span><span class="n">BOSS_DR9</span><span class="p">,</span><span class="n">DECAM_BGS</span><span class="p">,</span><span class="n">DECAM_ELG</span><span class="p">,</span><span class="n">DECAM_LRG</span><span class="p">,</span><span class="n">DECAM_QSO</span><span class="p">}</span>
+  <span class="o">--</span><span class="n">bands</span> <span class="p">{</span><span class="n">Y</span><span class="p">,</span><span class="n">W4</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">W1</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">W3</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">W2</span><span class="p">}</span> <span class="p">[{</span><span class="n">Y</span><span class="p">,</span><span class="n">W4</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">W1</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">W3</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">W2</span><span class="p">}</span> <span class="o">...</span><span class="p">]</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">z</span> <span class="n">SIGMA_Z</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">g</span> <span class="n">SIGMA_G</span>
+  <span class="o">--</span><span class="n">sigma</span><span class="o">-</span><span class="n">r</span> <span class="n">SIGMA_R</span>
 </pre></div>
 </div>
 </div>
@@ -354,21 +356,18 @@ optional arguments:
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/datapipeline.txt"
+      <li><a href="_sources/datapipeline.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -390,12 +389,12 @@ optional arguments:
         <li class="right" >
           <a href="install.html" title="Installation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">ImagingLSS 0.9 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>

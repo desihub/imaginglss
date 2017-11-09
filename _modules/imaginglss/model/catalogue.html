@@ -1,32 +1,30 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>imaginglss.model.catalogue &mdash; ImagingLSS 0.9 documentation</title>
-    
+    <title>imaginglss.model.catalogue &#8212; ImagingLSS 0.9 documentation</title>
     <link rel="stylesheet" href="../../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '0.9',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="ImagingLSS 0.9 documentation" href="../../../index.html" />
-    <link rel="up" title="imaginglss" href="../../imaginglss.html" /> 
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -36,9 +34,9 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" accesskey="U">imaginglss</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -56,15 +54,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">fits</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">filehandler</span>
-<span class="kn">from</span> <span class="nn">..utils.columnstore</span> <span class="kn">import</span> <span class="n">ColumnStore</span>
-<span class="kn">from</span> <span class="nn">..utils.npyquery</span> <span class="kn">import</span> <span class="n">Column</span> <span class="k">as</span> <span class="n">ColumnBase</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">fits</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="k">import</span> <span class="n">filehandler</span>
+<span class="kn">from</span> <span class="nn">..utils.columnstore</span> <span class="k">import</span> <span class="n">ColumnStore</span>
+<span class="kn">from</span> <span class="nn">..utils.npyquery</span> <span class="k">import</span> <span class="n">Column</span> <span class="k">as</span> <span class="n">ColumnBase</span>
 
 <span class="k">try</span><span class="p">:</span>
-  <span class="nb">basestring</span>
+  <span class="n">basestring</span>
 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
-  <span class="nb">basestring</span> <span class="o">=</span> <span class="nb">str</span>
+  <span class="n">basestring</span> <span class="o">=</span> <span class="nb">str</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Yu Feng and Martin White&quot;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
@@ -75,11 +73,8 @@
 <span class="sd">        with the :py:mod:`imaginglss.utils.npyquery` mini language </span>
 <span class="sd">     &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="C.visit"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.C.visit">[docs]</a>    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">catalogue</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">catalogue</span><span class="p">,</span> <span class="n">CachedCatalogue</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">catalogue</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">][:]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Rows</span>
-            <span class="k">return</span> <span class="n">catalogue</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div></div>
+        <span class="c1"># Rows</span>
+        <span class="k">return</span> <span class="n">catalogue</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span></div></div>
 
 <div class="viewcode-block" id="coord2xyz"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.coord2xyz">[docs]</a><span class="k">def</span> <span class="nf">coord2xyz</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -131,11 +126,17 @@
     <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="TransformedColumn"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.TransformedColumn">[docs]</a><span class="k">class</span> <span class="nc">TransformedColumn</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">columns</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">[</span><span class="n">index</span><span class="p">])</span></div>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span>  <span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Catalogue"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.Catalogue">[docs]</a><span class="k">class</span> <span class="nc">Catalogue</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -158,26 +159,7 @@
 <span class="sd">        in :py:class:`numpy.dtype`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">COLUMNS</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;RA&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DEC&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_FLUX_IVAR&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_MW_TRANSMISSION&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_PSFSIZE&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_NOBS&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_ANYMASK&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_DEPTH&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DECAM_FLUX&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;WISE_FLUX&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;WISE_FLUX_IVAR&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;WISE_MW_TRANSMISSION&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;TYPE&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;SHAPEDEV_R&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;SHAPEEXP_R&#39;</span><span class="p">,</span>
-    <span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="n">format_filename</span><span class="p">,</span> <span class="n">aliases</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="n">format_filename</span><span class="p">,</span> <span class="n">aliases</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
 
         <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">format_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">)</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">]</span>
         <span class="n">bricknames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">brick</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">]</span>
@@ -191,6 +173,7 @@
         <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">:</span>
             <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">brick</span><span class="p">))</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">COLUMNS</span> <span class="o">=</span> <span class="n">columns</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -213,188 +196,14 @@
         <span class="k">return</span> <span class="n">data_compressed</span></div>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
             <span class="n">old</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">old</span><span class="p">],</span> <span class="n">transform</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s1">&#39;Catalogue: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="CachedCatalogue"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue">[docs]</a><span class="k">class</span> <span class="nc">CachedCatalogue</span><span class="p">(</span><span class="n">ColumnStore</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Class for handling object catalogs associated with a data release.</span>
-
-<span class="sd">    Access via the :py:attr:`catalogue` attribute of :py:class:`DataRelease`</span>
-<span class="sd">    object.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The catalogs are contained in many small FITS files. Accesing them </span>
-<span class="sd">    directly is slow. </span>
-<span class="sd">    The columns must be first converted from the many-small file original</span>
-<span class="sd">    format to a cache format via a script, :code:`scripts/build_cache.py`.</span>
-<span class="sd">    The scripts calls the function :py:meth:`build_cache` to build the cache</span>
-<span class="sd">    for chunks of catalogue in parallel, then write them to the correct cache</span>
-<span class="sd">    directory.</span>
-
-<span class="sd">    This class caches the information on disk for speed. </span>
-<span class="sd">    Only columns that are accessed are loaded into memory.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; d = DECALS()</span>
-<span class="sd">    &gt;&gt;&gt; cat = d.datarelease.catalogue</span>
-<span class="sd">    &gt;&gt;&gt; print cat[&#39;BRICK_PRIMARY&#39;][:100]</span>
-<span class="sd">    &gt;&gt;&gt; print cat[&#39;BRICK_PRIMARY&#39;][10]</span>
-<span class="sd">    &gt;&gt;&gt; print cat[&#39;BRICK_PRIMARY&#39;][:] # may be huge!</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    cachedir  : string</span>
-<span class="sd">        the location for caching.</span>
-<span class="sd">    bricks: list</span>
-<span class="sd">        a list of bricks names that the catalogue covers.</span>
-<span class="sd">    format_filename : function</span>
-<span class="sd">        a function converts a brick object to a filename of the tractor</span>
-<span class="sd">        catalogue</span>
-<span class="sd">    aliases   : list</span>
-<span class="sd">        a list of fields to transform; this is to support migration</span>
-<span class="sd">        of schema from older data release to newer ones. The list</span>
-<span class="sd">        is of from (oldname, newname, transformfunction)</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dtype : dtype</span>
-<span class="sd">        A container of the data type of columns</span>
-<span class="sd">        in :py:class:`numpy.dtype`</span>
-<span class="sd">    filenames : dict</span>
-<span class="sd">        A mapping between the brickname and the filenames.</span>
-<span class="sd">    </span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cachedir</span><span class="p">,</span> <span class="n">bricks</span><span class="p">,</span> <span class="n">format_filename</span><span class="p">,</span> <span class="n">aliases</span><span class="p">):</span>
-
-        <span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">format_filename</span><span class="p">(</span><span class="n">brick</span><span class="p">)</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">]</span>
-        <span class="n">bricknames</span> <span class="o">=</span> <span class="p">[</span> <span class="n">brick</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">brick</span> <span class="ow">in</span> <span class="n">bricks</span><span class="p">]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">filenames</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">bricknames</span><span class="p">,</span> <span class="n">filenames</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">new</span><span class="p">,</span> <span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">transform</span><span class="p">))</span> 
-                <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">,</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span> <span class="o">=</span> <span class="n">cachedir</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span><span class="p">,</span> <span class="s1">&#39;BRICK_PRIMARY&#39;</span><span class="p">)</span>
-            <span class="n">columns</span> <span class="o">=</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">columns</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">])</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">ColumnStore</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span>
-
-<div class="viewcode-block" id="CachedCatalogue.open"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brick</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">[</span><span class="n">brick</span><span class="o">.</span><span class="n">name</span><span class="p">])</span></div>
-
-<div class="viewcode-block" id="CachedCatalogue.build_cache"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue.build_cache">[docs]</a>    <span class="k">def</span> <span class="nf">build_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filenames</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Build cache of the catalogue files listed in filenames</span>
-
-<span class="sd">        The fits files are converted to file handler format.</span>
-<span class="sd">        Each column becomes a single file.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        This shall be run before using the catalogue. </span>
-<span class="sd">        And it takes a long time.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        cachedir : string</span>
-<span class="sd">            directory for holding the cache</span>
-<span class="sd">        filenames : list</span>
-<span class="sd">            list of FITS files to read from</span>
-<span class="sd">       </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        concatenated catalogue for filenames</span>
-
-<span class="sd">        &quot;&quot;&quot;</span> 
-        
-        <span class="n">cachedir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span>
-
-        <span class="c1"># get the first filename</span>
-        <span class="n">dtype</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">first</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-                <span class="n">dtype</span> <span class="o">=</span> <span class="n">subdtype</span><span class="p">(</span><span class="n">uppercase_dtype</span><span class="p">(</span><span class="n">first</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="n">Catalogue</span><span class="o">.</span><span class="n">COLUMNS</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="k">else</span> <span class="p">:</span>
-                    <span class="k">raise</span>
-                
-        <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span>
-
-        <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
-            <span class="n">table</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-            <span class="n">table</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">uppercase_dtype</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">dtype</span><span class="p">))</span>
-            <span class="n">data1</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">table</span><span class="p">),</span> <span class="n">dtype</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-                <span class="c1"># only preserve those in both &#39;first&#39; and all</span>
-                <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span> <span class="k">continue</span>
-                <span class="n">data1</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
-
-            <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data1</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">data</span></div>
-
-<div class="viewcode-block" id="CachedCatalogue.check_cache"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue.check_cache">[docs]</a>    <span class="k">def</span> <span class="nf">check_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Check if cache is consistent </span>
-<span class="sd">            </span>
-<span class="sd">            Returns</span>
-<span class="sd">            -------</span>
-<span class="sd">            consistent : boolean</span>
-<span class="sd">                True if consistent, Falst if need to rebuild with :py:meth:`build_cache`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">Nfile</span> <span class="o">=</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;nfiles&quot;</span><span class="p">])[</span><span class="s1">&#39;nfiles&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">Nfile</span> <span class="o">=</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;nfiles&quot;</span><span class="p">])[</span><span class="s1">&#39;nfiles&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">MissingColumn</span><span class="p">:</span>
-            <span class="n">Nfile</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="n">Nfile</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filenames</span><span class="p">)</span></div>
-        
-    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
-            <span class="n">old</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">old</span><span class="p">],</span> <span class="n">transform</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ColumnStore</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CachedCatalogue.fetch"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_cache</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="n">CacheExpired</span><span class="p">(</span><span class="s2">&quot;The cache is too old. Regenerate it with scripts/build_cache.py&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">filehandler</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span><span class="p">,</span> <span class="p">[</span><span class="n">column</span><span class="p">],</span> <span class="n">offset</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span></div>
-
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;CachedCatalogue: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CachedCatalogue.neighbours"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.CachedCatalogue.neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">,</span> <span class="n">sep</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
 
 <div class="viewcode-block" id="BigFileCatalogue"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.BigFileCatalogue">[docs]</a><span class="k">class</span> <span class="nc">BigFileCatalogue</span><span class="p">(</span><span class="n">ColumnStore</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -404,14 +213,15 @@
         <span class="kn">import</span> <span class="nn">bigfile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cachedir</span> <span class="o">=</span> <span class="n">cachedir</span>
 
-        <span class="k">with</span> <span class="n">bigfile</span><span class="o">.</span><span class="n">BigFile</span><span class="p">(</span><span class="n">cachedir</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">bf</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">bigfile</span><span class="o">.</span><span class="n">BigFile</span><span class="p">(</span><span class="n">cachedir</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">bf</span><span class="p">:</span>
             <span class="n">bd</span> <span class="o">=</span> <span class="n">bigfile</span><span class="o">.</span><span class="n">BigData</span><span class="p">(</span><span class="n">bf</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_size</span> <span class="o">=</span> <span class="n">bd</span><span class="o">.</span><span class="n">size</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span> <span class="o">=</span> <span class="n">bd</span><span class="o">.</span><span class="n">dtype</span>
-            <span class="k">print</span> <span class="p">(</span><span class="n">bf</span><span class="p">,</span> <span class="n">cachedir</span><span class="p">,</span> <span class="n">bd</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">bd</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="n">aliases</span>
-        <span class="n">ColumnStore</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">new</span><span class="p">,</span> <span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">transform</span><span class="p">))</span> 
+                <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">,</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">])</span>
+        <span class="n">ColumnStore</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -425,11 +235,11 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;FIXME: currently cannot open a brick from a sweep.&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">basestring</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">:</span>
             <span class="n">old</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">old</span><span class="p">],</span> <span class="n">transform</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">TransformedColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ColumnStore</span><span class="o">.</span><span class="n">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ColumnStore</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BigFileCatalogue.fetch"><a class="viewcode-back" href="../../../imaginglss.model.catalogue.html#imaginglss.model.catalogue.BigFileCatalogue.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">bigfile</span>
@@ -451,14 +261,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -474,14 +281,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &raquo;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">ImagingLSS 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../imaginglss.html" >imaginglss</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Yu Feng, Martin White.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+        &#169; Copyright 2015, Yu Feng, Martin White.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
     </div>
   </body>
 </html>
