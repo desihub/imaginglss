@@ -162,6 +162,28 @@ class DR3(DR2):
 
     """
     BRICKS_FILENAME = 'survey-bricks.fits.gz'
+    # make DR3 compatible with DR4.
+    CATALOGUE_ALIASES = [
+            ('DECAM_FLUX', 'FLUX_G', lambda x: x[:, 1]),
+            ('DECAM_FLUX', 'FLUX_R', lambda x: x[:, 2]),
+            ('DECAM_FLUX', 'FLUX_Z', lambda x: x[:, 4]),
+            ('DECAM_FLUX_IVAR', 'FLUX_G_IVAR', lambda x: x[:, 1]),
+            ('DECAM_FLUX_IVAR', 'FLUX_R_IVAR', lambda x: x[:, 2]),
+            ('DECAM_FLUX_IVAR', 'FLUX_Z_IVAR', lambda x: x[:, 4]),
+            ('DECAM_DEPTH', 'PSFDEPTH_G', lambda x: x[:, 1]),
+            ('DECAM_DEPTH', 'PSFDEPTH_R', lambda x: x[:, 2]),
+            ('DECAM_DEPTH', 'PSFDEPTH_Z', lambda x: x[:, 4]),
+            ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_G', lambda x: x[:, 1]),
+            ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_R', lambda x: x[:, 2]),
+            ('DECAM_MW_TRANSMISSION', 'MW_TRANSMISSION_Z', lambda x: x[:, 4]),
+            ('WISE_FLUX', 'LC_FLUX_W1', lambda x: x[:, 0]),
+            ('WISE_FLUX', 'LC_FLUX_W2', lambda x: x[:, 1]),
+            ('WISE_FLUX_IVAR', 'LC_FLUX_IVAR_W1', lambda x: x[:, 0]),
+            ('WISE_FLUX_IVAR', 'LC_FLUX_IVAR_W2', lambda x: x[:, 1]),
+            ('WISE_MW_TRANSMISSION', 'MW_TRANSMISSION_W1', lambda x: x[:, 0]),
+            ('WISE_MW_TRANSMISSION', 'MW_TRANSMISSION_W2', lambda x: x[:, 1]),
+        ]
+
     @staticmethod
     def format_image_filenames():
         images = {
@@ -182,4 +204,7 @@ class DR3(DR2):
 
         return imagerepos
 
+    pass
+
+class DR4(DR3):
     pass

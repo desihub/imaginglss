@@ -81,11 +81,17 @@ class CacheExpired(RuntimeError):
     pass
 
 class TransformedColumn(object):
-    def __init__(self, ref, transform):
+    def __init__(self, ref, columns, transform):
+        if not isinstance(columns, (tuple, list)):
+            columns = [columns]
         self.ref = ref
+        self.columns = columns
         self.transform = transform
+
     def __getitem__(self, index):
-        return self.transform(self.ref[index])
+        args = tuple([  self.ref[c][index]
+                        for c in self.columns])
+        return self.transform(*args)
 
 class Catalogue(object):
     """
@@ -165,7 +171,7 @@ class Catalogue(object):
     def __getitem__(self, column):
         if isinstance(column, basestring) and column in self.aliases:
             old, transform = self.aliases[column]
-            return TransformedColumn(self[old], transform)
+            return TransformedColumn(self, old, transform)
         else:
             return self.data[column]
 
@@ -330,7 +336,7 @@ class CachedCatalogue(ColumnStore):
     def __getitem__(self, column):
         if isinstance(column, basestring) and column in self.aliases:
             old, transform = self.aliases[column]
-            return TransformedColumn(self[old], transform)
+            return TransformedColumn(self, old, transform)
         else:
             return ColumnStore.__getitem__(self, column)
 
@@ -359,8 +365,9 @@ class BigFileCatalogue(ColumnStore):
 
             self._size = bd.size
             self._dtype = bd.dtype
-            print (bf, cachedir, bd.dtype, bd.size)
-        self.aliases = aliases
+
+        self.aliases = dict([(new, (old, transform)) 
+                for old, new, transform in aliases])
         ColumnStore.__init__(self)
 
     @property
@@ -375,9 +382,10 @@ class BigFileCatalogue(ColumnStore):
         raise RuntimeError("FIXME: currently cannot open a brick from a sweep.")
 
     def __getitem__(self, column):
+        print(self.aliases)
         if isinstance(column, basestring) and column in self.aliases:
             old, transform = self.aliases[column]
-            return TransformedColumn(self[old], transform)
+            return TransformedColumn(self, old, transform)
         else:
             return ColumnStore.__getitem__(self, column)
 
