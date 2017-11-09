@@ -12,7 +12,7 @@ class ImageRepo(object):
     Standard users should not need to modify this class.
     
     """
-    def __init__(self, root, pattern):
+    def __init__(self, root, pattern, image_hdu):
         """
         Initizlize a ImageRepo.
 
@@ -23,12 +23,14 @@ class ImageRepo(object):
             a file name. String is supported for backward compatibility.
         root : string
             root path that is concatenated to the pattern.
-
+        image_hdu : int
+            HDU for the image.
         """
         self.root = root
         self.pattern = pattern
         self.cache = {}
-        self.meta_cache = {} 
+        self.meta_cache = {}
+        self.image_hdu = image_hdu
 
     def preload(self, bricks, **kwargs):
         """ 
@@ -73,7 +75,7 @@ class ImageRepo(object):
         if not os.path.exists(fname):
             raise IOError('%s does not exist' % fname)
         _ = self.metadata(brick, **kwargs)
-        return fits.read_image(fname)
+        return fits.read_image(fname, hdu=self.image_hdu)
         
     def metadata(self, brick, **kwargs):
         """ 
@@ -91,7 +93,7 @@ class ImageRepo(object):
             FITS header
         """
         if brick not in self.meta_cache:
-            meta = fits.read_metadata(self.get_filename(brick, **kwargs))
+            meta = fits.read_metadata(self.get_filename(brick, **kwargs), hdu=self.image_hdu)
             self.meta_cache[brick] = meta
         return self.meta_cache[brick]
 

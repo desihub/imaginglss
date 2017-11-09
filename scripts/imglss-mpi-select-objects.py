@@ -73,14 +73,14 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
             (1, 'FLUX_G', 'MW_TRANSMISSION_G'),
             (2, 'FLUX_R', 'MW_TRANSMISSION_R'),
             (4, 'FLUX_Z', 'MW_TRANSMISSION_Z'),
-            (6, 'LC_FLUX_W1', 'MW_TRANSMISSION_W1'),
-            (7, 'LC_FLUX_W2', 'MW_TRANSMISSION_W2')]:
+            (6, 'FLUX_W1', 'MW_TRANSMISSION_W1'),
+            (7, 'FLUX_W2', 'MW_TRANSMISSION_W2')]:
 
         GFLUX = cat['FLUX_G'][mine][mask] / cat['MW_TRANSMISSION_G'][mine][mask]
         RFLUX = cat['FLUX_R'][mine][mask] / cat['MW_TRANSMISSION_R'][mine][mask]
         ZFLUX = cat['FLUX_Z'][mine][mask] / cat['MW_TRANSMISSION_Z'][mine][mask]
-        W1FLUX = cat['LC_FLUX_W1'][mine][mask] / cat['MW_TRANSMISSION_W1'][mine][mask]
-        W2FLUX = cat['LC_FLUX_W2'][mine][mask] / cat['MW_TRANSMISSION_W2'][mine][mask]
+        W1FLUX = cat['FLUX_W1'][mine][mask] / cat['MW_TRANSMISSION_W1'][mine][mask]
+        W2FLUX = cat['FLUX_W2'][mine][mask] / cat['MW_TRANSMISSION_W2'][mine][mask]
 
         targets['INTRINSIC_FLUX'][:, i] = (cat[flux][mine][mask] / cat[mw][mine][mask]).clip(1e-15, 1e15)
 
@@ -97,10 +97,10 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     # we convert cat-lim to the DR3-like schema, because read_depth is doing
     # that.
     cat_lim = np.empty(len(targets), dtype=[
-        ('DECAM_DEPTH', cat.dtype['DECAM_DEPTH']),
-        ('WISE_FLUX_IVAR', cat.dtype['WISE_FLUX_IVAR']),
-        ('DECAM_MW_TRANSMISSION', cat.dtype['DECAM_MW_TRANSMISSION']),
-        ('WISE_MW_TRANSMISSION', cat.dtype['WISE_MW_TRANSMISSION']),
+        ('DECAM_DEPTH', ('f4', 6)),
+        ('WISE_FLUX_IVAR', ('f4', 4)),
+        ('DECAM_MW_TRANSMISSION', ('f4', 6)),
+        ('WISE_MW_TRANSMISSION', ('f4', 4)),
         ])
 
     if not ns.use_depth_bricks:
@@ -118,8 +118,8 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
         cat_lim['DECAM_MW_TRANSMISSION'][:, i] = cat_lim1['DECAM_MW_TRANSMISSION']
 
     for i, ivar, mw in [
-        (0, 'LC_FLUX_IVAR_W1', 'MW_TRANSMISSION_W1'),
-        (1, 'LC_FLUX_IVAR_W2', 'MW_TRANSMISSION_W2')
+        (0, 'FLUX_IVAR_W1', 'MW_TRANSMISSION_W1'),
+        (1, 'FLUX_IVAR_W2', 'MW_TRANSMISSION_W2')
         ]:
         cat_lim['WISE_FLUX_IVAR'][:, i] = cat[ivar][mine][mask]
         cat_lim['WISE_MW_TRANSMISSION'][:, i] = cat[mw][mine][mask]

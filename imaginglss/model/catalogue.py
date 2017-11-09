@@ -187,7 +187,6 @@ class BigFileCatalogue(ColumnStore):
         raise RuntimeError("FIXME: currently cannot open a brick from a sweep.")
 
     def __getitem__(self, column):
-        print(self.aliases)
         if isinstance(column, basestring) and column in self.aliases:
             old, transform = self.aliases[column]
             return TransformedColumn(self, old, transform)

@@ -352,9 +352,9 @@ class DataRelease(object):
             if isinstance(image_filenames[image], dict):
                 self.images[image] = {}
                 for band in image_filenames[image]:
-                    self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band])
+                    self.images[image][band] = imagerepo.ImageRepo(self.root, image_filenames[image][band], image_hdu=myschema.IMAGE_HDU)
             else:
-                self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image])
+                self.images[image] = imagerepo.ImageRepo(self.root, image_filenames[image], image_hdu=myschema.IMAGE_HDU)
 
     def __getstate__(self):
         d = self.__dict__.copy()

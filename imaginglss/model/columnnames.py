@@ -20,11 +20,11 @@ RFLUX.band = 'r'
 ZFLUX = C('FLUX_Z') / C('MW_TRANSMISSION_Z')
 ZFLUX.band = 'z'
 
-W1FLUX = C('LC_FLUX_W1') / C('MW_TRANSMISSION_W1')
-W1FLUX_IVAR = C('LC_FLUX_W1_IVAR') * C('MW_TRANSMISSION_W1') ** 2
+W1FLUX = C('FLUX_W1') / C('MW_TRANSMISSION_W1')
+W1FLUX_IVAR = C('FLUX_W1_IVAR') * C('MW_TRANSMISSION_W1') ** 2
 # Do not use WISE bands in completeness modeling
 # W1FLUX.band = 'w1'
-W2FLUX = C('LC_FLUX_W2') / C('MW_TRANSMISSION_W2')
-W2FLUX_IVAR = C('LC_FLUX_W2_IVAR') * C('MW_TRANSMISSION_W2') ** 2
+W2FLUX = C('FLUX_W2') / C('MW_TRANSMISSION_W2')
+W2FLUX_IVAR = C('FLUX_W2_IVAR') * C('MW_TRANSMISSION_W2') ** 2
 # Do not use WISE bands in completeness modeling
 # W2FLUX.band = 'w2'
