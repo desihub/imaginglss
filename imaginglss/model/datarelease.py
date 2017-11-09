@@ -311,14 +311,9 @@ class DataRelease(object):
 
         self.catalogue = catalogue.BigFileCatalogue(os.path.join(self.cache, 'catalogue'), aliases=myschema.CATALOGUE_ALIASES)
 
-        #self.catalogue = catalogue.CachedCatalogue(
-        #    cachedir=os.path.join(self.cache, 'catalogue'),
-        #    bricks=self.footprint.bricks,
-        #    format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
-        #    aliases=myschema.CATALOGUE_ALIASES
-        #    )
-
         self.init_from_state()
+
+        self.schema = myschema
 
     def create_footprint(self, extent):
         """ Create a footprint based on the extent.
@@ -342,7 +337,8 @@ class DataRelease(object):
         myschema = getattr(schema, self.version)
         return catalogue.Catalogue(bricks=footprint.bricks,
             format_filename=lambda x: os.path.join(self.root, myschema.format_catalogue_filename(x)),
-            aliases=myschema.CATALOGUE_ALIASES)
+            aliases=myschema.CATALOGUE_ALIASES,
+            columns=myscheme.CATALOGUE_COLUMNS)
 
     def init_from_state(self):
         myschema = getattr(schema, self.version)

@@ -91,6 +91,25 @@ class EDR4(EDR3):
 
     """
     CATALOGUE_ALIASES = []
+    CATALOGUE_COLUMNS = [
+        'BRICK_PRIMARY',
+        'RA',
+        'DEC',
+        'DECAM_FLUX_IVAR',
+        'DECAM_MW_TRANSMISSION',
+        'DECAM_PSFSIZE',
+        'DECAM_NOBS',
+        'DECAM_ANYMASK',
+        'DECAM_DEPTH',
+        'DECAM_FLUX',
+        'WISE_FLUX',
+        'WISE_FLUX_IVAR',
+        'WISE_MW_TRANSMISSION',
+        'TYPE',
+        'SHAPEDEV_R',
+        'SHAPEEXP_R',
+    ]
+
     pass
 
 class DR1(EDR4):
@@ -207,4 +226,25 @@ class DR3(DR2):
     pass
 
 class DR4(DR3):
-    pass
+    CATALOGUE_ALIASES = []
+    CATALOGUE_COLUMNS = [
+        'BRICK_PRIMARY',
+        'RA',
+        'DEC',
+        'DECAM_FLUX_IVAR',
+        'DECAM_MW_TRANSMISSION',
+        'DECAM_PSFSIZE',
+        'DECAM_NOBS',
+        'DECAM_ANYMASK',
+        'DECAM_DEPTH',
+        'DECAM_FLUX',
+        'WISE_FLUX',
+        'WISE_FLUX_IVAR',
+        'WISE_MW_TRANSMISSION',
+        'TYPE',
+        'SHAPEDEV_R',
+        'SHAPEEXP_R',
+    ]
+
+class DR5(DR4):
+    CATALOGUE_ALIASES = []

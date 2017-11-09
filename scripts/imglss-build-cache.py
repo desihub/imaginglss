@@ -16,7 +16,6 @@ import numpy
 
 from imaginglss.cli import CLI
 from imaginglss.analysis import cache
-from imaginglss.model.catalogue import Catalogue
 
 ap = CLI("Build cache")
 
@@ -27,7 +26,7 @@ print('building brick index')
 dr = decals.datarelease
 
 print('building tractor cache')
-builder = cache.CacheBuilder(decals.sweep_dir, decals.cache_dir, Catalogue.COLUMNS)
+builder = cache.CacheBuilder(decals.sweep_dir, decals.cache_dir, dr.schema.CATALOGUE_COLUMNS)
 
 builder.build()
 print('done')
