@@ -35,7 +35,8 @@ Before we start using ImagingLSS, it is crucial to build the catalogue cache.
     if the following configuration file is used:
 
     .. code-block:: bash
-       	/project/projectdirs/m779/imaginglss/dr2.conf.py
+
+        /project/projectdirs/m779/imaginglss/dr2.conf.py
 
 The application to build the cache is :code:`scripts/imglss-mpi-build-cache.py`. The application
 scans the files in the data release described by a configuration file (provided in
@@ -109,7 +110,7 @@ The inline help of the script describes the usage:
 Here is an example job script we use on Edison to generate the LRG catalogue.
 Submit the job script with :code:`sbatch`. We also encourage typing in the commands
 one by one from an interactive job session, obtained via :code:`salloc`. Refer to
-`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_.
+http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/.
 
 
 .. code-block:: bash
@@ -163,7 +164,7 @@ The inline help of the script describes the usage:
 Here is an example job script we use on Edison to generate a QSO random catalogue.
 Submit the job script with :code:`sbatch`. We also encourage typing in the commands
 one by one from an interactive job session, obtained via :code:`salloc`. Refer to
-`http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/`_.
+http://www.nersc.gov/users/computational-systems/cori/running-jobs/interactive-jobs/.
 
 .. code:: 
 

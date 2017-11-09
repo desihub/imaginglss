@@ -133,9 +133,9 @@ Example Dataset
 For those who do **not** work on NERSC, 
 we provide a small sampling data set that contains a few bricks from DR2. 
 
-http://imaginglss.s3-website-us-west-1.amazonaws.com/dr2-mini.tar.gz 
+http://imaginglss.s3-website-us-west-1.amazonaws.com/dr5-mini.tar.gz 
 
-The total size is less than 45 MB after decompressing. 
+The total size is less than 200 MB after decompressing. 
 
 The SFD98 dust map is required for target selelection and completeness masks
 The SFD98 file is somewhat larger, on the order of 100 MB.
@@ -155,7 +155,10 @@ see the following steps.
     cd testdata
 
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr2-mini.tar.gz
-    tar -xzvf dr2-mini.tar.gz
+    tar -xzvf dr3-mini.tar.gz
+
+    wget http://imaginglss.s3-website-us-west-1.amazonaws.com/dr5-mini.tar.gz
+    tar -xzvf dr5-mini.tar.gz
 
     wget http://imaginglss.s3-website-us-west-1.amazonaws.com/SFD98.tar.gz
     tar -xzvf SFD98.tar.gz
