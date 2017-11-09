@@ -10,7 +10,7 @@ for Large scale structure analysis.
 The modelled data is a product from the Tractor, the source identification
 software used in by DESI.
 
-Refer to http://legacysurvey.org/dr2/ for the data model.
+Refer to http://legacysurvey.org/dr5/ for the data model.
 
 Refer to the document at http://desihub.github.io/imaginglss
 

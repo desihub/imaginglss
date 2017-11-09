@@ -4,15 +4,17 @@ Installation
 ImagingLSS can be installed as a regular Python package, but it can also be
 used without installation (since the code evolves rapidly with time).
 
-To install (this is how we test ImagingLSS at home)
+To install for development (this is how we test ImagingLSS)
 
 .. code-block:: bash
 
+    # (optionally) activate the python conda environment first
+
     git clone https://github.com/desihub/imaginglss/
     cd imaginglss
-    pip install --user -e .
+    pip install -e .
 
-To use without installation (this is how we test ImagingLSS at NERSC)
+To use without installation
 
 .. code-block:: bash
 
@@ -49,18 +51,29 @@ ImagingLSS is light on dependency.
  - fitsio 0.9.8 + for accessing FITS files.
    Do not use 0.9.7 due this bug: https://github.com/esheldon/fitsio/issues/39
    which affects building catalogue cache. 
-   For now, you can install the rc2 prerelease of fitsio.
+
+   .. code-block:: bash
+
+       conda install -c bccp fitsio
+
+   alternatively, from pip directly
 
    .. code-block:: bash
 
        pip install -U --no-deps --user https://github.com/esheldon/fitsio/archive/v0.9.8rc2.tar.gz
-   
+
    We still do support astropy.io.fits, but the use of astropy.io.fits is not
    recommended.
- 
+
  - kdcount for spatial queries.
    Some of the scripts in imaginglss, including the completeness estimator is build with
    kdcount. Install with
+
+   .. code-block:: bash
+
+       conda install -c bccp kdcount
+
+   alternatively, from pip directly
 
    .. code-block:: bash
 
@@ -69,9 +82,18 @@ ImagingLSS is light on dependency.
 
 On parallel HPC systems where files are hosted in a shared file system, 
 the time it takes to launch a Python application may fluctuate badly. 
-This applies to ImagingLSS, too. 
-At NERSC, we set up python-mpi-bcast to eliminate this issue. Refer to 
-https://github.com/rainwoodman/python-mpi-bcast .
+This applies to ImagingLSS, too.
+
+We use the BCCP contributed python environment at NERSC, for fast Python
+applications startup. Add these lines to the job script to enable it
+
+.. code-block:: bash
+
+    source /usr/common/contrib/bccp/conda-activate.sh 3.6
+
+    bcast-pip <path to imaginglss source code>
+
+    srun -n <number of ranks> python -u <imglss-mpi script>
 
 The usage of python-mpi-bcast will be noted in the NERSC examples.
 

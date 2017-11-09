@@ -7,16 +7,15 @@
 #SBATCH -t 00:30:00
 
 export OMP_NUM_THREADS=1
-module load python/3.5-anaconda
 
-source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
+source /usr/common/contrib/bccp/conda-activate.sh 3.6
 
-mirror ../ imaginglss scripts
+(cd ../; python setup.py sdist )
+version=`python ../setup.py --version`
 
-# use without installing
-export PYTHONPATH=/dev/shm/local:$PYTHONPATH
+bcast-pip ../dist/imaginglss-$version.tar.gz
 
-srun -n 1 python -u /dev/shm/local/scripts/imglss-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
+srun -n 1 python -u ../scripts/imglss-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
 
 
 
