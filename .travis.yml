@@ -24,8 +24,8 @@ install:
     - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
     - source activate test
     - conda install --yes numpy=$NUMPY_VERSION nose mpi4py scipy h5py cython
-    - pip install https://github.com/esheldon/fitsio/archive/v0.9.8rc1.tar.gz
-    - pip install kdcount bigfile
+    - pip install kdcount bigfile runtests
+    - pip install fitsio
     - python setup.py install
 
 before_script:
