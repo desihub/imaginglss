@@ -46,6 +46,8 @@ class CacheBuilder(object):
         sizes = numpy.array(sizes)
         offsets = numpy.concatenate([[0], numpy.cumsum(sizes)])
 
+        print("total number of objects:", sizes.sum())
+
         blocks = {}
         for column in self.columns:
             blocks[column] = bf.create(column, dtype=dtype[column], size=sizes.sum(), Nfile=1)
