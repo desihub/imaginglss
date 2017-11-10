@@ -15,7 +15,7 @@ version=`python ../setup.py --version`
 
 bcast-pip ../dist/imaginglss-$version.tar.gz
 
-srun -n 1 python -u ../scripts/imglss-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr3.conf.py
+srun -n 1 python -u ../scripts/imglss-build-cache.py --conf /project/projectdirs/m779/yfeng1/imaginglss/dr5.conf.py
 
 
 

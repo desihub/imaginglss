@@ -10,13 +10,17 @@
 export OMP_NUM_THREADS=1
 set -x
 
-module load python/3.5-anaconda
-source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
+source /usr/common/contrib/bccp/conda-activate.sh 3.6
 
-# install the 'nersc' version of imaginglss
-bcast-pip bigfile /project/projectdirs/desi/users/yfeng1/imaginglss/imaginglss
+(cd ../; python setup.py sdist )
+version=`python ../setup.py --version`
 
-time srun -n 512 python-mpi -u /dev/shm/local/bin/imglss-mpi-make-random.py \
-    --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py \
+bcast-pip ../dist/imaginglss-$version.tar.gz
+
+# http://www.nersc.gov/users/data-analytics/data-management/i-o-libraries/hdf5-2/h5py/#toc-anchor-6
+export HDF5_USE_FILE_LOCKING=FALSE  
+
+time srun -n 512 python -u ../scripts/imglss-mpi-make-random.py \
+    --conf /project/projectdirs/m779/yfeng1/imaginglss/dr5.conf.py \
     20000000 \
-    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3/RANDOM.hdf5
+    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr5/RANDOM.hdf5

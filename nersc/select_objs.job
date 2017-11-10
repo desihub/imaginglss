@@ -10,19 +10,24 @@
 export OMP_NUM_THREADS=1
 set -x
 
-module load python/3.5-anaconda
-source /usr/common/contrib/bccp/python-mpi-bcast/nersc/activate.sh
+source /usr/common/contrib/bccp/conda-activate.sh 3.6
 
-# install the 'nersc' version of imaginglss
-bcast-pip bigfile /project/projectdirs/desi/users/yfeng1/imaginglss/imaginglss
+(cd ../; python setup.py sdist )
+version=`python ../setup.py --version`
 
-OPTIONS=" --conf /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3.conf.py "
-OPTIONS+=" --extra-target-definitions targets "
+bcast-pip ../dist/imaginglss-$version.tar.gz
+
+# http://www.nersc.gov/users/data-analytics/data-management/i-o-libraries/hdf5-2/h5py/#toc-anchor-6
+export HDF5_USE_FILE_LOCKING=FALSE  
+
+
+OPTIONS=" --conf /project/projectdirs/m779/yfeng1/imaginglss/dr5.conf.py "
+#OPTIONS+=" --extra-target-definitions targets "
 
 for T in ELG LRG QSO; do
-    time srun -n 16 python-mpi /dev/shm/local/bin/imglss-mpi-select-objects.py \
+    time srun -n 16 python ../scripts/imglss-mpi-select-objects.py \
     $OPTIONS \
     ${T} \
-    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr3/${T}.hdf5
+    /project/projectdirs/desi/users/yfeng1/imaginglss/legacysurvey/dr5/${T}.hdf5
 done
 
