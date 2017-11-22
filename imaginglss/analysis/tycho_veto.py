@@ -1,6 +1,9 @@
 """
     veto objects based on a star catalogue.
-    The tycho vetos are based on the email discussion at:
+    
+    The "DESI_" vetos are based on Kitanidis++17 in prep.
+    
+    The "DECAM_" vetos are based on the email discussion at:
 
     Date: June 18, 2015 at 3:44:09 PM PDT
     To: decam-data@desi.lbl.gov
@@ -15,13 +18,19 @@
     >>>
 """
 
-def BOSS_DR9(decals):
+def DESI_TYCHO(decals):
     tycho = decals.tycho
-    bmag = tycho['BMAG']
-    # BOSS DR9-11
-    b = bmag.clip(6, 11.5)
-    R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
+    vtmag = tycho['VTMAG']
+    R = 10 ** (4.1 - 0.2 * vtmag) / 3600. 
     return tycho['RA'], tycho['DEC'], R
+
+def DESI_WISE(decals):
+    wise = decals.wise
+    W1mpro = wise['W1MPRO']
+    radius = 10 ** (3.0 - 0.1 * W1mpro) 
+    radius[W1mpro < 2] = 1100.
+    R = radius / 3600.
+    return wise['RA'], wise['DEC'], R
 
 def DECAM_LRG(decals):
     tycho = decals.tycho
@@ -43,6 +52,14 @@ def DECAM_BGS(decals):
 #    R = 10 ** (2.2 - 0.15 * vtmag) / 3600. 
     # The above mask is not conservative enough. Ellie suggests:
     R = 10 ** (3.3 - 0.15 * vtmag) / 3600.
+    return tycho['RA'], tycho['DEC'], R
+
+def BOSS_DR9(decals):
+    tycho = decals.tycho
+    bmag = tycho['BMAG']
+    # BOSS DR9-11
+    b = bmag.clip(6, 11.5)
+    R = (0.0802 * b ** 2 - 1.86 * b + 11.625) / 60. # 
     return tycho['RA'], tycho['DEC'], R
 
 def EBOSS_V6(decals):
