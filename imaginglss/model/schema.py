@@ -183,6 +183,12 @@ class DR3(DR2):
 
     """
     BRICKS_FILENAME = 'survey-bricks.fits.gz'
+
+    CCDTABLE_FILENAMES = [
+            'survey-ccds-decals.fits.gz',
+            'survey-ccds-nondecals.fits.gz',
+            'survey-ccds-extra.fits.gz']
+
     # make DR3 compatible with DR4.
     CATALOGUE_ALIASES = [
             ('DECAM_FLUX', 'FLUX_G', lambda x: x[:, 1]),

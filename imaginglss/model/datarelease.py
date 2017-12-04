@@ -478,3 +478,6 @@ class DataRelease(object):
 
         return output
 
+    def get_ccdtable(self):
+        """ returns a newly constructed CCDTable object """
+        return  CCDTable(self.schema.CCDTABLE_FILENAMES)

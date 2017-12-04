@@ -5,11 +5,9 @@ from ..utils.wcs_tangent import ang2pix
 from ..utils import fits
 
 class CCDTable(object):
-    def __init__(self, filename):
+    def __init__(self, filenames):
         data = []
-        for fn in [filename,
-                   filename.replace('ccds-decals', 'ccds-nondecals'),
-                   filename.replace('ccds-decals', 'ccds-extra')]:
+        for fn in filenames:
             try:
                 ccdhdu = fits.read_table(fn)
             except Exception as e:
