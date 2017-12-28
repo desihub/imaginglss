@@ -21,6 +21,7 @@ from . import brickindex
 from . import imagerepo
 from . import catalogue
 from . import schema
+from .ccdtable import CCDTable
 from .sfdmap import SFDMap
 __author__ = "Yu Feng and Martin White"
 __version__ = "0.9"
