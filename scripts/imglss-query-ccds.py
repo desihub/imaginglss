@@ -20,6 +20,9 @@ cli = CLI("Query completeness",
 cli.add_argument("query",
         help="catalogue to query ccd systematic")
 
+cli.add_argument("ccdfilepath",
+        help="survey ccd fits file path; this is the path to the ccd fits file(s).")
+
 cli.add_argument("ccdattrs", type=lambda x: x.upper(), nargs="+",
         help="column name to query ")
 
@@ -29,7 +32,7 @@ decals = DECALS(ns.conf)
 np.seterr(divide='ignore', invalid='ignore')
 
 def main():
-    ccdtable = decals.datarelease.get_ccdtable()
+    ccdtable = decals.datarelease.get_ccdtable(ns.ccdfilepath)
 
     ccdtree = points(ccdtable.RA, ccdtable.DEC).tree
     with h5py.File(ns.query) as ff:

@@ -5,9 +5,10 @@ from ..utils.wcs_tangent import ang2pix
 from ..utils import fits
 
 class CCDTable(object):
-    def __init__(self, filenames):
+    def __init__(self, filepath, filenames):
         data = []
         for fn in filenames:
+            fn = filepath + fn
             try:
                 ccdhdu = fits.read_table(fn)
             except Exception as e:

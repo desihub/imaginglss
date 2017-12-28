@@ -274,8 +274,8 @@ class DR4(DR3):
 class DR5(DR4):
     CATALOGUE_ALIASES = []
     CCDTABLE_FILENAMES = [
-        '/project/projectdirs/m779/elliek/ccds/dr5/survey-ccds-nocuts.fits',
-        '/project/projectdirs/m779/elliek/ccds/dr5/ccds-annotated-dr5.fits']
+        'survey-ccds-nocuts.fits',
+        'ccds-annotated-dr5.fits']
     IMAGE_HDU = 1
     @staticmethod
     def format_image_filenames():

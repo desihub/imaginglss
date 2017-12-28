@@ -479,6 +479,6 @@ class DataRelease(object):
 
         return output
 
-    def get_ccdtable(self):
+    def get_ccdtable(self, filepath):
         """ returns a newly constructed CCDTable object """
-        return  CCDTable(self.schema.CCDTABLE_FILENAMES)
+        return  CCDTable(filepath, self.schema.CCDTABLE_FILENAMES)
