@@ -185,9 +185,9 @@ class DR3(DR2):
     BRICKS_FILENAME = 'survey-bricks.fits.gz'
 
     CCDTABLE_FILENAMES = [
-            'survey-ccds-decals.fits.gz',
-            'survey-ccds-nondecals.fits.gz',
-            'survey-ccds-extra.fits.gz']
+            'survey-ccds-decals.fits',
+            'survey-ccds-nondecals.fits',
+            'survey-ccds-extra.fits']
 
     # make DR3 compatible with DR4.
     CATALOGUE_ALIASES = [
@@ -273,6 +273,9 @@ class DR4(DR3):
 
 class DR5(DR4):
     CATALOGUE_ALIASES = []
+    CCDTABLE_FILENAMES = [
+        '/project/projectdirs/m779/elliek/ccds/dr5/survey-ccds-nocuts.fits',
+        '/project/projectdirs/m779/elliek/ccds/dr5/ccds-annotated-dr5.fits']
     IMAGE_HDU = 1
     @staticmethod
     def format_image_filenames():
