@@ -7,14 +7,19 @@ from ..utils import fits
 class CCDTable(object):
     def __init__(self, filepath, filenames):
         data = []
-        for fn in filenames:
-            fn = filepath + fn
-            try:
-                ccdhdu = fits.read_table(fn)
-            except Exception as e:
-                print("CCDTable: file %s skipped due to %s" % (fn, e))
+        for fnrow in filenames:
+            if not isinstance(fnrow, (tuple, list)):
+                fnrow = (fnrow,)
+            datarow = []
+            for fn in fnrow:
+               fn = filepath + fn
+               try:
+                   ccdhdu = fits.read_table(fn)
+               except Exception as e:
+                   print("CCDTable: file %s skipped due to %s" % (fn, e))
+               datarow.append(ccdhud)
 
-            data.append(ccdhdu)
+            data.append(datarow)
 
         data = concatenate_struct_arrays(data)
 
@@ -53,23 +58,34 @@ class CCDTable(object):
         return inside
 
 def concatenate_struct_arrays(arrays):
+    """ sorry, but array shall be a list of list of arrays. (nested) """
     names = None
-    for array in arrays:
-        if names is None:
-            names = set(array.dtype.names)
-        else:
-            names = names.union(set(array.dtype.names))
+    for arow in arrays:
+        for array in arow:
+            if names is None:
+                names = set(array.dtype.names)
+            else:
+                names = names.union(set(array.dtype.names))
     dtype = []
     for name in names:
-        dtype.append((name, array[0].dtype[name]))
+        # only check the first row
+        for array in arrays[0]:
+            if name not in array.dtype[name]: continue
+            dtype.append((name, array[0].dtype[name]))
+            break
     dtype = np.dtype(dtype)
-    result = np.empty(sum(len(a) for a in arrays), dtype=dtype)
+    result = np.empty(sum(len(arow[0]) for arow in arrays), dtype=dtype)
     offset = 0
-    for array in arrays:
+    for arow in arrays:
+        # use len of the first array in the nested row
+        alen = len(arow[0])
         for name in names:
-            result[offset:offset+len(array)][name] = array[name]
-        offset = offset + len(array)
-        
+            for array in arow:
+                if name not in array.dtype[name]: continue
+                result[offset:offset+alen][name] = array[name]
+                break
+        offset = offset + alen
+
     return result
 
 def get_legacy_cataloged(data):
