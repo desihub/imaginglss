@@ -17,7 +17,7 @@ class CCDTable(object):
                    ccdhdu = fits.read_table(fn)
                except Exception as e:
                    print("CCDTable: file %s skipped due to %s" % (fn, e))
-               datarow.append(ccdhud)
+               datarow.append(ccdhdu)
 
             data.append(datarow)
 
