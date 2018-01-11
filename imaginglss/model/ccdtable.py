@@ -70,7 +70,7 @@ def concatenate_struct_arrays(arrays):
     for name in names:
         # only check the first row
         for array in arrays[0]:
-            if name not in array.dtype[name]: continue
+            if name not in array.dtype.names: continue
             dtype.append((name, array[0].dtype[name]))
             break
     dtype = np.dtype(dtype)
@@ -81,7 +81,7 @@ def concatenate_struct_arrays(arrays):
         alen = len(arow[0])
         for name in names:
             for array in arow:
-                if name not in array.dtype[name]: continue
+                if name not in array.dtype.names: continue
                 result[offset:offset+alen][name] = array[name]
                 break
         offset = offset + alen
