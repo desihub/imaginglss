@@ -273,9 +273,7 @@ class DR4(DR3):
 
 class DR5(DR4):
     CATALOGUE_ALIASES = []
-    CCDTABLE_FILENAMES = [
-        'survey-ccds-nocuts.fits',
-        'ccds-annotated-dr5.fits']
+    CCDTABLE_FILENAMES = [('survey-ccds-nocuts.fits','ccds-annotated-dr5.fits')]
     IMAGE_HDU = 1
     @staticmethod
     def format_image_filenames():
