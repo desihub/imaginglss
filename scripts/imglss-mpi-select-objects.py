@@ -148,9 +148,29 @@ if __name__=="__main__":
             ds = ff.create_dataset('_HEADER', shape=(0,))
             ds.attrs.update(cli.prune_namespace(ns))
 
+            for column in targets.dtype.names:
+                shape = tuple([size] + list(targets[column].shape[1:]))
+                dtype = targets[column].dtype
+                ds = ff.create_dataset(column, shape=shape, dtype=dtype)
+
+    comm.barrier()
+
+    # the loop makes sure the ranks take turns; avoiding race condition
+    # with HDF5. Really could have saved as a bigfile instead to avoid
+    # this craziness.
+
+    offset = sum(comm.allgather(len(targets))[:comm.rank])
+
+    for i in range(comm.size):
+        comm.barrier()
+
+        if i != comm.rank :
+            continue
+
     for column in targets.dtype.names:
         data = comm.gather(targets[column])
-        if comm.rank == 0:
-            with h5py.File(ns.output, 'r+') as ff:
-                ds = ff.create_dataset(column, data=np.concatenate(data))
+
+        with h5py.File(ns.output, 'r+') as ff:
+            for column in targets.dtype.names:
+                ff[column][offset:offset+len(targets)] = targets[column]
 
