@@ -167,10 +167,10 @@ if __name__=="__main__":
         if i != comm.rank :
             continue
 
-    for column in targets.dtype.names:
-        data = comm.gather(targets[column])
+        for column in targets.dtype.names:
+            data = comm.gather(targets[column])
 
-        with h5py.File(ns.output, 'r+') as ff:
-            for column in targets.dtype.names:
-                ff[column][offset:offset+len(targets)] = targets[column]
+            with h5py.File(ns.output, 'r+') as ff:
+                for column in targets.dtype.names:
+                    ff[column][offset:offset+len(targets)] = targets[column]
 
