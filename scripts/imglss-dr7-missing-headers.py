@@ -28,15 +28,15 @@ ap = argparse.ArgumentParser()
 ap.add_argument('outputprefix', help='output file prefix. will write to ccds-annotated-dr7-missing.fits.gz')
 ap.add_argument('--limit', help='limit to processing only N ccds', type=int, default=None)
 ap.add_argument('--np', help='number of processes', type=int, default=8)
+ap.add_argument('--prefix', help='prefix to dr7', default='/global/project/projectdirs/cosmo/data/legacysurvey/dr7')
+ap.add_argument('--stagingprefix', help='prefix to staging files (ccds)',
+            default='/global/project/projectdirs/cosmo/staging')
 
 ns = ap.parse_args()
 
 def main(ns):
-    prefix = '/global/project/projectdirs/cosmo/data/legacysurvey/dr7'
-    staging = '/global/project/projectdirs/cosmo/staging/'
 
-#    f = FITS(prefix + '/survey-ccds-dr7.fits.gz', upper=True)
-    with FITS(prefix + '/ccds-annotated-dr7.fits.gz', upper=True) as f:
+    with FITS(os.path.join(ns.prefix, 'ccds-annotated-dr7.fits.gz'), upper=True) as f:
 
         print(f[1]['DEC'][:].ndim)
         print(f[1]['DEC'][3].ndim)
@@ -61,7 +61,7 @@ def main(ns):
 
         def work(i):
             for result_row, row in zip(result[i:i+chunksize], ann[i:i+chunksize]):
-                d = get_meta(row, staging)
+                d = get_meta(row, ns.stagingprefix)
                 for key in d:
                     result_row[key] = d[key]
             return len(result[i:i+chunksize])
@@ -79,5 +79,5 @@ def main(ns):
         f.write_table(result)
 
 
-main()
+main(ns)
 
