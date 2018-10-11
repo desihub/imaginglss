@@ -20,7 +20,7 @@ cli = CLI("Query completeness",
 cli.add_argument("query",
         help="catalogue to query ccd systematic")
 
-cli.add_argument("ccdfilepath",
+cli.add_argument("--ccdfilepath", action='append', default=[],
         help="survey ccd fits file path; this is the path to the ccd fits file(s).")
 
 cli.add_argument("ccdattrs", type=lambda x: x.upper(), nargs="+",

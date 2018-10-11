@@ -7,17 +7,29 @@ from ..utils import fits
 class CCDTable(object):
     def __init__(self, filepath, filenames):
         data = []
+        # search all paths in the list
+        if not isinstance(filepath, (tuple, list)):
+            filepath = [filepath]
+
         for fnrow in filenames:
             if not isinstance(fnrow, (tuple, list)):
                 fnrow = (fnrow,)
             datarow = []
             for fn in fnrow:
-               fn = filepath + fn
-               try:
-                   ccdhdu = fits.read_table(fn)
-               except Exception as e:
-                   print("CCDTable: file %s skipped due to %s" % (fn, e))
-               datarow.append(ccdhdu)
+
+                # fine the first existing fn in the given paths
+                fullname = None
+                for path in filepath:
+                    fullname = os.path.join(path, fn)
+                    if os.path.exists(fullname): break
+                if fullname is None:
+                    print("File %s does not exist in any of the following paths: %s"
+                        % (fn, ','.join(filepath)))
+                try:
+                    ccdhdu = fits.read_table(fullname)
+                except Exception as e:
+                    print("CCDTable: file %s skipped due to %s" % (fullname, e))
+                datarow.append(ccdhdu)
 
             data.append(datarow)
 
