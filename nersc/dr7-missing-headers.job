@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#SBATCH -J dr7-missing
+#SBATCH -N 1
+#SBATCH -o dr7-missing.%j
+#SBATCH -q regular
+#SBATCH -t 24:00:00
+
+export OMP_NUM_THREADS=1
+
+source /usr/common/contrib/bccp/anaconda3/bin/activate bccp
+
+python -u ../scripts/imglss-dr7-missing-headers.py \
+--prefix /global/project/projectdirs/cosmo/data/legacysurvey/dr7 \
+--stagingprefix /global/project/projectdirs/cosmo/staging \
+--np 32 \
+.
+
+
+
+
+
+
