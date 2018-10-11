@@ -27,7 +27,10 @@ from imaginglss.model       import dataproduct
 from imaginglss.cli         import CLI
 
 cli = CLI("Select Objects based on Target definitions", enable_target_plugins=True)
-cli.add_argument("--use-depth-bricks", action='store_true', default=False, help="Use Tractor's Brick Depth in the catalogue, very slow!")
+cli.add_argument("--use-depth-bricks", action='store_true', default=False, help="use tractor's brick depth in the catalogue, very slow!")
+cli.add_argument("--use-bigfile", action='store_true', default=False ,help='save as a bigfile; use bigfile-convert to convert afterwards')
+
+cli.add_argument("--limit", type=int, default=None, help='limit to use this many candidates.')
 cli.add_target_type_argument("ObjectType")
 cli.add_argument("output", help="Output file name. A new object catalogue file will be created.")
 
@@ -48,14 +51,17 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
     dr     = decals.datarelease
     sfd    = decals.sfdmap
     cat    = dr.catalogue
+    totalsize = cat.size
+    if ns.limit is not None:
+        totalsize = ns.limit
     #
-    mystart = cat.size * comm.rank // comm.size
-    myend = cat.size * (comm.rank + 1) // comm.size
+    mystart = totalsize * comm.rank // comm.size
+    myend = totalsize * (comm.rank + 1) // comm.size
     #
     mine = slice(mystart, myend)
 
     if comm.rank == 0:
-        print('Rank 0 with', myend - mystart, 'items', 'total', cat.size)
+        print('Rank 0 with', myend - mystart, 'items', 'total', totalsize)
 
     with dr.catalogue as cat:
         rows = cat[mine]
@@ -134,11 +140,7 @@ def select_objs(decals, ns, comm=MPI.COMM_WORLD):
 
     return targets
 
-if __name__=="__main__":
-
-    targets = select_objs(decals, ns)
-
-    comm = MPI.COMM_WORLD
+def savehdf(ns, targets, comm):
     size = comm.allreduce(len(targets))
 
     if comm.rank == 0:
@@ -173,4 +175,21 @@ if __name__=="__main__":
             with h5py.File(ns.output, 'r+') as ff:
                 for column in targets.dtype.names:
                     ff[column][offset:offset+len(targets)] = targets[column]
+
+def savebigfile(ns, targets, comm):
+    import bigfile
+    with bigfile.BigFileMPI(comm, ns.output, create=True) as ff:
+        for column in targets.dtype.names:
+            with ff.create_from_array(column, targets[column], Nfile=1) as bb:
+                pass
+
+if __name__=="__main__":
+
+    targets = select_objs(decals, ns)
+
+    comm = MPI.COMM_WORLD
+    if not ns.use_bigfile:
+        savehdf(ns, targets, comm)
+    else:
+        savebigfile(ns, targets, comm)
 
