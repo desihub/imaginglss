@@ -169,10 +169,11 @@ def savehdf(ns, targets, comm):
         if i != comm.rank :
             continue
 
+        print('rank', comm.rank, 'writing')
         for column in targets.dtype.names:
-            data = comm.gather(targets[column])
-
+            print('rank', comm.rank, 'writing', column)
             with h5py.File(ns.output, 'r+') as ff:
+                print('rank', comm.rank, 'writing', column, ff)
                 for column in targets.dtype.names:
                     ff[column][offset:offset+len(targets)] = targets[column]
 
